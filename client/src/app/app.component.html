@@ -1,2 +1,10 @@
-<router-outlet></router-outlet>
-HELLO WORLD
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center;">
+  <h1>Welcome to {{title}}!</h1>
+  <router-outlet></router-outlet>
+  <div>
+    <h3>Test Post Request</h3>
+    <button (click)="postData()">ClickMe :)</button>
+    <h5>Response: {{postRequestResponse}}</h5>
+  </div>
+</div>

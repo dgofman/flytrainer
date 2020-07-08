@@ -1,6 +1,8 @@
+var env = require("../../environment.json");
+
 const PROXY_CONFIG = {
   "**": {
-    "target": "http://localhost:9000",
+    "target": env.endpoint,
     "secure": false,
     "bypass": function (req) {
       if (req && req.headers && req.headers.accept && req.headers.accept.indexOf("html") !== -1) {
@@ -11,4 +13,5 @@ const PROXY_CONFIG = {
   }
 };
 
+// tslint:disable-next-line
 module.exports = PROXY_CONFIG;

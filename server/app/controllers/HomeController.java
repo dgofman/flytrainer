@@ -5,30 +5,34 @@ import play.libs.Json;
 import play.mvc.*;
 
 class AppSummary {
-    private String content;
+	private String content;
 
-    AppSummary(String content) {
-        this.content = content;
-    }
+	AppSummary(String content) {
+		this.content = content;
+	}
 
-    public String getContent() {
-        return content;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 }
 
 public class HomeController extends Controller {
 
-    public Result appSummary() {
-        JsonNode jsonNode = Json.toJson(new AppSummary("Java Play Angular Seed"));
-        return ok(jsonNode).as("application/json");
-    }
+	public Result index() {
+		return ok("OK");
+	}
 
-    public Result postTest() {
-        JsonNode jsonNode = Json.toJson(new AppSummary("Post Request Test => Data Sending Success"));
-        return ok(jsonNode).as("application/json");
-    }
+	public Result appSummary() {
+		JsonNode jsonNode = Json.toJson(new AppSummary("Fly Trainer"));
+		return ok(jsonNode).as("application/json");
+	}
+
+	public Result postTest() {
+		JsonNode jsonNode = Json.toJson(new AppSummary("Post Request Test => Data Sending Success"));
+		return ok(jsonNode).as("application/json");
+	}
 }

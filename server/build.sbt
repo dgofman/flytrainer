@@ -1,11 +1,23 @@
-import scala.language.postfixOps
+import spray.json._
 
 name := """FlyTrainer"""
-organization := "com.softigent"
+organization := "com.flytrainer"
 
-version := "0.1"
+version := "1.0"
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava)
+val jsonProperties = settingKey[JsObject]("The environment properties")
+jsonProperties := {
+  val configFile = scala.io.Source.fromFile("../environment.json").getLines().mkString
+  configFile.parseJson.asJsObject
+}
+
+lazy val env = taskKey[Unit]("Print environment variables")
+lazy val root = (project in file("."))
+		.enablePlugins(PlayJava)
+		.settings(
+			env := { println( jsonProperties.value.prettyPrint ) },
+			PlayKeys.playDefaultPort := jsonProperties.value.getFields("sbt_port")(0).toString().toInt
+		)
 
 scalaVersion := "2.13.3"
 

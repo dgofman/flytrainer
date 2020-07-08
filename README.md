@@ -25,3 +25,8 @@ sbt makePom
 *Project*: FlyTrainerApp
 *Host*: localhost
 *Port*: 9999
+
+
+
+npm install -g @angular/cli
+npm install

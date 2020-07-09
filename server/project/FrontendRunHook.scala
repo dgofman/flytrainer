@@ -1,4 +1,5 @@
 import play.sbt.PlayRunHook
+import spray.json._
 import sbt._
 
 import scala.sys.process.Process
@@ -14,16 +15,19 @@ object FrontendRunHook {
       var process: Option[Process] = None
       var client_dir = base / "../client"
 
+      val configFile = scala.io.Source.fromFile("../environment.json").getLines().mkString
+      val jsValues = configFile.parseJson.asJsObject.getFields("sbt_port", "ui_port")
+
       /**
         * Change the commands in `FrontendCommands.scala` if you want to use Yarn.
         */
       var install: String = "npm install"
-      var run: String = "npm run start"
+      var run: String = "ng serve --open --proxy-config src/proxy.conf.js --port " + jsValues(1).toString()
 
       // Windows requires npm commands prefixed with cmd /c
       if (System.getProperty("os.name").toLowerCase().contains("win")){
-        Process("cmd /c  for /f \"tokens=5\" %a in ('netstat -aon ^| find \"4200\"') do taskkill /f /pid %a").!
-        Process("cmd /c  for /f \"tokens=5\" %a in ('netstat -aon ^| find \"9000\"') do taskkill /f /pid %a").!
+        Process("cmd /c  for /f \"tokens=5\" %a in ('netstat -aon ^| find \"" + jsValues(0).toString() + "\"') do taskkill /f /pid %a").!
+        Process("cmd /c  for /f \"tokens=5\" %a in ('netstat -aon ^| find \"" + jsValues(1).toString() + "\"') do taskkill /f /pid %a").!
         install = "cmd /c" + install
         run = "cmd /c" + run
       } else { 

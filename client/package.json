@@ -9,7 +9,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open --proxy-config src/proxy.conf.js --port 8000",
+    "start": "ng serve --open --proxy-config src/proxy.conf.js",
     "build": "ng build",
     "build:prod": "npm run build -- -c production",
     "build:electron": "npm run build -- -c electron",

@@ -26,7 +26,8 @@ sbt makePom
 *Host*: localhost
 *Port*: 9999
 
-
+sbt uuid
+sbt env
 
 npm install -g @angular/cli
 npm install

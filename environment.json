@@ -1,5 +1,7 @@
 {
     "sbt_port": 8080,
+    "ui_port": 8000,
     "endpoint": "http://localhost:8080",
-    "clientid": ""
+    "issuer": "FlyTrainer LLC",
+    "clientid": "zruZcGbAdHUk8C2eTmH/WkEedcYxB81F6rLmECfNDls"
 }

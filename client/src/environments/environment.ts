@@ -1,8 +1,5 @@
-import * as env from '@root/environment.json';
+import base from './base_environment';
 
 export const environment = {
-  production: false,
-  native: false,
-  endpoint: env.endpoint,
-  clientid: env.clientid
+  ...base
 };

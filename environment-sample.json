@@ -1,7 +1,10 @@
 {
     "sbt_port": 8080,
     "ui_port": 8000,
+    "title": "FlyTrainer App",
     "endpoint": "http://localhost:8080",
     "issuer": "FlyTrainer LLC",
+    "company": "BayAreaFlightInstructor",
+    "phone": "(650) 383-8398",
     "clientid": ""
 }

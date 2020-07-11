@@ -24,11 +24,13 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/favicon.ico"
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.less",
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/primeng/resources/themes/nova-colored/theme.css",
+              "node_modules/primeng/resources/primeng.min.css"
             ],
             "scripts": []
           },

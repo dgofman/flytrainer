@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
-import { AppService } from './app.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHttpInterceptor } from './auth-http-interceptor';
 
 import {TableModule} from 'primeng/table';
+import { UserService } from 'src/services/UserService';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,7 @@ import {TableModule} from 'primeng/table';
   ],
   providers: [
     Title,
-    AppService,
+    UserService,
     {
       multi: true,
       provide: HTTP_INTERCEPTORS,

@@ -1,4 +1,4 @@
-import base from './base_environment';
+import base from './base-environment';
 
 export const environment = {
   ...base

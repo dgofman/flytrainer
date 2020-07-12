@@ -1,5 +1,6 @@
 import Locales from './common';
 
 export default {
-    ...Locales
+    ...Locales,
+    accountBalance: 'Account Balance'
 };

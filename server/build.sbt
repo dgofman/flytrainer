@@ -24,7 +24,7 @@ getUUID := {
 lazy val env = taskKey[Unit]("Print environment variables")
 lazy val uuid = taskKey[Unit]("Print generated UUID")
 lazy val root = (project in file("."))
-		.enablePlugins(PlayJava)
+		.enablePlugins(PlayJava, PlayEbean)
 		.settings(
 			env := { println( jsonProperties.value.prettyPrint ) },
 			uuid := { println( "New ClientID: " + getUUID.value ) },
@@ -35,6 +35,7 @@ scalaVersion := "2.13.3"
 
 libraryDependencies ++= Seq(
   guice,
+  jdbc,
   "com.auth0" % "java-jwt" % "3.10.3",
-  "com.h2database" % "h2" % "1.4.200"
+  "mysql" % "mysql-connector-java" % "8.0.20"
 )

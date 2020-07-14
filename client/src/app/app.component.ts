@@ -23,6 +23,9 @@ export class AppComponent {
 
   constructor(titleService: Title, private userService: UserService) {
     titleService.setTitle(environment.title);
-    this.userService.getUser().subscribe(user => this.user = user);
+    this.userService.getUser().subscribe(user => {
+      this.user = user;
+      console.log(User.serialize(this.user));
+    });
   }
 }

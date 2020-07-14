@@ -11,6 +11,6 @@ export class UserService {
   }
 
   getUser(): Observable<User> {
-    return this.http.get<User>('../modules/data/user.json').pipe(map(json => User.serialize(json)));
+    return this.http.get<User>('../modules/data/user.json').pipe(map(json => User.deserialize(json)));
   }
 }

@@ -33,6 +33,10 @@
 
   <logger name="play" level="INFO" />
   <logger name="application" level="DEBUG" />
+  <logger name="utils" level="DEBUG" />
+  <logger name="org.jdbcdslog.ConnectionLogger" level="OFF"  />
+  <logger name="org.jdbcdslog.StatementLogger"  level="INFO" />
+  <logger name="org.jdbcdslog.ResultSetLogger"  level="OFF"  /> 
 
   <root level="WARN">
     <appender-ref ref="ASYNCFILE" />

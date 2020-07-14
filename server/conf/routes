@@ -13,3 +13,6 @@ GET     /api/summary                controllers.HomeController.appSummary
 
 # Test post request
 POST    /api/postTest               controllers.HomeController.postTest()
+
+
+GET     /init                      controllers.InitDatabaseController.index()

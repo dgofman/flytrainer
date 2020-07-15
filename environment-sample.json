@@ -6,5 +6,7 @@
     "issuer": "FlyTrainer LLC",
     "company": "BayAreaFlightInstructor",
     "phone": "(650) 383-8398",
+    "defaultPassword": "pilot",
+    "encryptKey": "",
     "clientid": ""
 }

@@ -1,12 +1,20 @@
 package controllers;
-import models.*;
+
+import java.util.StringJoiner;
+
+import io.ebean.Ebean;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-public class InitDatabaseController  extends Controller{
+import models.*;
 
-    public Result index(){
-        Account.find.all();
-        return ok("Compiled successfully.");
-    }
+public class InitDatabaseController extends Controller {
+
+	public Result index() {
+		StringJoiner sj = new StringJoiner("\n");
+		sj.add("Compiled successfully.");
+		sj.add("User: " + Ebean.find(User.class).findCount());
+		sj.add("Account: " + Ebean.find(Account.class).findCount());
+		return ok(sj.toString());
+	}
 }

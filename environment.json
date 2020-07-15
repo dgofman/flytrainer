@@ -6,5 +6,7 @@
     "issuer": "FlyTrainer LLC",
     "company": "NiceAir",
     "phone": "(408) 729-3383",
+    "defaultPassword": "pilot",
+    "encryptKey": "dBP@ssw0rdS3kr3tK3y",
     "clientid": "zruZcGbAdHUk8C2eTmH/WkEedcYxB81F6rLmECfNDls"
 }

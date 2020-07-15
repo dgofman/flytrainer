@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import play.libs.Json;
 
-public class Config {
+public class AppConfig {
 	
 	private static JsonNode json;
 

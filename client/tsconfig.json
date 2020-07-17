@@ -17,7 +17,7 @@
       "dom"
     ],
     "paths": {
-      "@root/*": ["../*"],
+      "@client/*": ["../client/src/*"],
       "@locales/*": ["../client/src/modules/locales/*"]
     }
   },

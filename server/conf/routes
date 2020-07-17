@@ -15,4 +15,4 @@ GET     /api/summary                controllers.HomeController.appSummary
 POST    /api/postTest               controllers.HomeController.postTest()
 
 
-GET     /init                      controllers.InitDatabaseController.index()
+GET     /init                      controllers.HomeController.initDatabase()

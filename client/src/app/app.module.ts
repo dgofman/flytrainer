@@ -1,36 +1,39 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { AppRoutingModule } from './app-routing.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthHttpInterceptor } from './auth-http-interceptor';
+import { AppNotFoundComponent } from './app.notfound.component';
+import { Routes, RouterModule } from '@angular/router';
 
-import {TableModule} from 'primeng/table';
-import { UserService } from 'src/services/UserService';
+export const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: 'login',
+    loadChildren: () => import('./authentication/login.component').then(m => m.LoginComponentModule)
+  },
+  {
+    path: 'reset',
+    loadChildren: () => import('./authentication/reset.component').then(m => m.ResetComponentModule)
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
+  },
+  {
+    path: '**', component: AppNotFoundComponent
+  }
+];
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
   imports: [
     BrowserModule,
-    FormsModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    TableModule
+    RouterModule.forRoot(routes)
   ],
-  providers: [
-    Title,
-    UserService,
-    {
-      multi: true,
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthHttpInterceptor
-    }
+  declarations: [
+    AppComponent,
+    AppNotFoundComponent
   ],
+  exports: [RouterModule],
+  providers: [Title],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

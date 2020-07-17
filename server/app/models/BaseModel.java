@@ -18,7 +18,7 @@ public abstract class BaseModel extends Model {
 	long version;
 
 	@Id
-	Integer id;
+	public Integer id;
 
 	@WhenCreated
 	Instant createdDate;

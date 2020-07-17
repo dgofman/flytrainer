@@ -6,12 +6,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import io.ebean.Finder;
 import io.ebean.annotation.DbComment;
 import io.ebean.annotation.Encrypted;
+import io.ebean.annotation.History;
 import io.ebean.annotation.Index;
 import io.ebean.annotation.JsonIgnore;
 import io.ebean.annotation.Length;
@@ -20,7 +22,15 @@ import utils.AppConfig;
 import utils.Constants;
 
 @Entity
+@History
+@NamedQueries(value = { 
+	@NamedQuery(name = User.LOGIN, query = "select(uuid) where username = :username and password = :password"),
+	@NamedQuery(name = User.AUTH, query = "select(id, isActive, role, resetPassword) where username = :username and uuid = :uuid")
+})
 public class User extends BaseModel {
+	
+	public static final String LOGIN = "User.login";
+	public static final String AUTH = "User.auth";
 
 	private static final String defaultPassword = AppConfig.get("defaultPassword").asText();
 
@@ -35,10 +45,10 @@ public class User extends BaseModel {
 	@NotNull
 	@Length(100)
 	public String lastname;
-	
+
 	@Length(50)
 	@NotNull
-	@Index(unique=true)
+	@Index(unique = true)
 	public String username;
 
 	@NotNull
@@ -67,6 +77,4 @@ public class User extends BaseModel {
 	@ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
 	@JsonBackReference
 	private Account account;
-	
-	public static Finder<Integer, User> find = new Finder<>(User.class);
 }

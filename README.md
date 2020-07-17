@@ -43,9 +43,24 @@ sbt uuid
 sbt env
 sbt -Ddb.flytrainer.username=flytrainer -Ddb.flytrainer.password=********** run
 
+
+# Update properties:
+/environment.json
+/client/src/environments/base-environment.ts
+
+
 # Initialisation database tables
 http://localhost:8080/init
 
+1. "An SQL script will be run on your database."
+Click button "Apply this script now!"
+
+2. After creation database, copy SQL triggers from server/conf/evolutions/flytrainer/1.sql file and RUN manually. 
+
+3. "An evolution has not been applied properly. Please check the problem and resolve it manually before marking it as resolved."
+Click button "Mark it resolved"
 
 # Troubleshooting 
 %USERPROFILE%/.ivy2
+
+

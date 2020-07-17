@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import io.ebean.Ebean;
 import models.User;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -25,6 +26,7 @@ class AppSummary {
 	}
 }
 
+//@BasicAuth()
 public class HomeController extends Controller {
 
 	public Result index() {
@@ -49,5 +51,10 @@ public class HomeController extends Controller {
 	public Result postTest() {
 		JsonNode jsonNode = Json.toJson(new AppSummary("Post Request Test => Data Sending Success"));
 		return ok(jsonNode).as("application/json");
+	}
+	
+	public Result initDatabase() {
+		Ebean.find(User.class).findCount();
+		return ok("Compiled successfully.");
 	}
 }

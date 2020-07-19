@@ -19,6 +19,7 @@ import io.ebean.annotation.JsonIgnore;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
 import utils.AppConfig;
+import utils.AppConfig.Key;
 import utils.Constants;
 
 @Entity
@@ -32,7 +33,7 @@ public class User extends BaseModel {
 	public static final String LOGIN = "User.login";
 	public static final String AUTH = "User.auth";
 
-	private static final String defaultPassword = AppConfig.get("defaultPassword").asText();
+	private static final String defaultPassword = AppConfig.get(Key.DEFAULT_PWD).asText();
 
 	public UUID uuid = UUID.randomUUID();
 

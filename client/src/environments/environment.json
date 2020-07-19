@@ -1,0 +1,7 @@
+{
+    "client_port": 8000,
+    "endpoint": "http://localhost:8080",
+    "company": "Company Name",
+    "phone": "(xxx) xxx-xxxx",
+    "clientId": "zruZcGbAdHUk8C2eTmH/WkEedcYxB81F6rLmECfNDls"
+}

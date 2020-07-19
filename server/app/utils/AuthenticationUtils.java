@@ -10,30 +10,29 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import io.ebean.Ebean;
 import models.User;
 
+import utils.AppConfig.Key;
+
 /**
  * Utility class to manage the authentication JWT token
  */
 public class AuthenticationUtils {
 
-	private static final int EXPIRE_TOKEN = AppConfig.get("expireToken").asInt();
-	private static final String ISSUER = AppConfig.get("issuer").asText();
-	private static final String CLIENTID = AppConfig.get("clientid").asText();
-	private static final Algorithm ALGORITHM = Algorithm.HMAC256(CLIENTID);
+	private static final int EXPIRE_TOKEN = AppConfig.get(Key.EXPIRE_TOKEN).asInt();
+	private static final String ISSUER = AppConfig.get(Key.ISSUER_TOKEN).asText();
+	private static final String CLIENTID = AppConfig.get(Key.CLIENT_ID).asText();
+	private static final Algorithm ALGORITHM = Algorithm.HMAC256(AppConfig.get(Key.SECRET_KEY).asText());
 
 	public static boolean validateClientId(String clientid) {
 		return CLIENTID.equals(clientid);
 	}
 
-	public static String issueToken(String secret, String username, String password) throws Exception {
-		// Issue a JWT token with validity of 30 minutes
+	public static String issueToken(String username, String password) throws Exception {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MINUTE, EXPIRE_TOKEN);
 		User user = Ebean.getDefaultServer().createNamedQuery(User.class, User.LOGIN)
 			.setParameter("username", username)
 			.setParameter("password", password).findOne();
-		user.username = "dgofman3";
-		user.save();
-		return JWT.create().withIssuer(ISSUER).withSubject(username).withKeyId(user.uuid.toString()).withExpiresAt(c.getTime()).sign(Algorithm.HMAC256(secret));
+		return JWT.create().withIssuer(ISSUER).withSubject(username).withKeyId(user.uuid.toString()).withExpiresAt(c.getTime()).sign(ALGORITHM);
 	}
 
 	public static DecodedJWT validateToken(String token) throws Exception {

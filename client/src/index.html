@@ -8,54 +8,11 @@
   <base href="./">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <style>
-    .rotating-plane {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 50px;
-      height: 50px;
-      transform: translate(-50px, -50px);
-      background: #146fd7;
-      -webkit-animation: rotateplane 1.2s infinite ease-in-out;
-      animation: rotateplane 1.2s infinite ease-in-out
-    }
-
-    @-webkit-keyframes rotateplane {
-      0% {
-        -webkit-transform: perspective(120px)
-      }
-
-      50% {
-        -webkit-transform: perspective(120px) rotateY(180deg)
-      }
-
-      100% {
-        -webkit-transform: perspective(120px) rotateY(180deg) rotateX(180deg)
-      }
-    }
-
-    @keyframes rotateplane {
-      0% {
-        -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
-        transform: perspective(120px) rotateX(0deg) rotateY(0deg)
-      }
-
-      50% {
-        -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
-        transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
-      }
-
-      100% {
-        -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-        transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg)
-      }
-    }
-  </style>
 </head>
 
 <body>
-  <app-root><div class="rotating-plane"></div></app-root>
-</body>
-
+  <app-root>
+    <div class="pi-spin" style="background-image: url('/assets/loading.png'); background-repeat: no-repeat; background-size: 100px 100px; background-position: center; position: fixed; width: 100%; height: 100%;"></div>
+  </app-root>
+  </body>
 </html>

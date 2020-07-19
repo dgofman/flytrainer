@@ -2,9 +2,11 @@ import { Component } from '@angular/core';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/modules/models/user';
 import Locales from '@locales/dashboard';
+import { environment } from '@client/environments/environment';
 
 @Component({
-  templateUrl: './dashboard.component.html'
+  templateUrl: './dashboard.component.html',
+  styleUrls: [ './dashboard.less' ]
 })
 export class DashboardComponent {
   Locales = Locales;
@@ -21,6 +23,8 @@ export class DashboardComponent {
   ];
 
   constructor(private userService: UserService) {
+    this.company = environment.company;
+    this.phone = environment.phone;
     this.userService.getUser().subscribe(user => {
       this.user = user;
       console.log(User.serialize(this.user));

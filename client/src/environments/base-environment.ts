@@ -1,7 +1,8 @@
+import * as env from './environment.json';
 
 export default {
-  title: 'Company Name',
-  endpoint: 'http://localhost:8080',
+  // tslint:disable-next-line: no-string-literal
+  ...env['default'],
   production: false,
   native: false
 };

@@ -7,6 +7,7 @@ import { DashboardComponent } from './dashboard.component';
 import { AuthHttpInterceptor } from '../authentication/auth-http-interceptor';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AppFooterComponentModule } from '../app.footer.component';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,7 @@ export const routes: Routes = [
     RouterModule.forChild(routes),
     CommonModule,
     HttpClientModule,
+    AppFooterComponentModule,
     TableModule
   ],
   declarations: [

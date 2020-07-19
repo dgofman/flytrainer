@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="topbar">
+        <div class="topbar-left">
+            <h3>{{company}}</h3>
+            <h4>{{phone}}</h4>
+        </div>
+    </div>
+    <div class="wrap">
+        <div class="main" [ngSwitch]="routerUrl">
+            <form method="POST" [action]="actionUrl" class="dialog">
+                <input type="hidden" name="cid" [value]="clientId"/>
+                <ng-template [ngSwitchCase]="'/login'">
+                    <div class="p-filed ui-fluid">
+                        <label class="p-col-fixed">{{Locales.userId}}</label>
+                        <input class="ui-inputtext" name="userid" required>
+                    </div>
+                    <div class="p-filed ui-fluid">
+                        <label class="p-col-fixed">{{Locales.password}}</label>
+                        <input type="password" class="ui-inputtext" name="passwd" required>
+                    </div>
+                    <a href="/reset">{{Locales.forgotPassword}}</a>
+                    <button class="ui-button ui-button-text" style="float: right" type="submit">{{Locales.login}}</button>
+                    <div style="margin-top: 40px; text-align: center;">{{Locales.aggrement}}</div>
+                </ng-template>
+                <ng-template [ngSwitchCase]="'/reset'">
+                    <div>
+                        <input />
+                        <input />
+                        <button>{{Locales.login}}</button>
+                    </div>
+                </ng-template>
+            </form>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>

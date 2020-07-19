@@ -21,6 +21,7 @@ import play.api.db.DatabaseConfig;
 import play.inject.Binding;
 import play.inject.Module;
 import utils.AppConfig;
+import utils.AppConfig.Key;
 
 public class ServerConfigModule implements ServerConfigStartup {
 
@@ -65,7 +66,7 @@ public class ServerConfigModule implements ServerConfigStartup {
 class BasicEncryptKeyManager implements EncryptKeyManager {
 
 	private static final Logger log = LoggerFactory.getLogger(BasicEncryptKeyManager.class);
-	private static final String encryptKey = AppConfig.get("encryptKey").asText();
+	private static final String encryptKey = AppConfig.get(Key.ENCRYPT_KEY).asText();
 
 	@Override
 	public EncryptKey getEncryptKey(String tableName, String columnName) {

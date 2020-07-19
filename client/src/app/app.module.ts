@@ -8,11 +8,11 @@ export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
-    loadChildren: () => import('./authentication/login.component').then(m => m.LoginComponentModule)
+    loadChildren: () => import('./authentication/auth.component').then(m => m.AuthComponentModule)
   },
   {
     path: 'reset',
-    loadChildren: () => import('./authentication/reset.component').then(m => m.ResetComponentModule)
+    loadChildren: () => import('./authentication/auth.component').then(m => m.AuthComponentModule)
   },
   {
     path: 'dashboard',

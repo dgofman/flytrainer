@@ -28,7 +28,7 @@ lazy val root = (project in file("."))
 		.settings(
 			env := { println( jsonProperties.value.prettyPrint ) },
 			uuid := { println( "New ClientID: " + getUUID.value ) },
-			PlayKeys.playDefaultPort := jsonProperties.value.getFields("sbt_port")(0).toString().toInt
+			PlayKeys.playDefaultPort := jsonProperties.value.getFields("server_port")(0).toString().toInt
 		)
 
 scalaVersion := "2.13.3"

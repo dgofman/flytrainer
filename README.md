@@ -46,7 +46,7 @@ sbt -Ddb.flytrainer.username=flytrainer -Ddb.flytrainer.password=********** run
 
 # Update properties:
 /environment.json
-/client/src/environments/base-environment.ts
+/client/src/environments/environment.json
 
 
 # Initialisation database tables

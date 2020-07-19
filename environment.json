@@ -1,11 +1,8 @@
 {
-    "sbt_port": 8080,
-    "ui_port": 8000,
-    "issuer": "FlyTrainer LLC",
-    "company": "NiceAir",
-    "phone": "(408) 729-3383",
-    "defaultPassword": "pilot",
+    "server_port": 8080,
     "expireToken": 30,
+    "issuer": "FlyTrainer LLC",
+    "defaultPassword": "pilot",
     "encryptKey": "dBP@ssw0rdS3kr3tK3y",
-    "clientid": "zruZcGbAdHUk8C2eTmH/WkEedcYxB81F6rLmECfNDls"
+    "secretKey": "1NdTSCLnkIwKUCWQu3K2xqQQaHX4e6VMOX0Uz3z0jNI"
 }

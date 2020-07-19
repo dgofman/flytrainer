@@ -8,6 +8,6 @@ import { environment } from '@client/environments/environment';
 })
 export class AppComponent {
   constructor(provider: Title) {
-    provider.setTitle('FlyTrainer - ' + environment.title);
+    provider.setTitle(environment.company);
   }
 }

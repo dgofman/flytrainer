@@ -4,7 +4,7 @@ import Locales from '@locales/common';
 
 @Component({
   selector: 'app-footer',
-  template: `<span class="powerby">${Locales.powerBy}</span>`
+  template: `<a href="https://www.1800wxbrief.com/Website/" target="_blank">1800WXBrief</a> | <a href="https://www.iFlightPlanner.com/AviationCharts/?Map=sectional&GS=115&Route=KRHV" target="_blank">iFlightPlanner</a> | <a href="https://skyvector.com/" target="_blank">Skyvector</a> <span class="powerby">${Locales.powerBy}</span>`
 })
 export class AppFooterComponent {}
 

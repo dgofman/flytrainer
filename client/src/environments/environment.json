@@ -3,5 +3,7 @@
     "endpoint": "http://localhost:8080",
     "company": "Company Name",
     "phone": "(xxx) xxx-xxxx",
+    "homeAirport": "KRHV",
+    "metarAirports": ["KRHV", "KSJC", "KPAO", "KE16", "KLVK", "KWVI", "KOAK", "KSFO", "KCVH", "KHAF", "KSNS", "KMRY"],
     "clientId": "zruZcGbAdHUk8C2eTmH/WkEedcYxB81F6rLmECfNDls"
 }

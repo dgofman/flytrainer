@@ -1,6 +1,14 @@
 var env = require("../../environment.json");
 
 const PROXY_CONFIG = {
+  "/dataserver_current": {
+    "target": "https://www.aviationweather.gov/adds",
+    "secure": true,
+    "pathRewrite": {
+      "^/posts": ""
+    },
+    "changeOrigin": true
+  },
   "**": {
     "target": env.endpoint,
     "secure": false,

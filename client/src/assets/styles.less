@@ -79,6 +79,7 @@ body {
         -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
         -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+        pointer-events: all;
     }
 
     .main,
@@ -96,16 +97,22 @@ body {
         margin-top: -@topbar-height;
         padding-bottom: @footer-height;
         margin-bottom: -@footer-height;
+        pointer-events: none;
     }
 
     .main {
         padding: 20px;
+        pointer-events: all;
     }
 
     app-footer {
         display: block;
         height: @footer-height;
         padding: 15px 20px;
+
+        a {
+            text-decoration: underline;
+        }
 
         .powerby {
             float: right;

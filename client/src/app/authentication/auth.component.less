@@ -1,0 +1,83 @@
+.dialog {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+    padding: 20px;
+    max-width: 500px;
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+.metars {
+    text-align: center;
+    padding: 30px 0 0;
+
+    li {
+        text-align: left;
+        display: inline-block;
+        background: gray;
+        border: 1px solid #000;
+        width: 16%;
+        padding: 5px 5px 0 5px;
+        margin: 5px;
+        pointer-events: all;
+
+        a {
+            color: #fff;
+        }
+
+        b {
+            padding: 5px;
+        }
+
+        b.VFR {
+            background: #32CD32;
+        };
+
+        b.MVFR {
+            background: #0000CD;
+        };
+
+        b.IFR {
+            background: #FF0000;
+        };
+
+        b.LIFR {
+            background: #FF00FF;
+        };
+    }
+
+    .raw {
+        height: 53px;
+        font-size: 12px;
+        margin: 5px 0;
+    }
+
+    div {
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 1500px) {
+    .metars {
+        li {
+            width: 25%;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .metars {
+        li {
+            width: 33.33%;
+        }
+    }
+}
+
+@media (max-width: 750px) {
+    .metars {
+        li {
+            width: 80%;
+        }
+    }
+}

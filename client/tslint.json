@@ -129,6 +129,7 @@
         "check-typecast"
       ]
     },
+    "one-variable-per-declaration": false,
     "no-conflicting-lifecycle": true,
     "no-host-metadata-property": true,
     "no-input-rename": true,

@@ -1,10 +1,11 @@
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule, ElementRef, ViewChild } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { environment } from '@client/environments/environment';
-import { AppFooterComponentModule } from '../app.footer.component';
 import { CommonModule } from '@angular/common';
 import Locales from '@locales/auth';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { AppComponentModule } from '../app.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   templateUrl: './auth.component.html',
@@ -12,29 +13,43 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 })
 export class AuthComponent {
   Locales = Locales;
-  routerUrl: string;
-  actionUrl: string;
   clientId: string;
   company: string;
   phone: string;
+  error: string;
+  worldtime: any = {};
+  currentDateTime: Date;
   metars: { [key: string]: any; } = {};
   metarAirports: string[];
 
-  constructor(router: Router, private http: HttpClient) {
-    this.routerUrl = router.url;
-    this.actionUrl = environment.endpoint + router.url;
+  @ViewChild('overlay')
+  overlay: ElementRef;
+
+  constructor(public router: Router, private http: HttpClient) {
     this.clientId = environment.clientId;
     this.company = environment.company;
     this.phone = environment.phone;
     this.metarAirports = environment.metarAirports;
-    this.getMetars();
+    this.currentDateTime = new Date();
 
-    setInterval(() => this.getMetars, 10 * 60 * 1000);
+    try {
+      this.worldtime.timezone = this.currentDateTime.toLocaleTimeString('en-us', {timeZoneName: 'short'}).split(' ')[2];
+    } catch (e) {
+    }
+
+    http.get('/timezone/' + environment.timezone).subscribe(value => {
+        this.worldtime = value;
+        this.currentDateTime = new Date(this.worldtime.utc_datetime);
+    }, (ex) => this.errorHandler(ex));
+
+    setInterval(() => this.currentDateTime = new Date(this.currentDateTime.getTime() + 1000), 1000);
+    setInterval(() => this.getMetars(), 10 * 60 * 1000);
+    this.getMetars();
   }
 
   getMetars() {
-    this.http.get('/dataserver_current/httpparam?format=csv&dataSource=metars&requestType=retrieve&mostRecent=false&hoursBeforeNow=1&stationString=' +
-              environment.metarAirports.join(' '), {responseType: 'text'}).subscribe(
+    this.http.get('/dataserver_current/httpparam?format=csv&dataSource=metars&requestType=retrieve&mostRecent=false&hoursBeforeNow=' +
+      environment.metarHoursBeforeNow + '&stationString=' + environment.metarAirports.join(' '), {responseType: 'text'}).subscribe(
       value => {
         const re = /^\w{4} (\d{6}Z.*?),(\w{4}),(.*?),.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,(.*?),/;
         const match = value.match(/^\w{4} \d{6}Z.*?,\w{4},.*?$/gm);
@@ -55,20 +70,34 @@ export class AuthComponent {
             }
           });
         }
-        console.log(this.metars);
-      },
-      error => {
-        console.error(error);
-      }
-    );
+      }, (ex) => this.errorHandler(ex));
+  }
+
+  onSubmit(form: any) {
+    if (form.valid) {
+      this.overlay.nativeElement.style.display = 'block';
+      this.http.post(this.router.url, Object.assign({cid: this.clientId, cip: this.worldtime.client_ip}, form.value)).subscribe(value => {
+        console.log(value);
+      }, (ex) => this.errorHandler(ex));
+    }
+  }
+
+  errorHandler(ex: any) {
+    this.overlay.nativeElement.style.display = 'none';
+    if (ex.status === 404 || ex.status % 500 < 50 || !ex.error) {
+      this.error = Locales.internalError;
+    } else {
+      this.error = ex.error;
+    }
   }
 }
 
 @NgModule({
   imports: [
+    FormsModule,
     CommonModule,
     HttpClientModule,
-    AppFooterComponentModule,
+    AppComponentModule,
     RouterModule.forChild([{
       path: '', component: AuthComponent,
     }]),

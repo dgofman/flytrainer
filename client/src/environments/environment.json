@@ -4,6 +4,9 @@
     "company": "Company Name",
     "phone": "(xxx) xxx-xxxx",
     "homeAirport": "KRHV",
+    "tfrLink": "https://tfr.faa.gov/tfr2/list.jsp?sort=d&cns_l_id=ZOA",
+    "timezone": "America/Los_Angeles",
+    "metarHoursBeforeNow": 1,
     "metarAirports": ["KRHV", "KSJC", "KPAO", "KE16", "KLVK", "KWVI", "KOAK", "KSFO", "KCVH", "KHAF", "KSNS", "KMRY"],
     "clientId": "zruZcGbAdHUk8C2eTmH/WkEedcYxB81F6rLmECfNDls"
 }

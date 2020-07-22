@@ -37,5 +37,6 @@ libraryDependencies ++= Seq(
   guice,
   jdbc,
   "com.auth0" % "java-jwt" % "3.10.3",
-  "mysql" % "mysql-connector-java" % "8.0.20"
+  "mysql" % "mysql-connector-java" % "8.0.20",
+  "com.sun.mail" % "javax.mail" % "1.6.2"
 )

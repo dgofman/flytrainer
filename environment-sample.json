@@ -1,8 +1,18 @@
 {
     "server_port": 8080,
     "expireToken": 30,
+    "maxLoginAttempts": 5,
+    "maxLockedTime": 15,
     "issuer": "FlyTrainer LLC",
     "defaultPassword": "pilot",
-    "encryptKey": "",
-    "secretKey": ""
+    "encryptKey": "*******",
+    "secretKey": "*******",
+    "email": {
+        "mail.smtp.host": "smtp.gmail.com",
+        "mail.smtp.port": 587,
+        "mail.smtp.auth": true,
+        "mail.smtp.starttls.enable": true,
+        "username": "*******@gmail.com",
+        "password": "*******"
+    }
 }

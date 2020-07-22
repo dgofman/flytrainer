@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -19,19 +20,18 @@ import io.ebean.annotation.JsonIgnore;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
 import utils.AppConfig;
-import utils.AppConfig.Key;
+import utils.Constants.Key;
 import utils.Constants;
 
 @Entity
 @History
 @NamedQueries(value = { 
-	@NamedQuery(name = User.LOGIN, query = "select(uuid) where username = :username and password = :password"),
-	@NamedQuery(name = User.AUTH, query = "select(id, isActive, role, resetPassword) where username = :username and uuid = :uuid")
+	@NamedQuery(name = User.LOGIN, query = "select(uuid, isActive, resetPassword) where username = :username and password = :password"),
+	//@NamedQuery(name = User.AUTH, query = "select(id, isActive, role, resetPassword) where username = :username and uuid = :uuid")
 })
 public class User extends BaseModel {
 	
 	public static final String LOGIN = "User.login";
-	public static final String AUTH = "User.auth";
 
 	private static final String defaultPassword = AppConfig.get(Key.DEFAULT_PWD).asText();
 
@@ -78,4 +78,7 @@ public class User extends BaseModel {
 	@ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
 	@JsonBackReference
 	private Account account;
+
+	@Transient
+	public String authToken;
 }

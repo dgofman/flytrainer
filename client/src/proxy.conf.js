@@ -1,4 +1,4 @@
-var env = require("../../environment.json");
+var env = require("./environments/environment.json");
 
 const PROXY_CONFIG = {
   "/dataserver_current": {
@@ -9,9 +9,13 @@ const PROXY_CONFIG = {
     },
     "changeOrigin": true
   },
+  "/timezone": {
+    "target": "http://worldtimeapi.org/api",
+    "changeOrigin": true
+  },
   "**": {
     "target": env.endpoint,
-    "secure": false,
+    "secure": env.secure,
     "bypass": function (req) {
       if (req && req.headers && req.headers.accept && req.headers.accept.indexOf("html") !== -1) {
         console.log("Skipping proxy for browser request.");

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import io.ebean.Ebean;
+import io.ebean.DB;
 import models.User;
 import play.mvc.Action;
 import play.mvc.Http;
@@ -36,7 +36,7 @@ class BasicAuthAction extends Action<BasicAuth> {
 		}
 		try {
 			DecodedJWT jwt = AuthenticationUtils.validateToken(authHeader.get().substring(Constants.TOKEN_FORMAT.length() + 1));
-			User user = Ebean.getDefaultServer().createNamedQuery(User.class, User.LOGIN)
+			User user = DB.createNamedQuery(User.class, User.LOGIN)
 					.setParameter("username", jwt.getSubject())
 					.setParameter("password", jwt.getKeyId()).findOne();
 			if (user.isActive) {

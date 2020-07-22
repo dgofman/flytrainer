@@ -21,7 +21,7 @@ import play.api.db.DatabaseConfig;
 import play.inject.Binding;
 import play.inject.Module;
 import utils.AppConfig;
-import utils.AppConfig.Key;
+import utils.Constants.Key;
 
 public class ServerConfigModule implements ServerConfigStartup {
 

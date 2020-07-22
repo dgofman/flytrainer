@@ -7,10 +7,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import io.ebean.Ebean;
+import io.ebean.DB;
 import models.User;
-
-import utils.AppConfig.Key;
+import utils.Constants.Errors;
+import utils.Constants.Key;
 
 /**
  * Utility class to manage the authentication JWT token
@@ -26,16 +26,28 @@ public class AuthenticationUtils {
 		return CLIENTID.equals(clientid);
 	}
 
-	public static String issueToken(String username, String password) throws Exception {
+	public static User authenticate(String username, String password) throws IllegalAccessException {
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MINUTE, EXPIRE_TOKEN);
-		User user = Ebean.getDefaultServer().createNamedQuery(User.class, User.LOGIN)
+		User user = DB.createNamedQuery(User.class, User.LOGIN)
 			.setParameter("username", username)
 			.setParameter("password", password).findOne();
-		return JWT.create().withIssuer(ISSUER).withSubject(username).withKeyId(user.uuid.toString()).withExpiresAt(c.getTime()).sign(ALGORITHM);
+		if (user == null) {
+			throw new IllegalAccessException(Errors.INVALID_LOGIN.error);
+		}
+		if (!user.isActive) {
+			throw new IllegalAccessException(Errors.DISABLED.error);
+		}
+		user.authToken = JWT.create()
+				.withIssuer(ISSUER)
+				.withSubject(username)
+				.withKeyId(user.uuid.toString())
+				.withExpiresAt(c.getTime())
+				.sign(ALGORITHM);
+		return user;
 	}
 
-	public static DecodedJWT validateToken(String token) throws Exception {
+	public static DecodedJWT validateToken(String token) {
 		JWTVerifier verifier = JWT.require(ALGORITHM).withIssuer(ISSUER).build();
 		return verifier.verify(token);
 	}

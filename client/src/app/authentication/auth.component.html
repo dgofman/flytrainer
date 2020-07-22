@@ -6,28 +6,35 @@
         </div>
     </div>
     <div class="wrap">
-        <div class="main" [ngSwitch]="routerUrl">
-            <form method="POST" [action]="actionUrl" class="dialog">
-                <input type="hidden" name="cid" [value]="clientId" />
+        <div style="float: right; margin: 10px; font-family: Monospace;">
+            <div>{{currentDateTime | date:"MM/dd/yyyy":"+0000"}}, <b><u>{{currentDateTime | date:"HH:mm":"+0000"}}</u> UTC</b></div>
+            <div>{{currentDateTime | date:"MM/dd/yyyy"}}, <b><u>{{currentDateTime | date:"HH:mm"}}</u> {{ worldtime.abbreviation }}</b></div>
+        </div>
+        <div class="main" [ngSwitch]="router.url">
+            <form method="POST" class="dialog" #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" ngNativeValidate>
+                <h5 style="color: red; margin: 0 0 8px;">{{error}}&nbsp;</h5>
                 <ng-template [ngSwitchCase]="'/login'">
                     <div class="p-filed ui-fluid">
                         <label class="p-col-fixed">{{Locales.userId}}</label>
-                        <input class="ui-inputtext" name="userid" required>
+                        <input class="ui-inputtext" name="userid" required ngModel autocomplete="off">
                     </div>
                     <div class="p-filed ui-fluid">
                         <label class="p-col-fixed">{{Locales.password}}</label>
-                        <input type="password" class="ui-inputtext" name="passwd" required>
+                        <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
                     </div>
                     <a href="/reset">{{Locales.forgotPassword}}</a>
-                    <button class="ui-button ui-button-text" style="float: right"
-                        type="submit">{{Locales.login}}</button>
+                    <button class="ui-button ui-button-text" style="float: right" type="submit">{{Locales.login}}</button>
                     <div style="margin-top: 40px; text-align: center;">{{Locales.aggrement}}</div>
                 </ng-template>
                 <ng-template [ngSwitchCase]="'/reset'">
-                    <div>
-                        <input />
-                        <input />
-                        <button>{{Locales.login}}</button>
+                    <div style="margin: 10px 0;">{{Locales.enterEmail}}</div>
+                    <div class="p-filed ui-fluid">
+                        <label class="p-col-fixed">{{Locales.email}}</label>
+                        <input type="email" class="ui-inputtext" name="email" required ngModel autocomplete="off">
+                    </div>
+                    <div style="float: right">
+                        <a href="/login" style="margin-right: 20px">{{Locales.cancel}}</a>
+                        <button class="ui-button ui-button-text" type="submit">{{Locales.submit}}</button>
                     </div>
                 </ng-template>
             </form>
@@ -43,6 +50,9 @@
                 </a>
             </li>
         </ul>
+        <div class="ui-dialog-mask ui-widget-overlay" #overlay>
+            <div class="app-loading"></div>
+        </div>
     </div>
     <app-footer></app-footer>
 </div>

@@ -26,6 +26,7 @@ object FrontendRunHook {
       var run: String = "ng serve --open --proxy-config src/proxy.conf.js --port " + jsClientValues(0).toString()
 
       // Windows requires npm commands prefixed with cmd /c
+      // for /f "tokens=5" %a in ('netstat -aon ^| find "9999"') do taskkill /f /pid %a
       if (System.getProperty("os.name").toLowerCase().contains("win")){
         Process("cmd /c  for /f \"tokens=5\" %a in ('netstat -aon ^| find \"" + jsServerValues(0).toString() + "\"') do taskkill /f /pid %a").!
         Process("cmd /c  for /f \"tokens=5\" %a in ('netstat -aon ^| find \"" + jsClientValues(0).toString() + "\"') do taskkill /f /pid %a").!

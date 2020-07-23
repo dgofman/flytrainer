@@ -24,6 +24,8 @@ public class MailServer {
 	private static final Properties prop = new Properties();
 	private static final Logger log = LoggerFactory.getLogger(MailServer.class);
 
+	private static String emailPassword;
+
 	static {
 		JsonNode email = AppConfig.get(Key.EMAIL);
 		Iterator<Map.Entry<String, JsonNode>> fields = email.fields();
@@ -31,12 +33,22 @@ public class MailServer {
 			Map.Entry<String, JsonNode> node = fields.next();
 			prop.put(node.getKey(), node.getValue().asText());
 		}
+
+		try {
+			emailPassword = prop.getProperty("password");
+			if ("true".equals(prop.getProperty("encrypted"))) {
+				emailPassword = AppConfig.decrypt(emailPassword);
+			}
+		} catch (Exception ex) {
+			log.error("MailServer::static", ex);
+			System.exit(1);
+		}
 	}
 
 	public static boolean sendMail(String toMail, String subject, String body) {
 		Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(prop.getProperty("username"), prop.getProperty("password"));
+				return new PasswordAuthentication(prop.getProperty("username"), emailPassword);
 			}
 		});
 		try {

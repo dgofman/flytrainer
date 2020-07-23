@@ -13,6 +13,7 @@
         "mail.smtp.auth": true,
         "mail.smtp.starttls.enable": true,
         "username": "*******@gmail.com",
-        "password": "*******"
+        "password": "*******",
+        "encrypted": true
     }
 }

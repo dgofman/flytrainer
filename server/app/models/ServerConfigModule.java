@@ -38,7 +38,7 @@ public class ServerConfigModule implements ServerConfigStartup {
 			return Arrays
 					.asList(
 							//bindClass(ReadAnnotations.class).to(CustomReadAnnotations.class).eagerly()
-							);
+					);
 		}
 	}
 

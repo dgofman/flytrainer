@@ -36,9 +36,9 @@ public class AppConfig {
 	}
 
 	public static JsonNode get(Key key) {
-		JsonNode node = server_json.get(key.name);
+		JsonNode node = server_json.get(key.toString());
 		if (node == null) {
-			node = client_json.get(key.name);
+			node = client_json.get(key.toString());
 		}
 		return node;
 	}

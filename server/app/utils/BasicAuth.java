@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import io.ebean.DB;
+import io.ebean.Ebean;
 import models.User;
 import play.mvc.Action;
 import play.mvc.Http;
@@ -32,23 +32,29 @@ class BasicAuthAction extends Action<BasicAuth> {
 	public CompletionStage<Result> call(Http.Request req) {
 		Optional<String> authHeader = req.getHeaders().get(Constants.AUTHORIZATION);
 		if (!authHeader.isPresent()|| authHeader.get().startsWith(Constants.TOKEN_FORMAT)) {
-			return CompletableFuture.completedFuture(status(Http.Status.UNAUTHORIZED, "Needs authorization"));
+			return CompletableFuture.completedFuture(status(Http.Status.UNAUTHORIZED, Constants.Errors.UNAUTHORIZED.toString()));
 		}
 		try {
 			DecodedJWT jwt = AuthenticationUtils.validateToken(authHeader.get().substring(Constants.TOKEN_FORMAT.length() + 1));
-			User user = DB.createNamedQuery(User.class, User.LOGIN)
+			if (jwt == null) {
+				return CompletableFuture.completedFuture(status(Http.Status.FORBIDDEN, Constants.Errors.FORBIDDEN.toString()));
+			}
+			User user = Ebean.createNamedQuery(User.class, User.LOGIN)
 					.setParameter("username", jwt.getSubject())
 					.setParameter("password", jwt.getKeyId()).findOne();
-			if (user.isActive) {
-				return CompletableFuture.completedFuture(status(Http.Status.NOT_ACCEPTABLE));
+			if (user.isActive == 0) {
+				return CompletableFuture.completedFuture(status(Http.Status.NOT_ACCEPTABLE, Constants.Errors.DISABLED.toString()));
 			}
-			if (user.resetPassword) {
-				return CompletableFuture.completedFuture(temporaryRedirect("/resetpassword"));
+			if (user.resetPassword == 1) {
+				return CompletableFuture.completedFuture(temporaryRedirect("/reset"));
 			}
-			req.getHeaders().adding("userKey", String.valueOf(user.id));
+			if (!user.uuid.toString().equals(jwt.getKeyId())) {
+				return CompletableFuture.completedFuture(status(Http.Status.FORBIDDEN, Constants.Errors.FORBIDDEN.toString()));
+			}
+			req.getHeaders().adding("currentUserId", String.valueOf(user.id));
 		} catch (Exception ex) {
 			log.error("Invalid auth header", ex);
-			return CompletableFuture.completedFuture(status(Http.Status.FORBIDDEN, "Invalid auth header"));
+			return CompletableFuture.completedFuture(status(Http.Status.FORBIDDEN, Constants.Errors.FORBIDDEN.toString()));
 		}
 		return delegate.call(req);
 	}

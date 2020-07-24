@@ -1,5 +1,6 @@
 import { Component, NgModule, ElementRef, ViewChild } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
+import {Pipe, PipeTransform} from '@angular/core';
+import { RouterModule, ActivatedRoute, Router, RouterState } from '@angular/router';
 import { environment } from '@client/environments/environment';
 import { CommonModule } from '@angular/common';
 import Locales from '@locales/auth';
@@ -13,7 +14,8 @@ import { FormsModule } from '@angular/forms';
 })
 export class AuthComponent {
   Locales = Locales;
-  clientId: string;
+  environment = environment;
+  path: string;
   company: string;
   phone: string;
   error: string;
@@ -25,8 +27,8 @@ export class AuthComponent {
   @ViewChild('overlay')
   overlay: ElementRef;
 
-  constructor(public router: Router, private http: HttpClient) {
-    this.clientId = environment.clientId;
+  constructor(router: Router, private http: HttpClient) {
+    this.path = router.url.split('?')[0];
     this.company = environment.company;
     this.phone = environment.phone;
     this.metarAirports = environment.metarAirports;
@@ -74,10 +76,17 @@ export class AuthComponent {
   }
 
   onSubmit(form: any) {
+    this.error = null;
     if (form.valid) {
+      const data = form.value;
+      if (data.conf_passwd && data.conf_passwd !== data.passwd) {
+        this.errorHandler({error: Locales.confirmPasswordError});
+        return;
+      }
+      delete data.conf_passwd;
       this.overlay.nativeElement.style.display = 'block';
-      this.http.post(this.router.url, Object.assign({cid: this.clientId, cip: this.worldtime.client_ip}, form.value)).subscribe(value => {
-        console.log(value);
+      this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, data)).subscribe(_ => {
+        this.overlay.nativeElement.style.display = 'none';
       }, (ex) => this.errorHandler(ex));
     }
   }
@@ -92,6 +101,16 @@ export class AuthComponent {
   }
 }
 
+@Pipe({name: 'formatRaw'})
+export class FormatRaw implements PipeTransform {
+  transform(val: string): string {
+    if (val !== null && val.length > 7) {
+      return val.substring(0, 2) + '<b><u>' + val.substring(2, 6) + '</u></b>' + val.substring(6);
+    }
+    return val;
+  }
+}
+
 @NgModule({
   imports: [
     FormsModule,
@@ -102,6 +121,10 @@ export class AuthComponent {
       path: '', component: AuthComponent,
     }]),
   ],
-  declarations: [AuthComponent]
+  declarations: [AuthComponent, FormatRaw]
 })
 export class AuthComponentModule { }
+
+
+
+

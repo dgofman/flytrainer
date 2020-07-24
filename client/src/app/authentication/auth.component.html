@@ -7,28 +7,29 @@
     </div>
     <div class="wrap">
         <div style="float: right; margin: 10px; font-family: Monospace;">
-            <div>{{currentDateTime | date:"MM/dd/yyyy":"+0000"}}, <b><u>{{currentDateTime | date:"HH:mm":"+0000"}}</u> UTC</b></div>
-            <div>{{currentDateTime | date:"MM/dd/yyyy"}}, <b><u>{{currentDateTime | date:"HH:mm"}}</u> {{ worldtime.abbreviation }}</b></div>
+            <div>{{currentDateTime | date:"MM/dd/yy":"+0000"}}, <b><u>{{currentDateTime | date:"HH:mm":"+0000"}}</u> UTC</b></div>
+            <div>{{currentDateTime | date:"MM/dd/yy"}}, <b><u>{{currentDateTime | date:"HH:mm"}}</u> {{ worldtime.abbreviation }}</b></div>
         </div>
-        <div class="main" [ngSwitch]="router.url">
-            <form method="POST" class="dialog" #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" ngNativeValidate>
+        <div class="main" [ngSwitch]="path">
+            <form method="POST" class="dialog ui-fluid" #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" ngNativeValidate>
                 <h5 style="color: red; margin: 0 0 8px;">{{error}}&nbsp;</h5>
                 <ng-template [ngSwitchCase]="'/login'">
-                    <div class="p-filed ui-fluid">
+                    <div class="p-filed">
                         <label class="p-col-fixed">{{Locales.userId}}</label>
                         <input class="ui-inputtext" name="userid" required ngModel autocomplete="off">
                     </div>
-                    <div class="p-filed ui-fluid">
+                    <div class="p-filed">
                         <label class="p-col-fixed">{{Locales.password}}</label>
                         <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
                     </div>
-                    <a href="/reset">{{Locales.forgotPassword}}</a>
+                    <a href="/reset" *ngIf="environment.includeForgotPassword">{{Locales.forgotPassword}}</a>
+                    <a href="/create" *ngIf="environment.includeCreateAccount">  |  {{Locales.createAccount}}</a>
                     <button class="ui-button ui-button-text" style="float: right" type="submit">{{Locales.login}}</button>
                     <div style="margin-top: 40px; text-align: center;">{{Locales.aggrement}}</div>
                 </ng-template>
                 <ng-template [ngSwitchCase]="'/reset'">
                     <div style="margin: 10px 0;">{{Locales.enterEmail}}</div>
-                    <div class="p-filed ui-fluid">
+                    <div class="p-filed">
                         <label class="p-col-fixed">{{Locales.email}}</label>
                         <input type="email" class="ui-inputtext" name="email" required ngModel autocomplete="off">
                     </div>
@@ -37,16 +38,50 @@
                         <button class="ui-button ui-button-text" type="submit">{{Locales.submit}}</button>
                     </div>
                 </ng-template>
+                <ng-template [ngSwitchCase]="'/create'">
+                    <div class="p-filed">
+                        <label class="p-col-fixed">{{Locales.userId}}*</label>
+                        <input class="ui-inputtext" name="userid" required ngModel autocomplete="off">
+                    </div>
+                    <div class="p-filed">
+                        <label class="p-col-fixed">{{Locales.password}}*</label>
+                        <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
+                    </div>
+                    <div class="p-filed">
+                        <label class="p-col-fixed">{{Locales.confirmPassword}}*</label>
+                        <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off">
+                    </div>
+                    <div class="p-filed">
+                        <label class="p-col-fixed">{{Locales.email}}*</label>
+                        <input class="ui-inputtext" name="email" required ngModel autocomplete="off">
+                    </div>
+                    <div class="p-filed">
+                        <label class="p-col-fixed">{{Locales.firstName}}*</label>
+                        <input class="ui-inputtext" name="first" required ngModel autocomplete="off">
+                    </div>
+                    <div class="p-filed">
+                        <label class="p-col-fixed">{{Locales.lastName}}*</label>
+                        <input class="ui-inputtext" name="last" required ngModel autocomplete="off">
+                    </div>
+                    <div class="p-filed">
+                        <label class="p-col-fixed">{{Locales.phone}}</label>
+                        <input class="ui-inputtext" name="phone" ngModel autocomplete="off">
+                    </div>
+                    <div style="float: right">
+                        <a href="/login" style="margin-right: 20px">{{Locales.cancel}}</a>
+                        <button class="ui-button ui-button-text" type="submit">{{Locales.submit}}</button>
+                    </div>
+                </ng-template>
             </form>
         </div>
-        <ul class="metars">
+        <ul class="metars" *ngIf="path=='/login'">
             <li *ngFor="let key of metarAirports">
                 <a href="https://www.aviationweather.gov/metar/data?ids={{key}}&format=decoded&date=&hours=0&taf=on" target="_block" [title]="metars[key]?.raw || key">
                     <div>
                         <b [class]="metars[key]?.ctg">{{key}}</b>
-                        <span style="float: right">{{metars[key]?.date | date:'short' }}</span>
+                        <span style="float: right" *ngIf="metars[key]">{{metars[key].date | date:"MM/dd/yy"}}, <b><u>{{metars[key].date | date:"HH:mm"}}</u></b>{{ worldtime.abbreviation }}</span>
                     </div>
-                    <div class="raw">{{metars[key]?.raw}}</div>
+                    <div class="raw" [innerHTML]="metars[key]?.raw | formatRaw"></div>
                 </a>
             </li>
         </ul>

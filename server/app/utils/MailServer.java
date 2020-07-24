@@ -53,7 +53,7 @@ public class MailServer {
 		});
 		try {
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("from@gmail.com"));
+			message.setFrom(new InternetAddress("DoNotReply@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toMail));
 			message.setSubject(subject);
 			message.setContent(body, "text/html");

@@ -15,7 +15,7 @@ import io.ebean.annotation.WhenModified;
 public abstract class BaseModel extends Model {
 
 	@Version
-	long version;
+	public long version;
 
 	@Id
 	public Integer id;
@@ -37,20 +37,29 @@ public abstract class BaseModel extends Model {
 	}
 
 	@Transient
-	private Integer currentUserId;
-	public void setCurrentUserId(Integer userId) {
-		this.currentUserId = userId;
-	}
-	
+	public Integer currentUserId;
+
 	@Override
 	public void save() {
 		if (currentUserId != null) {
 			if (id == null) {
 				whoCreated = currentUserId;
 			} else {
-				whoCreated = whoModified;
+				whoModified = currentUserId;
 			}
 		}
 		super.save();
+	}
+	
+	@Override
+	public void update() {
+		if (currentUserId != null) {
+			if (id == null) {
+				whoCreated = currentUserId;
+			} else {
+				whoModified = currentUserId;
+			}
+		}
+		super.update();
 	}
 }

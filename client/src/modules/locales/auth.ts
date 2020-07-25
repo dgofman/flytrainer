@@ -13,6 +13,7 @@ export default {
     createAccount: 'Create Account',
     returnToLogin: 'Return to Login',
     pleaseWait: 'Please wait while we process your request...',
+    chooseNewPassword: 'Choose a new password for your account. This password will replace the old one.',
     accountActivation: 'We sent an activation mail. Please follow the instruction in the email to activate your account.',
     accountActivated: 'Your account has been activated. Use the button bellow to continue.',
     aggrement: 'By signing up you agree to our Terms of Use and Privacy Policy.',

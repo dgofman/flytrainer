@@ -7,6 +7,7 @@ import Locales from '@locales/auth';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AppComponentModule } from '../app.component';
 import { FormsModule } from '@angular/forms';
+import { AuthHttpInterceptor } from './auth-http-interceptor';
 
 @Component({
   templateUrl: './auth.component.html',
@@ -15,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 export class AuthComponent implements AfterViewInit {
   Locales = Locales;
   environment = environment;
+  resetPassword  = false;
   path: string;
   company: string;
   phone: string;
@@ -28,7 +30,7 @@ export class AuthComponent implements AfterViewInit {
   @ViewChild('overlay')
   overlay: ElementRef;
 
-  constructor(router: Router, private route: ActivatedRoute, private http: HttpClient) {
+  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {
     this.path = router.url.split('?')[0];
     this.company = environment.company;
     this.phone = environment.phone;
@@ -93,15 +95,26 @@ export class AuthComponent implements AfterViewInit {
     this.error = null;
     if (form.valid) {
       const data = form.value;
-      if (data.conf_passwd && data.conf_passwd !== data.passwd) {
-        this.errorHandler({error: Locales.confirmPasswordError});
-        return;
+      if (data.conf_passwd) {
+        if ((this.resetPassword && data.conf_passwd !== data.new_passwd) ||
+            (!this.resetPassword && data.conf_passwd !== data.passwd)) {
+          this.errorHandler({error: Locales.confirmPasswordError});
+          return;
+        }
       }
       delete data.conf_passwd;
       this.overlay.nativeElement.style.display = 'block';
-      this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, data)).subscribe(_ => {
+      this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, data)).subscribe((value: any) => {
         this.overlay.nativeElement.style.display = 'none';
         switch (this.path) {
+          case '/login':
+            if (value.token) {
+              AuthHttpInterceptor.AUTH_TOKEN = value.token;
+              this.router.navigate(['/dashboard']);
+            } else {
+              this.resetPassword = true;
+            }
+            break;
           case '/create':
             this.message = Locales.accountActivation;
             this.path = '/activate';

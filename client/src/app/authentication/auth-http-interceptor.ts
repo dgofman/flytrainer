@@ -5,7 +5,7 @@ import { environment } from '@client/environments/environment';
 
 @Injectable()
 export class AuthHttpInterceptor implements HttpInterceptor {
-    private static AUTH_TOKEN: string;
+    public static AUTH_TOKEN: string;
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         req.headers.set('Access-Control-Allow-Origin', '*');

@@ -20,7 +20,8 @@ public class Constants {
 		INVALID_LOGIN("Invalid username or password"),
 		ACCESS_DENIED("You do not have enough access privileges for this operation."),
 		UNAUTHORIZED("Needs authorization"),
-		FORBIDDEN("Your account activation token is not longer valid.");
+		FORBIDDEN("Your account activation token is not longer valid."),
+		RESET("Required to reset password.");
 		
 		private final String error;
 

@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +11,11 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import io.ebean.Ebean;
 import models.User;
+import play.mvc.Http;
 import utils.Constants.Errors;
 import utils.Constants.Key;
 
@@ -44,28 +47,24 @@ public class AuthenticationUtils {
 		return user;
 	}
 
-	public static String createToken(User user, boolean full, Date expireDate) {
+	public static String createToken(User user, Date expireDate) {
 		JWTCreator.Builder jwt = JWT.create()
 				.withIssuer(ISSUER)
+				.withSubject(user.username)
 				.withKeyId(user.uuid.toString())
 				.withExpiresAt(expireDate);
-		if (full) {
-			jwt.withSubject(user.username)
-				.withClaim("v", user.version);
-		}
 		return jwt.sign(ALGORITHM);
 	}
-	
+
 	public static DecodedJWT validateToken(String token) {
 		return JWT.require(ALGORITHM).withIssuer(ISSUER).build().verify(token);
 	}
 
-	public static DecodedJWT validateToken(String token, long version, String username) {
+	public static DecodedJWT validateToken(String token, String username) {
 		try {
 			return JWT.require(ALGORITHM)
 					.withIssuer(ISSUER)
 					.withSubject(username)
-					.withClaim("v", version)
 					.build().verify(token);
 		} catch (TokenExpiredException ex) {
 			log.error("The Token has expired", ex);
@@ -74,5 +73,19 @@ public class AuthenticationUtils {
 			log.error("Unexpected error", ex);
 			return null;
 		}
+	}
+
+	public static String getClientIpAddress(Http.Request request, JsonNode body) {	
+		String clientIp = "";
+		if (body.get("cip") != null) {
+			clientIp = body.get("cip").asText() + '/';
+		}
+		Optional<String> xForward = request.getHeaders().get("X-FORWARDED-FOR");  
+		if (xForward.isPresent()) {
+			clientIp += xForward.get();
+		} else {
+			clientIp += request.remoteAddress();
+		}
+		return clientIp;
 	}
 }

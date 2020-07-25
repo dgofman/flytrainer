@@ -14,16 +14,29 @@
             <form method="POST" class="dialog ui-fluid" #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" ngNativeValidate>
                 <h5 style="color: red; margin: 0 0 8px;">{{error}}&nbsp;</h5>
                 <ng-template [ngSwitchCase]="'/login'">
-                    <div class="p-filed">
-                        <label class="p-col-fixed">{{Locales.userId}}</label>
-                        <input class="ui-inputtext" name="userid" required ngModel autocomplete="off">
+                    <div [style.display]="resetPassword ? 'none' : 'block'">
+                        <div class="p-filed">
+                            <label class="p-col-fixed">{{Locales.userId}}</label>
+                            <input class="ui-inputtext" name="userid" required ngModel autocomplete="off">
+                        </div>
+                        <div class="p-filed">
+                            <label class="p-col-fixed">{{Locales.password}}</label>
+                            <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
+                        </div>
+                        <a href="/reset" *ngIf="environment.includeForgotPassword">{{Locales.forgotPassword}}</a>
+                        <a href="/create" *ngIf="environment.includeCreateAccount">  |  {{Locales.createAccount}}</a>
                     </div>
-                    <div class="p-filed">
-                        <label class="p-col-fixed">{{Locales.password}}</label>
-                        <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
+                    <div *ngIf="resetPassword">
+                        <p>{{Locales.chooseNewPassword}}</p>
+                        <div class="p-filed">
+                            <label class="p-col-fixed">{{Locales.password}}*</label>
+                            <input type="password" class="ui-inputtext" name="new_passwd" required ngModel autocomplete="off">
+                        </div>
+                        <div class="p-filed">
+                            <label class="p-col-fixed">{{Locales.confirmPassword}}*</label>
+                            <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off">
+                        </div>
                     </div>
-                    <a href="/reset" *ngIf="environment.includeForgotPassword">{{Locales.forgotPassword}}</a>
-                    <a href="/create" *ngIf="environment.includeCreateAccount">  |  {{Locales.createAccount}}</a>
                     <button class="ui-button ui-button-text" style="float: right" type="submit">{{Locales.login}}</button>
                     <div style="margin-top: 40px; text-align: center;">{{Locales.aggrement}}</div>
                 </ng-template>

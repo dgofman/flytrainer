@@ -21,10 +21,10 @@ public abstract class BaseModel extends Model {
 	public Integer id;
 
 	@WhenCreated
-	Instant createdDate;
+	public Instant createdDate;
 
 	@WhenModified
-	Instant modifiedDate;
+	public Instant modifiedDate;
 
 	private Integer whoCreated;
 	public Integer getWhoCreated() {

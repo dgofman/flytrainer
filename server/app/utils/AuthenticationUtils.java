@@ -1,6 +1,6 @@
 package utils;
 
-import java.util.Calendar;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,6 @@ import utils.Constants.Key;
  */
 public class AuthenticationUtils {
 
-	private static final int EXPIRE_TOKEN = AppConfig.get(Key.EXPIRE_TOKEN).asInt();
 	private static final String ISSUER = AppConfig.get(Key.ISSUER_TOKEN).asText();
 	private static final String CLIENTID = AppConfig.get(Key.CLIENT_ID).asText();
 	private static final Algorithm ALGORITHM = Algorithm.HMAC256(AppConfig.get(Key.SECRET_KEY).asText());
@@ -45,13 +44,11 @@ public class AuthenticationUtils {
 		return user;
 	}
 
-	public static String createToken(User user, boolean full) {
-		Calendar c = Calendar.getInstance();
-		c.add(Calendar.MINUTE, EXPIRE_TOKEN);
+	public static String createToken(User user, boolean full, Date expireDate) {
 		JWTCreator.Builder jwt = JWT.create()
 				.withIssuer(ISSUER)
 				.withKeyId(user.uuid.toString())
-				.withExpiresAt(c.getTime());
+				.withExpiresAt(expireDate);
 		if (full) {
 			jwt.withSubject(user.username)
 				.withClaim("v", user.version);
@@ -63,12 +60,12 @@ public class AuthenticationUtils {
 		return JWT.require(ALGORITHM).withIssuer(ISSUER).build().verify(token);
 	}
 
-	public static DecodedJWT validateToken(String token, String username, String version) {
+	public static DecodedJWT validateToken(String token, long version, String username) {
 		try {
 			return JWT.require(ALGORITHM)
 					.withIssuer(ISSUER)
 					.withSubject(username)
-					.withClaim("v", Long.valueOf(version))
+					.withClaim("v", version)
 					.build().verify(token);
 		} catch (TokenExpiredException ex) {
 			log.error("The Token has expired", ex);

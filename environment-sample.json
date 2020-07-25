@@ -1,6 +1,7 @@
 {
     "server_port": 8080,
-    "expireToken": 30,
+    "sessionExpireTimeInMinutes": 30,
+    "mailLinkExpireTimeInHours": 48,
     "maxLoginAttempts": 5,
     "maxLockedTime": 15,
     "issuer": "FlyTrainer LLC",

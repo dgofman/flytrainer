@@ -1,5 +1,6 @@
 package controllers;
 
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -66,7 +67,9 @@ public class HomeController extends Controller {
 		}
 		try {
 			User user = AuthenticationUtils.authenticate(username, body.get("passwd").asText());
-			String authToken = AuthenticationUtils.createToken(user, false);
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.HOUR, AppConfig.get(Key.EXPIRE_ACTIVATION).asInt());
+			String authToken = AuthenticationUtils.createToken(user, false, c.getTime());
 			if (user.resetPassword == 1) {
 				redirect("/reset?t=" + authToken);
 			}
@@ -99,42 +102,48 @@ public class HomeController extends Controller {
 				return badRequest(Constants.Errors.ERROR.toString());
 			}
 		}
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MINUTE, AppConfig.get(Key.EXPIRE_TOKEN).asInt());
+		String authToken = AuthenticationUtils.createToken(user, true, c.getTime());
+		log.debug("Send activatation token: " +user.email + ", authToken=" + authToken);
 		String origin = "";
 		if (request.getHeaders().get("Origin").isPresent()) {
 			origin = request.getHeaders().get("Origin").get();
 		}
-		String authToken = AuthenticationUtils.createToken(user, true);
-		log.debug("Send activatation token: " +user.email + ", authToken=" + authToken);
-		String body = String.format(Constants.createAccountMessage, user.firstname, user.lastname, AppConfig.get(Constants.Key.ENDPOINT).asText() + "/activate?user=" + user.username + "&v=" +user. version + "&t=" + authToken + "&redirect=" + origin + "/login");
-		MailServer.sendMail(user.email, "Activate your account", body);
+		try {
+			String body = String.format(Constants.createAccountMessage, user.firstname, user.lastname, origin + "/activate?user=" + user.username + "&v=" +user. version + "&t=" + authToken + "&d=" + user.modifiedDate.toEpochMilli());
+			MailServer.sendMail(user.email, "Activate your account", body);
+		} catch (Exception e) {
+			return badRequest(Constants.Errors.ERROR.toString());
+		}
 		return ok();
 	}
 
 	public Result activate(Http.Request request) {
-		if (!request.queryString("t").isPresent() && !request.queryString("user").isPresent() || !request.queryString("v").isPresent() || !request.queryString("redirect").isPresent()) {
-			log.error("Invalid activation link=" + request.path());
-			return forbidden(Constants.Errors.FORBIDDEN.toString());
-		}
-		DecodedJWT jwt = AuthenticationUtils.validateToken(request.queryString("t").get(), request.queryString("user").get(), request.queryString("v").get());
+		JsonNode body = request.body().asJson();
+		DecodedJWT jwt = AuthenticationUtils.validateToken(body.get("t").asText(), body.get("v").asLong(), body.get("user").asText());
 		if (jwt == null) {
-			log.error("Invalid activation link=" + request.path());
+			log.error("Invalid token=" + request.path());
 			return forbidden(Constants.Errors.FORBIDDEN.toString());
 		}
 		try {
 			User user = Ebean.createNamedQuery(User.class, User.FIND)
 					.setParameter("username", jwt.getSubject())
 					.setParameter("uuid", jwt.getKeyId())
-					.setParameter("version", jwt.getClaim("v").asLong()).findOne();
+					.setParameter("version", jwt.getClaim("v").asLong())
+					.setParameter("modifiedDate", Instant.ofEpochMilli(body.get("d").asLong())).findOne();
 			if (user == null) {
+				log.error("Invalid version or timestamp=" + body.get("d").asLong());
 				return forbidden(Constants.Errors.FORBIDDEN.toString());
 			}
 			user.isActive = 1;
 			user.currentUserId = user.id;
 			user.update();
 		} catch (Exception ex) {
+			log.error("Find and update user", ex);
 			return badRequest(Constants.Errors.ERROR.toString());
 		}
-		return redirect(request.queryString("redirect").get());
+		return ok();
 	}
 	
 	public Result initDatabase() {

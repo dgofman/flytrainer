@@ -27,7 +27,7 @@ import utils.Constants.Key;
 @History
 @NamedQueries(value = { 
 	@NamedQuery(name = User.LOGIN, query = "select(uuid, isActive, resetPassword) where username = :username and password = :password"),
-	@NamedQuery(name = User.FIND, query = "select(isActive) where username = :username and uuid = :uuid and version = :version")
+	@NamedQuery(name = User.FIND, query = "select(isActive) where username = :username and uuid = :uuid and version = :version and modifiedDate =:modifiedDate")
 })
 public class User extends BaseModel {
 	

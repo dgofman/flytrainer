@@ -38,6 +38,14 @@
                         <button class="ui-button ui-button-text" type="submit">{{Locales.submit}}</button>
                     </div>
                 </ng-template>
+                <ng-template [ngSwitchCase]="'/activate'">
+                    <p>{{message}}</p>
+                    <div style="float: right">
+                        <a href="/login">
+                            <button type="button" class="ui-button ui-button-text">{{Locales.returnToLogin}}</button>
+                        </a>
+                    </div>
+                </ng-template>
                 <ng-template [ngSwitchCase]="'/create'">
                     <div class="p-filed">
                         <label class="p-col-fixed">{{Locales.userId}}*</label>
@@ -53,7 +61,7 @@
                     </div>
                     <div class="p-filed">
                         <label class="p-col-fixed">{{Locales.email}}*</label>
-                        <input class="ui-inputtext" name="email" required ngModel autocomplete="off">
+                        <input type="email" class="ui-inputtext" name="email" required ngModel autocomplete="off">
                     </div>
                     <div class="p-filed">
                         <label class="p-col-fixed">{{Locales.firstName}}*</label>

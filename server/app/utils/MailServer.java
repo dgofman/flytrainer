@@ -45,23 +45,17 @@ public class MailServer {
 		}
 	}
 
-	public static boolean sendMail(String toMail, String subject, String body) {
+	public static void sendMail(String toMail, String subject, String body) throws MessagingException {
 		Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(prop.getProperty("username"), emailPassword);
 			}
 		});
-		try {
-			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("DoNotReply@gmail.com"));
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toMail));
-			message.setSubject(subject);
-			message.setContent(body, "text/html");
-			Transport.send(message);
-			return true;
-		} catch (MessagingException ex) {
-			log.error(toMail, ex);
-			return false;
-		}
+		Message message = new MimeMessage(session);
+		message.setFrom(new InternetAddress("DoNotReply@gmail.com"));
+		message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toMail));
+		message.setSubject(subject);
+		message.setContent(body, "text/html");
+		Transport.send(message);
 	}
 }

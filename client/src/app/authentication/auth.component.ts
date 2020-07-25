@@ -1,6 +1,6 @@
-import { Component, NgModule, ElementRef, ViewChild } from '@angular/core';
+import { Component, NgModule, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import {Pipe, PipeTransform} from '@angular/core';
-import { RouterModule, ActivatedRoute, Router, RouterState } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { environment } from '@client/environments/environment';
 import { CommonModule } from '@angular/common';
 import Locales from '@locales/auth';
@@ -12,13 +12,14 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './auth.component.html',
   styleUrls: [ './auth.component.less' ]
 })
-export class AuthComponent {
+export class AuthComponent implements AfterViewInit {
   Locales = Locales;
   environment = environment;
   path: string;
   company: string;
   phone: string;
   error: string;
+  message: string;
   worldtime: any = {};
   currentDateTime: Date;
   metars: { [key: string]: any; } = {};
@@ -27,26 +28,39 @@ export class AuthComponent {
   @ViewChild('overlay')
   overlay: ElementRef;
 
-  constructor(router: Router, private http: HttpClient) {
+  constructor(router: Router, private route: ActivatedRoute, private http: HttpClient) {
     this.path = router.url.split('?')[0];
     this.company = environment.company;
     this.phone = environment.phone;
     this.metarAirports = environment.metarAirports;
     this.currentDateTime = new Date();
+    this.message = Locales.pleaseWait;
 
     try {
-      this.worldtime.timezone = this.currentDateTime.toLocaleTimeString('en-us', {timeZoneName: 'short'}).split(' ')[2];
+      this.worldtime.abbreviation = this.currentDateTime.toLocaleTimeString('en-us', {timeZoneName: 'short'}).split(' ')[2];
     } catch (e) {
     }
 
     http.get('/timezone/' + environment.timezone).subscribe(value => {
         this.worldtime = value;
         this.currentDateTime = new Date(this.worldtime.utc_datetime);
-    }, (ex) => this.errorHandler(ex));
+    }, (ex) => console.error(ex));
 
     setInterval(() => this.currentDateTime = new Date(this.currentDateTime.getTime() + 1000), 1000);
-    setInterval(() => this.getMetars(), 10 * 60 * 1000);
-    this.getMetars();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.path === '/login') {
+      setInterval(() => this.getMetars(), 10 * 60 * 1000);
+      this.getMetars();
+    } else if (this.path === '/activate') {
+      const params = this.route.queryParams as any;
+      this.overlay.nativeElement.style.display = 'block';
+      this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, params._value)).subscribe(_ => {
+        this.overlay.nativeElement.style.display = 'none';
+        this.message = Locales.accountActivated;
+      }, (ex) => this.errorHandler(ex));
+    }
   }
 
   getMetars() {
@@ -72,7 +86,7 @@ export class AuthComponent {
             }
           });
         }
-      }, (ex) => this.errorHandler(ex));
+      }, (ex) => console.error(ex));
   }
 
   onSubmit(form: any) {
@@ -87,11 +101,21 @@ export class AuthComponent {
       this.overlay.nativeElement.style.display = 'block';
       this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, data)).subscribe(_ => {
         this.overlay.nativeElement.style.display = 'none';
+        switch (this.path) {
+          case '/create':
+            this.message = Locales.accountActivation;
+            this.path = '/activate';
+            break;
+          case '/activate':
+            this.message = Locales.accountActivated;
+            break;
+        }
       }, (ex) => this.errorHandler(ex));
     }
   }
 
   errorHandler(ex: any) {
+    this.message = null;
     this.overlay.nativeElement.style.display = 'none';
     if (ex.status === 404 || ex.status % 500 < 50 || !ex.error) {
       this.error = Locales.internalError;

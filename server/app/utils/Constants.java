@@ -38,10 +38,10 @@ public class Constants {
 		SERVER_PORT("server_port"), 
 		CLIENT_PORT("client_port"), // client/src/environments/environment.json
 		CLIENT_ID("clientId"), // client/src/environments/environment.json
-		ENDPOINT("endpoint"), // client/src/environments/environment.json
 		CREATE_ACCOUNT("includeCreateAccount"), // client/src/environments/environment.json
 		RESET_PASSWORD("includeForgotPassword"), // client/src/environments/environment.json
-		SECRET_KEY("secretKey"), EXPIRE_TOKEN("expireToken"), ISSUER_TOKEN("issuer"), 
+		SECRET_KEY("secretKey"), EXPIRE_TOKEN("sessionExpireTimeInMinutes"), 
+		EXPIRE_ACTIVATION("mailLinkExpireTimeInHours"), ISSUER_TOKEN("issuer"), 
 		DEFAULT_PWD("defaultPassword"), ENCRYPT_KEY("encryptKey"), EMAIL("email"),
 		LOGIN_ATTEMPTS("maxLoginAttempts"), LOCKED_TIME("maxLockedTime");
 

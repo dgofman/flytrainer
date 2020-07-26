@@ -2,25 +2,27 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppNotFoundComponent } from './app.notfound.component';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, UrlSegment } from '@angular/router';
+
+const AuthRouteMatcher = (url: UrlSegment[]) => {
+  if (url.length) {
+    switch (url[0].path) {
+      case 'login':
+      case 'create':
+      case 'forgot':
+      case 'reset':
+      case 'activate':
+        return {consumed: url};
+    }
+  }
+  return null;
+};
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
-    path: 'login',
-    loadChildren: () => import('./authentication/auth.component').then(m => m.AuthComponentModule)
-  },
-  {
-    path: 'reset',
-    loadChildren: () => import('./authentication/auth.component').then(m => m.AuthComponentModule)
-  },
-  {
-    path: 'create',
-    loadChildren: () => import('./authentication/auth.component').then(m => m.AuthComponentModule)
-  },
-  {
-    path: 'activate',
-    loadChildren: () => import('./authentication/auth.component').then(m => m.AuthComponentModule)
+      matcher: AuthRouteMatcher,
+      loadChildren: () => import('./authentication/auth.component').then(m => m.AuthComponentModule)
   },
   {
     path: 'dashboard',

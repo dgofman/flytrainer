@@ -1,5 +1,5 @@
-@topbar-height: 60px;
-@footer-height: 46px;
+@topbar-height: 7vh;
+@footer-height: 5vh;
 @left-menu-width: 235px;
 @menu-close-speed: 0.3s;
 
@@ -80,7 +80,6 @@ body {
         -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
         -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
-        pointer-events: all;
     }
 
     .main,
@@ -93,21 +92,15 @@ body {
 
     .wrap {
         position: relative;
-        min-height: 100%;
-        padding-top: @topbar-height;
-        margin-top: -@topbar-height;
-        padding-bottom: @footer-height;
-        margin-bottom: -@footer-height;
-        pointer-events: none;
+        min-height: 100 - @topbar-height - @footer-height;
     }
 
     .main {
         padding: 20px;
-        pointer-events: all;
-        clear: both;
     }
 
     app-footer {
+        overflow: auto;
         display: block;
         height: @footer-height;
         padding: 15px 20px;

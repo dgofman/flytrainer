@@ -1,4 +1,4 @@
-import { Component, NgModule, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, NgModule, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import {Pipe, PipeTransform} from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { environment } from '@client/environments/environment';
@@ -16,7 +16,7 @@ import { AuthHttpInterceptor } from './auth-http-interceptor';
 export class AuthComponent implements AfterViewInit {
   Locales = Locales;
   environment = environment;
-  resetPassword  = false;
+  resetPassword: boolean;
   path: string;
   company: string;
   phone: string;
@@ -30,7 +30,7 @@ export class AuthComponent implements AfterViewInit {
   @ViewChild('overlay')
   overlay: ElementRef;
 
-  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {
+  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient, private changeDetector: ChangeDetectorRef) {
     this.path = router.url.split('?')[0];
     this.company = environment.company;
     this.phone = environment.phone;
@@ -57,11 +57,15 @@ export class AuthComponent implements AfterViewInit {
       this.getMetars();
     } else if (this.path === '/activate') {
       const params = this.route.queryParams as any;
-      this.overlay.nativeElement.style.display = 'block';
-      this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, params._value)).subscribe(_ => {
-        this.overlay.nativeElement.style.display = 'none';
-        this.message = Locales.accountActivated;
-      }, (ex) => this.errorHandler(ex));
+      if (Object.keys(params._value).length) {
+        this.overlay.nativeElement.style.display = 'block';
+        this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, params._value)).subscribe(_ => {
+          this.overlay.nativeElement.style.display = 'none';
+          this.message = Locales.accountActivated;
+        }, (ex) => this.errorHandler(ex));
+      } else {
+        this.errorHandler({error: Locales.internalError});
+      }
     }
   }
 
@@ -94,17 +98,17 @@ export class AuthComponent implements AfterViewInit {
   onSubmit(form: any) {
     this.error = null;
     if (form.valid) {
+      const params = this.route.queryParams as any;
       const data = form.value;
       if (data.conf_passwd) {
-        if ((this.resetPassword && data.conf_passwd !== data.new_passwd) ||
-            (!this.resetPassword && data.conf_passwd !== data.passwd)) {
+        if (!(data.conf_passwd === data.new_passwd || data.conf_passwd === data.passwd)) {
           this.errorHandler({error: Locales.confirmPasswordError});
           return;
         }
       }
       delete data.conf_passwd;
       this.overlay.nativeElement.style.display = 'block';
-      this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, data)).subscribe((value: any) => {
+      this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, params._value, data)).subscribe((value: any) => {
         this.overlay.nativeElement.style.display = 'none';
         switch (this.path) {
           case '/login':
@@ -116,11 +120,16 @@ export class AuthComponent implements AfterViewInit {
             }
             break;
           case '/create':
-            this.message = Locales.accountActivation;
+          case '/forgot':
+            this.message = Locales.activationInstruction;
             this.path = '/activate';
             break;
           case '/activate':
             this.message = Locales.accountActivated;
+            break;
+          case '/reset':
+            this.message = Locales.passwordUpdated;
+            this.path = '/activate';
             break;
         }
       }, (ex) => this.errorHandler(ex));
@@ -135,6 +144,7 @@ export class AuthComponent implements AfterViewInit {
     } else {
       this.error = ex.error;
     }
+    this.changeDetector.detectChanges();
   }
 }
 
@@ -161,7 +171,4 @@ export class FormatRaw implements PipeTransform {
   declarations: [AuthComponent, FormatRaw]
 })
 export class AuthComponentModule { }
-
-
-
 

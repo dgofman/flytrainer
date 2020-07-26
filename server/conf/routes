@@ -6,6 +6,8 @@ GET     /init                       controllers.HomeController.initDatabase()
 
 # Test post request
 POST    /login                      controllers.HomeController.login(request: Request)
-POST    /reset                      controllers.HomeController.reset(request: Request)
 POST    /create                     controllers.HomeController.create(request: Request)
 POST    /activate                   controllers.HomeController.activate(request: Request)
+POST    /forgot                     controllers.HomeController.forgot(request: Request)
+POST    /reset                      controllers.HomeController.reset(request: Request)
+

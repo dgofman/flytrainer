@@ -16,5 +16,21 @@
         "username": "*******@gmail.com",
         "password": "*******",
         "encrypted": true
+    },
+    "messages": {
+        "accountActivation": [
+            "Hello %s %s,<br>",
+            "The final registation step is to confirm your email address by clicking on the link below.",
+            "Please click this activation link: %s<br>",
+            "Sincerely,",
+            "The FlyTrainer Services Staff"
+        ],
+        "resetPassword": [
+            "Hello,<br>",
+            "You have requested to change your password.",
+            "Please click on the below link to create a new password: %s<br>",
+            "Sincerely,",
+            "The FlyTrainer Services Staff"
+        ]
     }
 }

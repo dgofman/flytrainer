@@ -27,12 +27,14 @@ import utils.Constants.Key;
 @History
 @NamedQueries(value = { 
 	@NamedQuery(name = User.LOGIN, query = "select(uuid, isActive, resetPassword) where username = :username and password = :password"),
-	@NamedQuery(name = User.FIND, query = "select(isActive) where username = :username and uuid = :uuid and version = :version and modifiedDate =:modifiedDate")
+	@NamedQuery(name = User.FIND_BY_UUID, query = "select(isActive) where username = :username and uuid = :uuid and version = :version and modifiedDate =:modifiedDate"),
+	@NamedQuery(name = User.FIND_BY_EMAIL, query = "select(isActive) where username = :username and email = :email")
 })
 public class User extends BaseModel {
-	
+
 	public static final String LOGIN = "User.login";
-	public static final String FIND = "User.find";
+	public static final String FIND_BY_UUID = "User.findByUuid";
+	public static final String FIND_BY_EMAIL = "User.findByEmail";
 
 	private static final String defaultPassword = AppConfig.get(Key.DEFAULT_PWD).asText();
 
@@ -85,7 +87,7 @@ public class User extends BaseModel {
 	}
 
 	public User(JsonNode body) {
-		this.username = body.get("userid").asText();
+		this.username = body.get("username").asText();
 		this.password = body.get("passwd").asText();
 		this.firstname = body.get("first").asText();
 		this.lastname = body.get("last").asText();

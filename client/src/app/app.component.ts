@@ -16,7 +16,7 @@ export class AppComponent {
 
 @Component({
   selector: 'app-footer',
-  template: `<a [href]="tfrLink" target="_blank">TFR</a> | <a href="https://www.1800wxbrief.com/Website/weatherGraphics?conus=0" target="_blank">1800WXBrief</a> | <a href="https://www.aviationweather.gov" target="_blank">AviationWeather</a> | <a href="https://www.iFlightPlanner.com/AviationCharts/?Map=sectional&GS=115&Route=KRHV" target="_blank">iFlightPlanner</a> | <a href="https://skyvector.com/" target="_blank">Skyvector</a> <span class="powerby">${Locales.powerBy}</span>`
+  template: `<a [href]="tfrLink" target="_blank">TFR</a> | <a href="https://www.1800wxbrief.com/Website/weatherGraphics?conus=0" target="_blank">1800WXBrief</a> | <a href="https://www.aviationweather.gov" target="_blank">AviationWeather</a> | <a href="https://www.iFlightPlanner.com/AviationCharts/?Map=sectional&GS=115&Route=KRHV" target="_blank">iFlightPlanner</a> | <a href="https://skyvector.com/" target="_blank">Skyvector</a> <div class="powerby">${Locales.powerBy}</div>`
 })
 export class AppFooterComponent {
   tfrLink = environment.tfrLink;

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Iterator;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -34,13 +35,38 @@ public class AppConfig {
 			System.exit(1);
 		}
 	}
-
+	
 	public static JsonNode get(Key key) {
-		JsonNode node = server_json.get(key.toString());
-		if (node == null) {
-			node = client_json.get(key.toString());
+		return get(key.toString(), null);
+	}
+
+	public static JsonNode get(String key, JsonNode node) {
+		String[] path = key.split("->");
+		if (node != null) {
+			node = node.get(path[0]);
+		} else {
+			node = server_json.get(path[0]);
+			if (node == null) {
+				node = client_json.get(path[0]);
+			}
+		}
+		if (path.length > 1) {
+			return get(String.join("->", Arrays.copyOfRange(path, 1, path.length)), node);
 		}
 		return node;
+	}
+	
+	public static String join(Key key, String delimiter) {
+		StringBuilder sb = new StringBuilder();
+		JsonNode node = get(key);
+		Iterator<JsonNode> iter = node.elements();
+		while(iter.hasNext()) {
+			sb.append(iter.next().asText());
+			if (iter.hasNext()) {
+				sb.append(delimiter);
+			}
+		}
+		return sb.toString();
 	}
 
 	public static String decrypt(String encyprt) throws Exception {

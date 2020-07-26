@@ -17,39 +17,36 @@
                     <div [style.display]="resetPassword ? 'none' : 'block'">
                         <div class="p-filed">
                             <label class="p-col-fixed">{{Locales.userId}}</label>
-                            <input class="ui-inputtext" name="userid" required ngModel autocomplete="off">
+                            <input class="ui-inputtext" name="username" required ngModel autocomplete="off">
                         </div>
                         <div class="p-filed">
                             <label class="p-col-fixed">{{Locales.password}}</label>
                             <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
                         </div>
-                        <a href="/reset" *ngIf="environment.includeForgotPassword">{{Locales.forgotPassword}}</a>
+                        <a href="/forgot" *ngIf="environment.includeForgotPassword">{{Locales.forgotPassword}}</a>
                         <a href="/create" *ngIf="environment.includeCreateAccount">  |  {{Locales.createAccount}}</a>
                     </div>
-                    <div *ngIf="resetPassword">
-                        <p>{{Locales.chooseNewPassword}}</p>
-                        <div class="p-filed">
-                            <label class="p-col-fixed">{{Locales.password}}*</label>
-                            <input type="password" class="ui-inputtext" name="new_passwd" required ngModel autocomplete="off">
-                        </div>
-                        <div class="p-filed">
-                            <label class="p-col-fixed">{{Locales.confirmPassword}}*</label>
-                            <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off">
-                        </div>
-                    </div>
+                    <ng-template *ngIf="resetPassword" [ngTemplateOutlet]="ResetPassword"></ng-template>
                     <button class="ui-button ui-button-text" style="float: right" type="submit">{{Locales.login}}</button>
                     <div style="margin-top: 40px; text-align: center;">{{Locales.aggrement}}</div>
                 </ng-template>
+                <ng-template [ngSwitchCase]="'/forgot'">
+                    <div>
+                        <div style="margin: 10px 0;">{{Locales.enterEmail}}</div>
+                        <div class="p-filed">
+                            <label class="p-col-fixed">{{Locales.userId}}</label>
+                            <input class="ui-inputtext" name="username" required ngModel autocomplete="off">
+                        </div>
+                        <div class="p-filed">
+                            <label class="p-col-fixed">{{Locales.email}}</label>
+                            <input type="email" class="ui-inputtext" name="email" required ngModel autocomplete="off">
+                        </div>
+                    </div>
+                    <ng-template [ngTemplateOutlet]="SubmitButton"></ng-template>
+                </ng-template>
                 <ng-template [ngSwitchCase]="'/reset'">
-                    <div style="margin: 10px 0;">{{Locales.enterEmail}}</div>
-                    <div class="p-filed">
-                        <label class="p-col-fixed">{{Locales.email}}</label>
-                        <input type="email" class="ui-inputtext" name="email" required ngModel autocomplete="off">
-                    </div>
-                    <div style="float: right">
-                        <a href="/login" style="margin-right: 20px">{{Locales.cancel}}</a>
-                        <button class="ui-button ui-button-text" type="submit">{{Locales.submit}}</button>
-                    </div>
+                    <ng-template [ngTemplateOutlet]="ResetPassword"></ng-template>
+                    <ng-template [ngTemplateOutlet]="SubmitButton"></ng-template>
                 </ng-template>
                 <ng-template [ngSwitchCase]="'/activate'">
                     <p>{{message}}</p>
@@ -62,7 +59,7 @@
                 <ng-template [ngSwitchCase]="'/create'">
                     <div class="p-filed">
                         <label class="p-col-fixed">{{Locales.userId}}*</label>
-                        <input class="ui-inputtext" name="userid" required ngModel autocomplete="off">
+                        <input class="ui-inputtext" name="username" required ngModel autocomplete="off">
                     </div>
                     <div class="p-filed">
                         <label class="p-col-fixed">{{Locales.password}}*</label>
@@ -88,6 +85,24 @@
                         <label class="p-col-fixed">{{Locales.phone}}</label>
                         <input class="ui-inputtext" name="phone" ngModel autocomplete="off">
                     </div>
+                    <ng-template [ngTemplateOutlet]="SubmitButton"></ng-template>
+                </ng-template>
+
+                <!-- Reusable templates -->
+                <ng-template #ResetPassword>
+                    <div>
+                        <p>{{Locales.chooseNewPassword}}</p>
+                        <div class="p-filed">
+                            <label class="p-col-fixed">{{Locales.password}}*</label>
+                            <input type="password" class="ui-inputtext" name="new_passwd" required ngModel autocomplete="off">
+                        </div>
+                        <div class="p-filed">
+                            <label class="p-col-fixed">{{Locales.confirmPassword}}*</label>
+                            <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off">
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template #SubmitButton>
                     <div style="float: right">
                         <a href="/login" style="margin-right: 20px">{{Locales.cancel}}</a>
                         <button class="ui-button ui-button-text" type="submit">{{Locales.submit}}</button>

@@ -12,27 +12,37 @@
   <div class="wrap">
     <div class="left-menu">
       <div class="profile">
-        {{user.lastname}}, {{user.firstname}} ({{user.id}})
-        <br><b>{{Locales.accountBalance}}:</b><span style="padding-left: 10px;">{{user.balance}}</span>
-        <br><a href="/login" style="text-decoration: underline; float: right">{{Locales.logout}}</a>
+        {{loggedUser.lastname}}, {{loggedUser.firstname}} ({{loggedUser.id}})
+        <br><b>{{Locales.accountBalance}}:</b><span style="padding-left: 10px;">{{loggedUser.currentAccount.balance | currency}}</span>
+        <br><a style="float: right" (click)="appService.logout()">{{Locales.logout}}</a>
       </div>
     </div>
     <div class="main">
-      <p-table [value]="cars">
+      <p-table [value]="users">
         <ng-template pTemplate="header">
           <tr>
-            <th>Vin</th>
-            <th>Year</th>
-            <th>Brand</th>
-            <th>Color</th>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Role</th>
+            <th>Is Active</th>
+            <th>Reset Password</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-car>
+        <ng-template pTemplate="body" let-user>
           <tr>
-            <td>{{car.vin}}</td>
-            <td>{{car.year}}</td>
-            <td>{{car.brand}}</td>
-            <td>{{car.color}}</td>
+            <td>{{user.id}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.firstname}}</td>
+            <td>{{user.lastname}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.phonenumber}}</td>
+            <td>{{user.role}}</td>
+            <td>{{user.isActive}}</td>
+            <td>{{user.resetPassword}}</td>
           </tr>
         </ng-template>
         <ng-template pTemplate="footer" let-columns="columns">
@@ -45,6 +55,7 @@
       </p-table>
     </div>
     <div class="layout-mask"></div>
+    <app-overlay></app-overlay>
   </div>
   <app-footer></app-footer>
 </div>

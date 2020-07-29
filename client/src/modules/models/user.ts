@@ -1,17 +1,30 @@
-import { JsonProperty, serialize, deserialize } from './serializable';
+import { BaseModel } from './base.model';
+import { Account } from './account';
 
-export class User {
-    @JsonProperty('accountid')
+export class User extends BaseModel {
     id: string;
+    username: string;
+    uuid: string;
     firstname: string;
     lastname: string;
-    balance: number;
+    email: string;
+    isActive: number;
+    resetPassword: number;
+    role: string;
+    version: number;
+    phonenumber: string;
+    password: string;
+    createdDate: number;
+    modifiedDate: number;
+    whoCreated: number;
+    whoModified: number;
 
-    static serialize(user: User): any {
-        return serialize(user);
-    }
+    currentAccount: Account;
 
-    static deserialize(json: any): User {
-        return deserialize(User, json);
+    constructor(json?: any) {
+        super(json);
+        if (!this.currentAccount) {
+            this.currentAccount = new Account({balance: 0});
+        }
     }
 }

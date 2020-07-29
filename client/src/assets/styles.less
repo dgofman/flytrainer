@@ -21,6 +21,16 @@ body {
     background-color: #f4f3f8;
 }
 
+td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+a {
+    cursor: pointer;
+}
+
 .p-filed {
     margin-bottom: 1em;
 }
@@ -28,6 +38,10 @@ body {
 .p-col-fixed {
     margin: 0 0.5em 0.1em 0;
     display: block;
+}
+
+.ui-button {
+    border-radius: 6px;
 }
 
 .ui-button.ui-button-text {
@@ -104,10 +118,6 @@ body {
         display: block;
         height: @footer-height;
         padding: 15px 20px;
-
-        a {
-            text-decoration: underline;
-        }
 
         .powerby {
             float: right;

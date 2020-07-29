@@ -10,13 +10,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import io.ebean.annotation.DbComment;
 import io.ebean.annotation.Encrypted;
 import io.ebean.annotation.History;
 import io.ebean.annotation.Index;
-import io.ebean.annotation.JsonIgnore;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
 import utils.AppConfig;
@@ -27,17 +27,20 @@ import utils.Constants.Key;
 @History
 @NamedQueries(value = { 
 	@NamedQuery(name = User.LOGIN, query = "select(uuid, isActive, resetPassword) where username = :username and password = :password"),
-	@NamedQuery(name = User.FIND_BY_UUID, query = "select(isActive) where username = :username and uuid = :uuid and version = :version and modifiedDate =:modifiedDate"),
+	@NamedQuery(name = User.FIND, query = "select(isActive) where username = :username and uuid = :uuid and version = :version and modifiedDate =:modifiedDate"),
+	@NamedQuery(name = User.FIND_BY_UUID, query = "select(role) where username = :username and uuid = :uuid"),
 	@NamedQuery(name = User.FIND_BY_EMAIL, query = "select(isActive) where username = :username and email = :email")
 })
 public class User extends BaseModel {
 
 	public static final String LOGIN = "User.login";
+	public static final String FIND = "User.find";
 	public static final String FIND_BY_UUID = "User.findByUuid";
 	public static final String FIND_BY_EMAIL = "User.findByEmail";
 
 	private static final String defaultPassword = AppConfig.get(Key.DEFAULT_PWD).asText();
 
+	@JsonView(Full.class)
 	public UUID uuid = UUID.randomUUID();
 
 	@Column(name = "first")
@@ -58,7 +61,7 @@ public class User extends BaseModel {
 	@NotNull
 	@Length(25)
 	@Encrypted
-	@JsonIgnore
+	@JsonView(Full.class)
 	@DbComment("CONVERT(AES_DECRYPT(password, `environment.json::encryptKey`) USING  UTF8)")
 	public String password = defaultPassword;
 

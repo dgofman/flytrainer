@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppNotFoundComponent } from './app.notfound.component';
 import { Routes, RouterModule, UrlSegment } from '@angular/router';
+import { AuthService } from './authentication/auth.service';
+import { HttpClientModule } from '@angular/common/http';
 
 const AuthRouteMatcher = (url: UrlSegment[]) => {
   if (url.length) {
@@ -26,6 +28,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
+    canActivate: [AuthService],
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
   },
   {
@@ -36,6 +39,7 @@ export const routes: Routes = [
 @NgModule({
   imports: [
     BrowserModule,
+    HttpClientModule,
     RouterModule.forRoot(routes)
   ],
   declarations: [
@@ -43,7 +47,7 @@ export const routes: Routes = [
     AppNotFoundComponent
   ],
   exports: [RouterModule],
-  providers: [Title],
+  providers: [AuthService, Title],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

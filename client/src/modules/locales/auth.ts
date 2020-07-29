@@ -19,6 +19,5 @@ export default {
     passwordUpdated: 'Your password has been successfully updated.',
     aggrement: 'By signing up you agree to our Terms of Use and Privacy Policy.',
     enterEmail: 'Enter your User ID and Email address associated with your account. We will send you a link so you can update your password.',
-    confirmPasswordError: 'Please make sure the passwords and confirm passwords you enter are the same.',
-    internalError: 'An internal error has occurred.'
+    confirmPasswordError: 'Please make sure the passwords and confirm passwords you enter are the same.'
 };

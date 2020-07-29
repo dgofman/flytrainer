@@ -10,4 +10,6 @@ POST    /create                     controllers.HomeController.create(request: R
 POST    /activate                   controllers.HomeController.activate(request: Request)
 POST    /forgot                     controllers.HomeController.forgot(request: Request)
 POST    /reset                      controllers.HomeController.reset(request: Request)
+POST    /logout                     controllers.HomeController.logout(request: Request)
 
+GET     /users                      controllers.AdminController.users(request: Request, startIndex: Integer, rows: Integer, sortBy: String ?= null, sortDirection: String ?= null, filter: String ?= null, query: String ?= null)

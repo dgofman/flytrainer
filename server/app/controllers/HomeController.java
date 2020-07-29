@@ -17,7 +17,6 @@ import io.ebean.DuplicateKeyException;
 import io.ebean.Ebean;
 import models.DDoS;
 import models.User;
-import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import utils.AppConfig;
@@ -27,8 +26,7 @@ import utils.Constants.Errors;
 import utils.Constants.Key;
 import utils.MailServer;
 
-//@BasicAuth()
-public class HomeController extends Controller {
+public class HomeController extends BaseController {
 	
 	private static final int LOGIN_ATTEMPTS = AppConfig.get(Key.LOGIN_ATTEMPTS).asInt();
 	private static final int LOCKED_TIME = AppConfig.get(Key.LOCKED_TIME).asInt();
@@ -46,15 +44,20 @@ public class HomeController extends Controller {
 	
 	public Result login(Http.Request request) {
 		JsonNode body = request.body().asJson();
-		String username = null;
+		DDoS ddos;
 		try {
-			username = body.get("username").asText();
-			Result result = checkDDoS(request, body, username);
+			ddos = new DDoS(request, body, body.get("username").asText());
+		} catch (Exception ex) {
+			log.error(body.toPrettyString());
+			return forbidden(Constants.Errors.FORBIDDEN.toString());
+		}
+		try {
+			Result result = checkDDoS(request, body, ddos.username);
 			if (result != null) {
 				return result;
 			}
 
-			User user = AuthenticationUtils.authenticate(username, body.get("passwd").asText());
+			User user = AuthenticationUtils.authenticate(ddos.username, body.get("passwd").asText());
 			if (user.resetPassword == 1) {
 				JsonNode pwd = body.get("new_passwd");
 				if (pwd == null || pwd.asText().isEmpty()) {
@@ -68,10 +71,20 @@ public class HomeController extends Controller {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.HOUR, AppConfig.get(Key.EXPIRE_ACTIVATION).asInt());
 			String authToken = AuthenticationUtils.createToken(user, c.getTime());
-			return ok("{\"token\":\"" + authToken + "\"}");
+			ddos.status = DDoS.LOGGEDIN;
+			ddos.save();
+			@SuppressWarnings("serial")
+			Map<String, Object> params = new LinkedHashMap<String, Object>(){{
+				put(Constants.CORRELATION_ID, ddos.createdDate.toEpochMilli());
+				put("token", authToken);
+				put("id", user.id);
+				put("firstname", user.firstname);
+				put("lastname", user.lastname);
+			}};
+			return ok(Ebean.json().toJson(params));
 		} catch (IllegalAccessException ex) {
-			DDoS ddos = new DDoS(request, body, username).commit();
-			log.error("IP Address: " + ddos.ipaddress + ", UserName: " + username, ex);
+			ddos.save();
+			log.error("IP Address: " + ddos.ipaddress + ", UserName: " + ddos.username, ex);
 			return unauthorized(ex.getMessage());
 		}
 	}
@@ -125,10 +138,9 @@ public class HomeController extends Controller {
 
 	public Result activate(Http.Request request) {
 		JsonNode body = request.body().asJson();
-		DecodedJWT jwt = AuthenticationUtils.validateToken(body.get(TOKEN_ATTR).asText(), body.get(USER_ATTR).asText());
-		if (jwt == null) {
-			log.error("Invalid token=" + request.path());
-			return forbidden(Constants.Errors.FORBIDDEN.toString());
+		Token token = token(body);
+		if (token.result != null) {
+			return token.result;
 		}
 
 		String username = null;
@@ -139,9 +151,9 @@ public class HomeController extends Controller {
 				return result;
 			}
 
-			User user = Ebean.createNamedQuery(User.class, User.FIND_BY_UUID)
-					.setParameter("username", jwt.getSubject())
-					.setParameter("uuid", jwt.getKeyId())
+			User user = Ebean.createNamedQuery(User.class, User.FIND)
+					.setParameter("username", token.jwt.getSubject())
+					.setParameter("uuid", token.jwt.getKeyId())
 					.setParameter("version", body.get(VERSION_ATTR).asLong())
 					.setParameter("modifiedDate", Instant.ofEpochMilli(body.get(DATE_ATTR).asLong())).findOne();
 			if (user == null) {
@@ -152,7 +164,8 @@ public class HomeController extends Controller {
 			user.modifiedDate = Instant.ofEpochMilli(new Date().getTime());
 			user.update();
 		} catch (Exception ex) {
-			DDoS ddos = new DDoS(request, body,  username).commit();
+			DDoS ddos = new DDoS(request, body,  username);
+			ddos.save();
 			log.error("IP Address: " + ddos.ipaddress + ", UserName: " + username, ex);
 			return badRequest(Constants.Errors.ERROR.toString());
 		}
@@ -197,7 +210,8 @@ public class HomeController extends Controller {
 			String emailBody = String.format(RESET_PASSWORD, origin + "/reset?" + Joiner.on("&").withKeyValueSeparator("=").join(params));
 			MailServer.sendMail(user.email, "Password Reset", emailBody);
 		} catch (Exception ex) {
-			DDoS ddos = new DDoS(request, body, username).commit();
+			DDoS ddos = new DDoS(request, body,  username);
+			ddos.save();
 			log.error("IP Address: " + ddos.ipaddress + ", UserName: " + username + ", Email: " + email, ex);
 			return unauthorized(ex.getMessage());
 		}
@@ -206,10 +220,9 @@ public class HomeController extends Controller {
 
 	public Result reset(Http.Request request) {
 		JsonNode body = request.body().asJson();
-		DecodedJWT jwt = AuthenticationUtils.validateToken(body.get(TOKEN_ATTR).asText(), body.get(USER_ATTR).asText());
-		if (jwt == null) {
-			log.error("Invalid token=" + request.path());
-			return forbidden(Constants.Errors.FORBIDDEN.toString());
+		Token token = token(body);
+		if (token.result != null) {
+			return token.result;
 		}
 
 		String username = null;
@@ -220,9 +233,9 @@ public class HomeController extends Controller {
 				return result;
 			}
 
-			User user = Ebean.createNamedQuery(User.class, User.FIND_BY_UUID)
-					.setParameter("username", jwt.getSubject())
-					.setParameter("uuid", jwt.getKeyId())
+			User user = Ebean.createNamedQuery(User.class, User.FIND)
+					.setParameter("username", token.jwt.getSubject())
+					.setParameter("uuid", token.jwt.getKeyId())
 					.setParameter("version", body.get(VERSION_ATTR).asLong())
 					.setParameter("modifiedDate", Instant.ofEpochMilli(body.get(DATE_ATTR).asLong())).findOne();
 			if (user == null) {
@@ -233,11 +246,53 @@ public class HomeController extends Controller {
 			user.modifiedDate = Instant.ofEpochMilli(new Date().getTime());
 			user.update();
 		} catch (Exception ex) {
-			DDoS ddos = new DDoS(request, body,  username).commit();
+			DDoS ddos = new DDoS(request, body,  username);
+			ddos.save();
 			log.error("IP Address: " + ddos.ipaddress + ", UserName: " + username, ex);
 			return badRequest(Constants.Errors.ERROR.toString());
 		}
 		return ok();
+	}
+	
+	public Result logout(Http.Request request) {
+		JsonNode body = request.body().asJson();
+		try {
+			String token = body.get("token").asText();
+			DecodedJWT jwt = AuthenticationUtils.validateToken(token);
+			if (jwt == null) {
+				log.error("Invalid token=" + token);
+				return forbidden(Constants.Errors.FORBIDDEN.toString());
+			}
+			DDoS ddos = Ebean.createNamedQuery(DDoS.class, DDoS.VALIDATE)
+					.setParameter("username", jwt.getSubject())
+					.setParameter("createdDate", Instant.ofEpochMilli(body.get(Constants.CORRELATION_ID).asLong())).findOne();
+			if (ddos == null) {
+				throw new IllegalAccessException(Errors.FORBIDDEN.toString());
+			}
+			ddos.status = DDoS.LOGOUT;
+			ddos.save();
+		} catch (Exception ex) {
+			log.error("Parse token",  ex);
+			return forbidden(Constants.Errors.FORBIDDEN.toString());
+		}
+		return ok();
+	}
+
+	public Token token(JsonNode body) {
+		Token token = new Token();
+		try {
+			String token_attr = body.get(TOKEN_ATTR).asText();
+			String user_attr = body.get(USER_ATTR).asText();
+			token.jwt = AuthenticationUtils.validateToken(token_attr, user_attr);
+			if (token.jwt == null) {
+				log.error("Invalid token=" + token_attr + ", username=" + user_attr);
+				token.result = forbidden(Constants.Errors.FORBIDDEN.toString());
+			}
+		} catch (Exception ex) {
+			log.error("Parse token",  ex);
+			token.result = forbidden(Constants.Errors.FORBIDDEN.toString());
+		}
+		return token;
 	}
 
 	public Result initDatabase() {
@@ -278,4 +333,9 @@ public class HomeController extends Controller {
 		}
 		return null;
 	}
+}
+
+class Token {
+	DecodedJWT jwt;
+	Result result;
 }

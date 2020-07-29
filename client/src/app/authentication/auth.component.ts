@@ -1,36 +1,33 @@
-import { Component, NgModule, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, NgModule, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import {Pipe, PipeTransform} from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { environment } from '@client/environments/environment';
 import { CommonModule } from '@angular/common';
-import Locales from '@locales/auth';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { AppBaseComponent } from '../app.base.component';
 import { AppComponentModule } from '../app.component';
 import { FormsModule } from '@angular/forms';
-import { AuthHttpInterceptor } from './auth-http-interceptor';
+import { AuthService } from './auth.service';
+import { environment } from '@client/environments/environment';
+import Locales from '@locales/auth';
 
 @Component({
   templateUrl: './auth.component.html',
   styleUrls: [ './auth.component.less' ]
 })
-export class AuthComponent implements AfterViewInit {
+export class AuthComponent extends AppBaseComponent implements AfterViewInit {
   Locales = Locales;
   environment = environment;
   resetPassword: boolean;
   path: string;
   company: string;
   phone: string;
-  error: string;
-  message: string;
   worldtime: any = {};
   currentDateTime: Date;
   metars: { [key: string]: any; } = {};
   metarAirports: string[];
 
-  @ViewChild('overlay')
-  overlay: ElementRef;
-
-  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient, private changeDetector: ChangeDetectorRef) {
+  constructor(changeDetector: ChangeDetectorRef, private router: Router, private route: ActivatedRoute, private http: HttpClient, private appService: AuthService) {
+    super(changeDetector);
     this.path = router.url.split('?')[0];
     this.company = environment.company;
     this.phone = environment.phone;
@@ -58,13 +55,13 @@ export class AuthComponent implements AfterViewInit {
     } else if (this.path === '/activate') {
       const params = this.route.queryParams as any;
       if (Object.keys(params._value).length) {
-        this.overlay.nativeElement.style.display = 'block';
+        this.overlay.display(true);
         this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, params._value)).subscribe(_ => {
-          this.overlay.nativeElement.style.display = 'none';
+          this.overlay.display(false);
           this.message = Locales.accountActivated;
         }, (ex) => this.errorHandler(ex));
       } else {
-        this.errorHandler({error: Locales.internalError});
+        this.internalError();
       }
     }
   }
@@ -107,13 +104,13 @@ export class AuthComponent implements AfterViewInit {
         }
       }
       delete data.conf_passwd;
-      this.overlay.nativeElement.style.display = 'block';
-      this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, params._value, data)).subscribe((value: any) => {
-        this.overlay.nativeElement.style.display = 'none';
+      this.overlay.display(true);
+      this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, params._value, data)).subscribe((json: any) => {
+        this.overlay.display(false);
         switch (this.path) {
           case '/login':
-            if (value.token) {
-              AuthHttpInterceptor.AUTH_TOKEN = value.token;
+            if (json.token) {
+              this.appService.login(json);
               this.router.navigate(['/dashboard']);
             } else {
               this.resetPassword = true;
@@ -134,17 +131,6 @@ export class AuthComponent implements AfterViewInit {
         }
       }, (ex) => this.errorHandler(ex));
     }
-  }
-
-  errorHandler(ex: any) {
-    this.message = null;
-    this.overlay.nativeElement.style.display = 'none';
-    if (ex.status === 404 || ex.status % 500 < 50 || !ex.error) {
-      this.error = Locales.internalError;
-    } else {
-      this.error = ex.error;
-    }
-    this.changeDetector.detectChanges();
   }
 }
 

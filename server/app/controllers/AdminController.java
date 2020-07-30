@@ -8,9 +8,10 @@ import models.User;
 import play.mvc.Http;
 import play.mvc.Result;
 import utils.BasicAuth;
-import utils.Constants;
 
-@BasicAuth(Constants.Access.ADMIN)
+import utils.Constants.Access;
+
+@BasicAuth({Access.ADMIN, Access.MANAGER})
 public class AdminController extends BaseController {
 
 	private static final int ALL_MAX_LIMIT = 10000;

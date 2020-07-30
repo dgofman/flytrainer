@@ -24,11 +24,13 @@ public abstract class BaseModel extends Model {
 	public Integer id;
 
 	@WhenCreated
+	@JsonView(Full.class)
 	public Instant createdDate;
 
 	@WhenModified
 	public Instant modifiedDate;
 
+	@JsonView(Full.class)
 	private Integer whoCreated;
 	public Integer getWhoCreated() {
 		return whoCreated;
@@ -46,23 +48,23 @@ public abstract class BaseModel extends Model {
 	@Override
 	public void save() {
 		if (currentUserId != null) {
-			if (id == null) {
-				whoCreated = currentUserId;
-			} else {
-				whoModified = currentUserId;
-			}
+			whoCreated = currentUserId;
+			whoModified = currentUserId;
 		}
 		super.save();
+		if (currentUserId != null) {
+			whoCreated = id;
+			whoModified = id;
+			super.save();
+		}
 	}
 	
 	@Override
 	public void update() {
 		if (currentUserId != null) {
-			if (id == null) {
-				whoCreated = currentUserId;
-			} else {
-				whoModified = currentUserId;
-			}
+			whoModified = id;
+		} else {
+			whoModified = currentUserId;
 		}
 		super.update();
 	}

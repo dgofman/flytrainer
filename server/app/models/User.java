@@ -45,12 +45,12 @@ public class User extends BaseModel {
 
 	@Column(name = "first")
 	@NotNull
-	@Length(100)
+	@Length(50)
 	public String firstname;
 
 	@Column(name = "last")
 	@NotNull
-	@Length(100)
+	@Length(50)
 	public String lastname;
 
 	@Length(50)
@@ -65,7 +65,7 @@ public class User extends BaseModel {
 	@DbComment("CONVERT(AES_DECRYPT(password, `environment.json::encryptKey`) USING  UTF8)")
 	public String password = defaultPassword;
 
-	@Length(50)
+	@Length(100)
 	@NotNull
 	public String email;
 

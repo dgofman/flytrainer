@@ -6,7 +6,9 @@ import Locales from '@locales/common';
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>'
+  template: `
+    <router-outlet></router-outlet>
+    <app-overlay></app-overlay>`
 })
 export class AppComponent {
   constructor(provider: Title) {
@@ -16,15 +18,14 @@ export class AppComponent {
 
 @Component({
   selector: 'app-overlay',
-  host: {class: 'ui-dialog-mask ui-widget-overlay'},
+  host: { class: 'ui-dialog-mask ui-widget-overlay' },
   template: `<div class="app-loading"></div>`
 })
 export class AppOverlayComponent {
-  constructor(private hostElement: ElementRef) {
-  }
+  static el: ElementRef;
 
-  display(show: boolean) {
-    this.hostElement.nativeElement.style.display = show ? 'block' : 'none';
+  constructor(hostElement: ElementRef) {
+    AppOverlayComponent.el = hostElement;
   }
 }
 
@@ -37,9 +38,9 @@ export class AppFooterComponent {
 }
 
 @NgModule({
-    imports: [CommonModule],
-    exports: [AppOverlayComponent, AppFooterComponent],
-    declarations: [AppOverlayComponent, AppFooterComponent]
+  imports: [CommonModule],
+  exports: [AppFooterComponent],
+  declarations: [AppFooterComponent]
 })
 export class AppComponentModule {
 }

@@ -1,12 +1,24 @@
 @import "../../assets/styles.less";
 
-label {
-    display: block;
+.p-grid {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: 5px 0;
+    background: #d5edff;
+    padding: 20px;
+    border: 1px solid gray;
 }
 
-.form-row {
-    display: inline-block;
-    margin-right: 10px;
+.p-field {
+    margin-bottom: .6em;
+    padding: .5em;
+}
+
+.p-field label {
+    display: block;
+    margin-bottom: .1em;
 }
 
 .container {
@@ -88,6 +100,49 @@ label {
 
     .left-menu {
         left: 0;
+    }
+}
+
+@media screen and (min-width: 768px) {
+
+    .p-md-1,
+    .p-md-2,
+    .p-md-3,
+    .p-md-4,
+    .p-md-5,
+    .p-md-6,
+    .p-md-7,
+    .p-md-8,
+    .p-md-9,
+    .p-md-10,
+    .p-md-11,
+    .p-md-12 {
+        -ms-flex: 0 0 auto;
+        flex: 0 0 auto
+    }
+
+    .p-md-1 {
+        width: 8.3333%
+    }
+
+    .p-md-2 {
+        width: 16.6667%
+    }
+
+    .p-md-3 {
+        width: 25%
+    }
+
+    .p-md-4 {
+        width: 33.3333%
+    }
+
+    .p-md-5 {
+        width: 41.6667%
+    }
+
+    .p-md-6 {
+        width: 50%
     }
 }
 

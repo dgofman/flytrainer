@@ -1,5 +1,5 @@
 import { Component, NgModule, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -12,7 +12,7 @@ import Locales from '@locales/auth';
 
 @Component({
   templateUrl: './auth.component.html',
-  styleUrls: [ './auth.component.less' ]
+  styleUrls: ['./auth.component.less']
 })
 export class AuthComponent extends AppBaseComponent implements AfterViewInit {
   Locales = Locales;
@@ -36,13 +36,13 @@ export class AuthComponent extends AppBaseComponent implements AfterViewInit {
     this.message = Locales.pleaseWait;
 
     try {
-      this.worldtime.abbreviation = this.currentDateTime.toLocaleTimeString('en-us', {timeZoneName: 'short'}).split(' ')[2];
+      this.worldtime.abbreviation = this.currentDateTime.toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
     } catch (e) {
     }
 
     http.get('/timezone/' + environment.timezone).subscribe(value => {
-        this.worldtime = value;
-        this.currentDateTime = new Date(this.worldtime.utc_datetime);
+      this.worldtime = value;
+      this.currentDateTime = new Date(this.worldtime.utc_datetime);
     }, (ex) => console.error(ex));
 
     setInterval(() => this.currentDateTime = new Date(this.currentDateTime.getTime() + 1000), 1000);
@@ -55,9 +55,9 @@ export class AuthComponent extends AppBaseComponent implements AfterViewInit {
     } else if (this.path === '/activate') {
       const params = this.route.queryParams as any;
       if (Object.keys(params._value).length) {
-        this.overlay.display(true);
-        this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, params._value)).subscribe(_ => {
-          this.overlay.display(false);
+        this.loading(true);
+        this.http.post(this.path, Object.assign({ cid: this.environment.clientId, cip: this.worldtime.client_ip }, params._value)).subscribe(_ => {
+          this.loading(false);
           this.message = Locales.accountActivated;
         }, (ex) => this.errorHandler(ex));
       } else {
@@ -68,28 +68,28 @@ export class AuthComponent extends AppBaseComponent implements AfterViewInit {
 
   getMetars() {
     this.http.get('/dataserver_current/httpparam?format=csv&dataSource=metars&requestType=retrieve&mostRecent=false&hoursBeforeNow=' +
-      environment.metarHoursBeforeNow + '&stationString=' + environment.metarAirports.join(' '), {responseType: 'text'}).subscribe(
-      value => {
-        const re = /^\w{4} (\d{6}Z.*?),(\w{4}),(.*?),.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,(.*?),/;
-        const match = value.match(/^\w{4} \d{6}Z.*?,\w{4},.*?$/gm);
-        this.metars = {};
-        if (match) {
-          match.forEach(val => {
-            const groups = re.exec(val);
-            if (groups.length === 5) {
-              let data = {id: groups[2], date: new Date(groups[3]), ctg: groups[4], raw: groups[1]};
-              if (this.metars[data.id]) {
-                if (this.metars[data.id].date.getTime() > data.date.getTime()) {
-                  data = this.metars[data.id];
+      environment.metarHoursBeforeNow + '&stationString=' + environment.metarAirports.join(' '), { responseType: 'text' }).subscribe(
+        value => {
+          const re = /^\w{4} (\d{6}Z.*?),(\w{4}),(.*?),.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,.*?,(.*?),/;
+          const match = value.match(/^\w{4} \d{6}Z.*?,\w{4},.*?$/gm);
+          this.metars = {};
+          if (match) {
+            match.forEach(val => {
+              const groups = re.exec(val);
+              if (groups.length === 5) {
+                let data = { id: groups[2], date: new Date(groups[3]), ctg: groups[4], raw: groups[1] };
+                if (this.metars[data.id]) {
+                  if (this.metars[data.id].date.getTime() > data.date.getTime()) {
+                    data = this.metars[data.id];
+                  }
                 }
+                this.metars[data.id] = data;
+              } else {
+                console.warn(groups);
               }
-              this.metars[data.id] = data;
-            } else {
-              console.warn(groups);
-            }
-          });
-        }
-      }, (ex) => console.error(ex));
+            });
+          }
+        }, (ex) => console.error(ex));
   }
 
   onSubmit(form: any) {
@@ -99,14 +99,14 @@ export class AuthComponent extends AppBaseComponent implements AfterViewInit {
       const data = form.value;
       if (data.conf_passwd) {
         if (!(data.conf_passwd === data.new_passwd || data.conf_passwd === data.passwd)) {
-          this.errorHandler({error: Locales.confirmPasswordError});
+          this.errorHandler({ error: Locales.confirmPasswordError });
           return;
         }
       }
       delete data.conf_passwd;
-      this.overlay.display(true);
-      this.http.post(this.path, Object.assign({cid: this.environment.clientId, cip: this.worldtime.client_ip}, params._value, data)).subscribe((json: any) => {
-        this.overlay.display(false);
+      this.loading(true);
+      this.http.post(this.path, Object.assign({ cid: this.environment.clientId, cip: this.worldtime.client_ip }, params._value, data)).subscribe((json: any) => {
+        this.loading(false);
         switch (this.path) {
           case '/login':
             if (json.token) {
@@ -134,7 +134,7 @@ export class AuthComponent extends AppBaseComponent implements AfterViewInit {
   }
 }
 
-@Pipe({name: 'formatRaw'})
+@Pipe({ name: 'formatRaw' })
 export class FormatRaw implements PipeTransform {
   transform(val: string): string {
     if (val !== null && val.length > 7) {

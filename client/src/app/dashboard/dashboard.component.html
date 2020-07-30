@@ -19,11 +19,12 @@
       </div>
     </div>
     <div class="main">
-      <p-table [columns]="cols" [value]="users" [resizableColumns]="true" [scrollable]="true" [expandedRowKeys]="expandedRows" dataKey="id">
+      <p-table [columns]="cols" [value]="users" [resizableColumns]="true" [scrollable]="true"
+        [expandedRowKeys]="expandedRows" dataKey="id" [lazy]="true" (onLazyLoad)="lazyLoad($event)">
         <ng-template pTemplate="colgroup" let-columns>
           <colgroup>
-            <col [style.width.px]="45"/>
-            <col *ngFor="let col of cols" [style.width.px]="col.width"/>
+            <col [style.width.px]="45" />
+            <col *ngFor="let col of cols" [style.width.px]="col.width" />
           </colgroup>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
@@ -47,28 +48,29 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
-            <tr>
-          <td [attr.colspan]="columns.length + 1">
-            <form [formGroup]="frmGroup">
-              <div class="form-row" *ngFor="let col of columns">
-                <label [for]="col.field">{{col.header}}:</label>
-                <input class="ui-inputtext" [formControlName]="col.field">
-              </div>
-            </form>
-          </td>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="emptymessage" let-columns>
-            <tr>
-              <td [attr.colspan]="10">
-                {{Locales.tbl_Noitems}}
-              </td>
-            </tr>
-          </ng-template>
+          <tr>
+            <td [attr.colspan]="columns.length + 1">
+              <form [formGroup]="frmGroup" class="ui-fluid p-grid">
+                <div class="p-field p-md-3" *ngFor="let col of editableFields" [ngSwitch]="col.edit">
+                  <label [for]="col.field">{{col.header}}:</label>
+                  <input class="ui-inputtext" [formControlName]="col.field" *ngSwitchCase="'input'" />
+                  <p-checkbox value="0" label="New York" [formControlName]="col.field" *ngSwitchCase="'check'">
+                  </p-checkbox>
+                </div>
+              </form>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="10">
+              {{Locales.tbl_Noitems}}
+            </td>
+          </tr>
+        </ng-template>
       </p-table>
     </div>
     <div class="layout-mask"></div>
-    <app-overlay></app-overlay>
   </div>
   <app-footer></app-footer>
 </div>

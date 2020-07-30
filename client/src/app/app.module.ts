@@ -1,6 +1,6 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
+import { AppComponent, AppOverlayComponent } from './app.component';
 import { AppNotFoundComponent } from './app.notfound.component';
 import { Routes, RouterModule, UrlSegment } from '@angular/router';
 import { AuthService } from './authentication/auth.service';
@@ -44,6 +44,7 @@ export const routes: Routes = [
   ],
   declarations: [
     AppComponent,
+    AppOverlayComponent,
     AppNotFoundComponent
   ],
   exports: [RouterModule],

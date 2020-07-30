@@ -19,8 +19,8 @@ export class AuthService implements HttpInterceptor, CanActivate {
         const newRequest = req.clone({
             url: environment.native ? environment.endpoint + req.url : req.url,
             headers: req.headers
-                        .set('Authorization', 'Bearer ' + AuthService.AUTH_TOKEN)
-                        .set('CorrelationId', String(AuthService.CORRELATION_ID))
+                .set('Authorization', 'Bearer ' + AuthService.AUTH_TOKEN)
+                .set('CorrelationId', String(AuthService.CORRELATION_ID))
         });
         return next.handle(newRequest);
     }

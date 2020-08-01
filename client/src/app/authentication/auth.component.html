@@ -15,11 +15,11 @@
                 <h5 style="color: red; margin: 0 0 8px;">{{error}}&nbsp;</h5>
                 <ng-template [ngSwitchCase]="'/login'">
                     <div [style.display]="resetPassword ? 'none' : 'block'">
-                        <div class="p-filed">
+                        <div class="row">
                             <label class="p-col-fixed">{{Locales.userId}}</label>
                             <input class="ui-inputtext" name="username" required ngModel autocomplete="off">
                         </div>
-                        <div class="p-filed">
+                        <div class="row">
                             <label class="p-col-fixed">{{Locales.password}}</label>
                             <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
                         </div>
@@ -33,11 +33,11 @@
                 <ng-template [ngSwitchCase]="'/forgot'">
                     <div>
                         <div style="margin: 10px 0;">{{Locales.enterEmail}}</div>
-                        <div class="p-filed">
+                        <div class="row">
                             <label class="p-col-fixed">{{Locales.userId}}</label>
                             <input class="ui-inputtext" name="username" required ngModel autocomplete="off">
                         </div>
-                        <div class="p-filed">
+                        <div class="row">
                             <label class="p-col-fixed">{{Locales.email}}</label>
                             <input type="email" class="ui-inputtext" name="email" required ngModel autocomplete="off">
                         </div>
@@ -57,31 +57,31 @@
                     </div>
                 </ng-template>
                 <ng-template [ngSwitchCase]="'/create'">
-                    <div class="p-filed">
+                    <div class="row">
                         <label class="p-col-fixed">{{Locales.userId}}*</label>
                         <input class="ui-inputtext" name="username" required ngModel autocomplete="off">
                     </div>
-                    <div class="p-filed">
+                    <div class="row">
                         <label class="p-col-fixed">{{Locales.password}}*</label>
                         <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
                     </div>
-                    <div class="p-filed">
+                    <div class="row">
                         <label class="p-col-fixed">{{Locales.confirmPassword}}*</label>
                         <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off">
                     </div>
-                    <div class="p-filed">
+                    <div class="row">
                         <label class="p-col-fixed">{{Locales.email}}*</label>
                         <input type="email" class="ui-inputtext" name="email" required ngModel autocomplete="off">
                     </div>
-                    <div class="p-filed">
+                    <div class="row">
                         <label class="p-col-fixed">{{Locales.firstName}}*</label>
                         <input class="ui-inputtext" name="first" required ngModel autocomplete="off">
                     </div>
-                    <div class="p-filed">
+                    <div class="row">
                         <label class="p-col-fixed">{{Locales.lastName}}*</label>
                         <input class="ui-inputtext" name="last" required ngModel autocomplete="off">
                     </div>
-                    <div class="p-filed">
+                    <div class="row">
                         <label class="p-col-fixed">{{Locales.phone}}</label>
                         <input class="ui-inputtext" name="phone" ngModel autocomplete="off">
                     </div>
@@ -92,11 +92,11 @@
                 <ng-template #ResetPassword>
                     <div>
                         <p>{{Locales.chooseNewPassword}}</p>
-                        <div class="p-filed">
+                        <div class="row">
                             <label class="p-col-fixed">{{Locales.password}}*</label>
                             <input type="password" class="ui-inputtext" name="new_passwd" required ngModel autocomplete="off">
                         </div>
-                        <div class="p-filed">
+                        <div class="row">
                             <label class="p-col-fixed">{{Locales.confirmPassword}}*</label>
                             <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off">
                         </div>

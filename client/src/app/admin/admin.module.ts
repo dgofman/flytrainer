@@ -1,18 +1,20 @@
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
-import { DashboardComponent } from './dashboard.component';
+import { UserService } from 'src/services/user.service';
+import { AdminComponent } from './admin.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponentModule } from '../app.component';
-import { AuthService } from '../authentication/auth.service';
+import { AdminAuthService } from '../authentication/auth.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { FTTableModule } from '../component/ft-table.component';
 
 export const routes: Routes = [
   {
-    path: '', component: DashboardComponent
+    path: '', component: AdminComponent
   }
 ];
 
@@ -23,18 +25,20 @@ export const routes: Routes = [
     HttpClientModule, /*required for HTTP_INTERCEPTORS*/
     ReactiveFormsModule, /*required for FormGroup, FormControl */
     AppComponentModule, /* required for app-footer */
+    CheckboxModule,
     ButtonModule,
     FTTableModule
   ],
   declarations: [
-    DashboardComponent
+    AdminComponent
   ],
   providers: [
+    UserService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthService,
+      useClass: AdminAuthService,
       multi: true
     }
   ]
 })
-export class DashboardModule { }
+export class AdminModule { }

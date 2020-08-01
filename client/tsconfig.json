@@ -18,6 +18,7 @@
     ],
     "paths": {
       "@client/*": ["../client/src/*"],
+      "@assets/*": ["../client/src/assets/*"],
       "@locales/*": ["../client/src/modules/locales/*"]
     }
   },

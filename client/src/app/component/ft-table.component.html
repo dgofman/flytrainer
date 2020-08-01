@@ -1,0 +1,45 @@
+<p-table [columns]="columns" [value]="data" [resizableColumns]="true" [scrollable]="true" [expandedRowKeys]="expandedRows"
+  [dataKey]="dataKey" [lazy]="true" (onLazyLoad)="lazyLoad($event)">
+  <ng-template pTemplate="colgroup">
+    <colgroup>
+      <col [style.width.px]="45" />
+      <col *ngFor="let col of columns" [style.width.px]="col.width" />
+    </colgroup>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 3em; padding-left: 0; padding-right: 0; text-align: center;">
+        <button pButton class="ui-table-add-button" icon="pi pi-plus" style="font-size: 12px" (click)="onAddNewRow()"></button>
+      </th>
+      <th *ngFor="let col of columns" pResizableColumn>
+        {{col.header}}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-expanded="expanded">
+    <tr>
+      <td>
+        <a href="#" [pRowToggler]="rowData">
+          <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+        </a>
+      </td>
+      <td *ngFor="let col of columns" class="ui-resizable-column" [title]="formatData(col, rowData)">
+        {{formatData(col, rowData)}}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="rowexpansion" let-rowData>
+    <tr>
+      <td [attr.colspan]="columns.length + 1">
+        <div [ftTableFormProvider]="rowData" (onNotify)="childEventHandler($event);">
+          <ng-container *ngComponentOutlet="expandFormTemplate"></ng-container>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="columns.length + 1" [innerHTML]="noData"></td>
+    </tr>
+  </ng-template>
+</p-table>

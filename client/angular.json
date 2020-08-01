@@ -29,7 +29,7 @@
               "src/modules/data"
             ],
             "styles": [
-              "src/assets/styles.less",
+              "src/assets/less/styles.less",
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/nova-colored/theme.css",
               "node_modules/primeng/resources/primeng.min.css"

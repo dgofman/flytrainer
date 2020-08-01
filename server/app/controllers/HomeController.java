@@ -80,6 +80,7 @@ public class HomeController extends BaseController {
 				put("id", user.id);
 				put("firstname", user.firstname);
 				put("lastname", user.lastname);
+				put("role", user.role);
 			}};
 			return ok(Ebean.json().toJson(params));
 		} catch (IllegalAccessException ex) {

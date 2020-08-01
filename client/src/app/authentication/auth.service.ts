@@ -49,3 +49,16 @@ export class AuthService implements HttpInterceptor, CanActivate {
         return true;
     }
 }
+
+@Injectable()
+export class AdminAuthService extends AuthService implements CanActivate {
+    canActivate(): boolean {
+        const isValid = super.canActivate();
+        if (!isValid) {
+            return false;
+        }
+        const auth = JSON.parse(sessionStorage.getItem('auth_data') || '{}');
+        return auth.role === 'ADMIN';
+    }
+}
+

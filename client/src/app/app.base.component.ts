@@ -1,15 +1,21 @@
+import Locales from '@locales/common';
+import { environment } from '@client/environments/environment';
 import { ChangeDetectorRef, Directive } from '@angular/core';
 import { AppOverlayComponent } from './app.component';
-import Locales from '@locales/common';
-
+import { User } from 'src/modules/models/user';
 
 @Directive()
-// tslint:disable-next-line: directive-class-suffix
-export abstract class AppBaseComponent {
+export abstract class AppBaseDirective {
+    environment = environment;
+    loggedUser: User = new User();
+    toggleArroMenu: boolean;
+
     message: string;
     error: string;
 
     constructor(private changeDetector: ChangeDetectorRef) {
+        const auth = JSON.parse(sessionStorage.getItem('auth_data'));
+        this.loggedUser = new User(auth);
     }
 
     loading(show: boolean) {

@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { AppBaseComponent } from '../app.base.component';
+import { AppBaseDirective } from '../app.base.component';
 import { AppComponentModule } from '../app.component';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
@@ -12,9 +12,14 @@ import Locales from '@locales/auth';
 
 @Component({
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.less']
+  styleUrls: ['./auth.component.less'],
+  styles: [`
+    .row {
+      margin-bottom: 1em;
+    }
+  `]
 })
-export class AuthComponent extends AppBaseComponent implements AfterViewInit {
+export class AuthComponent extends AppBaseDirective implements AfterViewInit {
   Locales = Locales;
   environment = environment;
   resetPassword: boolean;
@@ -111,7 +116,7 @@ export class AuthComponent extends AppBaseComponent implements AfterViewInit {
           case '/login':
             if (json.token) {
               this.appService.login(json);
-              this.router.navigate(['/dashboard']);
+              this.router.navigate([json.role === 'ADMIN' ? '/admin' : '/dashboard']);
             } else {
               this.resetPassword = true;
             }

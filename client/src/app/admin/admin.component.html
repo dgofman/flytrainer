@@ -1,4 +1,4 @@
-<div class="container" [ngClass]="{'menu-layout-open': !toggleArroMenu}">
+<div class="container" [ngClass]="{'menu-layout-open': toggleArroMenu}">
   <div class="topbar">
     <div class="topbar-left">
       <h3>{{environment.company}}</h3>
@@ -7,19 +7,15 @@
         <i class="pi pi-chevron-circle-right"></i>
       </div>
     </div>
-    <div class="topbar-right">RIGHT</div>
+    <div class="topbar-right">
+      <a style="float: right; color: #fff" (click)="appService.logout()">{{Locales.logout}}</a>
+    </div>
   </div>
   <div class="wrap">
     <div class="left-menu">
-      <div class="profile">
-        {{loggedUser.lastname}}, {{loggedUser.firstname}} ({{loggedUser.id}})
-        <br><b>{{Locales.accountBalance}}:</b><span
-          style="padding-left: 10px;">{{loggedUser.currentAccount.balance | currency}}</span>
-        <br><a style="float: right" (click)="appService.logout()">{{Locales.logout}}</a>
-      </div>
       <ul class="nav-menu">
-        <li routerLink="../admin" routerLinkActive="active" *ngIf="loggedUser.role == 'ADMIN'">
-          <i class="pi pi-unlock"></i>{{Locales.admin}}
+        <li routerLink="../dashboard" routerLinkActive="active">
+          <i class="pi pi-home"></i>{{Locales.dashboard}}
         </li>
         <li routerLink="dashboard" routerLinkActive="active">
           <i class="pi pi-dollar"></i>Accounting
@@ -30,9 +26,9 @@
       </ul>
     </div>
     <div class="main">
-
+      <ft-table [columns]="cols" [data]="users" dataKey="id" [noData]="Locales.noData"
+        (onNotify)="eventTableHandler($event)"></ft-table>
     </div>
-    <div class="layout-mask"></div>
   </div>
   <app-footer></app-footer>
 </div>

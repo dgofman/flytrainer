@@ -1,0 +1,31 @@
+
+<form [formGroup]="frmGroup" class="p-form">
+  <div class="ui-fluid p-grid">
+    <div class="p-field p-md-3">
+      <label for="username">{{colRef.username.header}}:</label>
+      <input class="ui-inputtext" formControlName="username" />
+    </div>
+    <div class="p-field p-md-3">
+      <label for="firstname">{{colRef.firstname.header}}:</label>
+      <input class="ui-inputtext" formControlName="firstname" />
+    </div>
+    <div class="p-field p-md-3">
+      <label for="lastname">{{colRef.lastname.header}}:</label>
+      <input class="ui-inputtext" formControlName="lastname" />
+    </div>
+    <div class="p-field p-md-3">
+      <label for="phonenumber">{{colRef.phonenumber.header}}:</label>
+      <input class="ui-inputtext" formControlName="phonenumber" />
+    </div>
+    <div class="p-field p-md-2">
+      <p-checkbox value="0" [label]="colRef.isActive.header" formControlName="isActive"></p-checkbox>
+    </div>
+    <div class="p-field p-md-2">
+      <p-checkbox value="0" [label]="colRef.resetPassword.header" formControlName="resetPassword">
+      </p-checkbox>
+    </div>
+  </div>
+  <div>
+    <p-button label="{{Locales.moreDetails}}" *ngIf="loggedUser.role=='ADMIN'"></p-button>
+  </div>
+</form>

@@ -1,72 +1,9 @@
-@import "../../assets/styles.less";
-
-.p-grid {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin: 5px 0;
-    background: #d5edff;
-    padding: 20px;
-    border: 1px solid gray;
-}
-
-.p-field {
-    margin-bottom: .6em;
-    padding: .5em;
-}
-
-.p-field label {
-    display: block;
-    margin-bottom: .1em;
-}
+@import "../../assets/less/styles.less";
+@import "../../assets/less/layout.less";
+@import "../../assets/less/navmenu.less";
 
 .container {
-    .topbar {
-        .topbar-right {
-            padding: 20px 0;
-            display: inline-block;
-            margin-left: 25px;
-            height: 100%;
-        }
-
-        .arrow-menu {
-            cursor: pointer;
-            position: absolute;
-            top: 15px;
-            right: -15px;
-            font-size: 25px;
-            z-index: 1;
-
-            &:hover {
-                color: #d8dae2;
-            }
-
-            &>i {
-                -moz-transition: all 0.3s;
-                -o-transition: all 0.3s;
-                -webkit-transition: all 0.3s;
-                transition: all 0.3s;
-            }
-        }
-    }
-
     .left-menu {
-        -moz-transition: left @menu-close-speed;
-        -o-transition: left @menu-close-speed;
-        -webkit-transition: left @menu-close-speed;
-        transition: left @menu-close-speed;
-
-        position: absolute;
-        overflow: auto;
-        left: -@left-menu-width;
-        width: @left-menu-width;
-        top: 0;
-        bottom: 0;
-        border-right: 1px solid #cccccc;
-        z-index: 1;
-        background: #fff;
-
         .profile {
             overflow: auto;
             padding: 15px;
@@ -86,82 +23,5 @@
         opacity: 0.7;
         top: 0;
         left: 0;
-    }
-}
-
-.container.menu-layout-open {
-    .arrow-menu>i {
-        -webkit-transform: rotate(-180deg);
-        -moz-transform: rotate(-180deg);
-        -o-transform: rotate(-180deg);
-        -ms-transform: rotate(-180deg);
-        transform: rotate(-180deg);
-    }
-
-    .left-menu {
-        left: 0;
-    }
-}
-
-@media screen and (min-width: 768px) {
-
-    .p-md-1,
-    .p-md-2,
-    .p-md-3,
-    .p-md-4,
-    .p-md-5,
-    .p-md-6,
-    .p-md-7,
-    .p-md-8,
-    .p-md-9,
-    .p-md-10,
-    .p-md-11,
-    .p-md-12 {
-        -ms-flex: 0 0 auto;
-        flex: 0 0 auto
-    }
-
-    .p-md-1 {
-        width: 8.3333%
-    }
-
-    .p-md-2 {
-        width: 16.6667%
-    }
-
-    .p-md-3 {
-        width: 25%
-    }
-
-    .p-md-4 {
-        width: 33.3333%
-    }
-
-    .p-md-5 {
-        width: 41.6667%
-    }
-
-    .p-md-6 {
-        width: 50%
-    }
-}
-
-@media (max-width: 1024px) {
-    .container.menu-layout-open {
-        .layout-mask {
-            display: block;
-        }
-    }
-}
-
-@media (min-width: 1025px) {
-    .container.menu-layout-open {
-        .main {
-            margin-left: @left-menu-width;
-        }
-
-        .footer {
-            margin-left: @left-menu-width;
-        }
     }
 }

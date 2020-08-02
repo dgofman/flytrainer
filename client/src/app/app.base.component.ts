@@ -3,6 +3,7 @@ import { environment } from '@client/environments/environment';
 import { ChangeDetectorRef, Directive } from '@angular/core';
 import { AppOverlayComponent } from './app.component';
 import { User } from 'src/modules/models/user';
+import { faPlane, faChalkboardTeacher as faInstructor } from '@fortawesome/free-solid-svg-icons';
 
 @Directive()
 export abstract class AppBaseDirective {
@@ -12,6 +13,9 @@ export abstract class AppBaseDirective {
 
     message: string;
     error: string;
+
+    faPlane = faPlane;
+    faInstructor = faInstructor;
 
     constructor(private changeDetector: ChangeDetectorRef) {
         const auth = JSON.parse(sessionStorage.getItem('auth_data'));

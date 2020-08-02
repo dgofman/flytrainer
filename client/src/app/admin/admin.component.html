@@ -17,11 +17,23 @@
         <li routerLink="../dashboard" routerLinkActive="active">
           <i class="pi pi-home"></i>{{Locales.dashboard}}
         </li>
-        <li routerLink="dashboard" routerLinkActive="active">
-          <i class="pi pi-dollar"></i>Accounting
+        <li routerLink="schedule" routerLinkActive="active">
+          <i class="pi pi-calendar"></i>{{Locales.schedule}}
         </li>
-        <li routerLink="dashboard" routerLinkActive="active">
-          <i class="pi pi-cog"></i>Maintance
+        <li routerLink="instructors" routerLinkActive="active">
+          <fa-icon [icon]="faInstructor"></fa-icon>{{Locales.instructors}}
+        </li>
+        <li routerLink="students" routerLinkActive="active">
+          <i class="pi pi-users"></i>{{Locales.students}}
+        </li>
+        <li routerLink="aircraft" routerLinkActive="active">
+          <fa-icon [icon]="faPlane" class="rotate-90"></fa-icon>{{Locales.aircraft}}
+        </li>
+        <li routerLink="billing" routerLinkActive="active">
+          <i class="pi pi-money-bill"></i>{{Locales.billing}}
+        </li>
+        <li routerLink="reports" routerLinkActive="active">
+          <i class="pi pi-chart-line"></i>{{Locales.reports}}
         </li>
       </ul>
     </div>

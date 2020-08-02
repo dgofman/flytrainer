@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { FTTableModule } from '../component/ft-table.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,7 @@ export const routes: Routes = [
     HttpClientModule, /*required for HTTP_INTERCEPTORS*/
     ReactiveFormsModule, /*required for FormGroup, FormControl */
     AppComponentModule, /* required for app-footer */
+    FontAwesomeModule,
     CheckboxModule,
     ButtonModule,
     FTTableModule

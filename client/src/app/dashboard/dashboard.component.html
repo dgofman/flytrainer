@@ -21,11 +21,14 @@
         <li routerLink="../admin" routerLinkActive="active" *ngIf="loggedUser.role == 'ADMIN'">
           <i class="pi pi-unlock"></i>{{Locales.admin}}
         </li>
-        <li routerLink="dashboard" routerLinkActive="active">
-          <i class="pi pi-dollar"></i>Accounting
+        <li routerLink="schedule" routerLinkActive="active">
+          <i class="pi pi-calendar"></i>{{Locales.schedule}}
         </li>
-        <li routerLink="dashboard" routerLinkActive="active">
-          <i class="pi pi-cog"></i>Maintance
+        <li routerLink="instructors" routerLinkActive="active">
+          <fa-icon [icon]="faInstructor"></fa-icon>{{Locales.instructors}}
+        </li>
+        <li routerLink="aircraft" routerLinkActive="active">
+          <fa-icon [icon]="faPlane" class="rotate-90"></fa-icon>{{Locales.aircraft}}
         </li>
       </ul>
     </div>

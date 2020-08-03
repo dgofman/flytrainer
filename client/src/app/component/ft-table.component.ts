@@ -1,26 +1,27 @@
 import { LazyLoadEvent, SelectItem } from 'primeng/api';
 import { Directive, Input, NgModule, EventEmitter, Output, Component } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import {TableModule} from 'primeng/table';
+import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 
 export interface ColumnType {
   field: string;
   header: string;
   width?: number;
-  validators?: any[];
   format?: string;
 }
 
 export enum EventType {
-  Load
+  Load,
+  Cancel
 }
 
 @Component({
-    selector: 'ft-table',
-    templateUrl: './ft-table.component.html'
+  selector: 'ft-table',
+  templateUrl: './ft-table.component.html'
 })
 export class FTTableComponent {
+  @Input('expandFormTemplate') public expandFormTemplate: Component;
   @Input('columns') public columns: Array<ColumnType>;
   @Input('data') public data: Array<any>;
   @Input('dataKey') public dataKey: string;
@@ -29,8 +30,6 @@ export class FTTableComponent {
 
   newRow: any;
   expandedRows: {} = {};
-
-  expandFormTemplate: Component;
 
   public itemsPerPageList: SelectItem[] = [
     { label: '15', value: 15 },
@@ -48,7 +47,7 @@ export class FTTableComponent {
   filterFieldName: string;
 
   notify(message: EventType, data: any) {
-    this.onNotify.emit({ message, data});
+    this.onNotify.emit({ message, data });
   }
 
   lazyLoad(event: LazyLoadEvent) {
@@ -95,7 +94,11 @@ export class FTTableComponent {
 })
 export class FTTableFormProviderDirective {
   @Input('ftTableFormProvider') data: any;
-  @Output() public onNotify: EventEmitter<any> = new EventEmitter();
+  @Output() private onNotify: EventEmitter<any> = new EventEmitter();
+
+  public notify(message: EventType, data: any) {
+    this.onNotify.emit({ message, data });
+  }
 }
 
 @NgModule({

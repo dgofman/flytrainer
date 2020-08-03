@@ -39,7 +39,7 @@
     </div>
     <div class="main">
       <ft-table [columns]="cols" [data]="users" dataKey="id" [noData]="Locales.noData"
-        (onNotify)="eventTableHandler($event)"></ft-table>
+        (onNotify)="eventTableHandler($event)" [expandFormTemplate]="tableExpandForm"></ft-table>
     </div>
   </div>
   <app-footer></app-footer>

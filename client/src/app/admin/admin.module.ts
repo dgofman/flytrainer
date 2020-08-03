@@ -12,6 +12,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { FTTableModule } from '../component/ft-table.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { UserFormComponent } from './userform.component';
+import { ConfirmationService } from 'primeng/api';
 
 export const routes: Routes = [
   {
@@ -32,9 +34,10 @@ export const routes: Routes = [
     FTTableModule
   ],
   declarations: [
-    AdminComponent
+    AdminComponent, UserFormComponent
   ],
   providers: [
+    ConfirmationService,
     UserService,
     {
       provide: HTTP_INTERCEPTORS,

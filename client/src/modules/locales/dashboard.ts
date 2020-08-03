@@ -2,6 +2,5 @@ import Locales from './common';
 
 export default {
     ...Locales,
-    accountBalance: 'Account Balance',
-    moreDetails: 'More Details'
+    accountBalance: 'Account Balance'
 };

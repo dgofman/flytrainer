@@ -4,8 +4,8 @@ import { UserService } from 'src/services/user.service';
 import { User } from 'src/modules/models/user';
 import { AuthService } from '../authentication/auth.service';
 import { AppBaseDirective } from '../app.base.component';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ColumnType, EventType } from '../component/ft-table.component';
+import { UserFormComponent } from './userform.component';
 
 @Component({
   templateUrl: './admin.component.html',
@@ -13,32 +13,24 @@ import { ColumnType, EventType } from '../component/ft-table.component';
 })
 export class AdminComponent extends AppBaseDirective {
   Locales = Locales;
+  tableExpandForm = UserFormComponent;
   users: User[];
-  frmGroup: FormGroup;
 
-  colRef: any;
   cols: ColumnType[] = [
-    { field: 'username', header: 'Username', width: 150, validators: [Validators.required, Validators.maxLength(50)] },
-    { field: 'firstname', header: 'First', width: 150, validators: [Validators.required, Validators.maxLength(50)] },
-    { field: 'lastname', header: 'Last', width: 150, validators: [Validators.required, Validators.maxLength(50)] },
-    { field: 'email', header: 'Email', width: 200, validators: [Validators.required, Validators.email, Validators.maxLength(100)] },
-    { field: 'phonenumber', header: 'Phone', width: 150, validators: [Validators.maxLength(100)] },
-    { field: 'role', header: 'Role', width: 100 },
-    { field: 'isActive', header: 'Active', width: 70 },
-    { field: 'resetPassword', header: 'Reset Password', width: 90},
-    { field: 'whoModified', header: 'Who Modified', width: 80 },
-    { field: 'modifiedDate', header: 'Modified Date', width: 200, format: 'date' }
+    { field: 'username', header: Locales.username, width: 150},
+    { field: 'firstname', header: Locales.firstname, width: 150},
+    { field: 'lastname', header: Locales.lastname, width: 150 },
+    { field: 'email', header: Locales.email, width: 200},
+    { field: 'phonenumber', header: Locales.phonenumber, width: 150 },
+    { field: 'role', header: Locales.role, width: 100 },
+    { field: 'isActive', header: Locales.isActive, width: 70 },
+    { field: 'resetPassword', header: Locales.resetPassword, width: 90},
+    { field: 'whoModified', header: Locales.whoModified, width: 80 },
+    { field: 'modifiedDate', header: Locales.modifiedDate, width: 200, format: 'date' }
   ];
 
   constructor(changeDetector: ChangeDetectorRef, private userService: UserService, public appService: AuthService) {
     super(changeDetector);
-    const fields = {};
-    this.colRef = {};
-    Object.values(this.cols).forEach(params => {
-      fields[params.field] = new FormControl(null, params.validators);
-      this.colRef[params.field] = params;
-    });
-    this.frmGroup = new FormGroup(fields);
   }
 
   eventTableHandler(event: any) {

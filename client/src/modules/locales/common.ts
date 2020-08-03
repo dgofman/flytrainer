@@ -11,6 +11,7 @@ export default {
     reports: 'Resports',
 
     noData: 'No data found.',
+    deleteRecord: 'Are you sure you want to delete this record?',
     powerBy: '© Power by FlyTrainer LLC',
     internalError: 'An internal error has occurred.'
 };

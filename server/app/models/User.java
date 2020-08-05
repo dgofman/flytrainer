@@ -54,6 +54,7 @@ public class User extends BaseModel {
 	@Column(name = "middlename")
 	@NotNull
 	@Length(50)
+	@JsonView(Full.class)
 	public String middle;
 
 	@Column(name = "lastname")
@@ -86,12 +87,14 @@ public class User extends BaseModel {
 	public byte isActive = 0;
 	
 	@NotNull
+	@JsonView(Full.class)
 	public byte isSchoolEmployee = 0;
 
 	@NotNull
 	public Constants.Access role = Constants.Access.USER;
 
 	@NotNull
+	@JsonView(Full.class)
 	public byte resetPassword = 1;
 
 	@JsonView(Full.class)

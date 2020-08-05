@@ -36,6 +36,7 @@ public abstract class BaseModel extends Model {
 		return whoCreated;
 	}
 
+	@JsonView(Full.class)
 	private Integer whoModified;
 	public Integer getWhoModified() {
 		return whoModified;

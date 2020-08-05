@@ -19,14 +19,11 @@ export class AdminComponent extends AppBaseDirective {
   cols: ColumnType[] = [
     { field: 'username', header: Locales.username, width: 150 },
     { field: 'first', header: Locales.firstname, width: 150 },
-    { field: 'middle', header: Locales.lastname, width: 150 },
     { field: 'last', header: Locales.lastname, width: 150 },
     { field: 'email', header: Locales.email, width: 200 },
-    { field: 'phone', header: Locales.phonenumber, width: 150 },
+    { field: 'phone', header: Locales.cellphone, width: 150 },
     { field: 'role', header: Locales.role, width: 100 },
     { field: 'isActive', header: Locales.isActive, width: 70 },
-    { field: 'resetPassword', header: Locales.resetPassword, width: 90 },
-    { field: 'whoModified', header: Locales.whoModified, width: 80 },
     { field: 'modifiedDate', header: Locales.modifiedDate, width: 200, format: 'date' }
   ];
 

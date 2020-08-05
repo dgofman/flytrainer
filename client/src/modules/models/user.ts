@@ -10,7 +10,14 @@ export class User extends BaseModel {
     last: string;
     email: string;
     isActive: number;
-    resetPassword: number;
+    isResetPassword: number;
+    isSchoolEmployee: number;
+    birthday: Date;
+    dl: string; /* driving license */
+    dlState: string; /* driving license state */
+    dlExpDate: Date;  /* driving license expiration date */
+    ssn: string;
+    ftn: string;
     role: string;
     version: number;
     phone: string;

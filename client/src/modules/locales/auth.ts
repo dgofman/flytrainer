@@ -7,6 +7,7 @@ export default {
     submit: 'Submmit',
     cancel: 'Cancel',
     firstName: 'First Name',
+    middleName: 'Middle Name',
     lastName: 'Last Name',
     phone: 'Phone',
     forgotPassword: 'Forgot your password?',

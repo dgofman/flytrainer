@@ -12,7 +12,7 @@
   <div class="wrap">
     <div class="left-menu">
       <div class="profile">
-        {{loggedUser.lastname}}, {{loggedUser.firstname}} ({{loggedUser.id}})
+        {{loggedUser.last}}, {{loggedUser.first}} ({{loggedUser.id}})
         <br><b>{{Locales.accountBalance}}:</b><span
           style="padding-left: 10px;">{{loggedUser.currentAccount.balance | currency}}</span>
         <br><a style="float: right" (click)="appService.logout()">{{Locales.logout}}</a>

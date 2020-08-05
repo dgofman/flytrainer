@@ -1,13 +1,16 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -41,17 +44,22 @@ public class User extends BaseModel {
 	private static final String defaultPassword = AppConfig.get(Key.DEFAULT_PWD).asText();
 
 	@JsonView(Full.class)
-	public UUID uuid = UUID.randomUUID();
+	public UUID uuid = UUID.randomUUID(); //internal security verification
 
-	@Column(name = "first")
+	@Column(name = "firstname")
 	@NotNull
 	@Length(50)
-	public String firstname;
+	public String first;
 
-	@Column(name = "last")
+	@Column(name = "middlename")
 	@NotNull
 	@Length(50)
-	public String lastname;
+	public String middle;
+
+	@Column(name = "lastname")
+	@NotNull
+	@Length(50)
+	public String last;
 
 	@Length(50)
 	@NotNull
@@ -70,11 +78,15 @@ public class User extends BaseModel {
 	public String email;
 
 	@Length(30)
+	@Column(name = "cellphone")
 	@DbComment("ex: (+NN) NNN NNN NNN")
-	public String phonenumber;
+	public String phone;
 
 	@NotNull
 	public byte isActive = 0;
+	
+	@NotNull
+	public byte isSchoolEmployee = 0;
 
 	@NotNull
 	public Constants.Access role = Constants.Access.USER;
@@ -82,9 +94,58 @@ public class User extends BaseModel {
 	@NotNull
 	public byte resetPassword = 1;
 
-	@ManyToOne(targetEntity = Account.class, fetch = FetchType.LAZY)
+	@JsonView(Full.class)
+	public Date birthday;
+	
+	@Length(10)
+	@Column(name = "driverLicense")
+	@JsonView(Full.class)
+	public String dl;
+	
+	@Length(2)
+	@Column(name = "driverLicenseState")
+	@JsonView(Full.class)
+	public String dlState;
+	
+	@Column(name = "driverLicenseExpirationDate")
+	@JsonView(Full.class)
+	public Date dlExpDate;
+	
+	@Length(10)
+	@JsonView(Full.class)
+	public String ssn;
+
+	@Length(10)
+	@JsonView(Full.class)
+	public String ftn;
+	
+	@OneToMany(targetEntity = Account.class, fetch = FetchType.LAZY, mappedBy = "user")
 	@JsonBackReference
-	private Account account;
+	public List<Account> accounts = new ArrayList<>();
+	
+	@OneToMany(targetEntity = Certificate.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonBackReference
+	public List<Certificate> certificates = new ArrayList<>();
+	
+	@OneToMany(targetEntity = MedicalCertificate.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonBackReference
+	public List<MedicalCertificate> medicalCertificates = new ArrayList<>();
+
+	@OneToMany(targetEntity = Address.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonBackReference
+	public List<Address> addresses = new ArrayList<>();
+	
+	@OneToMany(targetEntity = Contact.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonBackReference
+	public List<Contact> contacts = new ArrayList<>();
+
+	@OneToMany(targetEntity = Employer.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonBackReference
+	public List<Employer> employers = new ArrayList<>();
+	
+	@OneToMany(targetEntity = Note.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@JsonBackReference
+	public List<Note> notes = new ArrayList<>();
 
 	public User() {
 	}
@@ -92,12 +153,13 @@ public class User extends BaseModel {
 	public User(JsonNode body) {
 		this.username = body.get("username").asText();
 		this.password = body.get("passwd").asText();
-		this.firstname = body.get("first").asText();
-		this.lastname = body.get("last").asText();
+		this.first = body.get("first").asText();
+		this.middle = body.get("middle").asText();
+		this.last = body.get("last").asText();
 		this.email = body.get("email").asText();
 		this.resetPassword = 0;
 		if (!body.get("phone").isEmpty()) {
-			this.phonenumber = body.get("phone").asText();
+			this.phone = body.get("phone").asText();
 		}
 	}
 }

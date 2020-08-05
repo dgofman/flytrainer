@@ -8,6 +8,7 @@ public class Constants {
 
 	public static enum Access {
 		USER,
+		INSTRUCTOR,
 		MECHANIC,
 		MANAGER,
 		ADMIN
@@ -60,5 +61,97 @@ public class Constants {
 		public String toString() {
 			return key;
 		}
+	}
+	
+	public static enum Certificate {
+		StudentPilot("Student Pilot", "STD"),
+		SportPilot("Sport Pilot", "SPL"),
+		RecreationalPilot("Recreational Pilot", "RPL"),
+		RemotePilot("Remote Pilot", "RP"),
+		PrivatePilot("Private Pilot", "PPL"),
+		InstrumentRating("Instrument Rating", "IR"),
+		CommercialPilot("Commercial Pilot", "CPL"),
+		AirlineTransportPilot("Airline Transport Pilot", "ATP"),
+		MultiCrewPilot("Multi-Crew Pilot", "MCP"),
+		FlightInstructor("Certified Flight Instructor", "CFI"),
+		BasicGroundInstructor("Basic Ground Instructor", "BGI"),
+		AdvancedGroundInstructor("Advanced Ground Instructor", "AGI"),
+		InstrumentGroundInstructor("Instrument Ground Instructor", "IGI"),
+		MultiEngineRating("Multi-Engine Rating", "ME"),
+		PilotExaminer("Designated Pilot Examiner", "DPE");
+
+		private final String name;
+		private final String key;
+
+		private Certificate(String name, String key) {
+			this.name = name;
+			this.key = key;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String toString() {
+			return key;
+		}
+	}
+	
+	public static enum Ratings {
+		SingleEngineLand("Single-Engine Land", "ASEL"),
+		SingleEngineSea("Single-Engine Sea", "ASES"),
+		MultiengineLand("Multiengine Land", "AMEL"),
+		MultiengineSea("Multiengine Sea", "AMES"),
+		PoweredLift("Powered-Lift", "PWRL"),
+		Helicopter("Helicopter", "HLCR"),
+		Gyroplane("Gyroplane", "GYRO"),
+		Balloon("Balloon", "BALL"),
+		Airship("Airship", "AIR"),
+		Glider("Glider", "GLDR"),
+		LightSportAircraft("Light Sport Aircraft", "LSA");
+
+		private final String name;
+		private final String key;
+
+		private Ratings(String name, String key) {
+			this.name = name;
+			this.key = key;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String toString() {
+			return key;
+		}
+	}
+	
+	public static enum MedicalCertificate {
+		ThirdClass("Third class"),
+		SecondClass("Second class"),
+		FirstClass("First class"),
+		BasicMed("BasicMed");
+
+		private final String key;
+
+		private MedicalCertificate(String key) {
+			this.key = key;
+		}
+
+		@Override
+		public String toString() {
+			return key;
+		}
+	}
+	
+	public static enum AddressType {
+		HOME,
+		BUSINESS,
+		BILLING,
+		SHIPPING,
+		CONTRACT
 	}
 }

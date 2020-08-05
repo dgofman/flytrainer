@@ -1,6 +1,7 @@
 package models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,29 +9,37 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import io.ebean.annotation.History;
+import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
 import utils.Constants;
 
 @Entity
 @History
-@Table(name = "account")
-public class Account extends BaseModel {
+@Table(name = "certificate")
+public class Certificate extends BaseModel {
 
-	public Integer accountId; //userId
+	@Length(10)
+	public String number;
+	
+	@NotNull
+	public List<Constants.Certificate> certificates ;
+	
+	public List<Constants.Ratings> ratings;
+	
+	@Length(100)
+	public List<String> limitations;
 
 	@NotNull
-	public Double balance = 0.0;
-
+	Date issuedDate;
+	
+	Date renewDate;
+	
 	@Column(name = "expirationDate")
 	public Date expDate;
 	
 	@NotNull
-	public byte isActive = 0;
+	public byte isSuspended = 0;
 	
-	@NotNull
-	@Column(name = "accountType")
-	public Constants.Access type = Constants.Access.USER;
-
 	@ManyToOne()
 	public User user;
 }

@@ -5,14 +5,15 @@ export class User extends BaseModel {
     id: string;
     username: string;
     uuid: string;
-    firstname: string;
-    lastname: string;
+    first: string;
+    middle: string;
+    last: string;
     email: string;
     isActive: number;
     resetPassword: number;
     role: string;
     version: number;
-    phonenumber: string;
+    phone: string;
     password: string;
     createdDate: number;
     modifiedDate: number;

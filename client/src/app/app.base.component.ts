@@ -32,7 +32,7 @@ export abstract class AppBaseDirective {
         if (ex.status === 404 || ex.status % 500 < 50 || !ex.error) {
             this.error = Locales.internalError;
         } else {
-            this.error = JSON.stringify(ex.error);
+            this.error = typeof(ex.error) === 'string' ? ex.error : JSON.stringify(ex.error);
         }
         this.changeDetector.detectChanges();
     }

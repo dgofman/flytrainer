@@ -78,8 +78,8 @@ public class HomeController extends BaseController {
 				put(Constants.CORRELATION_ID, ddos.createdDate.toEpochMilli());
 				put("token", authToken);
 				put("id", user.id);
-				put("firstname", user.firstname);
-				put("lastname", user.lastname);
+				put("firstname", user.first);
+				put("lastname", user.last);
 				put("role", user.role);
 			}};
 			return ok(Ebean.json().toJson(params));
@@ -129,7 +129,7 @@ public class HomeController extends BaseController {
 				put(TOKEN_ATTR, authToken);
 				put(DATE_ATTR, user.modifiedDate.toEpochMilli());
 			}};
-			String emailBody = String.format(ACCOUNT_ACTIVATION, user.firstname, user.lastname, origin + "/activate?" + Joiner.on("&").withKeyValueSeparator("=").join(params));
+			String emailBody = String.format(ACCOUNT_ACTIVATION, user.first, user.last, origin + "/activate?" + Joiner.on("&").withKeyValueSeparator("=").join(params));
 			MailServer.sendMail(user.email, "Activate your account", emailBody);
 		} catch (Exception e) {
 			return badRequest(Constants.Errors.ERROR.toString());

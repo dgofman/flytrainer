@@ -17,10 +17,11 @@ export class UserFormComponent extends AdminFormDirective {
     super(formProvider, confirmationService);
     this.frmGroup = new FormGroup({
       username: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
-      firstname: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
-      lastname: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
+      first: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
+      middle: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
+      last: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
       email: new FormControl(null, [Validators.required, Validators.email, Validators.maxLength(100)]),
-      phonenumber: new FormControl(null, [Validators.required, Validators.email, Validators.maxLength(100)]),
+      phone: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
       isActive: new FormControl(),
       resetPassword: new FormControl(),
     });

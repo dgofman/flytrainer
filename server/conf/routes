@@ -13,3 +13,4 @@ POST    /reset                      controllers.HomeController.reset(request: Re
 POST    /logout                     controllers.HomeController.logout(request: Request)
 
 GET     /users                      controllers.AdminController.users(request: Request, startIndex: Integer, rows: Integer, sortBy: String ?= null, sortDirection: String ?= null, filter: String ?= null, query: String ?= null)
+GET     /users/:id                  controllers.AdminController.userById(id: Long)

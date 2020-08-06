@@ -9,8 +9,12 @@ export class UserService {
   public constructor(private http: HttpClient) {
   }
 
-  getUser(startIndex: number, rows: number, sortBy?: string, sortDirection?: string, filter?: string, query?: string): Observable<User[]> {
+  getUsers(startIndex: number, rows: number, sortBy?: string, sortDirection?: string, filter?: string, query?: string): Observable<User[]> {
     const url = `/users?startIndex=${startIndex}&rows=${rows}&sortBy=${sortBy || ''}&sortDirection=${sortDirection || ''}&filter=${filter || ''}&query=${query || ''}`;
     return this.http.get<User[]>(url);
+  }
+
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>(`/users/${id}`);
   }
 }

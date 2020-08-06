@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import play.mvc.Result;
+import utils.Constants;
 import play.mvc.Controller;
 
 public class BaseController extends Controller {
@@ -19,5 +20,9 @@ public class BaseController extends Controller {
 		} catch (JsonProcessingException e) {
 			return badRequest(e.getMessage());
 		}
+	}
+	
+	public Result createBadRequest(String code, Constants.Errors error) {
+		return badRequest("{\"code\": \"" + code + "\", \"message\": \"" + error.toString() + "\"}");
 	}
 }

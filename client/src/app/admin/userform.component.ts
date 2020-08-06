@@ -5,6 +5,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { AdminFormDirective } from '../component/ft-table-form.component';
 import { FTTableFormProviderDirective } from '../component/ft-table.component';
+import { UserService } from 'src/services/user.service';
+import { User } from 'src/modules/models/user';
 
 @Component({
   templateUrl: './userform.component.html',
@@ -14,7 +16,7 @@ export class UserFormComponent extends AdminFormDirective {
   Locales = Locales;
 
 
-  constructor(formProvider: FTTableFormProviderDirective, confirmationService: ConfirmationService) {
+  constructor(formProvider: FTTableFormProviderDirective, confirmationService: ConfirmationService, private userService: UserService) {
     super(formProvider, confirmationService);
     this.frmGroup = new FormGroup({
       username: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
@@ -26,6 +28,15 @@ export class UserFormComponent extends AdminFormDirective {
       isActive: new FormControl(),
       resetPassword: new FormControl(),
     });
+  }
+
+  init(data: any) {
+    super.init(data);
+    this.loading(true);
+    this.userService.getUserById((data as User).id + 1).subscribe(user => {
+      this.loading(false);
+      super.init(user);
+    }, (ex) => this.errorHandler(ex, {nouser: Locales.invalidRequest}));
   }
 
   doDelete(): void {

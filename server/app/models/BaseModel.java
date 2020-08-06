@@ -70,6 +70,8 @@ public abstract class BaseModel extends Model {
 		super.update();
 	}
 
+	public static class Admin {};
+
 	public static class Full {};
 	
 	public static class Never {};

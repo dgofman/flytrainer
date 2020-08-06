@@ -70,7 +70,7 @@ public class User extends BaseModel {
 	@NotNull
 	@Length(25)
 	@Encrypted
-	@JsonView(Full.class)
+	@JsonView(Admin.class)
 	@DbComment("CONVERT(AES_DECRYPT(password, `environment.json::encryptKey`) USING  UTF8)")
 	public String password = defaultPassword;
 
@@ -115,7 +115,7 @@ public class User extends BaseModel {
 	public Date dlExpDate;
 	
 	@Length(10)
-	@JsonView(Full.class)
+	@JsonView(Admin.class)
 	public String ssn;
 
 	@Length(10)

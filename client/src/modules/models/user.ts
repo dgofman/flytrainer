@@ -2,7 +2,7 @@ import { BaseModel } from './base.model';
 import { Account } from './account';
 
 export class User extends BaseModel {
-    id: string;
+    id: number;
     username: string;
     uuid: string;
     first: string;

@@ -1,5 +1,5 @@
 import Locales from '@locales/admin';
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/modules/models/user';
 import { AuthService } from '../authentication/auth.service';
@@ -27,8 +27,8 @@ export class AdminComponent extends AppBaseDirective {
     { field: 'modifiedDate', header: Locales.modifiedDate, width: 200, format: 'date' }
   ];
 
-  constructor(changeDetector: ChangeDetectorRef, private userService: UserService, public appService: AuthService) {
-    super(changeDetector);
+  constructor(private userService: UserService, public appService: AuthService) {
+    super();
   }
 
   eventTableHandler(event: EmitEvent) {
@@ -36,7 +36,7 @@ export class AdminComponent extends AppBaseDirective {
       case EventType.Load:
         const t = event.data as FTTableComponent;
         this.loading(true);
-        this.userService.getUser(t.firstRow, t.itemsPerPage, t.sortField, t.sortDirection, t.filterColumn, t.filterQuery).subscribe(users => {
+        this.userService.getUsers(t.firstRow, t.itemsPerPage, t.sortField, t.sortDirection, t.filterColumn, t.filterQuery).subscribe(users => {
           this.loading(false);
           this.users = users;
         }, (ex) => this.errorHandler(ex));

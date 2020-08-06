@@ -1,6 +1,6 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AppComponent, AppOverlayComponent } from './app.component';
+import { AppComponent, AppOverlayComponent, AppToastComponent } from './app.component';
 import { AppNotFoundComponent } from './app.notfound.component';
 import { Routes, RouterModule, UrlSegment } from '@angular/router';
 import { AuthService, AdminAuthService } from './authentication/auth.service';
@@ -49,6 +49,7 @@ export const routes: Routes = [
   ],
   declarations: [
     AppComponent,
+    AppToastComponent,
     AppOverlayComponent,
     AppNotFoundComponent
   ],

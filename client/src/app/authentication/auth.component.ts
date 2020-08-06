@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { environment } from '@client/environments/environment';
 import Locales from '@locales/auth';
+import { AppUtils } from '../utils/AppUtils';
 
 @Component({
   templateUrl: './auth.component.html',
@@ -19,7 +20,7 @@ import Locales from '@locales/auth';
     }
   `]
 })
-export class AuthComponent extends AppBaseDirective implements AfterViewInit {
+export class AuthComponent implements AfterViewInit {
   Locales = Locales;
   environment = environment;
   resetPassword: boolean;
@@ -31,8 +32,10 @@ export class AuthComponent extends AppBaseDirective implements AfterViewInit {
   metars: { [key: string]: any; } = {};
   metarAirports: string[];
 
-  constructor(changeDetector: ChangeDetectorRef, private router: Router, private route: ActivatedRoute, private http: HttpClient, private appService: AuthService) {
-    super(changeDetector);
+  message: string;
+  error: string;
+
+  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient, private appService: AuthService) {
     this.path = router.url.split('?')[0];
     this.company = environment.company;
     this.phone = environment.phone;
@@ -60,13 +63,13 @@ export class AuthComponent extends AppBaseDirective implements AfterViewInit {
     } else if (this.path === '/activate') {
       const params = this.route.queryParams as any;
       if (Object.keys(params._value).length) {
-        this.loading(true);
+        AppUtils.loading(true);
         this.http.post(this.path, Object.assign({ cid: this.environment.clientId, cip: this.worldtime.client_ip }, params._value)).subscribe(_ => {
-          this.loading(false);
+          AppUtils.loading(false);
           this.message = Locales.accountActivated;
         }, (ex) => this.errorHandler(ex));
       } else {
-        this.internalError();
+        this.errorHandler({ error: Locales.internalError });
       }
     }
   }
@@ -109,9 +112,9 @@ export class AuthComponent extends AppBaseDirective implements AfterViewInit {
         }
       }
       delete data.conf_passwd;
-      this.loading(true);
+      AppUtils.loading(true);
       this.http.post(this.path, Object.assign({ cid: this.environment.clientId, cip: this.worldtime.client_ip }, params._value, data)).subscribe((json: any) => {
-        this.loading(false);
+        AppUtils.loading(false);
         switch (this.path) {
           case '/login':
             if (json.token) {
@@ -137,6 +140,16 @@ export class AuthComponent extends AppBaseDirective implements AfterViewInit {
       }, (ex) => this.errorHandler(ex));
     }
   }
+
+  errorHandler(ex: any) {
+        AppUtils.loading(false);
+        this.message = null;
+        if (ex.status === 404 || ex.status % 500 < 50 || !ex.error) {
+            this.error = Locales.internalError;
+        } else {
+            this.error = typeof(ex.error) === 'string' ? ex.error : JSON.stringify(ex.error);
+        }
+    }
 }
 
 @Pipe({ name: 'formatRaw' })

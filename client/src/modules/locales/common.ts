@@ -1,4 +1,9 @@
+import Locales from './errors';
+
 export default {
+    ...Locales,
+    success: 'Success',
+    error: 'Error',
     logout: 'Logout',
     admin: 'Admin',
     dashboard: 'Dashboard',
@@ -12,6 +17,5 @@ export default {
 
     noData: 'No data found.',
     deleteRecord: 'Are you sure you want to delete this record?',
-    powerBy: '© Power by FlyTrainer LLC',
-    internalError: 'An internal error has occurred.'
+    powerBy: '© Power by FlyTrainer LLC'
 };

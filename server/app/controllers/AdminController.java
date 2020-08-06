@@ -4,11 +4,12 @@ import org.springframework.util.StringUtils;
 
 import io.ebean.Ebean;
 import io.ebean.Query;
+import models.BaseModel;
 import models.User;
 import play.mvc.Http;
 import play.mvc.Result;
 import utils.BasicAuth;
-
+import utils.Constants;
 import utils.Constants.Access;
 
 @BasicAuth({Access.ADMIN, Access.MANAGER})
@@ -31,7 +32,16 @@ public class AdminController extends BaseController {
 		}
 		query.setFirstRow(startIndex);
 		query.setMaxRows(rows != -1 ? rows : ALL_MAX_LIMIT);
-		
 		return okResult(User.class, query.findList());
+	}
+
+	public Result userById(Long userId) {
+		Query<User> query = Ebean.find(User.class);
+		query.where().eq("id", userId);
+		User user = query.findOne();
+		if (user == null) {
+			return createBadRequest("nouser", Constants.Errors.ERROR);
+		}
+		return okResult(BaseModel.Full.class, user);
 	}
 }

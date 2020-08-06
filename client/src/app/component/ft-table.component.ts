@@ -9,6 +9,7 @@ export interface ColumnType {
   header: string;
   width?: number;
   format?: string;
+  align?: string;
 }
 
 export interface EmitEvent {
@@ -24,13 +25,7 @@ export enum EventType {
 @Component({
   selector: 'ft-table',
   templateUrl: './ft-table.component.html',
-  styles: [
-    `
-    .ui-state-highlight {
-        background-color: #146fd7 !important;
-    }
-    `
-  ]
+  styleUrls: ['./ft-table.component.less']
 })
 export class FTTableComponent {
   @Input('expandFormTemplate') public expandFormTemplate: Component;
@@ -82,11 +77,13 @@ export class FTTableComponent {
     this.expandedRows[-1] = true;
   }
 
-  formatData(col: any, rowData: any) {
+  formatData(col: any, rowData: any, title: boolean) {
     const data = rowData[col.field];
     switch (col.format) {
       case 'date':
         return new DatePipe('en-US').transform(data * 1000, 'medium');
+      case 'bool':
+        return title ? '' : '<i class="pi ' + (data ? 'pi-thumbs-up green' : 'pi-thumbs-down red') + '"></i>';
       default:
         return data;
     }

@@ -9,7 +9,7 @@ import { UserFormComponent } from './userform.component';
 
 @Component({
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.less']
+  styleUrls: ['./admin.component.less']
 })
 export class AdminComponent extends AppBaseDirective {
   Locales = Locales;
@@ -22,8 +22,8 @@ export class AdminComponent extends AppBaseDirective {
     { field: 'last', header: Locales.lastname, width: 150 },
     { field: 'email', header: Locales.email, width: 200 },
     { field: 'phone', header: Locales.cellphone, width: 150 },
-    { field: 'role', header: Locales.role, width: 100 },
-    { field: 'isActive', header: Locales.isActive, width: 70 },
+    { field: 'role', header: Locales.role, width: 100, align: 'center' },
+    { field: 'isActive', header: Locales.isActive, width: 70, align: 'center', format: 'bool' },
     { field: 'modifiedDate', header: Locales.modifiedDate, width: 200, format: 'date' }
   ];
 

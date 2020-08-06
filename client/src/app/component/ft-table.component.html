@@ -24,9 +24,7 @@
           <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
         </a>
       </td>
-      <td *ngFor="let col of columns" class="ui-resizable-column" [title]="formatData(col, rowData)">
-        {{formatData(col, rowData)}}
-      </td>
+      <td *ngFor="let col of columns" class="ui-resizable-column" [style.text-align]="col.align" [title]="formatData(col, rowData, true)" [innerHTML]="formatData(col, rowData, false)"></td>
     </tr>
   </ng-template>
   <ng-template pTemplate="rowexpansion" let-rowData>

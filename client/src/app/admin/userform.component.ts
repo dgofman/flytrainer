@@ -7,7 +7,8 @@ import { AdminFormDirective } from '../component/ft-table-form.component';
 import { FTTableFormProviderDirective } from '../component/ft-table.component';
 
 @Component({
-  templateUrl: './userform.component.html'
+  templateUrl: './userform.component.html',
+  styleUrls: ['../component/ft-table.component.less']
 })
 export class UserFormComponent extends AdminFormDirective {
   Locales = Locales;

@@ -4,7 +4,7 @@ import { UserService } from 'src/services/user.service';
 import { User } from 'src/modules/models/user';
 import { AuthService } from '../authentication/auth.service';
 import { AppBaseDirective } from '../app.base.component';
-import { ColumnType, EventType } from '../component/ft-table.component';
+import { ColumnType, EventType, EmitEvent, FTTableComponent } from '../component/ft-table.component';
 import { UserFormComponent } from './userform.component';
 
 @Component({
@@ -31,11 +31,12 @@ export class AdminComponent extends AppBaseDirective {
     super(changeDetector);
   }
 
-  eventTableHandler(event: any) {
+  eventTableHandler(event: EmitEvent) {
     switch (event.message) {
       case EventType.Load:
+        const t = event.data as FTTableComponent;
         this.loading(true);
-        this.userService.getUser(0, 20, 'username').subscribe(users => {
+        this.userService.getUser(t.firstRow, t.itemsPerPage, t.sortField, t.sortDirection, t.filterColumn, t.filterQuery).subscribe(users => {
           this.loading(false);
           this.users = users;
         }, (ex) => this.errorHandler(ex));

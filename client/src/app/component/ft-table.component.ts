@@ -11,6 +11,11 @@ export interface ColumnType {
   format?: string;
 }
 
+export interface EmitEvent {
+  message: EventType;
+  data: any;
+}
+
 export enum EventType {
   Load,
   Cancel
@@ -18,7 +23,14 @@ export enum EventType {
 
 @Component({
   selector: 'ft-table',
-  templateUrl: './ft-table.component.html'
+  templateUrl: './ft-table.component.html',
+  styles: [
+    `
+    .ui-state-highlight {
+        background-color: #146fd7 !important;
+    }
+    `
+  ]
 })
 export class FTTableComponent {
   @Input('expandFormTemplate') public expandFormTemplate: Component;
@@ -26,35 +38,36 @@ export class FTTableComponent {
   @Input('data') public data: Array<any>;
   @Input('dataKey') public dataKey: string;
   @Input('noData') public noData: string;
+  @Input('sortField') public sortField: string;
   @Output() public onNotify: EventEmitter<any> = new EventEmitter();
 
   newRow: any;
   expandedRows: {} = {};
 
-  public itemsPerPageList: SelectItem[] = [
+  itemsPerPageList: SelectItem[] = [
     { label: '15', value: 15 },
     { label: '25', value: 25 },
     { label: '50', value: 50 },
     { label: '100', value: 100 },
     { label: 'All', value: -1 }];
-  public itemsPerPage = 25;
-  public firstRow = 0;
-  public tableVisible = true;
 
+  itemsPerPage = 25;
+  firstRow = 0;
   sortDirection = 'asc';
-  sortField = 'name';
+  filterColumn: string;
   filterQuery: string;
-  filterFieldName: string;
 
   notify(message: EventType, data: any) {
-    this.onNotify.emit({ message, data });
+    this.onNotify.emit({ message, data } as EmitEvent);
   }
 
   lazyLoad(event: LazyLoadEvent) {
-    this.sortField = event.sortField;
-    this.sortDirection = event.sortField == null || event.sortOrder > 0 ? 'asc' : 'desc';
+    if (event.sortField) {
+      this.sortField = event.sortField;
+      this.sortDirection = event.sortOrder > 0 ? 'asc' : 'desc';
+    }
     this.expandedRows = {};
-    this.notify(EventType.Load, event);
+    this.notify(EventType.Load, this);
   }
 
   onAddNewRow() {
@@ -69,11 +82,6 @@ export class FTTableComponent {
     this.expandedRows[-1] = true;
   }
 
-  itemsPerPageChanged() {
-    this.firstRow = 0;
-    this.lazyLoad({ sortField: 'name', sortOrder: 1, first: this.firstRow, rows: this.itemsPerPage });
-  }
-
   formatData(col: any, rowData: any) {
     const data = rowData[col.field];
     switch (col.format) {
@@ -84,7 +92,7 @@ export class FTTableComponent {
     }
   }
 
-  childEventHandler(_: any) {
+  formEventHandler(_: EmitEvent) {
 
   }
 }
@@ -97,7 +105,7 @@ export class FTTableFormProviderDirective {
   @Output() private onNotify: EventEmitter<any> = new EventEmitter();
 
   public notify(message: EventType, data: any) {
-    this.onNotify.emit({ message, data });
+    this.onNotify.emit({ message, data } as EmitEvent);
   }
 }
 

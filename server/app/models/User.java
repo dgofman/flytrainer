@@ -43,7 +43,7 @@ public class User extends BaseModel {
 
 	private static final String defaultPassword = AppConfig.get(Key.DEFAULT_PWD).asText();
 
-	@JsonView(Full.class)
+	@JsonView(Never.class)
 	public UUID uuid = UUID.randomUUID(); //internal security verification
 
 	@Column(name = "firstname")

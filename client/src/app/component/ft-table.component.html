@@ -11,8 +11,9 @@
       <th style="width: 3em; padding-left: 0; padding-right: 0; text-align: center;">
         <button pButton class="ui-table-add-button" icon="pi pi-plus" style="font-size: 12px" (click)="onAddNewRow()"></button>
       </th>
-      <th *ngFor="let col of columns" pResizableColumn>
+      <th *ngFor="let col of columns" pResizableColumn pSortableColumn="{{col.field}}">
         {{col.header}}
+        <p-sortIcon field="{{col.field}}"></p-sortIcon>
       </th>
     </tr>
   </ng-template>
@@ -31,7 +32,7 @@
   <ng-template pTemplate="rowexpansion" let-rowData>
     <tr>
       <td [attr.colspan]="columns.length + 1">
-        <div [ftTableFormProvider]="rowData" (onNotify)="childEventHandler($event);">
+        <div [ftTableFormProvider]="rowData" (onNotify)="formEventHandler($event);">
           <ng-container *ngComponentOutlet="expandFormTemplate"></ng-container>
         </div>
       </td>

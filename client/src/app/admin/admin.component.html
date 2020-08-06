@@ -38,7 +38,7 @@
       </ul>
     </div>
     <div class="main">
-      <ft-table [columns]="cols" [data]="users" dataKey="id" [noData]="Locales.noData"
+      <ft-table sortField="last" [columns]="cols" [data]="users" dataKey="id" [noData]="Locales.noData"
         (onNotify)="eventTableHandler($event)" [expandFormTemplate]="tableExpandForm"></ft-table>
     </div>
   </div>

@@ -12,7 +12,7 @@ export class AppUtils {
         }, show ? 1 : 100);
     }
 
-    static errorHandler(ex: any, errorMap: { [cocde: string]: string }) {
+    static errorHandler(ex: any, errorMap: { [code: string]: string }) {
         AppUtils.loading(false);
         if (ex.status === 404 || ex.status % 500 < 50 || !ex.error) {
             AppUtils.error(Locales.internalError);

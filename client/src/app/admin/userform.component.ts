@@ -33,7 +33,7 @@ export class UserFormComponent extends AdminFormDirective {
   init(data: any) {
     super.init(data);
     this.loading(true);
-    this.userService.getUserById((data as User).id + 1).subscribe(user => {
+    this.userService.getUserById((data as User).id).subscribe(user => {
       this.loading(false);
       super.init(user);
     }, (ex) => this.errorHandler(ex, {nouser: Locales.invalidRequest}));

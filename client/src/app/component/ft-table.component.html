@@ -4,7 +4,7 @@
     <colgroup>
       <col [style.width.px]="45" />
       <col *ngFor="let col of columns" [style.width.px]="col.width" />
-      <col [style.width.px]="45"/>
+      <col [style.width.px]="50"/>
     </colgroup>
   </ng-template>
   <ng-template pTemplate="header">
@@ -27,7 +27,7 @@
         </a>
       </td>
       <td *ngFor="let col of columns" class="ui-resizable-column" [style.text-align]="col.align" [title]="formatData(col, rowData, true)" [innerHTML]="formatData(col, rowData, false)"></td>
-      <td style="text-overflow: initial"><button pButton icon="pi pi-search" style="font-size: 10px" (click)="onMoreDetails()"></button></td>
+      <td style="text-overflow: initial"><button pButton icon="pi pi-id-card"  (click)="onMoreDetails()" [title]="Locales.moreDetails"></button></td>
     </tr>
   </ng-template>
   <ng-template pTemplate="rowexpansion" let-rowData>

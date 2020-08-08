@@ -16,6 +16,7 @@ export default {
     billing: 'Billing',
     maintance: 'Maintance',
     reports: 'Resports',
+    moreDetails: 'More Details',
 
     noData: 'No data found.',
     deleteRecord: 'Are you sure you want to delete this record?',

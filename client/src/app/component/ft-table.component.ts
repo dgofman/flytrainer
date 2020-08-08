@@ -1,3 +1,4 @@
+import Locales from '@locales/common';
 import { LazyLoadEvent, SelectItem } from 'primeng/api';
 import { Directive, Input, NgModule, EventEmitter, Output, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -30,6 +31,7 @@ export enum EventType {
   styleUrls: ['./ft-table.component.less']
 })
 export class FTTableComponent {
+  Locales = Locales;
   isEditorAccess = AppUtils.isEditorAccess;
 
   @Input('expandFormTemplate') public expandFormTemplate: Component;

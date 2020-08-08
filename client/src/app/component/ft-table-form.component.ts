@@ -7,6 +7,7 @@ import { EventType, FTTableFormProviderDirective } from './ft-table.component';
 
 @Directive()
 export abstract class AdminFormDirective implements OnInit {
+  Locales = Locales;
   AppUtils = AppUtils;
   data: any;
   frmGroup: FormGroup;

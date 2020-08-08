@@ -64,3 +64,7 @@ Click button "Mark it resolved"
 %USERPROFILE%/.ivy2
 
 
+# Permissions 
+ASSISTANT - Access to User records as read only
+MANAGER - Access to User records as editor
+ADMIN - Access to all records including view user passwords

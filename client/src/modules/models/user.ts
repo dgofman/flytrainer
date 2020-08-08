@@ -3,12 +3,16 @@ import { Account } from './account';
 
 export class User extends BaseModel {
     id: number;
+    version: number;
     username: string;
-    uuid: string;
+    protected uuid: string;
     first: string;
     middle: string;
     last: string;
     email: string;
+    phone: string;
+    ftn: string;
+    role: string;
     isActive: number;
     isResetPassword: number;
     isSchoolEmployee: number;
@@ -16,12 +20,8 @@ export class User extends BaseModel {
     dl: string; /* driving license */
     dlState: string; /* driving license state */
     dlExpDate: Date;  /* driving license expiration date */
-    ssn: string;
-    ftn: string;
-    role: string;
-    version: number;
-    phone: string;
-    password: string;
+    protected ssn: string;
+    protected password: string;
     createdDate: number;
     modifiedDate: number;
     whoCreated: number;

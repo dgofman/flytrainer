@@ -2,11 +2,12 @@ import Locales from '@locales/common';
 import { OnInit, Directive } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
-import { AppUtils } from '../utils/AppUtils';
+import { AppUtils } from '../utils/app-utils';
 import { EventType, FTTableFormProviderDirective } from './ft-table.component';
 
 @Directive()
 export abstract class AdminFormDirective implements OnInit {
+  AppUtils = AppUtils;
   data: any;
   frmGroup: FormGroup;
 

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-
 import { UserService } from 'src/services/user.service';
 import { AdminComponent } from './admin.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -14,6 +13,9 @@ import { FTTableModule } from '../component/ft-table.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { UserFormComponent } from './userform.component';
 import { ConfirmationService } from 'primeng/api';
+import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
+import { FTDatePipe } from '../utils/pipes';
 
 export const routes: Routes = [
   {
@@ -29,12 +31,14 @@ export const routes: Routes = [
     ReactiveFormsModule, /*required for FormGroup, FormControl */
     AppComponentModule, /* required for app-footer */
     FontAwesomeModule,
+    CalendarModule,
     CheckboxModule,
+    DropdownModule,
     ButtonModule,
     FTTableModule
   ],
   declarations: [
-    AdminComponent, UserFormComponent
+    AdminComponent, UserFormComponent, FTDatePipe
   ],
   providers: [
     ConfirmationService,

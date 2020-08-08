@@ -5,18 +5,23 @@ td {
     text-overflow: ellipsis;
 }
 
+input[formcontrolname], input[readonly] {
+    height: 33px;
+}
+
+input[readonly] {
+    background: #eee !important;
+}
+
 .p-form {
     margin: 5px 0;
     background: #d5edff;
     padding: 20px;
     border: 1px solid gray;
+    overflow: hidden;
 }
 
 .p-grid>div {
     margin-bottom: .6em;
     padding: .5em;
-}
-
-.ui-state-highlight {
-    background-color: #146fd7 !important;
 }

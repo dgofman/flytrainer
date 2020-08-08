@@ -1,21 +1,21 @@
 import { environment } from '@client/environments/environment';
 import { Directive } from '@angular/core';
-import { User } from 'src/modules/models/user';
 import { faPlane, faChalkboardTeacher as faInstructor } from '@fortawesome/free-solid-svg-icons';
-import { AppUtils } from './utils/AppUtils';
+import { Session } from 'src/modules/models/constants';
+import { AppUtils } from './utils/app-utils';
 
 @Directive()
 export abstract class AppBaseDirective {
+    AppUtils = AppUtils;
+    session: Session;
     environment = environment;
-    loggedUser: User = new User();
     toggleArroMenu: boolean;
 
     faPlane = faPlane;
     faInstructor = faInstructor;
 
     constructor() {
-        const auth = JSON.parse(sessionStorage.getItem('auth_data'));
-        this.loggedUser = new User(auth);
+        this.session = AppUtils.getSession();
     }
 
     loading(show: boolean) {

@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -121,6 +122,9 @@ public class User extends BaseModel {
 	@Length(10)
 	@JsonView(Full.class)
 	public String ftn;
+	
+	@OneToOne
+	public Account defaultAccount;
 	
 	@OneToMany(targetEntity = Account.class, fetch = FetchType.LAZY, mappedBy = "user")
 	@JsonBackReference

@@ -12,13 +12,13 @@
   <div class="wrap">
     <div class="left-menu">
       <div class="profile">
-        {{loggedUser.last}}, {{loggedUser.first}} ({{loggedUser.id}})
+        {{session.lastname}}, {{session.firstname}} ({{session.id}})
         <br><b>{{Locales.accountBalance}}:</b><span
-          style="padding-left: 10px;">{{loggedUser.currentAccount.balance | currency}}</span>
+          style="padding-left: 10px;">{{0 | currency}}</span>
         <br><a style="float: right" (click)="appService.logout()">{{Locales.logout}}</a>
       </div>
       <ul class="nav-menu">
-        <li routerLink="../admin" routerLinkActive="active" *ngIf="loggedUser.role == 'ADMIN'">
+        <li routerLink="../admin" routerLinkActive="active" *ngIf="AppUtils.isReviewAccess()">
           <i class="pi pi-unlock"></i>{{Locales.admin}}
         </li>
         <li routerLink="schedule" routerLinkActive="active">

@@ -1,15 +1,14 @@
-import { Component, NgModule, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import Locales from '@locales/auth';
+import { environment } from '@client/environments/environment';
+import { Component, NgModule, AfterViewInit } from '@angular/core';
 import { Pipe, PipeTransform } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { AppBaseDirective } from '../app.base.component';
 import { AppComponentModule } from '../app.component';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
-import { environment } from '@client/environments/environment';
-import Locales from '@locales/auth';
-import { AppUtils } from '../utils/AppUtils';
+import { AppUtils } from '../utils/app-utils';
 
 @Component({
   templateUrl: './auth.component.html',
@@ -119,7 +118,7 @@ export class AuthComponent implements AfterViewInit {
           case '/login':
             if (json.token) {
               this.appService.login(json);
-              this.router.navigate([json.role === 'ADMIN' ? '/admin' : '/dashboard']);
+              this.router.navigate([AppUtils.canViewAdmin() ? '/admin' : '/dashboard']);
             } else {
               this.resetPassword = true;
             }

@@ -8,7 +8,13 @@
       </div>
     </div>
     <div class="topbar-right">
-      <a style="float: right; color: #fff" (click)="appService.logout()">{{Locales.logout}}</a>
+      <div style="float: right">
+        <span class="p-overlay-badge">
+          <i class="pi pi-bell" style="font-size: 2em; margin-right: 5px;"></i>
+          <span class="p-badge">2</span>
+        </span>
+        <a style="color: #fff; margin-left: 30px; vertical-align: top" (click)="appService.logout()">{{Locales.logout}}</a>
+      </div>
     </div>
   </div>
   <div class="wrap">

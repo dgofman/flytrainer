@@ -5,16 +5,64 @@
       <input class="ui-inputtext" formControlName="username" />
     </div>
     <div class="p-md-3">
-      <label for="firstname">{{Locales.firstname}}:</label>
+      <label for="first">{{Locales.firstname}}:</label>
       <input class="ui-inputtext" formControlName="first" />
     </div>
     <div class="p-md-3">
-      <label for="lastname">{{Locales.lastname}}:</label>
+      <label for="middle">{{Locales.middlename}}:</label>
+      <input class="ui-inputtext" formControlName="middle" />
+    </div>
+    <div class="p-md-3">
+      <label for="last">{{Locales.lastname}}:</label>
       <input class="ui-inputtext" formControlName="last" />
     </div>
     <div class="p-md-3">
-      <label for="phonenumber">{{Locales.cellphone}}:</label>
+      <label for="email">{{Locales.email}}:</label>
+      <input class="ui-inputtext" formControlName="email" />
+    </div>
+    <div class="p-md-3">
+      <label for="phone">{{Locales.cellphone}}:</label>
       <input class="ui-inputtext" formControlName="phone" />
+    </div>
+    <div class="p-md-3">
+      <label for="role">{{Locales.role}}:</label>
+      <p-dropdown [options]="Roles" formControlName="role" ></p-dropdown>
+    </div>
+    <div class="p-md-3">
+      <label for="ftn">{{Locales.ftn}}:</label>
+      <input class="ui-inputtext" formControlName="ftn" />
+    </div>
+    <div class="p-md-3">
+      <label for="birthday">{{Locales.birthday}}:</label>
+      <p-calendar [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" appendTo="body" formControlName="birthday"></p-calendar>
+    </div>
+    <div class="p-md-3">
+      <label for="dl">{{Locales.driverLicense}}:</label>
+      <input class="ui-inputtext" formControlName="dl" />
+    </div>
+    <div class="p-md-3">
+      <label for="dlState">{{Locales.driverState}}:</label>
+      <input class="ui-inputtext" formControlName="dlState" />
+    </div>
+    <div class="p-md-3">
+      <label for="dlExpDate">{{Locales.driverExpDate}}:</label>
+      <p-calendar [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" appendTo="body" formControlName="dlExpDate"></p-calendar>
+    </div>
+    <div class="p-md-3">
+      <label for="createdDate">{{Locales.createdDate}}:</label>
+      <input class="ui-inputtext" [value]="frmGroup.get('createdDate').value | ftdate" readonly/>
+    </div>
+    <div class="p-md-3">
+      <label for="whoCreated">{{Locales.whoCreated}}:</label>
+      <input class="ui-inputtext" formControlName="whoCreated" />
+    </div>
+    <div class="p-md-3">
+      <label for="modifiedDate">{{Locales.modifiedDate}}:</label>
+      <input class="ui-inputtext" [value]="frmGroup.get('modifiedDate').value | ftdate" readonly/>
+    </div>
+    <div class="p-md-3">
+      <label for="whoModified">{{Locales.whoModified}}:</label>
+      <input class="ui-inputtext" formControlName="whoModified" />
     </div>
     <div class="p-md-2">
       <p-checkbox [label]="Locales.isActive" binary="true" formControlName="isActive"></p-checkbox>
@@ -23,8 +71,16 @@
       <p-checkbox [label]="Locales.resetPassword" binary="true" formControlName="resetPassword">
       </p-checkbox>
     </div>
+    <div class="p-md-2">
+      <p-checkbox [label]="Locales.schoolEmployee" binary="true" formControlName="isSchoolEmployee">
+      </p-checkbox>
+    </div>
   </div>
   <div>
-    <p-button label="{{Locales.moreDetails}}" *ngIf="data.role=='ADMIN'"></p-button>
+    <p-button label="{{Locales.moreDetails}}" *ngIf="AppUtils.isEditorAccess()"></p-button>
+    <div class="right">
+      <p-button label="{{Locales.apply}}" *ngIf="AppUtils.isEditorAccess()"></p-button>
+      <p-button label="{{Locales.cancel}}"></p-button>
+  </div>
   </div>
 </form>

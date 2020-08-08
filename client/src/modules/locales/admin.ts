@@ -9,9 +9,17 @@ export default {
     middlename: 'Middle Name',
     email: 'Email',
     cellphone: 'Cell Phone',
+    ftn: 'FAA Tracking Number (FTN)',
     role: 'Role',
     isActive: 'Active',
     resetPassword: 'Reset Password',
-    whoModified: 'Who Modified',
-    modifiedDate: 'Modified Date'
+    schoolEmployee: 'School Employee',
+    birthday: 'Date of birth',
+    driverLicense: 'Driver License Number',
+    driverState: 'Driver License State',
+    driverExpDate: 'Driver License Exp. Date',
+    createdDate: 'Created Date',
+    whoCreated: 'Who Created',
+    modifiedDate: 'Modified Date',
+    whoModified: 'Who Modified'
 };

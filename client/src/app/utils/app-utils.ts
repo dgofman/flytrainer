@@ -1,5 +1,6 @@
 import Locales from '@locales/common';
 import { AppOverlayComponent, AppToastComponent } from '../app.component';
+import { Session, Role } from 'src/modules/models/constants';
 
 export class AppUtils {
 
@@ -34,5 +35,23 @@ export class AppUtils {
 
     static success(mesage: string) {
         AppToastComponent.add('success', mesage);
+    }
+
+    static getSession(): Session {
+        return JSON.parse(sessionStorage.getItem('auth_data') || '{}') as Session;
+    }
+
+    static canViewAdmin(): boolean {
+        return AppUtils.isReviewAccess();
+    }
+
+    static isEditorAccess(): boolean {
+        const session = AppUtils.getSession();
+        return session.role === Role.ADMIN || session.role === Role.MANAGER;
+    }
+
+    static isReviewAccess(): boolean {
+        const session = AppUtils.getSession();
+        return session.role === Role.ADMIN || session.role === Role.MANAGER || session.role === Role.ASSISTANT;
     }
 }

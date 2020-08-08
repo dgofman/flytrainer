@@ -1,8 +1,9 @@
+import { environment } from '@client/environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpEvent, HttpHandler, HttpRequest, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CanActivate, Router } from '@angular/router';
-import { environment } from '@client/environments/environment';
+import { AppUtils } from '../utils/app-utils';
 
 @Injectable()
 export class AuthService implements HttpInterceptor, CanActivate {
@@ -10,9 +11,9 @@ export class AuthService implements HttpInterceptor, CanActivate {
     private static CORRELATION_ID: string;
 
     constructor(private http: HttpClient, private router: Router) {
-        const auth = JSON.parse(sessionStorage.getItem('auth_data') || '{}');
-        AuthService.AUTH_TOKEN = auth.token;
-        AuthService.CORRELATION_ID = auth.correlationId;
+        const session = AppUtils.getSession();
+        AuthService.AUTH_TOKEN = session.token;
+        AuthService.CORRELATION_ID = String(session.correlationId);
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -20,7 +21,7 @@ export class AuthService implements HttpInterceptor, CanActivate {
             url: environment.native ? environment.endpoint + req.url : req.url,
             headers: req.headers
                 .set('Authorization', 'Bearer ' + AuthService.AUTH_TOKEN)
-                .set('CorrelationId', String(AuthService.CORRELATION_ID))
+                .set('CorrelationId', AuthService.CORRELATION_ID)
         });
         return next.handle(newRequest);
     }
@@ -57,8 +58,7 @@ export class AdminAuthService extends AuthService implements CanActivate {
         if (!isValid) {
             return false;
         }
-        const auth = JSON.parse(sessionStorage.getItem('auth_data') || '{}');
-        return auth.role === 'ADMIN';
+        return  AppUtils.isReviewAccess();
     }
 }
 

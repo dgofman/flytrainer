@@ -1,8 +1,10 @@
 import { LazyLoadEvent, SelectItem } from 'primeng/api';
 import { Directive, Input, NgModule, EventEmitter, Output, Component } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { FTDatePipe } from '../utils/pipes';
+import { AppUtils } from '../utils/app-utils';
 
 export interface ColumnType {
   field: string;
@@ -28,6 +30,8 @@ export enum EventType {
   styleUrls: ['./ft-table.component.less']
 })
 export class FTTableComponent {
+  isEditorAccess = AppUtils.isEditorAccess;
+
   @Input('expandFormTemplate') public expandFormTemplate: Component;
   @Input('columns') public columns: Array<ColumnType>;
   @Input('data') public data: Array<any>;
@@ -77,11 +81,15 @@ export class FTTableComponent {
     this.expandedRows[-1] = true;
   }
 
+  onMoreDetails() {
+
+  }
+
   formatData(col: any, rowData: any, title: boolean) {
     const data = rowData[col.field];
     switch (col.format) {
       case 'date':
-        return new DatePipe('en-US').transform(data * 1000, 'medium');
+        return new FTDatePipe().transform(data);
       case 'bool':
         return title ? '' : '<i class="pi ' + (data ? 'pi-thumbs-up green' : 'pi-thumbs-down red') + '"></i>';
       default:

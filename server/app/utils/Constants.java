@@ -10,6 +10,7 @@ public class Constants {
 		USER,
 		INSTRUCTOR,
 		MECHANIC,
+		ASSISTANT,
 		MANAGER,
 		ADMIN
 	}

@@ -12,7 +12,7 @@ import utils.BasicAuth;
 import utils.Constants;
 import utils.Constants.Access;
 
-@BasicAuth({Access.ADMIN, Access.MANAGER})
+@BasicAuth({Access.ASSISTANT, Access.MANAGER, Access.ADMIN})
 public class AdminController extends BaseController {
 
 	private static final int ALL_MAX_LIMIT = 10000;

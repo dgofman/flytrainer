@@ -1,4 +1,5 @@
 import { BrowserModule, Title } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { AppComponent, AppOverlayComponent, AppToastComponent } from './app.component';
 import { AppNotFoundComponent } from './app.notfound.component';
@@ -45,6 +46,7 @@ export const routes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
+    NoopAnimationsModule,
     RouterModule.forRoot(routes)
   ],
   declarations: [

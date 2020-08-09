@@ -80,7 +80,7 @@
     <p-button label="{{Locales.moreDetails}}"></p-button>
     <div class="right">
       <p-button label="{{Locales.apply}}" *ngIf="AppUtils.isEditorAccess()"></p-button>
-      <p-button label="{{Locales.cancel}}"></p-button>
+      <p-button label="{{Locales.cancel}}" (click)="doCancel($event)"></p-button>
   </div>
   </div>
 </form>

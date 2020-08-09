@@ -48,7 +48,7 @@ export abstract class AdminFormDirective implements OnInit {
     });
   }
 
-  cancelItem(event: Event) {
+  doCancel(event: Event) {
     event.preventDefault();
     this.formProvider.notify(EventType.Cancel, this.data);
   }

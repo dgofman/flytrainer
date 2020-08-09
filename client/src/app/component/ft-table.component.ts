@@ -6,6 +6,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { FTDatePipe } from '../utils/pipes';
 import { AppUtils } from '../utils/app-utils';
+import { BaseModel } from 'src/modules/models/base.model';
 
 export interface ColumnType {
   field: string;
@@ -36,7 +37,7 @@ export class FTTableComponent {
 
   @Input('expandFormTemplate') public expandFormTemplate: Component;
   @Input('columns') public columns: Array<ColumnType>;
-  @Input('data') public data: Array<any>;
+  @Input('data') public data: Array<BaseModel>;
   @Input('dataKey') public dataKey: string;
   @Input('noData') public noData: string;
   @Input('sortField') public sortField: string;
@@ -99,8 +100,19 @@ export class FTTableComponent {
     }
   }
 
-  formEventHandler(_: EmitEvent) {
+  onCancel(item: BaseModel) {
+    delete this.expandedRows[item.id];
+    if (item.id === -1) {
+      this.data.splice(0, 1);
+      this.newRow = null;
+    }
+  }
 
+  formEventHandler(event: EmitEvent) {
+    switch (event.message) {
+      case EventType.Cancel:
+        this.onCancel(event.data);
+    }
   }
 }
 
@@ -108,7 +120,7 @@ export class FTTableComponent {
   selector: '[ftTableFormProvider]'
 })
 export class FTTableFormProviderDirective {
-  @Input('ftTableFormProvider') data: any;
+  @Input('ftTableFormProvider') data: BaseModel;
   @Output() private onNotify: EventEmitter<any> = new EventEmitter();
 
   public notify(message: EventType, data: any) {

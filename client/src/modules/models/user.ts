@@ -2,8 +2,6 @@ import { BaseModel } from './base.model';
 import { Account } from './account';
 
 export class User extends BaseModel {
-    id: number;
-    version: number;
     username: string;
     protected uuid: string;
     first: string;
@@ -28,11 +26,4 @@ export class User extends BaseModel {
     whoModified: number;
 
     currentAccount: Account;
-
-    constructor(json?: any) {
-        super(json);
-        if (!this.currentAccount) {
-            this.currentAccount = new Account({balance: 0});
-        }
-    }
 }

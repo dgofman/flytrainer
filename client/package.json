@@ -18,6 +18,11 @@
     "electron": "electron .",
     "lint": "ng lint"
   },
+  "build": {
+    "win": {
+      "icon": "src/assets/favicon.png"
+    }
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^10.0.3",

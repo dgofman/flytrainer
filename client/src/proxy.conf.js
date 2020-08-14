@@ -1,18 +1,7 @@
 var env = require("./environments/environment.json");
+var proxy = require("./environments/proxy-config.json");
 
-const PROXY_CONFIG = {
-  "/dataserver_current": {
-    "target": "https://www.aviationweather.gov/adds",
-    "secure": true,
-    "pathRewrite": {
-      "^/posts": ""
-    },
-    "changeOrigin": true
-  },
-  "/timezone": {
-    "target": "http://worldtimeapi.org/api",
-    "changeOrigin": true
-  },
+module.exports = Object.assign(proxy, {
   "**": {
     "target": env.endpoint,
     "secure": env.secure,
@@ -23,7 +12,4 @@ const PROXY_CONFIG = {
       }
     }
   }
-};
-
-// tslint:disable-next-line
-module.exports = PROXY_CONFIG;
+});

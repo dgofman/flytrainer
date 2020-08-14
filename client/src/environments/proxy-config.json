@@ -1,0 +1,11 @@
+{
+  "/dataserver_current": {
+    "target": "https://www.aviationweather.gov/adds",
+    "changeOrigin": true,
+    "secure": true
+  },
+  "/timezone": {
+    "target": "http://worldtimeapi.org/api",
+    "changeOrigin": true
+  }
+}

@@ -5,3 +5,4 @@ target
 /.settings
 /RUNNING_PID
 /environment.json
+/electorn-release

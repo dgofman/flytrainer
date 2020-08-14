@@ -11,11 +11,9 @@ const AuthRouteMatcher = (url: UrlSegment[]) => {
   if (url.length) {
     switch (url[0].path) {
       case 'login':
-      case 'create':
-      case 'forgot':
       case 'reset':
       case 'activate':
-        return {consumed: url};
+        return { consumed: url };
     }
   }
   return null;
@@ -24,8 +22,16 @@ const AuthRouteMatcher = (url: UrlSegment[]) => {
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
-      matcher: AuthRouteMatcher,
-      loadChildren: () => import('./authentication/auth.component').then(m => m.AuthComponentModule)
+    path: 'forgot',
+    loadChildren: () => import('./authentication/auth.component').then(m => m.AuthComponentModule)
+  },
+  {
+    path: 'create',
+    loadChildren: () => import('./authentication/auth.component').then(m => m.AuthComponentModule)
+  },
+  {
+    matcher: AuthRouteMatcher,
+    loadChildren: () => import('./authentication/auth.component').then(m => m.AuthComponentModule)
   },
   {
     path: 'admin',
@@ -47,7 +53,9 @@ export const routes: Routes = [
     BrowserModule,
     HttpClientModule,
     NoopAnimationsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes, {
+      useHash: true
+    })
   ],
   declarations: [
     AppComponent,

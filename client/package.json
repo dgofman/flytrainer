@@ -1,7 +1,7 @@
 {
   "name": "flytrainerapp",
-  "version": "0.0.0",
-  "main": "main.js",
+  "version": "1.2.0",
+  "main": "electron_main.js",
   "description": "Flight School Management Software",
   "author": {
     "name": "David Gofman",
@@ -12,15 +12,25 @@
     "start": "ng serve --open --proxy-config src/proxy.conf.js",
     "build": "ng build",
     "build:prod": "npm run build -- -c production",
-    "build:electron": "npm run build -- -c electron",
+    "build:electron": "npm run build -- -c electron --base-href ./index.html",
     "electron:local": "npm run build:electron && npx electron .",
     "electron:build": "npm run build:electron && electron-builder build",
     "electron": "electron .",
     "lint": "ng lint"
   },
   "build": {
+    "productName": "FlyTrainer",
+    "artifactName": "FlyTrainer.exe",
+    "appId": "com.flytrainer",
     "win": {
-      "icon": "src/assets/favicon.png"
+      "icon": "src/assets/favicon.png",
+      "target": [
+            "nsis"
+        ]
+    },
+    "directories": {
+        "buildResources": "resources",
+        "output": "../electorn-release"
     }
   },
   "private": true,

@@ -23,8 +23,8 @@
                             <label class="p-col-fixed">{{Locales.password}}</label>
                             <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
                         </div>
-                        <a href="/forgot" *ngIf="environment.includeForgotPassword">{{Locales.forgotPassword}}</a>
-                        <a href="/create" *ngIf="environment.includeCreateAccount">  |  {{Locales.createAccount}}</a>
+                        <a routerLink="../forgot" *ngIf="environment.includeForgotPassword">{{Locales.forgotPassword}}</a>
+                        <a routerLink="../create" *ngIf="environment.includeCreateAccount">  |  {{Locales.createAccount}}</a>
                     </div>
                     <ng-template *ngIf="resetPassword" [ngTemplateOutlet]="ResetPassword"></ng-template>
                     <button class="ui-button ui-button-text" style="float: right" type="submit">{{Locales.login}}</button>
@@ -108,7 +108,7 @@
                 </ng-template>
                 <ng-template #SubmitButton>
                     <div style="float: right">
-                        <a href="/login" style="margin-right: 20px">{{Locales.cancel}}</a>
+                        <a routerLink="../login" style="margin-right: 20px">{{Locales.cancel}}</a>
                         <button class="ui-button ui-button-text" type="submit">{{Locales.submit}}</button>
                     </div>
                 </ng-template>

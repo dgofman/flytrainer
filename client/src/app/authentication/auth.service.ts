@@ -17,13 +17,25 @@ export class AuthService implements HttpInterceptor, CanActivate {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const newRequest = req.clone({
-            url: environment.native ? environment.endpoint + req.url : req.url,
-            headers: req.headers
+        let url = req.url;
+        if (environment.native) {
+            if (!environment.proxy[`/${url.split('/')[1]}`]) {  // handle by electron.session.defaultSession.webRequest.onBeforeRequest in electron.js
+                url = environment.endpoint + req.url;
+            }
+        }
+        let headers = req.headers;
+        if (AuthService.AUTH_TOKEN) {
+            headers = headers
                 .set('Authorization', 'Bearer ' + AuthService.AUTH_TOKEN)
-                .set('CorrelationId', AuthService.CORRELATION_ID)
-        });
-        return next.handle(newRequest);
+                .set('CorrelationId', AuthService.CORRELATION_ID);
+        }
+        return next.handle(req.clone({url, headers}));
+    }
+
+    reset() {
+        AuthService.AUTH_TOKEN = null;
+        AuthService.CORRELATION_ID = null;
+        sessionStorage.removeItem('auth_data');
     }
 
     login(json: any) {
@@ -34,9 +46,7 @@ export class AuthService implements HttpInterceptor, CanActivate {
 
     logout() {
         this.http.post('/logout', { cid: environment.clientId, correlationId: AuthService.CORRELATION_ID, token: AuthService.AUTH_TOKEN }).subscribe(_ => {
-            AuthService.AUTH_TOKEN = null;
-            AuthService.CORRELATION_ID = null;
-            sessionStorage.removeItem('auth_data');
+            this.reset();
             this.router.navigate(['login']);
         }, (ex) => console.error(ex));
     }

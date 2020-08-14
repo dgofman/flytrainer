@@ -18,16 +18,16 @@
         <br><a style="float: right" (click)="appService.logout()">{{Locales.logout}}</a>
       </div>
       <ul class="nav-menu">
-        <li routerLink="../admin" routerLinkActive="active" *ngIf="AppUtils.isReviewAccess()">
+        <li routerLink="../admin" *ngIf="AppUtils.isReviewAccess()">
           <i class="pi pi-unlock"></i>{{Locales.admin}}
         </li>
-        <li routerLink="schedule" routerLinkActive="active">
+        <li routerLink="schedule">
           <i class="pi pi-calendar"></i>{{Locales.schedule}}
         </li>
-        <li routerLink="instructors" routerLinkActive="active">
+        <li routerLink="instructors">
           <fa-icon [icon]="faInstructor"></fa-icon>{{Locales.instructors}}
         </li>
-        <li routerLink="aircraft" routerLinkActive="active">
+        <li routerLink="aircraft">
           <fa-icon [icon]="faPlane" class="rotate-90"></fa-icon>{{Locales.aircraft}}
         </li>
       </ul>

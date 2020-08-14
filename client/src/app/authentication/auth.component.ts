@@ -4,7 +4,7 @@ import { Component, NgModule, AfterViewInit } from '@angular/core';
 import { Pipe, PipeTransform } from '@angular/core';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponentModule } from '../app.component';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
@@ -41,6 +41,10 @@ export class AuthComponent implements AfterViewInit {
     this.metarAirports = environment.metarAirports;
     this.currentDateTime = new Date();
     this.message = Locales.pleaseWait;
+
+    if (this.path === '/login') {
+        appService.reset();
+    }
 
     try {
       this.worldtime.abbreviation = this.currentDateTime.toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
@@ -171,7 +175,13 @@ export class FormatRaw implements PipeTransform {
       path: '', component: AuthComponent,
     }]),
   ],
-  declarations: [AuthComponent, FormatRaw]
+  declarations: [AuthComponent, FormatRaw],
+  providers: [
+  {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthService,
+      multi: true
+  }],
 })
 export class AuthComponentModule { }
 

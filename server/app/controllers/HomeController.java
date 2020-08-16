@@ -129,7 +129,7 @@ public class HomeController extends BaseController {
 				put(TOKEN_ATTR, authToken);
 				put(DATE_ATTR, user.modifiedDate.toEpochMilli());
 			}};
-			String emailBody = String.format(ACCOUNT_ACTIVATION, user.first, user.last, origin + "/activate?" + Joiner.on("&").withKeyValueSeparator("=").join(params));
+			String emailBody = String.format(ACCOUNT_ACTIVATION, user.first, user.last, origin + request.getHeaders().get("SourceMap").get() + "activate?" + Joiner.on("&").withKeyValueSeparator("=").join(params));
 			MailServer.sendMail(user.email, "Activate your account", emailBody);
 		} catch (Exception e) {
 			return badRequest(Constants.Errors.ERROR.toString());
@@ -208,7 +208,7 @@ public class HomeController extends BaseController {
 				put(TOKEN_ATTR, authToken);
 				put(DATE_ATTR, user.modifiedDate.toEpochMilli());
 			}};
-			String emailBody = String.format(RESET_PASSWORD, origin + "/reset?" + Joiner.on("&").withKeyValueSeparator("=").join(params));
+			String emailBody = String.format(RESET_PASSWORD, origin + request.getHeaders().get("SourceMap").get() + "reset?" + Joiner.on("&").withKeyValueSeparator("=").join(params));
 			MailServer.sendMail(user.email, "Password Reset", emailBody);
 		} catch (Exception ex) {
 			DDoS ddos = new DDoS(request, body,  username);

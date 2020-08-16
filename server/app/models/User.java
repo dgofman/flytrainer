@@ -13,7 +13,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -126,32 +125,32 @@ public class User extends BaseModel {
 	@OneToOne
 	public Account defaultAccount;
 	
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Account.class, fetch = FetchType.LAZY, mappedBy = "user")
-	@JsonBackReference
 	public List<Account> accounts = new ArrayList<>();
 	
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Certificate.class, fetch = FetchType.LAZY, mappedBy = "user")
-	@JsonBackReference
 	public List<Certificate> certificates = new ArrayList<>();
 	
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = MedicalCertificate.class, fetch = FetchType.LAZY, mappedBy = "user")
-	@JsonBackReference
 	public List<MedicalCertificate> medicalCertificates = new ArrayList<>();
 
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Address.class, fetch = FetchType.LAZY, mappedBy = "user")
-	@JsonBackReference
 	public List<Address> addresses = new ArrayList<>();
 	
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Contact.class, fetch = FetchType.LAZY, mappedBy = "user")
-	@JsonBackReference
 	public List<Contact> contacts = new ArrayList<>();
 
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Employer.class, fetch = FetchType.LAZY, mappedBy = "user")
-	@JsonBackReference
 	public List<Employer> employers = new ArrayList<>();
 	
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Note.class, fetch = FetchType.LAZY, mappedBy = "user")
-	@JsonBackReference
 	public List<Note> notes = new ArrayList<>();
 
 	public User() {

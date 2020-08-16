@@ -1,5 +1,11 @@
+<div style="overflow: hidden; margin: 5px 0;">
+  <div style="float: right">
+    {{Locales.itemsPerPage}} 
+    <p-dropdown [options]="itemsPerPageList" (onChange)="itemsPerPageChanged()" [style]="{'minWidth':'75px', 'width': '75px'}" append="body"></p-dropdown>
+  </div>
+</div>
 <p-table [columns]="columns" [value]="data" [resizableColumns]="true" [scrollable]="true" [expandedRowKeys]="expandedRows"
-  [dataKey]="dataKey" [lazy]="true" (onLazyLoad)="lazyLoad($event)">
+  [dataKey]="dataKey" [lazy]="true" [paginator]="true" [rows]="itemsPerPage" (onLazyLoad)="lazyLoad($event)">
   <ng-template pTemplate="colgroup">
     <colgroup>
       <col [style.width.px]="45" />
@@ -44,4 +50,9 @@
       <td [attr.colspan]="columns.length + 2" [innerHTML]="noData"></td>
     </tr>
   </ng-template>
+  <ng-template pTemplate="paginatorright">
+      <div style="margin-right: 10px; margin-top: 5px">
+        {{Locales.total}}: {{data?.length}}
+      </div>
+    </ng-template>
 </p-table>

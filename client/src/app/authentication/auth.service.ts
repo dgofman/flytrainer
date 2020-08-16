@@ -23,7 +23,7 @@ export class AuthService implements HttpInterceptor, CanActivate {
                 url = environment.endpoint + req.url;
             }
         }
-        let headers = req.headers;
+        let headers = req.headers.set('SourceMap', environment.native ? '#' : '/');
         if (AuthService.AUTH_TOKEN) {
             headers = headers
                 .set('Authorization', 'Bearer ' + AuthService.AUTH_TOKEN)

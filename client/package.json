@@ -2,7 +2,7 @@
   "name": "flytrainerapp",
   "version": "1.2.0",
   "main": "electron_main.js",
-  "description": "Flight School Management Software",
+  "description": "Flight School Management System",
   "author": {
     "name": "David Gofman",
     "email": "dgofmancfi@gmail.com"
@@ -21,7 +21,7 @@
   "build": {
     "productName": "FlyTrainer",
     "artifactName": "FlyTrainer.exe",
-    "appId": "com.flytrainer",
+    "appId": "com.flytrainer.fsms",
     "win": {
       "icon": "src/assets/favicon.png",
       "target": [

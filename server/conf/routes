@@ -14,3 +14,4 @@ POST    /logout                     controllers.HomeController.logout(request: R
 
 GET     /users                      controllers.AdminController.users(request: Request, startIndex: Integer, rows: Integer, sortBy: String ?= null, sortDirection: String ?= null, filter: String ?= null, query: String ?= null)
 GET     /users/:id                  controllers.AdminController.userById(id: Long)
+POST    /users                      controllers.AdminController.saveUser(request: Request)

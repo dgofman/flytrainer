@@ -1,3 +1,4 @@
+import { environment } from '@client/environments/environment';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
@@ -54,7 +55,7 @@ export const routes: Routes = [
     HttpClientModule,
     NoopAnimationsModule,
     RouterModule.forRoot(routes, {
-      useHash: true
+      useHash: environment.native
     })
   ],
   declarations: [

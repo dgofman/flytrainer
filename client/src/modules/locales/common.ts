@@ -16,6 +16,8 @@ export default {
     billing: 'Billing',
     maintance: 'Maintance',
     reports: 'Resports',
+    total: 'Total',
+    itemsPerPage: 'ItemsPerPage',
     moreDetails: 'More Details',
 
     noData: 'No data found.',

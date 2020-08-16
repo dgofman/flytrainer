@@ -68,3 +68,34 @@ Click button "Mark it resolved"
 ASSISTANT - Access to User records as read only
 MANAGER - Access to User records as editor
 ADMIN - Access to all records including view user passwords
+
+
+# Android
+https://medium.com/@christof.thalmann/convert-angular-project-to-android-apk-in-10-steps-c49e2fddd29
+
+Donload and Install https://gradle.org/install/
+
+Download Latest Android Studio SDK https://developer.android.com/studio/install
+
+Add System environment variable:
+ANDROID_SDK_ROOT=C:\Users\dgofman\AppData\Local\Android\Sdk
+
+System PATH variables add two path:
+%ANDROID_SDK_ROOT%\platforms
+%ANDROID_SDK_ROOT%\platform-tools
+%ANDROID_SDK_ROOT%\tools
+C:\softwares\gradle-6.6\bin
+
+%ANDROID_SDK_ROOT%\tools\bin\sdkmanager --licenses
+%ANDROID_SDK_ROOT%\tools\bin\sdkmanager --list | findstr system-images
+%ANDROID_SDK_ROOT%\tools\bin\sdkmanager --install "system-images;android-29;default;x86_64"
+
+echo "no" | %ANDROID_SDK_ROOT%\tools\bin\avdmanager --verbose create avd --force --name "generic_10" --package "system-images;android-29;default;x86_64" --tag "default" --abi "x86_64"
+
+npm install -g cordova
+
+cordova build android
+
+cordova emulate android
+
+cordova build --release android

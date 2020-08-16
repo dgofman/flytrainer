@@ -47,13 +47,25 @@ export class UserFormComponent extends AdminFormDirective {
     });
   }
 
-  init(data: any) {
-    super.init(data);
+  setData(data: any) {
+    super.setData(data);
+    if (data.id !== -1) {
+      this.loading(true);
+      this.userService.getUserById((data as User).id).subscribe(user => {
+        this.loading(false);
+        super.setData(user);
+      }, (ex) => this.errorHandler(ex, {nouser: Locales.invalidRequest}));
+    }
+  }
+
+  applyItem(event: Event) {
+    super.applyItem(event);
     this.loading(true);
-    this.userService.getUserById((data as User).id).subscribe(user => {
-      this.loading(false);
-      super.init(user);
-    }, (ex) => this.errorHandler(ex, {nouser: Locales.invalidRequest}));
+    this.userService.save(this.getData() as User).subscribe(user => {
+        this.loading(false);
+        super.setData(user);
+        this.doCancel();
+      }, (ex) => this.errorHandler(ex));
   }
 
   doDelete(): void {

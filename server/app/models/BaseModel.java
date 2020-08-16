@@ -4,7 +4,6 @@ import java.time.Instant;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -12,12 +11,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.ebean.Model;
 import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
+import play.libs.typedmap.TypedKey;
 
 @MappedSuperclass
 public abstract class BaseModel extends Model {
+	
+	public static final TypedKey<BaseModel> MODEL = TypedKey.<BaseModel>create("baseModel");
 
 	@Version
-	@JsonView(Full.class)
 	public long version;
 
 	@Id
@@ -42,31 +43,15 @@ public abstract class BaseModel extends Model {
 		return whoModified;
 	}
 
-	@Transient
-	@JsonView(Never.class)
-	public Integer currentUserId;
 
-	@Override
-	public void save() {
-		if (currentUserId != null) {
-			whoCreated = currentUserId;
-			whoModified = currentUserId;
-		}
+	public void save(BaseModel currentUser) {
+		whoCreated = currentUser.id;
+		whoModified = currentUser.id;
 		super.save();
-		if (currentUserId != null) {
-			whoCreated = id;
-			whoModified = id;
-			super.save();
-		}
 	}
 	
-	@Override
-	public void update() {
-		if (currentUserId != null) {
-			whoModified = id;
-		} else {
-			whoModified = currentUserId;
-		}
+	public void update(BaseModel currentUser) {
+		whoModified = currentUser.id;
 		super.update();
 	}
 

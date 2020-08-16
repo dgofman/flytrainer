@@ -68,9 +68,19 @@ function createWindow() {
         // when you should delete the corresponding element.
         win = null;
     });
-    win.webContents.on('new-window', function(event, url){
+    win.webContents.on('new-window', function(event, url, _frameName, _disposition, options) {
         event.preventDefault();
-        electron.shell.openExternal(url);
+        console.log(url, _frameName, _disposition, options);
+        if (env.popupBrowser) {
+            electron.shell.openExternal(url);
+        } else {
+            new electron.BrowserWindow({
+                width: size.width - 100,
+                height: size.height - 100,
+                icon: path.join(__dirname, '/src/favicon.ico'),
+                webContents: options.webContents,
+            }).loadURL(url);
+        }
     });
     console.log(win.webContents.session.getUserAgent());
     return win;

@@ -15,13 +15,13 @@ import org.slf4j.LoggerFactory;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import io.ebean.Ebean;
+import models.BaseModel;
 import models.DDoS;
 import models.User;
 import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.With;
-
 import utils.Constants.Access;
 
 @With(BasicAuthAction.class)
@@ -36,6 +36,7 @@ class BasicAuthAction extends Action<BasicAuth> {
 
 	@Override
 	public CompletionStage<Result> call(Http.Request req) {
+		User user = null;
 		Optional<String> authHeader = req.getHeaders().get(Constants.AUTHORIZATION);
 		if (!authHeader.isPresent() || !authHeader.get().startsWith(Constants.TOKEN_FORMAT)) {
 			return CompletableFuture
@@ -66,24 +67,23 @@ class BasicAuthAction extends Action<BasicAuth> {
 			}
 			if (roles.contains(Access.USER)) {
 				return delegate.call(req);
-			} else {
-				User user = Ebean.createNamedQuery(User.class, User.FIND_BY_UUID)
-						.setParameter("username", jwt.getSubject())
-						.setParameter("uuid", jwt.getKeyId()).findOne();
-				if (user == null) {
-					return CompletableFuture
-							.completedFuture(status(Http.Status.FORBIDDEN, Constants.Errors.FORBIDDEN.toString()));
-				}
-				if (!roles.contains(user.role)) {
-					return CompletableFuture
-							.completedFuture(status(Http.Status.NOT_ACCEPTABLE, Constants.Errors.ACCESS_DENIED.toString()));
-				}
+			}
+			user = Ebean.createNamedQuery(User.class, User.FIND_BY_UUID)
+					.setParameter("username", jwt.getSubject())
+					.setParameter("uuid", jwt.getKeyId()).findOne();
+			if (user == null) {
+				return CompletableFuture
+						.completedFuture(status(Http.Status.FORBIDDEN, Constants.Errors.FORBIDDEN.toString()));
+			}
+			if (!roles.contains(user.role)) {
+				return CompletableFuture
+						.completedFuture(status(Http.Status.NOT_ACCEPTABLE, Constants.Errors.ACCESS_DENIED.toString()));
 			}
 		} catch (Exception ex) {
 			log.error("Invalid auth header", ex);
 			return CompletableFuture
 					.completedFuture(status(Http.Status.FORBIDDEN, Constants.Errors.FORBIDDEN.toString()));
 		}
-		return delegate.call(req);
+		return delegate.call(req.addAttr(BaseModel.MODEL, user));
 	}
 }

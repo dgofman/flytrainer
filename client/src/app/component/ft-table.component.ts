@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { FTDatePipe } from '../utils/pipes';
 import { AppUtils } from '../utils/app-utils';
 import { BaseModel } from 'src/modules/models/base.model';
+import { DropdownModule } from 'primeng/dropdown';
 
 export interface ColumnType {
   field: string;
@@ -37,8 +38,8 @@ export class FTTableComponent {
 
   @Input('expandFormTemplate') public expandFormTemplate: Component;
   @Input('columns') public columns: Array<ColumnType>;
+  @Input('dataKey') public dataKey = 'id';
   @Input('data') public data: Array<BaseModel>;
-  @Input('dataKey') public dataKey: string;
   @Input('noData') public noData: string;
   @Input('sortField') public sortField: string;
   @Output() public onNotify: EventEmitter<any> = new EventEmitter();
@@ -63,6 +64,11 @@ export class FTTableComponent {
     this.onNotify.emit({ message, data } as EmitEvent);
   }
 
+  itemsPerPageChanged() {
+    this.firstRow = 0;
+    this.lazyLoad({ sortField: 'id', sortOrder: 1, first: this.firstRow, rows: this.itemsPerPage });
+  }
+
   lazyLoad(event: LazyLoadEvent) {
     if (event.sortField) {
       this.sortField = event.sortField;
@@ -76,12 +82,12 @@ export class FTTableComponent {
     if (this.newRow) {
       const index = this.data.indexOf(this.newRow);
       this.data.splice(index, 1);
-      delete this.expandedRows[this.newRow.internalId];
+      delete this.expandedRows[this.newRow[this.dataKey]];
     }
     this.newRow = {};
     this.newRow[this.dataKey] = -1;
     this.data.unshift(this.newRow);
-    this.expandedRows[-1] = true;
+    this.expandedRows[this.newRow[this.dataKey]] = true;
   }
 
   onMoreDetails() {
@@ -120,16 +126,21 @@ export class FTTableComponent {
   selector: '[ftTableFormProvider]'
 })
 export class FTTableFormProviderDirective {
+  @Input('table') table: FTTableComponent;
   @Input('ftTableFormProvider') data: BaseModel;
   @Output() private onNotify: EventEmitter<any> = new EventEmitter();
 
   public notify(message: EventType, data: any) {
     this.onNotify.emit({ message, data } as EmitEvent);
   }
+
+  public getDataKey() {
+    return this.table ? this.table.dataKey : 'id';
+  }
 }
 
 @NgModule({
-  imports: [CommonModule, ButtonModule, TableModule],
+  imports: [CommonModule, ButtonModule, DropdownModule, TableModule],
   exports: [FTTableComponent, FTTableFormProviderDirective],
   declarations: [FTTableComponent, FTTableFormProviderDirective]
 })

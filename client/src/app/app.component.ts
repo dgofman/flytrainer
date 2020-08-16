@@ -125,10 +125,14 @@ export class AppToastComponent {
 
 @Component({
   selector: 'app-footer',
-  template: `<a [href]="tfrLink" target="_blank">TFR</a> | <a href="https://www.1800wxbrief.com/Website/weatherGraphics?conus=0" target="_blank">1800WXBrief</a> | <a href="https://www.aviationweather.gov" target="_blank">AviationWeather</a> | <a href="https://www.iFlightPlanner.com/AviationCharts/?Map=sectional&GS=115&Route=KRHV" target="_blank">iFlightPlanner</a> | <a href="https://skyvector.com/" target="_blank">Skyvector</a> <div class="powerby">${Locales.powerBy}</div>`
+  template: `<a [href]="tfrLink" target="_blank">TFR</a> | <a [href]="wxbriefLink" target="_blank">1800WXBrief</a> | <a [href]="wxLink" target="_blank">AviationWeather</a> | <a [href]="iplanLink" target="_blank">iFlightPlanner</a> | <a [href]="skyvectorLink" target="_blank">Skyvector</a> <div class="powerby">${Locales.powerBy}</div>`
 })
 export class AppFooterComponent {
-  tfrLink = environment.tfrLink;
+  tfrLink = environment.tfrLink || 'https://tfr.faa.gov/tfr2/list.jsp';
+  wxbriefLink = environment.wxbriefLink || 'https://www.1800wxbrief.com/Website/weatherGraphics?conus=0';
+  wxLink = environment.wxLink || 'https://www.aviationweather.gov';
+  iplanLink = environment.iplanLink || 'https://www.iFlightPlanner.com/AviationCharts/?Map=sectional&GS=115&Route=' + environment.homeAirport;
+  skyvectorLink = environment.skyvectorLink || 'https://skyvector.com/';
 }
 
 @NgModule({

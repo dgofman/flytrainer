@@ -2,17 +2,21 @@ package controllers;
 
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.ebean.Ebean;
 import io.ebean.Query;
 import models.BaseModel;
 import models.User;
+import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
 import utils.BasicAuth;
 import utils.Constants;
 import utils.Constants.Access;
 
-@BasicAuth({Access.ASSISTANT, Access.MANAGER, Access.ADMIN})
+@BasicAuth({ Access.ASSISTANT, Access.MANAGER, Access.ADMIN })
 public class AdminController extends BaseController {
 
 	private static final int ALL_MAX_LIMIT = 10000;
@@ -43,5 +47,31 @@ public class AdminController extends BaseController {
 			return createBadRequest("nouser", Constants.Errors.ERROR);
 		}
 		return okResult(BaseModel.Full.class, user);
+	}
+
+	public Result saveUser(Http.Request request) {
+		BaseModel currentUser = request.attrs().get(BaseModel.MODEL);
+		JsonNode body = request.body().asJson();
+		try {
+			RequiredField require = requiredFields(body);
+			User user;
+			if (require.id == -1) { // create
+				user = Json.fromJson(body, User.class);
+				user.id = null;
+				user.save(currentUser);
+			} else {
+				Query<User> query = Ebean.find(User.class);
+				query.where().eq("id", require.id).eq("version", require.version);
+				user = query.findOne();
+				if (user == null) {
+					return createBadRequest("nouser", Constants.Errors.ERROR);
+				}
+				new ObjectMapper().readerForUpdating(user).readValue(body);
+				user.update(currentUser);
+			}
+			return okResult(User.class, user);
+		} catch (Exception e) {
+			return badRequest(e.getMessage());
+		}
 	}
 }

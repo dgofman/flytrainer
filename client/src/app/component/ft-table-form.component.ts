@@ -56,6 +56,13 @@ export abstract class AdminFormDirective implements OnInit {
 
   applyItem(event: Event) {
     event.preventDefault();
+    Object.keys(this.frmGroup.controls).forEach(field => {
+      const control = this.frmGroup.get(field);
+      if (!control.valid) {
+        control.markAsDirty();
+      }
+    });
+    return this.frmGroup.valid;
   }
 
   deleteItem() {

@@ -10,7 +10,7 @@
     <colgroup>
       <col [style.width.px]="45" />
       <col *ngFor="let col of columns" [style.width.px]="col.width" />
-      <col [style.width.px]="50"/>
+      <col *ngIf="moreDetails" [style.width.px]="50"/>
     </colgroup>
   </ng-template>
   <ng-template pTemplate="header">
@@ -22,7 +22,7 @@
         {{col.header}}
         <p-sortIcon field="{{col.field}}"></p-sortIcon>
       </th>
-      <th></th>
+      <th *ngIf="moreDetails"></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-expanded="expanded">
@@ -33,12 +33,12 @@
         </a>
       </td>
       <td *ngFor="let col of columns" class="ui-resizable-column" [style.text-align]="col.align" [title]="formatData(col, rowData, true)" [innerHTML]="formatData(col, rowData, false)"></td>
-      <td style="text-overflow: initial"><button pButton icon="pi pi-id-card"  (click)="onMoreDetails()" [title]="Locales.moreDetails"></button></td>
+      <td *ngIf="moreDetails" style="text-overflow: initial"><button pButton icon="pi pi-id-card" (click)="onMoreDetails(rowData)" [title]="Locales.moreDetails"></button></td>
     </tr>
   </ng-template>
   <ng-template pTemplate="rowexpansion" let-rowData>
     <tr>
-      <td [attr.colspan]="columns.length + 2">
+      <td [attr.colspan]="columns.length + 1 + (moreDetails ? 1 : 0)">
         <div [ftTableFormProvider]="rowData" (onNotify)="formEventHandler($event);">
           <ng-container *ngComponentOutlet="expandFormTemplate"></ng-container>
         </div>
@@ -47,7 +47,7 @@
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td [attr.colspan]="columns.length + 2" [innerHTML]="noData"></td>
+      <td [attr.colspan]="columns.length + 1 + (moreDetails ? 1 : 0)" [innerHTML]="noData"></td>
     </tr>
   </ng-template>
   <ng-template pTemplate="paginatorright">

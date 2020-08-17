@@ -42,6 +42,7 @@ export class FTTableComponent {
   @Input('data') public data: Array<BaseModel>;
   @Input('noData') public noData: string;
   @Input('sortField') public sortField: string;
+  @Input('moreDetails') public moreDetails: boolean;
   @Output() public onNotify: EventEmitter<any> = new EventEmitter();
 
   newRow: any;
@@ -90,8 +91,7 @@ export class FTTableComponent {
     this.expandedRows[this.newRow[this.dataKey]] = true;
   }
 
-  onMoreDetails() {
-
+  onMoreDetails(_: any) {
   }
 
   formatData(col: any, rowData: any, title: boolean) {

@@ -119,7 +119,7 @@ export class AppToastComponent {
       if (r.parentNode(div)) {
         r.removeChild(this.el.nativeElement, div);
       }
-    }, 3000);
+    }, 5000);
   }
 }
 

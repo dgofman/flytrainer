@@ -27,19 +27,19 @@ export class UserFormComponent extends AdminFormDirective {
       version: new FormControl(),
       username: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
       first: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
-      middle: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
+      middle: new FormControl(),
       last: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
       email: new FormControl(null, [Validators.required, Validators.email, Validators.maxLength(100)]),
       phone: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
       ftn: new FormControl(null, [Validators.maxLength(10)]),
       role: new FormControl(null, [Validators.required]),
-      isActive: new FormControl(null, [Validators.required]),
-      resetPassword: new FormControl(null, [Validators.required]),
-      isSchoolEmployee: new FormControl(null, [Validators.required]),
+      isActive: new FormControl(),
+      resetPassword: new FormControl(),
+      isSchoolEmployee: new FormControl(),
       birthday: new FormControl(),
       dl: new FormControl(null, [Validators.maxLength(10)]),
       dlState: new FormControl(null, [Validators.maxLength(2)]),
-      dlExpDate: new FormControl(),
+      dlExpDate: new FormControl(null, [Validators.required]),
       createdDate: new FormControl(),
       modifiedDate: new FormControl(),
       whoCreated: new FormControl(),
@@ -59,13 +59,15 @@ export class UserFormComponent extends AdminFormDirective {
   }
 
   applyItem(event: Event) {
-    super.applyItem(event);
-    this.loading(true);
-    this.userService.save(this.getData() as User).subscribe(user => {
-        this.loading(false);
-        super.setData(user);
-        this.doCancel();
-      }, (ex) => this.errorHandler(ex));
+    if (super.applyItem(event)) {
+      this.loading(true);
+      this.userService.save(this.getData() as User).subscribe(user => {
+          this.loading(false);
+          super.setData(user);
+          this.doCancel();
+        }, (ex) => this.errorHandler(ex));
+      }
+    return true;
   }
 
   doDelete(): void {

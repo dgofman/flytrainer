@@ -41,7 +41,7 @@ sbt makePom
 
 sbt uuid
 sbt env
-sbt -Ddb.flytrainer.username=flytrainer -Ddb.flytrainer.password=********** run
+sbt -java-home %JAVA_HOME% -Ddb.flytrainer.username=flytrainer -Ddb.flytrainer.password=********** run
 SET PASSWORD=********** && sbt pwd
 
 # Update properties:

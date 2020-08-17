@@ -125,31 +125,31 @@ public class User extends BaseModel {
 	@OneToOne
 	public Account defaultAccount;
 	
-	@JsonView(Full.class)
+	@JsonView(Details.class)
 	@OneToMany(targetEntity = Account.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Account> accounts = new ArrayList<>();
 	
-	@JsonView(Full.class)
+	@JsonView(Details.class)
 	@OneToMany(targetEntity = Certificate.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Certificate> certificates = new ArrayList<>();
 	
-	@JsonView(Full.class)
+	@JsonView(Details.class)
 	@OneToMany(targetEntity = MedicalCertificate.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<MedicalCertificate> medicalCertificates = new ArrayList<>();
 
-	@JsonView(Full.class)
+	@JsonView(Details.class)
 	@OneToMany(targetEntity = Address.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Address> addresses = new ArrayList<>();
 	
-	@JsonView(Full.class)
+	@JsonView(Details.class)
 	@OneToMany(targetEntity = Contact.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Contact> contacts = new ArrayList<>();
 
-	@JsonView(Full.class)
+	@JsonView(Details.class)
 	@OneToMany(targetEntity = Employer.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Employer> employers = new ArrayList<>();
 	
-	@JsonView(Full.class)
+	@JsonView(Details.class)
 	@OneToMany(targetEntity = Note.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Note> notes = new ArrayList<>();
 

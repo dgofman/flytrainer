@@ -59,5 +59,7 @@ public abstract class BaseModel extends Model {
 
 	public static class Full {};
 	
+	public static class Details {};
+	
 	public static class Never {};
 }

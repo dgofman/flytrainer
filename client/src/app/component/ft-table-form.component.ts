@@ -1,28 +1,39 @@
 import Locales from '@locales/common';
 import { OnInit, Directive } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
 import { AppUtils } from '../utils/app-utils';
-import { EventType, FTTableFormProviderDirective } from './ft-table.component';
 import { BaseModel } from 'src/modules/models/base.model';
+import { FTFormControl } from '../utils/ft-form.control';
+import { FTTableFormProviderDirective } from './ft-table.component';
 
 @Directive()
 export abstract class AdminFormDirective implements OnInit {
   Locales = Locales;
   AppUtils = AppUtils;
-  data: any;
+  data: BaseModel;
   frmGroup: FormGroup;
 
-  constructor(protected formProvider: FTTableFormProviderDirective, protected confirmationService: ConfirmationService) {
+  constructor(protected formProvider: FTTableFormProviderDirective) {
   }
 
-  abstract doDelete(): void;
+  get dataKey(): string {
+    return this.formProvider.getDataKey();
+  }
+
+  isNew(item: BaseModel) {
+    return this.formProvider.table.isNew(item);
+  }
 
   ngOnInit(): void {
     this.setData(this.formProvider.data);
   }
 
-  setData(data: any) {
+  getLabel(field: string) {
+    const control = this.frmGroup.get(field);
+    return (control instanceof  FTFormControl) ? control.label : field;
+  }
+
+  setData(data: BaseModel) {
     if (!this.data) {
       this.data = data;
     } else {
@@ -32,7 +43,7 @@ export abstract class AdminFormDirective implements OnInit {
   }
 
   getData() {
-    const dataKey = this.formProvider.getDataKey(),
+    const dataKey = this.dataKey,
       version = 'version',
       data = this.frmGroup.getRawValue(),
       newdata = new BaseModel();
@@ -54,27 +65,32 @@ export abstract class AdminFormDirective implements OnInit {
     AppUtils.errorHandler(ex, errorMap);
   }
 
-  applyItem(event: Event) {
+  applyItem(event: Event): boolean {
     event.preventDefault();
     Object.keys(this.frmGroup.controls).forEach(field => {
       const control = this.frmGroup.get(field);
       if (!control.valid) {
         control.markAsDirty();
+        Object.keys(control.errors).forEach(error => {
+          let label = field;
+          if (control instanceof  FTFormControl) {
+            label = control.label;
+          }
+          AppUtils.showError(label, error, control.errors[error]);
+        });
       }
     });
     return this.frmGroup.valid;
   }
 
   deleteItem() {
-    this.confirmationService.confirm({
-      message: Locales.deleteRecord,
-      accept: () => {
-        this.doDelete();
-      }
-    });
+    const index = this.formProvider.table.data.indexOf(this.data);
+    if (index !== -1) {
+      this.formProvider.table.data.splice(index, 1);
+    }
   }
 
   doCancel() {
-    this.formProvider.notify(EventType.Cancel, this.data);
+    this.formProvider.table.onCancel(this.data);
   }
 }

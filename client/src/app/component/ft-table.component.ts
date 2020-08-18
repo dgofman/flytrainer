@@ -1,6 +1,6 @@
 import Locales from '@locales/common';
-import { LazyLoadEvent, SelectItem } from 'primeng/api';
-import { Directive, Input, NgModule, EventEmitter, Output, Component } from '@angular/core';
+import { LazyLoadEvent, SelectItem, PrimeTemplate } from 'primeng/api';
+import { Directive, Input, NgModule, EventEmitter, Output, Component, TemplateRef, AfterContentInit, ContentChildren, QueryList } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -8,6 +8,16 @@ import { FTDatePipe } from '../utils/pipes';
 import { AppUtils } from '../utils/app-utils';
 import { BaseModel } from 'src/modules/models/base.model';
 import { DropdownModule } from 'primeng/dropdown';
+
+export enum EventType {
+  Load,
+  New
+}
+
+export interface EmitEvent {
+  message: EventType;
+  data: any;
+}
 
 export interface ColumnType {
   field: string;
@@ -17,35 +27,25 @@ export interface ColumnType {
   align?: string;
 }
 
-export interface EmitEvent {
-  message: EventType;
-  data: any;
-}
-
-export enum EventType {
-  Load,
-  Cancel
-}
-
 @Component({
   selector: 'ft-table',
   templateUrl: './ft-table.component.html',
   styleUrls: ['./ft-table.component.less']
 })
-export class FTTableComponent {
+export class FTTableComponent implements AfterContentInit {
   Locales = Locales;
   isEditorAccess = AppUtils.isEditorAccess;
+  lastColumnTemplate: TemplateRef<any>;
 
   @Input('expandFormTemplate') public expandFormTemplate: Component;
   @Input('columns') public columns: Array<ColumnType>;
   @Input('dataKey') public dataKey = 'id';
   @Input('data') public data: Array<BaseModel>;
-  @Input('noData') public noData: string;
   @Input('sortField') public sortField: string;
-  @Input('moreDetails') public moreDetails: boolean;
-  @Output() public onNotify: EventEmitter<any> = new EventEmitter();
+  @Output() public onNotify: EventEmitter<EmitEvent> = new EventEmitter();
+  @ContentChildren(PrimeTemplate) templates: QueryList<PrimeTemplate>;
 
-  newRow: any;
+  newRow: BaseModel;
   expandedRows: {} = {};
 
   itemsPerPageList: SelectItem[] = [
@@ -61,13 +61,23 @@ export class FTTableComponent {
   filterColumn: string;
   filterQuery: string;
 
+  ngAfterContentInit(): void {
+    this.templates.forEach((item) => {
+      switch (item.getType()) {
+        case 'lastColumn':
+            this.lastColumnTemplate = item.template;
+            break;
+      }
+    });
+  }
+
   notify(message: EventType, data: any) {
     this.onNotify.emit({ message, data } as EmitEvent);
   }
 
   itemsPerPageChanged() {
     this.firstRow = 0;
-    this.lazyLoad({ sortField: 'id', sortOrder: 1, first: this.firstRow, rows: this.itemsPerPage });
+    this.lazyLoad({ sortField: this.dataKey, sortOrder: 1, first: this.firstRow, rows: this.itemsPerPage });
   }
 
   lazyLoad(event: LazyLoadEvent) {
@@ -85,16 +95,18 @@ export class FTTableComponent {
       this.data.splice(index, 1);
       delete this.expandedRows[this.newRow[this.dataKey]];
     }
-    this.newRow = {};
+    this.data.unshift(new BaseModel());
+    this.newRow = this.data[0];
     this.newRow[this.dataKey] = -1;
-    this.data.unshift(this.newRow);
     this.expandedRows[this.newRow[this.dataKey]] = true;
+    this.notify(EventType.New, this.newRow);
   }
 
-  onMoreDetails(_: any) {
+  isNew(item: BaseModel) {
+    return item[this.dataKey] === -1;
   }
 
-  formatData(col: any, rowData: any, title: boolean) {
+  formatData(col: any, rowData: BaseModel, title: boolean) {
     const data = rowData[col.field];
     switch (col.format) {
       case 'date':
@@ -107,17 +119,14 @@ export class FTTableComponent {
   }
 
   onCancel(item: BaseModel) {
-    delete this.expandedRows[item.id];
-    if (item.id === -1) {
-      this.data.splice(0, 1);
+    if (this.newRow) {
+      delete this.expandedRows[this.newRow[this.dataKey]];
+      if (this.isNew(item)) {
+        this.data.splice(0, 1);
+      }
       this.newRow = null;
-    }
-  }
-
-  formEventHandler(event: EmitEvent) {
-    switch (event.message) {
-      case EventType.Cancel:
-        this.onCancel(event.data);
+    } else {
+      delete this.expandedRows[item[this.dataKey]];
     }
   }
 }
@@ -128,14 +137,9 @@ export class FTTableComponent {
 export class FTTableFormProviderDirective {
   @Input('table') table: FTTableComponent;
   @Input('ftTableFormProvider') data: BaseModel;
-  @Output() private onNotify: EventEmitter<any> = new EventEmitter();
-
-  public notify(message: EventType, data: any) {
-    this.onNotify.emit({ message, data } as EmitEvent);
-  }
 
   public getDataKey() {
-    return this.table ? this.table.dataKey : 'id';
+    return this.table.dataKey;
   }
 }
 

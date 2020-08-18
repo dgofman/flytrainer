@@ -3,6 +3,7 @@ import Locales from './errors';
 export default {
     ...Locales,
     cancel: 'Cancel',
+    delete: 'Delete',
     apply: 'Apply',
     success: 'Success',
     error: 'Error',
@@ -21,6 +22,7 @@ export default {
     moreDetails: 'More Details',
 
     noData: 'No data found.',
+    deleteHeader: 'Delete Confirmation',
     deleteRecord: 'Are you sure you want to delete this record?',
     powerBy: '© Power by FlyTrainer LLC'
 };

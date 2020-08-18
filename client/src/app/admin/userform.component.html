@@ -1,67 +1,67 @@
 <form [formGroup]="frmGroup" class="p-form">
   <div class="ui-fluid p-grid">
     <div class="p-md-3">
-      <label for="username">{{Locales.username}}:</label>
+      <label for="username">{{getLabel('username')}}:</label>
       <input class="ui-inputtext" formControlName="username" />
     </div>
     <div class="p-md-3">
-      <label for="first">{{Locales.firstname}}:</label>
+      <label for="first">{{getLabel('first')}}:</label>
       <input class="ui-inputtext" formControlName="first" />
     </div>
     <div class="p-md-3">
-      <label for="middle">{{Locales.middlename}}:</label>
+      <label for="middle">{{getLabel('middle')}}:</label>
       <input class="ui-inputtext" formControlName="middle" />
     </div>
     <div class="p-md-3">
-      <label for="last">{{Locales.lastname}}:</label>
+      <label for="last">{{getLabel('last')}}:</label>
       <input class="ui-inputtext" formControlName="last" />
     </div>
     <div class="p-md-3">
-      <label for="email">{{Locales.email}}:</label>
+      <label for="email">{{getLabel('email')}}:</label>
       <input class="ui-inputtext" formControlName="email" />
     </div>
     <div class="p-md-3">
-      <label for="phone">{{Locales.cellphone}}:</label>
+      <label for="phone">{{getLabel('phone')}}:</label>
       <input class="ui-inputtext" formControlName="phone" />
     </div>
     <div class="p-md-3">
-      <label for="role">{{Locales.role}}:</label>
+      <label for="role">{{getLabel('role')}}:</label>
       <p-dropdown [options]="Roles" formControlName="role" ></p-dropdown>
     </div>
     <div class="p-md-3">
-      <label for="ftn">{{Locales.ftn}}:</label>
+      <label for="ftn">{{getLabel('ftn')}}:</label>
       <input class="ui-inputtext" formControlName="ftn" />
     </div>
     <div class="p-md-3">
-      <label for="birthday">{{Locales.birthday}}:</label>
+      <label for="birthday">{{getLabel('birthday')}}:</label>
       <p-calendar [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" appendTo="body" formControlName="birthday"></p-calendar>
     </div>
     <div class="p-md-3">
-      <label for="dl">{{Locales.driverLicense}}:</label>
+      <label for="dl">{{getLabel('dl')}}:</label>
       <input class="ui-inputtext" formControlName="dl" />
     </div>
     <div class="p-md-3">
-      <label for="dlState">{{Locales.driverState}}:</label>
+      <label for="dlState">{{getLabel('dlState')}}:</label>
       <input class="ui-inputtext" formControlName="dlState" />
     </div>
     <div class="p-md-3">
-      <label for="dlExpDate">{{Locales.driverExpDate}}:</label>
+      <label for="dlExpDate">{{getLabel('dlExpDate')}}:</label>
       <p-calendar [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" appendTo="body" formControlName="dlExpDate"></p-calendar>
     </div>
     <div class="p-md-3">
-      <label for="createdDate">{{Locales.createdDate}}:</label>
+      <label for="createdDate">{{getLabel('createdDate')}}:</label>
       <input class="ui-inputtext" [value]="frmGroup.get('createdDate').value | ftdate" readonly/>
     </div>
     <div class="p-md-3">
-      <label for="whoCreated">{{Locales.whoCreated}}:</label>
+      <label for="whoCreated">{{getLabel('whoCreated')}}:</label>
       <input class="ui-inputtext" formControlName="whoCreated" />
     </div>
     <div class="p-md-3">
-      <label for="modifiedDate">{{Locales.modifiedDate}}:</label>
+      <label for="modifiedDate">{{getLabel('modifiedDate')}}:</label>
       <input class="ui-inputtext" [value]="frmGroup.get('modifiedDate').value | ftdate" readonly/>
     </div>
     <div class="p-md-3">
-      <label for="whoModified">{{Locales.whoModified}}:</label>
+      <label for="whoModified">{{getLabel('whoModified')}}:</label>
       <input class="ui-inputtext" formControlName="whoModified" />
     </div>
     <div class="p-md-2">
@@ -80,6 +80,7 @@
     <p-button label="{{Locales.moreDetails}}"></p-button>
     <div class="right">
       <p-button label="{{Locales.apply}}" *ngIf="AppUtils.isEditorAccess()" (click)="applyItem($event)"></p-button>
+      <p-button label="{{Locales.delete}}" (click)="doDelete()" *ngIf="AppUtils.isEditorAccess() && isNew(data)==false"></p-button>
       <p-button label="{{Locales.cancel}}" (click)="doCancel()"></p-button>
   </div>
   </div>

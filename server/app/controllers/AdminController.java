@@ -46,7 +46,7 @@ public class AdminController extends BaseController {
 		if (user == null) {
 			return createBadRequest("nouser", Constants.Errors.ERROR);
 		}
-		return okResult(BaseModel.Full.class, user);
+		return okResult(BaseModel.Short.class, user);
 	}
 
 	public Result saveUser(Http.Request request) {
@@ -71,7 +71,22 @@ public class AdminController extends BaseController {
 			}
 			return okResult(User.class, user);
 		} catch (Exception e) {
-			return badRequest(e.getMessage());
+			return badRequest(e);
 		}
+	}
+	
+	public Result deleteUser(Http.Request request, Long userId) {
+		BaseModel currentUser = request.attrs().get(BaseModel.MODEL);
+		Query<User> query = Ebean.find(User.class);
+		query.where().eq("id", userId);
+		User user = query.findOne();
+		if (user == null) {
+			return createBadRequest("nouser", Constants.Errors.ERROR);
+		}
+		if (user.id == currentUser.id) {
+			return badRequest(Constants.Errors.DELETE_USER.toString());
+		}
+		user.delete(currentUser);
+		return okResult(BaseModel.Short.class, user);
 	}
 }

@@ -23,6 +23,7 @@ public class Constants {
 		INVALID_LOGIN("Invalid username or password"),
 		INVALID_EMAIL("Invalid username or email"),
 		ACCESS_DENIED("You do not have enough access privileges for this operation."),
+		DELETE_USER("Cannot delete user. It is being used by another person."),
 		UNAUTHORIZED("Needs authorization"),
 		FORBIDDEN("Your account access token is not longer valid. Please contact our system administrator."),
 		RESET("Required to reset password.");

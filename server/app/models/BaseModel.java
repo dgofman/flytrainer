@@ -25,19 +25,19 @@ public abstract class BaseModel extends Model {
 	public Integer id;
 
 	@WhenCreated
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public Instant createdDate;
 
 	@WhenModified
 	public Instant modifiedDate;
 
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	private Integer whoCreated;
 	public Integer getWhoCreated() {
 		return whoCreated;
 	}
 
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	private Integer whoModified;
 	public Integer getWhoModified() {
 		return whoModified;
@@ -54,12 +54,17 @@ public abstract class BaseModel extends Model {
 		whoModified = currentUser.id;
 		super.update();
 	}
+	
+	public void delete(BaseModel currentUser) {
+		whoModified = currentUser.id;
+		super.delete();
+	}
 
 	public static class Admin {};
 
-	public static class Full {};
+	public static class Short {};
 	
-	public static class Details {};
+	public static class Full {};
 	
 	public static class Never {};
 }

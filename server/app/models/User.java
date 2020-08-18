@@ -52,9 +52,8 @@ public class User extends BaseModel {
 	public String first;
 
 	@Column(name = "middlename")
-	@NotNull
 	@Length(50)
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public String middle;
 
 	@Column(name = "lastname")
@@ -87,31 +86,31 @@ public class User extends BaseModel {
 	public byte isActive = 0;
 	
 	@NotNull
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public byte isSchoolEmployee = 0;
 
 	@NotNull
 	public Constants.Access role = Constants.Access.USER;
 
 	@NotNull
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public byte resetPassword = 1;
 
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public Date birthday;
 	
 	@Length(10)
 	@Column(name = "driverLicense")
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public String dl;
 	
 	@Length(2)
 	@Column(name = "driverLicenseState")
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public String dlState;
 	
 	@Column(name = "driverLicenseExpirationDate")
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public Date dlExpDate;
 	
 	@Length(10)
@@ -119,37 +118,37 @@ public class User extends BaseModel {
 	public String ssn;
 
 	@Length(10)
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public String ftn;
 	
 	@OneToOne
 	public Account defaultAccount;
 	
-	@JsonView(Details.class)
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Account.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Account> accounts = new ArrayList<>();
 	
-	@JsonView(Details.class)
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Certificate.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Certificate> certificates = new ArrayList<>();
 	
-	@JsonView(Details.class)
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = MedicalCertificate.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<MedicalCertificate> medicalCertificates = new ArrayList<>();
 
-	@JsonView(Details.class)
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Address.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Address> addresses = new ArrayList<>();
 	
-	@JsonView(Details.class)
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Contact.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Contact> contacts = new ArrayList<>();
 
-	@JsonView(Details.class)
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Employer.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Employer> employers = new ArrayList<>();
 	
-	@JsonView(Details.class)
+	@JsonView(Full.class)
 	@OneToMany(targetEntity = Note.class, fetch = FetchType.LAZY, mappedBy = "user")
 	public List<Note> notes = new ArrayList<>();
 

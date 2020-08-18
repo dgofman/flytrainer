@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponentModule } from '../app.component';
 import { AdminAuthService } from '../authentication/auth.service';
 import { CommonModule } from '@angular/common';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
@@ -35,6 +36,7 @@ export const routes: Routes = [
     CheckboxModule,
     DropdownModule,
     ButtonModule,
+    ConfirmDialogModule,
     FTTableModule
   ],
   declarations: [

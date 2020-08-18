@@ -1,16 +1,18 @@
-<div style="overflow: hidden; margin: 5px 0;">
+<div style="height: 40px">
   <div style="float: right">
-    {{Locales.itemsPerPage}} 
-    <p-dropdown [options]="itemsPerPageList" (onChange)="itemsPerPageChanged()" [style]="{'minWidth':'75px', 'width': '75px'}" append="body"></p-dropdown>
+    {{Locales.itemsPerPage}}
+    <p-dropdown [options]="itemsPerPageList" (onChange)="itemsPerPageChanged()"
+      [style]="{'minWidth':'80px', 'width': '80px'}"></p-dropdown>
   </div>
 </div>
-<p-table [columns]="columns" [value]="data" [resizableColumns]="true" [scrollable]="true" [expandedRowKeys]="expandedRows"
-  [dataKey]="dataKey" [lazy]="true" [paginator]="true" [rows]="itemsPerPage" (onLazyLoad)="lazyLoad($event)">
+<p-table [columns]="columns" [value]="data" [resizableColumns]="true" [scrollable]="true"
+  [expandedRowKeys]="expandedRows" [dataKey]="dataKey" [lazy]="true" [paginator]="true" [rows]="itemsPerPage"
+  (onLazyLoad)="lazyLoad($event)">
   <ng-template pTemplate="colgroup">
     <colgroup>
       <col [style.width.px]="45" />
       <col *ngFor="let col of columns" [style.width.px]="col.width" />
-      <col *ngIf="moreDetails" [style.width.px]="50"/>
+      <col *ngIf="lastColumnTemplate" [style.width.px]="50" />
     </colgroup>
   </ng-template>
   <ng-template pTemplate="header">
@@ -22,7 +24,7 @@
         {{col.header}}
         <p-sortIcon field="{{col.field}}"></p-sortIcon>
       </th>
-      <th *ngIf="moreDetails"></th>
+      <th *ngIf="lastColumnTemplate"></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-expanded="expanded">
@@ -33,13 +35,15 @@
         </a>
       </td>
       <td *ngFor="let col of columns" class="ui-resizable-column" [style.text-align]="col.align" [title]="formatData(col, rowData, true)" [innerHTML]="formatData(col, rowData, false)"></td>
-      <td *ngIf="moreDetails" style="text-overflow: initial"><button pButton icon="pi pi-id-card" (click)="onMoreDetails(rowData)" [title]="Locales.moreDetails"></button></td>
+      <td *ngIf="lastColumnTemplate" style="text-overflow: initial">
+        <ng-container *ngTemplateOutlet="lastColumnTemplate; context: {$implicit: rowData}"></ng-container>
+      </td>
     </tr>
   </ng-template>
   <ng-template pTemplate="rowexpansion" let-rowData>
     <tr>
-      <td [attr.colspan]="columns.length + 1 + (moreDetails ? 1 : 0)">
-        <div [ftTableFormProvider]="rowData" (onNotify)="formEventHandler($event);">
+      <td [attr.colspan]="columns.length + 1 + (lastColumnTemplate ? 1 : 0)">
+        <div [ftTableFormProvider]="rowData" [table]="this">
           <ng-container *ngComponentOutlet="expandFormTemplate"></ng-container>
         </div>
       </td>
@@ -47,12 +51,12 @@
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td [attr.colspan]="columns.length + 1 + (moreDetails ? 1 : 0)" [innerHTML]="noData"></td>
+      <td [attr.colspan]="columns.length + 1 + (lastColumnTemplate ? 1 : 0)" style="text-align: center;">{{Locales.noData}}</td>
     </tr>
   </ng-template>
   <ng-template pTemplate="paginatorright">
-      <div style="margin-right: 10px; margin-top: 5px">
-        {{Locales.total}}: {{data?.length}}
-      </div>
-    </ng-template>
+    <div style="margin-right: 10px; margin-top: 5px">
+      {{Locales.total}}: {{data?.length}}
+    </div>
+  </ng-template>
 </p-table>

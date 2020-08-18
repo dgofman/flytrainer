@@ -19,12 +19,16 @@ public class BaseController extends Controller {
 		try {
 			return ok(w.writeValueAsString(value));
 		} catch (JsonProcessingException e) {
-			return badRequest(e.getMessage());
+			return badRequest(e);
 		}
 	}
 
 	public Result createBadRequest(String code, Constants.Errors error) {
 		return badRequest("{\"code\": \"" + code + "\", \"message\": \"" + error.toString() + "\"}");
+	}
+	
+	public Result badRequest(Throwable e) {
+		return badRequest(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 	}
 	
 	public RequiredField requiredFields(JsonNode body) {

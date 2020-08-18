@@ -4,8 +4,9 @@ import { UserService } from 'src/services/user.service';
 import { User } from 'src/modules/models/user';
 import { AuthService } from '../authentication/auth.service';
 import { AppBaseDirective } from '../app.base.component';
-import { ColumnType, EventType, EmitEvent, FTTableComponent } from '../component/ft-table.component';
+import { ColumnType, FTTableComponent, EmitEvent, EventType } from '../component/ft-table.component';
 import { UserFormComponent } from './userform.component';
+import { Role } from 'src/modules/models/constants';
 
 @Component({
   templateUrl: './admin.component.html',
@@ -31,8 +32,15 @@ export class AdminComponent extends AppBaseDirective {
     super();
   }
 
+  onMoreDetails(user: User) {
+    console.log(user);
+  }
+
   eventTableHandler(event: EmitEvent) {
     switch (event.message) {
+      case EventType.New:
+        event.data.role = Role.USER;
+        break;
       case EventType.Load:
         const t = event.data as FTTableComponent;
         this.loading(true);

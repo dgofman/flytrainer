@@ -11,12 +11,9 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.ebean.Model;
 import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
-import play.libs.typedmap.TypedKey;
 
 @MappedSuperclass
 public abstract class BaseModel extends Model {
-	
-	public static final TypedKey<BaseModel> MODEL = TypedKey.<BaseModel>create("baseModel");
 
 	@Version
 	public long version;

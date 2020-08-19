@@ -7,12 +7,22 @@ public class Constants {
 	public static final String CORRELATION_ID = "correlationId";
 
 	public static enum Access {
-		USER,
-		INSTRUCTOR,
-		MECHANIC,
-		ASSISTANT,
-		MANAGER,
-		ADMIN
+		USER(0),
+		INSTRUCTOR(1),
+		MECHANIC(2),
+		ASSISTANT(3),
+		MANAGER(4),
+		ADMIN(5);
+		
+		private final int level;
+
+		private Access(int level) {
+			this.level = level;
+		}
+		
+		public int getLevel() {
+			return this.level;
+		}
 	}
 	
 	public static enum Errors {

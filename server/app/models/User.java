@@ -22,6 +22,7 @@ import io.ebean.annotation.History;
 import io.ebean.annotation.Index;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
+import play.libs.typedmap.TypedKey;
 import utils.AppConfig;
 import utils.Constants;
 import utils.Constants.Key;
@@ -35,6 +36,8 @@ import utils.Constants.Key;
 	@NamedQuery(name = User.FIND_BY_EMAIL, query = "select(isActive) where username = :username and email = :email")
 })
 public class User extends BaseModel {
+	
+	public static final TypedKey<User> MODEL = TypedKey.<User>create("userModel");
 
 	public static final String LOGIN = "User.login";
 	public static final String FIND = "User.find";

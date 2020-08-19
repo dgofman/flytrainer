@@ -15,3 +15,12 @@ export enum Role {
     MANAGER = 'MANAGER',
     ADMIN = 'ADMIN'
 }
+
+export const RoleLevel = [
+    Role.USER,
+    Role.INSTRUCTOR,
+    Role.MECHANIC,
+    Role.ASSISTANT,
+    Role.MANAGER,
+    Role.ADMIN
+];

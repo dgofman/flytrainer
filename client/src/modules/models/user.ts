@@ -12,7 +12,7 @@ export class User extends BaseModel {
     ftn: string;
     role: string;
     isActive: number;
-    isResetPassword: number;
+    resetPassword: number;
     isSchoolEmployee: number;
     birthday: Date;
     dl: string; /* driving license */

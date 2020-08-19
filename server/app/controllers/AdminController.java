@@ -50,7 +50,7 @@ public class AdminController extends BaseController {
 	}
 
 	public Result saveUser(Http.Request request) {
-		BaseModel currentUser = request.attrs().get(BaseModel.MODEL);
+		User currentUser = request.attrs().get(User.MODEL);
 		JsonNode body = request.body().asJson();
 		try {
 			RequiredField require = requiredFields(body);
@@ -58,6 +58,7 @@ public class AdminController extends BaseController {
 			if (require.id == -1) { // create
 				user = Json.fromJson(body, User.class);
 				user.id = null;
+				validateRole(user, currentUser);
 				user.save(currentUser);
 			} else {
 				Query<User> query = Ebean.find(User.class);
@@ -67,6 +68,7 @@ public class AdminController extends BaseController {
 					return createBadRequest("nouser", Constants.Errors.ERROR);
 				}
 				new ObjectMapper().readerForUpdating(user).readValue(body);
+				validateRole(user, currentUser);
 				user.update(currentUser);
 			}
 			return okResult(User.class, user);
@@ -76,7 +78,7 @@ public class AdminController extends BaseController {
 	}
 	
 	public Result deleteUser(Http.Request request, Long userId) {
-		BaseModel currentUser = request.attrs().get(BaseModel.MODEL);
+		BaseModel currentUser = request.attrs().get(User.MODEL);
 		Query<User> query = Ebean.find(User.class);
 		query.where().eq("id", userId);
 		User user = query.findOne();
@@ -88,5 +90,14 @@ public class AdminController extends BaseController {
 		}
 		user.delete(currentUser);
 		return okResult(BaseModel.Short.class, user);
+	}
+	
+	
+	private void validateRole(User user, User currentUser) {
+		/*if (user.role != Constants.Access.ADMIN && 
+			(user.id == currentUser.id && user.role != currentUser.role) &&
+			(user.role.getLevel() > currentUser.role.getLevel())) {
+			throw new RuntimeException(Constants.Errors.ACCESS_DENIED.name());
+		}*/
 	}
 }

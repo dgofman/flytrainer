@@ -77,7 +77,7 @@
     </div>
   </div>
   <div>
-    <p-button label="{{Locales.moreDetails}}"></p-button>
+    <p-button label="{{Locales.moreDetails}}" *ngIf="AppUtils.isEditorAccess()"></p-button>
     <div class="right">
       <p-button label="{{Locales.apply}}" *ngIf="AppUtils.isEditorAccess()" (click)="applyItem($event)"></p-button>
       <p-button label="{{Locales.delete}}" (click)="doDelete()" *ngIf="AppUtils.isEditorAccess() && isNew(data)==false"></p-button>

@@ -27,7 +27,7 @@ import utils.Constants.Key;
 import utils.MailServer;
 
 public class HomeController extends BaseController {
-	
+
 	private static final int LOGIN_ATTEMPTS = AppConfig.get(Key.LOGIN_ATTEMPTS).asInt();
 	private static final int LOCKED_TIME = AppConfig.get(Key.LOCKED_TIME).asInt();
 	private static final boolean CREATE_ACCOUNT = AppConfig.get(Key.CREATE_ACCOUNT).asBoolean();
@@ -41,7 +41,7 @@ public class HomeController extends BaseController {
 	private static final String DATE_ATTR = "d";
 
 	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
-	
+
 	public Result login(Http.Request request) {
 		JsonNode body = request.body().asJson();
 		DDoS ddos;
@@ -74,14 +74,16 @@ public class HomeController extends BaseController {
 			ddos.status = DDoS.LOGGEDIN;
 			ddos.save();
 			@SuppressWarnings("serial")
-			Map<String, Object> params = new LinkedHashMap<String, Object>(){{
-				put(Constants.CORRELATION_ID, ddos.createdDate.toEpochMilli());
-				put("token", authToken);
-				put("id", user.id);
-				put("firstname", user.first);
-				put("lastname", user.last);
-				put("role", user.role);
-			}};
+			Map<String, Object> params = new LinkedHashMap<String, Object>() {
+				{
+					put(Constants.CORRELATION_ID, ddos.createdDate.toEpochMilli());
+					put("token", authToken);
+					put("id", user.id);
+					put("firstname", user.first);
+					put("lastname", user.last);
+					put("role", user.role);
+				}
+			};
 			return ok(Ebean.json().toJson(params));
 		} catch (IllegalAccessException ex) {
 			ddos.save();
@@ -99,8 +101,8 @@ public class HomeController extends BaseController {
 		try {
 			User user = new User(body);
 			int count = Ebean.find(User.class).findCount();
-			if (count == 0) { //allow to register at least one user
-				user.role = Constants.Access.ADMIN;
+			if (count == 0) { // allow to register at least one user
+				user.role =  Constants.Access.ADMIN;
 			} else if (!CREATE_ACCOUNT) {
 				return notAcceptable(Errors.ACCESS_DENIED.toString());
 			}
@@ -116,20 +118,24 @@ public class HomeController extends BaseController {
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MINUTE, AppConfig.get(Key.EXPIRE_TOKEN).asInt());
 			String authToken = AuthenticationUtils.createToken(user, c.getTime());
-			log.debug("Activatation token: " +user.email + ", authToken=" + authToken);
+			log.debug("Activatation token: " + user.email + ", authToken=" + authToken);
 			String origin = "";
 			if (request.getHeaders().get("Origin").isPresent()) {
 				origin = request.getHeaders().get("Origin").get();
 			}
 
 			@SuppressWarnings("serial")
-			Map<String, Object> params = new LinkedHashMap<String, Object>(){{
-				put(USER_ATTR, user.username);
-				put(VERSION_ATTR, user.version);
-				put(TOKEN_ATTR, authToken);
-				put(DATE_ATTR, user.modifiedDate.toEpochMilli());
-			}};
-			String emailBody = String.format(ACCOUNT_ACTIVATION, user.first, user.last, origin + request.getHeaders().get("SourceMap").get() + "activate?" + Joiner.on("&").withKeyValueSeparator("=").join(params));
+			Map<String, Object> params = new LinkedHashMap<String, Object>() {
+				{
+					put(USER_ATTR, user.username);
+					put(VERSION_ATTR, user.version);
+					put(TOKEN_ATTR, authToken);
+					put(DATE_ATTR, user.modifiedDate.toEpochMilli());
+				}
+			};
+			String emailBody = String.format(ACCOUNT_ACTIVATION, user.first, user.last,
+					origin + request.getHeaders().get("SourceMap").get() + "activate?"
+							+ Joiner.on("&").withKeyValueSeparator("=").join(params));
 			MailServer.sendMail(user.email, "Activate your account", emailBody);
 		} catch (Exception e) {
 			return badRequest(Constants.Errors.ERROR.toString());
@@ -152,10 +158,8 @@ public class HomeController extends BaseController {
 				return result;
 			}
 
-			User user = Ebean.createNamedQuery(User.class, User.FIND)
-					.setParameter("username", token.jwt.getSubject())
-					.setParameter("uuid", token.jwt.getKeyId())
-					.setParameter("version", body.get(VERSION_ATTR).asLong())
+			User user = Ebean.createNamedQuery(User.class, User.FIND).setParameter("username", token.jwt.getSubject())
+					.setParameter("uuid", token.jwt.getKeyId()).setParameter("version", body.get(VERSION_ATTR).asLong())
 					.setParameter("modifiedDate", Instant.ofEpochMilli(body.get(DATE_ATTR).asLong())).findOne();
 			if (user == null) {
 				log.error("Invalid version or timestamp=" + body.get(DATE_ATTR).asLong());
@@ -165,7 +169,7 @@ public class HomeController extends BaseController {
 			user.modifiedDate = Instant.ofEpochMilli(new Date().getTime());
 			user.update();
 		} catch (Exception ex) {
-			DDoS ddos = new DDoS(request, body,  username);
+			DDoS ddos = new DDoS(request, body, username);
 			ddos.save();
 			log.error("IP Address: " + ddos.ipaddress + ", UserName: " + username, ex);
 			return badRequest(Constants.Errors.ERROR.toString());
@@ -191,27 +195,29 @@ public class HomeController extends BaseController {
 				origin = request.getHeaders().get("Origin").get();
 			}
 
-			User user = Ebean.createNamedQuery(User.class, User.FIND_BY_EMAIL)
-				.setParameter("username", username)
-				.setParameter("email", email).findOne();
+			User user = Ebean.createNamedQuery(User.class, User.FIND_BY_EMAIL).setParameter("username", username)
+					.setParameter("email", email).findOne();
 			if (user == null) {
 				throw new IllegalAccessException(Errors.INVALID_EMAIL.toString());
 			}
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MINUTE, AppConfig.get(Key.EXPIRE_TOKEN).asInt());
 			String authToken = AuthenticationUtils.createToken(user, c.getTime());
-			log.debug("Reset password token: " +user.email + ", authToken=" + authToken);
+			log.debug("Reset password token: " + user.email + ", authToken=" + authToken);
 			@SuppressWarnings("serial")
-			Map<String, Object> params = new LinkedHashMap<String, Object>(){{
-				put(USER_ATTR, user.username);
-				put(VERSION_ATTR, user.version);
-				put(TOKEN_ATTR, authToken);
-				put(DATE_ATTR, user.modifiedDate.toEpochMilli());
-			}};
-			String emailBody = String.format(RESET_PASSWORD, origin + request.getHeaders().get("SourceMap").get() + "reset?" + Joiner.on("&").withKeyValueSeparator("=").join(params));
+			Map<String, Object> params = new LinkedHashMap<String, Object>() {
+				{
+					put(USER_ATTR, user.username);
+					put(VERSION_ATTR, user.version);
+					put(TOKEN_ATTR, authToken);
+					put(DATE_ATTR, user.modifiedDate.toEpochMilli());
+				}
+			};
+			String emailBody = String.format(RESET_PASSWORD, origin + request.getHeaders().get("SourceMap").get()
+					+ "reset?" + Joiner.on("&").withKeyValueSeparator("=").join(params));
 			MailServer.sendMail(user.email, "Password Reset", emailBody);
 		} catch (Exception ex) {
-			DDoS ddos = new DDoS(request, body,  username);
+			DDoS ddos = new DDoS(request, body, username);
 			ddos.save();
 			log.error("IP Address: " + ddos.ipaddress + ", UserName: " + username + ", Email: " + email, ex);
 			return unauthorized(ex.getMessage());
@@ -234,10 +240,8 @@ public class HomeController extends BaseController {
 				return result;
 			}
 
-			User user = Ebean.createNamedQuery(User.class, User.FIND)
-					.setParameter("username", token.jwt.getSubject())
-					.setParameter("uuid", token.jwt.getKeyId())
-					.setParameter("version", body.get(VERSION_ATTR).asLong())
+			User user = Ebean.createNamedQuery(User.class, User.FIND).setParameter("username", token.jwt.getSubject())
+					.setParameter("uuid", token.jwt.getKeyId()).setParameter("version", body.get(VERSION_ATTR).asLong())
 					.setParameter("modifiedDate", Instant.ofEpochMilli(body.get(DATE_ATTR).asLong())).findOne();
 			if (user == null) {
 				log.error("Invalid version or timestamp=" + body.get(DATE_ATTR).asLong());
@@ -247,14 +251,14 @@ public class HomeController extends BaseController {
 			user.modifiedDate = Instant.ofEpochMilli(new Date().getTime());
 			user.update();
 		} catch (Exception ex) {
-			DDoS ddos = new DDoS(request, body,  username);
+			DDoS ddos = new DDoS(request, body, username);
 			ddos.save();
 			log.error("IP Address: " + ddos.ipaddress + ", UserName: " + username, ex);
 			return badRequest(Constants.Errors.ERROR.toString());
 		}
 		return ok();
 	}
-	
+
 	public Result logout(Http.Request request) {
 		JsonNode body = request.body().asJson();
 		try {
@@ -264,16 +268,16 @@ public class HomeController extends BaseController {
 				log.error("Invalid token=" + token);
 				return forbidden(Constants.Errors.FORBIDDEN.toString());
 			}
-			DDoS ddos = Ebean.createNamedQuery(DDoS.class, DDoS.VALIDATE)
-					.setParameter("username", jwt.getSubject())
-					.setParameter("createdDate", Instant.ofEpochMilli(body.get(Constants.CORRELATION_ID).asLong())).findOne();
+			DDoS ddos = Ebean.createNamedQuery(DDoS.class, DDoS.VALIDATE).setParameter("username", jwt.getSubject())
+					.setParameter("createdDate", Instant.ofEpochMilli(body.get(Constants.CORRELATION_ID).asLong()))
+					.findOne();
 			if (ddos == null) {
 				throw new IllegalAccessException(Errors.FORBIDDEN.toString());
 			}
 			ddos.status = DDoS.LOGOUT;
 			ddos.save();
 		} catch (Exception ex) {
-			log.error("Parse token",  ex);
+			log.error("Parse token", ex);
 			return forbidden(Constants.Errors.FORBIDDEN.toString());
 		}
 		return ok();
@@ -290,7 +294,7 @@ public class HomeController extends BaseController {
 				token.result = forbidden(Constants.Errors.FORBIDDEN.toString());
 			}
 		} catch (Exception ex) {
-			log.error("Parse token",  ex);
+			log.error("Parse token", ex);
 			token.result = forbidden(Constants.Errors.FORBIDDEN.toString());
 		}
 		return token;
@@ -300,7 +304,7 @@ public class HomeController extends BaseController {
 		Ebean.find(User.class).findCount();
 		return ok("Compiled successfully.");
 	}
-	
+
 	private Result checkClientId(JsonNode body) {
 		if (!AuthenticationUtils.validateClientId(body.get("cid").asText())) {
 			log.error(body.toPrettyString());
@@ -315,15 +319,13 @@ public class HomeController extends BaseController {
 			return result;
 		}
 
-		String clientIp = AuthenticationUtils.getClientIpAddress(request,body);
+		String clientIp = AuthenticationUtils.getClientIpAddress(request, body);
 		log.debug("IP Address: " + clientIp + ", UserName: " + username);
 
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MINUTE, -LOCKED_TIME);
-		DDoS ddos = Ebean.createNamedQuery(DDoS.class, DDoS.FIND)
-				.setParameter("clientIp", clientIp)
-				.setParameter("username", username)
-				.setParameter("date", cal.getTime()).findOne();
+		DDoS ddos = Ebean.createNamedQuery(DDoS.class, DDoS.FIND).setParameter("clientIp", clientIp)
+				.setParameter("username", username).setParameter("date", cal.getTime()).findOne();
 		if (ddos != null) {
 			if (ddos.totalCount >= LOGIN_ATTEMPTS) { // count(*)
 				return status(LOCKED, String.format(Errors.LOCKED.toString(), LOCKED_TIME));

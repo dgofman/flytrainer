@@ -8,12 +8,12 @@ import { AppUtils } from '../utils/app-utils';
 @Injectable()
 export class AuthService implements HttpInterceptor, CanActivate {
     private static AUTH_TOKEN: string;
-    private static CORRELATION_ID: string;
+    private static CORRELATION_ID: number;
 
     constructor(private http: HttpClient, private router: Router) {
         const session = AppUtils.getSession();
         AuthService.AUTH_TOKEN = session.token;
-        AuthService.CORRELATION_ID = String(session.correlationId);
+        AuthService.CORRELATION_ID = session.correlationId;
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -27,7 +27,7 @@ export class AuthService implements HttpInterceptor, CanActivate {
         if (AuthService.AUTH_TOKEN) {
             headers = headers
                 .set('Authorization', 'Bearer ' + AuthService.AUTH_TOKEN)
-                .set('CorrelationId', AuthService.CORRELATION_ID);
+                .set('CorrelationId', String(AuthService.CORRELATION_ID));
         }
         return next.handle(req.clone({url, headers}));
     }

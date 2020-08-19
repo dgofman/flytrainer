@@ -16,7 +16,7 @@ export default {
     birthday: 'Date of birth',
     driverLicense: 'Driver License Number',
     driverState: 'Driver License State',
-    driverExpDate: 'Driver License Exp. Date',
+    dlExpDate: 'Driver License Exp. Date',
     createdDate: 'Created Date',
     whoCreated: 'Who Created',
     modifiedDate: 'Modified Date',

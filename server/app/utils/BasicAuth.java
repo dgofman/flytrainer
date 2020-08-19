@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import io.ebean.Ebean;
-import models.BaseModel;
 import models.DDoS;
 import models.User;
 import play.mvc.Action;
@@ -84,6 +83,6 @@ class BasicAuthAction extends Action<BasicAuth> {
 			return CompletableFuture
 					.completedFuture(status(Http.Status.FORBIDDEN, Constants.Errors.FORBIDDEN.toString()));
 		}
-		return delegate.call(req.addAttr(BaseModel.MODEL, user));
+		return delegate.call(req.addAttr(User.MODEL, user));
 	}
 }

@@ -7,7 +7,7 @@ import { AdminFormDirective } from '../component/ft-table-form.component';
 import { FTTableFormProviderDirective } from '../component/ft-table.component';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/modules/models/user';
-import { Role } from 'src/modules/models/constants';
+import { Role, RoleLevel } from 'src/modules/models/constants';
 import { FTFormControl } from '../utils/ft-form.control';
 
 @Component({
@@ -17,12 +17,18 @@ import { FTFormControl } from '../utils/ft-form.control';
 export class UserFormComponent extends AdminFormDirective {
   Locales = Locales;
   yearRange = ((new Date().getFullYear() - 80) + ':' + (new Date().getFullYear()));
-  Roles: SelectItem[] = Object.keys(Role).map(key => {
-    return {label: Role[key], value: key};
-  });
+  Roles: SelectItem[] = [];
 
   constructor(formProvider: FTTableFormProviderDirective, private confirmationService: ConfirmationService, private userService: UserService) {
     super(formProvider);
+
+    const userLevel = RoleLevel.indexOf(this.AppUtils.getSession().role);
+    RoleLevel.forEach((role, index) => {
+      if (role !== Role.ADMIN && index <= userLevel) {
+        this.Roles.push({label: role, value: role});
+      }
+    });
+
     this.frmGroup = new FormGroup({
       id: new FTFormControl(this.dataKey),
       version: new FTFormControl('version'),
@@ -40,7 +46,7 @@ export class UserFormComponent extends AdminFormDirective {
       birthday: new FTFormControl(Locales.birthday),
       dl: new FTFormControl(Locales.driverLicense, [Validators.maxLength(10)]),
       dlState: new FTFormControl(Locales.driverState, [Validators.maxLength(2)]),
-      dlExpDate: new FTFormControl(Locales.driverLicense),
+      dlExpDate: new FTFormControl(Locales.dlExpDate),
       createdDate: new FTFormControl(Locales.createdDate),
       modifiedDate: new FTFormControl(Locales.modifiedDate),
       whoCreated: new FTFormControl(Locales.whoCreated),

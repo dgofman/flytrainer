@@ -94,10 +94,10 @@ public class AdminController extends BaseController {
 	
 	
 	private void validateRole(User user, User currentUser) {
-		/*if (user.role != Constants.Access.ADMIN && 
+		if (user.role != Constants.Access.ADMIN && 
 			(user.id == currentUser.id && user.role != currentUser.role) &&
 			(user.role.getLevel() > currentUser.role.getLevel())) {
 			throw new RuntimeException(Constants.Errors.ACCESS_DENIED.name());
-		}*/
+		}
 	}
 }

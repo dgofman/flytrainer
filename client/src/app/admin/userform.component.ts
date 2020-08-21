@@ -7,7 +7,7 @@ import { AdminFormDirective } from '../component/ft-table-form.component';
 import { FTTableFormProviderDirective } from '../component/ft-table.component';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/modules/models/user';
-import { Role, RoleLevel } from 'src/modules/models/constants';
+import { Role, RoleType } from 'src/modules/models/constants';
 import { FTFormControl } from '../utils/ft-form.control';
 
 @Component({
@@ -22,8 +22,8 @@ export class UserFormComponent extends AdminFormDirective {
   constructor(formProvider: FTTableFormProviderDirective, private confirmationService: ConfirmationService, private userService: UserService) {
     super(formProvider);
 
-    const userLevel = RoleLevel.indexOf(this.AppUtils.getSession().role);
-    RoleLevel.forEach((role, index) => {
+    const userLevel = RoleType.indexOf(this.AppUtils.getSession().role);
+    RoleType.forEach((role, index) => {
       if (role !== Role.ADMIN && index <= userLevel) {
         this.Roles.push({label: role, value: role});
       }
@@ -40,8 +40,11 @@ export class UserFormComponent extends AdminFormDirective {
       phone: new FTFormControl(Locales.cellphone, [Validators.maxLength(30)]),
       ftn: new FTFormControl(Locales.ftn, [Validators.maxLength(10)]),
       role: new FTFormControl(Locales.role, [Validators.required]),
+      isMemeber: new FTFormControl(Locales.isMemeber),
       isActive: new FTFormControl(Locales.isActive),
       resetPassword: new FTFormControl(Locales.resetPassword),
+      isCitizen: new FTFormControl(Locales.schoolEmployee),
+      englishProficient: new FTFormControl(Locales.schoolEmployee),
       isSchoolEmployee: new FTFormControl(Locales.schoolEmployee),
       birthday: new FTFormControl(Locales.birthday),
       dl: new FTFormControl(Locales.driverLicense, [Validators.maxLength(10)]),

@@ -23,25 +23,27 @@ public class MedicalCertificate extends BaseModel {
 	@Length(10)
 	@Column(name = "medicalClass")
 	public Constants.MedicalCertificate medClass = Constants.MedicalCertificate.ThirdClass;
-	
+
 	@Length(100)
 	public String specialIssuance;
-	
-	@Length(100)
-	public String restrictions;
-	
+
 	@Length(100)
 	public String examiner;
 
 	@NotNull
 	Date issuedDate;
-	
-	@Column(name = "expirationDate")
+
 	public Date expDate;
-	
+
 	@NotNull
 	public byte isSuspended = 0;
-	
-	@ManyToOne()
+
+	@ManyToOne
+	public Document document;
+
+	@ManyToOne
 	public User user;
+
+	@ManyToOne
+	public Note notes;
 }

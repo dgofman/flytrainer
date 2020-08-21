@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -29,14 +29,13 @@ import utils.Constants.Key;
 
 @Entity
 @History
-@NamedQueries(value = { 
-	@NamedQuery(name = User.LOGIN, query = "select(uuid, isActive, resetPassword) where username = :username and password = :password"),
-	@NamedQuery(name = User.FIND, query = "select(isActive) where username = :username and uuid = :uuid and version = :version and modifiedDate =:modifiedDate"),
-	@NamedQuery(name = User.FIND_BY_UUID, query = "select(role) where username = :username and uuid = :uuid"),
-	@NamedQuery(name = User.FIND_BY_EMAIL, query = "select(isActive) where username = :username and email = :email")
-})
+@NamedQueries(value = {
+		@NamedQuery(name = User.LOGIN, query = "select(uuid, isActive, resetPassword) where username = :username and password = :password"),
+		@NamedQuery(name = User.FIND, query = "select(isActive) where username = :username and uuid = :uuid and version = :version and modifiedDate =:modifiedDate"),
+		@NamedQuery(name = User.FIND_BY_UUID, query = "select(role) where username = :username and uuid = :uuid"),
+		@NamedQuery(name = User.FIND_BY_EMAIL, query = "select(isActive) where username = :username and email = :email") })
 public class User extends BaseModel {
-	
+
 	public static final TypedKey<User> MODEL = TypedKey.<User>create("userModel");
 
 	public static final String LOGIN = "User.login";
@@ -47,7 +46,7 @@ public class User extends BaseModel {
 	private static final String defaultPassword = AppConfig.get(Key.DEFAULT_PWD).asText();
 
 	@JsonView(Never.class)
-	public UUID uuid = UUID.randomUUID(); //internal security verification
+	public UUID uuid = UUID.randomUUID(); // internal security verification
 
 	@Column(name = "firstname")
 	@NotNull
@@ -87,35 +86,47 @@ public class User extends BaseModel {
 
 	@NotNull
 	public byte isActive = 0;
-	
-	@NotNull
-	@JsonView(Short.class)
-	public byte isSchoolEmployee = 0;
-
-	@NotNull
-	public Constants.Access role = Constants.Access.USER;
 
 	@NotNull
 	@JsonView(Short.class)
 	public byte resetPassword = 1;
 
+	@NotNull
+	@JsonView(Short.class)
+	public byte isSchoolEmployee = 0;
+
+	@NotNull
+	@JsonView(Short.class)
+	public byte isCitizen = 0;
+
+	@NotNull
+	@JsonView(Short.class)
+	public byte englishProficient = 0; // AC 60-28
+
+	@NotNull
+	@JsonView(Short.class)
+	public byte isMemeber = 1;
+
+	@NotNull
+	public Constants.Access role = Constants.Access.USER;
+
 	@JsonView(Short.class)
 	public Date birthday;
-	
+
 	@Length(10)
 	@Column(name = "driverLicense")
 	@JsonView(Short.class)
 	public String dl;
-	
+
 	@Length(2)
 	@Column(name = "driverLicenseState")
 	@JsonView(Short.class)
 	public String dlState;
-	
+
 	@Column(name = "driverLicenseExpirationDate")
 	@JsonView(Short.class)
 	public Date dlExpDate;
-	
+
 	@Length(10)
 	@JsonView(Admin.class)
 	public String ssn;
@@ -123,37 +134,53 @@ public class User extends BaseModel {
 	@Length(10)
 	@JsonView(Short.class)
 	public String ftn;
-	
+
 	@OneToOne
 	public Account defaultAccount;
-	
+
 	@JsonView(Full.class)
-	@OneToMany(targetEntity = Account.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(mappedBy = "user")
 	public List<Account> accounts = new ArrayList<>();
-	
+
 	@JsonView(Full.class)
-	@OneToMany(targetEntity = Certificate.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(mappedBy = "user")
 	public List<Certificate> certificates = new ArrayList<>();
-	
+
 	@JsonView(Full.class)
-	@OneToMany(targetEntity = MedicalCertificate.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(mappedBy = "user")
+	public List<Rating> ratings = new ArrayList<>();
+
+	@JsonView(Full.class)
+	@OneToMany(mappedBy = "user")
 	public List<MedicalCertificate> medicalCertificates = new ArrayList<>();
 
 	@JsonView(Full.class)
-	@OneToMany(targetEntity = Address.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(mappedBy = "user")
 	public List<Address> addresses = new ArrayList<>();
-	
+
 	@JsonView(Full.class)
-	@OneToMany(targetEntity = Contact.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(mappedBy = "user")
+	public List<Course> courses = new ArrayList<>();
+
+	@JsonView(Full.class)
+	@OneToMany(mappedBy = "user")
+	public List<Endorsement> endorsements = new ArrayList<>();
+
+	@JsonView(Full.class)
+	@OneToMany(mappedBy = "user")
 	public List<Contact> contacts = new ArrayList<>();
 
 	@JsonView(Full.class)
-	@OneToMany(targetEntity = Employer.class, fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(mappedBy = "user")
 	public List<Employer> employers = new ArrayList<>();
-	
+
 	@JsonView(Full.class)
-	@OneToMany(targetEntity = Note.class, fetch = FetchType.LAZY, mappedBy = "user")
-	public List<Note> notes = new ArrayList<>();
+	@OneToMany(mappedBy = "user")
+	public List<Document> documents = new ArrayList<>();
+
+	@JsonView(Full.class)
+	@ManyToOne
+	public Note notes;
 
 	public User() {
 	}

@@ -14,6 +14,9 @@ export class User extends BaseModel {
     isActive: number;
     resetPassword: number;
     isSchoolEmployee: number;
+    isCitizen: number;
+    englishProficient: number;
+    isMemeber: number;
     birthday: Date;
     dl: string; /* driving license */
     dlState: string; /* driving license state */

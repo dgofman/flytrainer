@@ -9,18 +9,22 @@ export interface Session {
 
 export enum Role {
     USER = 'USER',
-    INSTRUCTOR = 'INSTRUCTOR',
-    MECHANIC = 'MECHANIC',
     ASSISTANT = 'ASSISTANT',
     MANAGER = 'MANAGER',
     ADMIN = 'ADMIN'
 }
 
-export const RoleLevel = [
+export const RoleType = [
     Role.USER,
-    Role.INSTRUCTOR,
-    Role.MECHANIC,
     Role.ASSISTANT,
     Role.MANAGER,
     Role.ADMIN
 ];
+
+export enum AccountType {
+    STUDENT = 'STUDENT',
+    PILOT = 'PILOT',
+    INSTRUCTOR = 'INSTRUCTOR',
+    MECHANIC = 'MECHANIC',
+    INSPECTOR = 'INSPECTOR'
+}

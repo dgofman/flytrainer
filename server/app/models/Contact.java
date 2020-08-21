@@ -3,7 +3,6 @@ package models;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import io.ebean.annotation.DbComment;
@@ -16,8 +15,8 @@ import io.ebean.annotation.NotNull;
 @Table(name = "contact")
 public class Contact extends BaseModel {
 
-	@OneToOne
-	public Address address;
+	@Length(30)
+	public String description;
 
 	@Column(name = "firstname")
 	@NotNull
@@ -37,11 +36,17 @@ public class Contact extends BaseModel {
 	@NotNull
 	@Length(30)
 	public String relationship;
-	
+
 	@Length(30)
 	@DbComment("ex: (+NN) NNN NNN NNN")
 	public String phone;
-	
-	@ManyToOne()
-	public User user;
+
+	@ManyToOne
+	public Address address;
+
+	@ManyToOne
+	public User user; // FK User::contacts
+
+	@ManyToOne
+	public Note notes;
 }

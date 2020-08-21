@@ -3,20 +3,18 @@ package models;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import io.ebean.annotation.DbJsonB;
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
 
 @Entity
 @History
-@Table(name = "note")
-public class Note extends BaseModel {
-	
-	@Length(50)
-	public String type; //RESTRICTION, DEBIT, CREDIT etc.
+@Table(name = "tier")
+public class TierRate extends BaseModel {
 
-	@DbJsonB
 	@NotNull
-	public String content;
+	@Length(50)
+	public String name;
+	
+	public Double discount = 0.0;
 }

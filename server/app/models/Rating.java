@@ -12,21 +12,17 @@ import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
 import utils.Constants.AircraftCategoryClass;
-import utils.Constants.CertificateType;
 
 @Entity
 @History
-@Table(name = "certificate")
-public class Certificate extends BaseModel {
+@Table(name = "rating")
+public class Rating extends BaseModel {
 
 	@NotNull
-	public CertificateType type;
+	public AircraftCategoryClass cclass;
 
-	@Length(10)
+	@Length(30)
 	public String other;
-
-	@NotNull
-	public List<AircraftCategoryClass> cclass;
 
 	@Length(10)
 	public String number;
@@ -42,8 +38,6 @@ public class Certificate extends BaseModel {
 
 	Date renewDate;
 
-	Date currentBy; // BFR
-
 	public Date expDate;
 
 	@NotNull
@@ -53,7 +47,7 @@ public class Certificate extends BaseModel {
 	public Document document;
 
 	@ManyToOne
-	public User user; // FK User::certificates
+	public User user; // FK - User::ratings
 
 	@ManyToOne
 	public Note notes;

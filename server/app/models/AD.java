@@ -19,22 +19,30 @@ public class AD extends BaseModel {
 	
 	@NotNull
 	@Length(100)
-	public String subject;
+	public String subject; //subject
+	
+	@Length(100)
+	public String revision; //revision
 
 	@NotNull
 	@Length(20)
-	public String part;
+	public String part; //part
+	
+	public Date effectiveDate; //effective_date
+	
+	public byte recurring = 0; //recurring
+	
+	public byte isCompliance = 0; //is_compliance
 	
 	@Length(30)
-	public String amendment;
-	
-	public byte recurring = 0;
-	
-	public Date effectiveDate;
+	public String amendment; //amendment
 	
 	@ManyToOne
-	public Maintenance maintenance; //FK - Maintenance::maintenances
+	public Note actions; //action_id
 	
 	@ManyToOne
-	public Note notes;
+	public Maintenance maintenance; //FK maintenance_id - Maintenance::ads
+	
+	@ManyToOne
+	public Note notes; //notes_id
 }

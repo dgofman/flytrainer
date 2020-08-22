@@ -15,30 +15,30 @@ public class Employer extends BaseModel {
 
 	@NotNull
 	@Length(50)
-	public String occupation;
+	public String occupation; //occupation
 
 	@NotNull
 	@Length(50)
-	public String name;
+	public String name; //name
 
-	public Double annualWage;
+	public Double annualWage; //annual_wage
 
-	public Double hourlyWage;
+	public Double hourlyWage; //hourly_wage
 
-	public byte isContractor = 0;
+	public byte isContractor = 0; //is_contractor
 	
 	@ManyToOne
-	public Insurance insurance;
+	public Insurance insurance; //insurance_id
 	
 	@ManyToOne
-	public Document document;
+	public Document document; //document_id
 
 	@ManyToOne
-	public Address address;
+	public Address address; //address_id
 
 	@ManyToOne
-	public User user; // FK User:employers
+	public User user; // FK user_id - User::employers
 
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

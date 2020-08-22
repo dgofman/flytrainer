@@ -15,25 +15,26 @@ import utils.Constants.RateType;
 
 @Entity
 @History
-@Table(name = "rates")
+@Table(name = "rate")
 public class Rate extends BaseModel {
 	
 	public static final int EXCLUDE_ALL_TIERS = -1;
-	
+
+	@NotNull
+	public RateType type = RateType.PerHour; //type
+
 	@NotNull
 	@Length(50)
-	public String name;
-
-	public RateType type;
+	public String name; //name
 	
-	public Double fee;
+	public Double fee; //fee
 	
 	@ManyToMany
-	public List<TierRate> excludedTiers = new ArrayList<>();
+	public List<TierRate> excludedTiers = new ArrayList<>(); //rate_tier::reate_id
 
 	@ManyToOne
-	public Aircraft aircraft; //FK - User::rates
+	public Aircraft aircraft; //FK aircraft_id - User::rates
 
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

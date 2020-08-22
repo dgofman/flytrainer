@@ -1,8 +1,6 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -10,6 +8,7 @@ import javax.persistence.Table;
 
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
+import io.ebean.annotation.NotNull;
 import utils.Constants.EndorsementType;
 
 @Entity
@@ -17,31 +16,34 @@ import utils.Constants.EndorsementType;
 @Table(name = "endorsement")
 public class Endorsement extends BaseModel {
 
-	public EndorsementType type;
+	@NotNull
+	public EndorsementType type = EndorsementType.Citizenship; //type
 
 	@Length(30)
-	public String other;
+	public String other; //other
 
 	@Length(100)
-	public String decription;
+	public String description; //description
+
+	@Length(100)
+	public String limitations; //limitations
 
 	@Length(50)
-	public String number;
+	public String number; //number
+	
+	public Date expDate; //exp_date
 
-	public User signed;
+	public Date signedDate; //signed_date
 
-	public Date signedDate;
-
-	public Date expDate;
-
-	public List<String> limitations = new ArrayList<>();
+	@ManyToOne
+	public User signed; //signed_id
 	
 	@ManyToOne
-	public Document document;
+	public Document document; //document_id
 
 	@ManyToOne
-	public User user; // FK User::endorsements
+	public User user; // FK user_id - User::endorsements
 
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

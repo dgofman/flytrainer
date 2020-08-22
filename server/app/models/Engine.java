@@ -11,7 +11,8 @@ import javax.persistence.Table;
 
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
-import utils.Constants.EnginePosition;
+import io.ebean.annotation.NotNull;
+import utils.Constants.PositionType;
 import utils.Constants.EngineType;
 
 @Entity
@@ -19,41 +20,42 @@ import utils.Constants.EngineType;
 @Table(name = "engine")
 public class Engine extends BaseModel {
 
-	public EngineType type;
+	@NotNull
+	public EngineType type = EngineType.Reciprocating; //type
 
 	@Length(30)
-	public String other;
+	public String other; //other
 
-	public EnginePosition position;
+	public PositionType position; //position
 
 	@Length(50)
-	public String manufacturer;
+	public String manufacturer; //manufacturer
 
 	@Length(30)
-	public String model;
+	public String model; //model
 
 	@Length(30)
-	public String serialNumber;
+	public String serialNumber; //serial_number
 
-	public Date year;
+	public Date year; //year
 
-	public Double hobbs;
+	public Double hobbs; //hobbs
 
-	public Double tach;
+	public Double tach; //tach
 
-	public Date lastTBO;
+	public Date lastTBO; //last_tbo
 
-	public Integer mohInterval;
+	public Integer mohInterval; //moh_interval
 
 	@OneToMany(mappedBy = "aircraft")
-	public List<Maintenance> maintances = new ArrayList<>();
+	public List<Maintenance> maintances = new ArrayList<>(); //Maintenance::aircraft_id
 	
 	@ManyToOne
-	public Document document;
+	public Document document; //document_id
 
 	@ManyToOne
-	public Aircraft aircraft; //FK Aircraft::engines
+	public Aircraft aircraft; //FK aircraft_id - Aircraft::engines
 
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

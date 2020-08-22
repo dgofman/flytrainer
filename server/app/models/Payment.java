@@ -8,6 +8,7 @@ import javax.persistence.Table;
 
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
+import io.ebean.annotation.NotNull;
 import utils.Constants.PaymentType;
 
 /* Credit Card information */
@@ -16,35 +17,37 @@ import utils.Constants.PaymentType;
 @Table(name = "payment")
 public class Payment extends BaseModel {
 
-	public PaymentType type;
+	@NotNull
+	public PaymentType type = PaymentType.Credit; //type
 
 	@Length(30)
-	public String other;
+	public String other; //other
 
 	@Length(50)
-	public String description;
+	public String description; //description
 
 	@Length(50)
-	public String number;
+	public String number; //number
 
 	@Length(10)
-	public String verification;
+	public String verification; //verification
 
-	public Date expDate;
+	public Date expDate; //exp_date
 
-	public User diffOwner = null;
+	public byte isDefault = 1; //is_default
 
 	@Length(500)
-	public String url;
-
-	public byte isDefault = 1;
+	public String url; //url
 
 	@ManyToOne
-	public Billing billing; // FK Billing::payments
+	public User diffOwner = null; //diff_owner_id
+	
+	@ManyToOne
+	public Document document; //document_id
+	
+	@ManyToOne
+	public Billing billing; // FK billing_id - Billing::payments
 
 	@ManyToOne
-	public Document document;
-
-	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

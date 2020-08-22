@@ -2,7 +2,6 @@ package models;
 
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -18,32 +17,35 @@ import utils.Constants;
 public class MedicalCertificate extends BaseModel {
 
 	@Length(10)
-	public String number;
+	@NotNull
+	public Constants.MedicalCertificate type = Constants.MedicalCertificate.ThirdClass; //type
+	
+	@Length(30)
+	public String other; //other
 
 	@Length(10)
-	@Column(name = "medicalClass")
-	public Constants.MedicalCertificate medClass = Constants.MedicalCertificate.ThirdClass;
+	public String number; //nuber
 
 	@Length(100)
-	public String specialIssuance;
+	public String specialIssuance; //special_issuance
 
 	@Length(100)
-	public String examiner;
+	public String examiner; //examiner
 
 	@NotNull
-	Date issuedDate;
+	Date issuedDate; //issued_date
 
-	public Date expDate;
+	public Date expDate; //exp_date
 
 	@NotNull
-	public byte isSuspended = 0;
+	public byte isSuspended = 0; //is_suspended
 
 	@ManyToOne
-	public Document document;
+	public Document document; //document_id
 
 	@ManyToOne
-	public User user;
+	public User user; //FK user_id - User::medicalCertificates
 
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

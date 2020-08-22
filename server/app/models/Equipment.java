@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
+import io.ebean.annotation.NotNull;
 import utils.Constants.EquipmentType;
 
 @Entity
@@ -18,46 +19,47 @@ import utils.Constants.EquipmentType;
 @Table(name = "equipment")
 public class Equipment extends BaseModel {
 	
-	public EquipmentType type;
+	@NotNull
+	public EquipmentType type = EquipmentType.Gnss; //type
 	
 	@Length(30)
-	public String other;
+	public String other; //other
 	
 	@Length(30)
-	public String manufacturer;
+	public String manufacturer; //manufacturer
 	
 	@Length(30)
-	public String model;
+	public String model; //model
 	
 	@Length(30)
-	public String serialNumber;
+	public String serialNumber; //serial_number
 	
 	@Length(30)
-	public String code;
+	public String code; //code
 
-	public Double weight;
+	public Double weight; //weight
 	
-	public Date year;
+	public Date year; //year
 	
-	public Double price;
+	public Double price; //price
 	
-	public Double warrantyExpDate;
+	public Double warrantyExpDate; //warranty_exp_date
 	
-	public byte inop = 0;
+	public byte inop = 0; //inop
 	
-	public Double deviation;
+	public Double deviation; //deviation
 	
-	public Long inspectionTime;
+	public Long inspectionTime; //inspection_time
 	
 	@ManyToOne
-	public Document document;
+	public Document document; //document_id
 
 	@OneToMany(mappedBy = "aircraft")
-	public List<Maintenance> maintances = new ArrayList<>();
+	public List<Maintenance> maintances = new ArrayList<>();  //Maintenance::aircraft_id
 
 	@ManyToOne
-	public Aircraft aircraft; //FK - Aircraft::equipments
+	public Aircraft aircraft; //FK aircraft_id - Aircraft::equipments
 	
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

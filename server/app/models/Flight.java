@@ -1,11 +1,7 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import io.ebean.annotation.History;
@@ -19,40 +15,42 @@ import utils.Constants.FlightType;
 @Table(name = "flight")
 public class Flight extends BaseModel {
 	
-	public FlightType type;
+	@NotNull
+	public FlightType type = FlightType.Flight; //type
 	
 	@Length(30)
-	public String other;
+	public String other; //other
 	
-	public Double startHobbs;
+	public Double startHobbs; //start_hobbs
 	
-	public Double endHobbs;
+	public Double endHobbs; //end_hobbs
 	
-	public Double startTach;
+	public Double startTach; //start_tach
 	
-	public Double endTach;
+	public Double endTach; //end_tach
 	
-	public Double addedOil;
+	public Double addedOil; //added_oil
 	
-	public Double addedFuel;
+	public Double addedFuel; //added_fuel
 		
-	public CancelationType cancelationType;
+	public CancelationType cancelationType; //cancelation_type
+	
+	@Length(100)
+	public String legs; //legs
 	
 	@ManyToOne
-	public Document document;
-	
-	public List<String> legs = new ArrayList<>();
+	public Document document; //document_id
 
 	@NotNull
-	@OneToMany
-	public Billing billing;
-
-	@OneToMany
-	public Aircraft aircraft;
+	@ManyToOne
+	public Billing billing; //billing_id
 
 	@ManyToOne
-	public Account account; //FK - Account::flights
+	public Aircraft aircraft; //aircraft_id
+
+	@ManyToOne
+	public Account account; //FK account_id - Account::flights
 	
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

@@ -10,23 +10,23 @@ import javax.persistence.Table;
 @Table(name = "schedule")
 public class Schedule extends BaseModel {
 
-	public Date startDate;
+	public Date startDate; //start_date
 	
-	public Date endDate;
+	public Date endDate; //end_date
 	
-	public byte notifyEmail = 1;
+	public byte notifyEmail = 1; //notify_email
 	
-	public byte notifySMS = 1;
+	public byte notifySMS = 1; //notify_sms
 	
 	@ManyToOne
-	public Flight flight;
+	public Flight flight; //flight_id
 
 	@ManyToOne
-	public Account account; //FK Account::schedules
+	public Account account; //FK account_id - Account::schedules
 	
 	@ManyToOne
-	public Account instructor; //FK Account::schedules
+	public Account instructor; //instructor_id
 
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

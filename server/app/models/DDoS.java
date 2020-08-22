@@ -30,22 +30,22 @@ public class DDoS extends Model {
 	public static final short DECLINE = 0, LOGGEDIN = 1, LOGOUT = 2;
 
 	@Id
-	public Integer id;
+	public Integer id; //id
 	
 	@Length(95)
-	public String ipaddress;
+	public String ipaddress; //ipaddress
 
 	@Length(50)
-	public String username;
+	public String username; //username
 	
 	@NotNull
-	public int permanently = 0;
+	public int permanently = 0; //permanently
 
 	@NotNull
-	public int status = DECLINE;
+	public int status = DECLINE; //status
 
 	@WhenCreated
-	public Instant createdDate;
+	public Instant createdDate; //created_date
 	
 	@Aggregation("count(*)")
 	public Long totalCount;

@@ -19,40 +19,44 @@ import utils.Constants.DocumentType;
 @Table(name = "document")
 public class Document extends BaseModel {
 
-	public DocumentType type;
+	@NotNull
+	public DocumentType type = DocumentType.Driverslicense; //type
 
 	@Length(30)
-	public Document other;
+	public String other; //other
 
 	@Length(50)
-	public Document number;
+	public String description; //description
 
-	@NotNull
-	@Length(50)
-	public Document description;
+	public Integer pageNumber = 1; //page_number
 
-	public Integer pageNumber = 1;
-
-	public byte isFronSide = 1;
+	public byte isFrontSide = 1; //is_front_side
+	
+	public byte isSuspended = 0; //is_suspended
+	
+	public byte isWithdrawn = 0; //is_withdrawn
 
 	@Length(2000)
-	public String url;
+	public String url; //url
 
 	@Length(25)
 	@Encrypted
 	@DbComment("CONVERT(AES_DECRYPT(password, `environment.json::encryptKey`) USING  UTF8)")
-	public String password;
+	public String password; //password
 
 	@Lob
-	public byte[] file;
+	public byte[] file; //file
 
-	public Date issuedDate;
+	public Date issuedDate; //issued_date
 
-	public Date expDate;
-
-	@ManyToOne
-	public User user; //FK User::documents
+	public Date expDate; //exp_date
 	
 	@ManyToOne
-	public Note notes;
+	public Document parent; //parent_id
+
+	@ManyToOne
+	public User user; //FK user_id - User::documents
+	
+	@ManyToOne
+	public Note notes; //notes_id
 }

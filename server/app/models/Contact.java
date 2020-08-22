@@ -16,37 +16,37 @@ import io.ebean.annotation.NotNull;
 public class Contact extends BaseModel {
 
 	@Length(30)
-	public String description;
+	public String description; //description
 
 	@Column(name = "firstname")
 	@NotNull
 	@Length(50)
-	public String first;
+	public String first; //firstname
 
 	@Column(name = "middlename")
 	@NotNull
 	@Length(50)
-	public String middle;
+	public String middle; //middlename
 
 	@Column(name = "lastname")
 	@NotNull
 	@Length(50)
-	public String last;
+	public String last; //lastname
 
 	@NotNull
 	@Length(30)
-	public String relationship;
+	public String relationship; //relationship
 
 	@Length(30)
 	@DbComment("ex: (+NN) NNN NNN NNN")
-	public String phone;
+	public String phone; //phone
 
 	@ManyToOne
-	public Address address;
+	public Address address; //address_id
 
 	@ManyToOne
-	public User user; // FK User::contacts
+	public User user; // FK user_id - User::contacts
 
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

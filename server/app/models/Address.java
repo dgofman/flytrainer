@@ -15,47 +15,53 @@ import utils.Constants.AddressType;
 @Table(name = "address")
 public class Address extends BaseModel {
 
-	public AddressType type;
+	@NotNull
+	public AddressType type = AddressType.Home; //type
 
 	@Length(30)
-	public String other;
+	public String other; //other
+	
+	@Length(100)
+	public String description; //description
 
 	@Length(10)
-	public String number;
+	public String number; //number
 
 	@Length(120)
-	public String steet;
+	public String street; //street
 
 	@Length(20)
-	public String district; // The region of an address, this may be a state, province, prefecture, etc.
+	@DbComment("ex: the region of an address, this may be a state, province, prefecture, etc.")
+	public String district; //district
 
 	@NotNull
-	public String city;
+	public String city; //city
 
 	@Length(16)
-	public String code; // The postal code or ZIP code of the address (where applicable).
+	@DbComment("ex: the postal code or ZIP code of the address (where applicable)")
+	public String code; //code
 
 	@Length(30)
 	@DbComment("ex: (+NN) NNN NNN NNN")
-	public String phone;
+	public String phone; //phone
 
 	@Length(30)
 	@DbComment("ex: (+NN) NNN NNN NNN")
-	public String fax;
+	public String fax; //fax
 
 	@NotNull
 	@Length(2)
-	public String country = "US";
+	public String country = "US"; //country
 
 	@NotNull
-	public byte isPrimary = 1;
+	public byte isPrimary = 1; //is_primary
 	
 	@ManyToOne
-	public Document document;
+	public Document document; //document_id
 
 	@ManyToOne
-	public User user; // FK - User::addresses
+	public User user; // FK user_id - User::addresses
 
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

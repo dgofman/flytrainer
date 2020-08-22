@@ -11,7 +11,7 @@
 -Dsbt.global.base=${env_var:TEMP}\sbt-global-pluginstub --add-opens java.base/java.lang=ALL-UNNAMED -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9999 -Xms512M -Xmx1024M -Xss1M -XX:+CMSClassUnloadingEnabled 
 -DappTop=. 
 -Ddb.flytrainer.username=flytrainer
--Ddb.flytrainer.password=f1ytr@n3r
+-Ddb.flytrainer.password=**********
 -Dplay.temporaryFile.dir=./server/target -jar "${env_var:SBT_HOME}bin\sbt-launch.jar" run
 
 2) Open Debug Configuration:*

@@ -7,7 +7,6 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import io.ebean.annotation.History;
@@ -15,102 +14,84 @@ import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
 import utils.Constants.AircraftCategory;
 import utils.Constants.AircraftCategoryClass;
+import utils.Constants.AircraftSpecification;
 
 @Entity
 @History
 @Table(name = "aircraft")
 public class Aircraft extends BaseModel {
 
-	public AircraftCategoryClass cclass;
+	@NotNull
+	public AircraftCategoryClass type = AircraftCategoryClass.SingleEngineLand; //type
 
-	public List<AircraftCategory> categories;
+	public long categories = AircraftCategory.getType(AircraftCategory.Normal); //categories
+	
+	public long specifications = AircraftSpecification.getType(AircraftSpecification.ForHire); //specifications
 
 	@Length(30)
-	public String other;
+	public String other; //other
 
 	@NotNull
 	@Length(50)
-	public String make;
+	public String make; //make
 
 	@NotNull
 	@Length(10)
-	public String model;
+	public String model; //model
 
 	@NotNull
 	@Length(10)
-	public String tailNo;
+	public String tailNo; //tail_no
 
 	@NotNull
-	public Integer year;
+	public Integer year; //year
 
 	@Length(20)
-	public String serialNumber;
+	public String serialNumber; //serial_number
 
-	public Date regExpDate;
+	public Date regExpDate; //reg_exp_date
+	
+	public Integer seatsNo; //seats_no
 
 	@ManyToOne
-	public User onwer;
+	public User onwer; //onwer_id
 
 	@ManyToOne
-	public Address location;
+	public Address location; //location_id
 
-	public Integer seats;
-
-	public byte complex = 0;
-
-	public byte highPerformance = 0;
-
-	public byte experimental = 0;
-
-	public byte lightSport = 0;
-
-	public byte tailWheel = 0;
-
-	public byte pressuarized = 0;
-
-	public byte oxygent = 0;
-
-	public byte certifiedIfr = 0;
-
-	public byte certified141 = 0;
-
-	public byte certifiedNight = 0;
-
-	public byte far91409 = 0;
-
-	public byte part135 = 0;
-
-	public byte forHire = 0;
-
-	public byte maintenanceCheck = 0;
-
-	@OneToOne(mappedBy = "aircraft")
-	public AircraftWeightAndBallance wb;
+	@OneToMany(mappedBy = "aircraft")
+	public List<AircraftWeightAndBallance> wb = new ArrayList<>(); //AircraftWeightAndBallance::aircraft_id
 	
 	@OneToMany(mappedBy = "aircraft")
-	public List<Engine> engines = new ArrayList<>();
+	public List<Engine> engines = new ArrayList<>(); //Engine::aircraft_id
 	
 	@OneToMany(mappedBy = "aircraft")
-	public List<Propeller> propellers = new ArrayList<>();
+	public List<Propeller> propellers = new ArrayList<>(); //Propeller::aircraft_id
 
 	@OneToMany(mappedBy = "aircraft")
-	public List<Maintenance> maintances = new ArrayList<>();
+	public List<Equipment> equipments = new ArrayList<>(); //Equipment::aircraft_id
+	
+	@OneToMany(mappedBy = "aircraft")
+	public List<Maintenance> maintenances = new ArrayList<>(); //Maintenance::aircraft_id
 
 	@OneToMany(mappedBy = "aircraft")
-	public List<Insurance> insurance = new ArrayList<>();
+	public List<Insurance> insurance = new ArrayList<>(); //Insurance::aircraft_id
 
 	@OneToMany(mappedBy = "aircraft")
-	public List<Squawks> squawks = new ArrayList<>();
+	public List<Squawk> squawks = new ArrayList<>(); //Squawks::aircraft_id
 
 	@OneToMany(mappedBy = "aircraft")
-	public List<Rate> rates = new ArrayList<>();
+	public List<Rate> rates = new ArrayList<>(); //Rate::aircraft_id
 
-	@OneToMany(mappedBy = "aircraft")
-	public List<Equipment> equipments = new ArrayList<>();
+	@ManyToOne
+	public Document document;  //document_id
 	
 	@ManyToOne
-	public Document document;
+	public Document registration; //registration_id
+	
+	@ManyToOne
+	public Document airworthiness; //airworthiness_id
 
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

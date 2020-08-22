@@ -1,8 +1,6 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -20,41 +18,42 @@ import utils.Constants.CertificateType;
 public class Certificate extends BaseModel {
 
 	@NotNull
-	public CertificateType type;
+	public AircraftCategoryClass type = AircraftCategoryClass.SingleEngineLand; //type
 
-	@Length(10)
-	public String other;
+	@Length(30)
+	public String other; //other
 
 	@NotNull
-	public List<AircraftCategoryClass> cclass;
+	public long certificates = CertificateType.getType(CertificateType.PrivatePilot); //certificates
 
 	@Length(10)
-	public String number;
+	public String number; //number
 
 	@Length(50)
-	public String description;
+	public String description; //description
 
 	@Length(100)
-	public List<String> limitations = new ArrayList<>();
+	public String limitations; //limitations
 
 	@NotNull
-	Date issuedDate;
+	Date issuedDate; //issued_date
 
-	Date renewDate;
+	Date renewDate; //renew_date
 
-	Date currentBy; // BFR
+	Date currentBy; // current_by (BFR)
 
-	public Date expDate;
+	public Date expDate; //exp_date
 
-	@NotNull
-	public byte isSuspended = 0;
-
-	@ManyToOne
-	public Document document;
+	public byte isSuspended = 0; //is_suspended
+	
+	public byte isWithdrawn = 0; //is_withdrawn
 
 	@ManyToOne
-	public User user; // FK User::certificates
+	public Document document; //document_id
 
 	@ManyToOne
-	public Note notes;
+	public User user; // FK user_id - User::certificates
+
+	@ManyToOne
+	public Note notes; //notes_id
 }

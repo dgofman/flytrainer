@@ -1,7 +1,5 @@
 package utils;
 
-import io.ebean.annotation.Length;
-
 public class Constants {
 	
 	public static final String AUTHORIZATION = "Authorization";
@@ -26,13 +24,13 @@ public class Constants {
 	}
 	
 	public static enum AccountType {
-		STUDENT(0),
-		PILOT(1),
-		INSTRUCTOR(2),
-		MECHANIC(3),
-		INSPECTOR(4),
-		STATION(5), //RepairStation
-		OTHER(50);
+		Other(0),
+		Student(1),
+		Pilot(2),
+		Instructor(3),
+		Mechanic(4),
+		Inspector(5),
+		Station(6); //repairstation
 
 		private final int type;
 
@@ -46,12 +44,12 @@ public class Constants {
 	}
 	
 	public static enum InsuranceType {
-		RENTAL(0),
-		LIABILITY(1),
-		MEDICAL(2),
-		LIFE(3),
-		AUTO(4),
-		OTHER(50);
+		Other(0),
+		Rental(1),
+		Liability(2),
+		Medical(3),
+		Life(4),
+		Auto(5);
 		
 		private final int type;
 
@@ -65,13 +63,13 @@ public class Constants {
 	}
 	
 	public static enum ActivityType {
-		CREDIT(0),
-		PAYMENT(1),
-		DEBIT(2),
-		MEMBERSHIP_DEBIT(3),
-		INSURANCE_DEBIT(4),
-		LANDING_DEBIT(5),
-		OTHER(50);
+		Other(0),
+		Credit(1),
+		Payment(2),
+		Debit(3),
+		MembershipDebit(4),
+		InsuranceDebit(5),
+		LandingDebit(6);
 
 		private final int type;
 
@@ -84,18 +82,28 @@ public class Constants {
 		}
 	}
 	
-	public static enum AircraftCategory {
-		Transport(0),
-		Normal(1),
-		Utility(2),
-		Acrobatic(3),
-		Limited(4),
-		Restricted(5),
-		Provisional(6);
+	public static enum AircraftCategoryClass {
+		Other(0),
+		SingleEngineLand(1),
+		SingleEngineSea(2),
+		MultiengineLand(3),
+		MultiengineSea(4),
+		Rotorcraft(5),
+		Helicopter(6),
+		Gyroplane(7),
+		Balloon(8),
+		Airship(9),
+		Glider(10),
+		PoweredLift(11),
+		WeightShift(12),
+		PoweredParachute(13),
+		Rocket(14),
+		Sim(15),
+		UAV(16);
 
 		private final int type;
 
-		private AircraftCategory(int type) {
+		private AircraftCategoryClass(int type) {
 			this.type = type;
 		}
 		
@@ -103,46 +111,14 @@ public class Constants {
 			return this.type;
 		}
 	}
-	
-	public static enum AircraftCategoryClass {
-		SingleEngineLand("ASEL"),
-		SingleEngineSea("ASES"),
-		MultiengineLand("AMEL"),
-		MultiengineSea("AMES"),
-		Rotorcraft("RCFT"),
-		Helicopter("HLCR"),
-		Gyroplane("GYRO"),
-		Balloon("BALL"),
-		Airship("AIR"),
-		Glider("GLDR"),
-		LightSportAircraft("LSA"),
-		PoweredLift("PWRL"),
-		WeightShift("WSFT"),
-		PoweredParachute("PPCT"),
-		Rocket("RCKT"),
-		Sim("SIM"),
-		UAV("UAV"),
-		Other("OTHER");
-
-		@Length(5)
-		private final String type;
-
-		private AircraftCategoryClass(String type) {
-			this.type = type;
-		}
-		
-		public String getType() {
-			return this.type;
-		}
-	}
 
 	public static enum PaymentPeriod {
-		ONTIME(0),
-		DAILY(1),
-		MONTHLY(2),
-		QUARTERLY(3),
-		SEMIANNUAL(4),
-		ANNUAL(5);
+		OnTime(0),
+		Daily(1),
+		Monthly(2),
+		Quarterly(3),
+		SemiAnnual(4),
+		Annual(5);
 
 		private final int type;
 
@@ -156,11 +132,12 @@ public class Constants {
 	}
 	
 	public static enum SquawksStatus {
-		OPEN(0),
-		GROUNDED(1),
-		VERIFIED(2),
-		FIXED(3),
-		CLOSED(4);
+		Other(0),
+		Open(1),
+		Grounded(2),
+		Verified(3),
+		Fixed(4),
+		Closed(5);
 
 		private final int type;
 
@@ -173,16 +150,16 @@ public class Constants {
 		}
 	}
 	
-	public static enum EnginePosition {
-		FRONT(0),
-		BACK(1),
-		LEFT(2),
-		RIGHT(3),
-		TOP(4);
+	public static enum PositionType {
+		Front(0),
+		Back(1),
+		Left(2),
+		Right(3),
+		Top(4);
 
 		private final int type;
 
-		private EnginePosition(int type) {
+		private PositionType(int type) {
 			this.type = type;
 		}
 		
@@ -192,14 +169,14 @@ public class Constants {
 	}
 	
 	public static enum EngineType {
-		RECIPROCATING(0),
-		ROTARY(1),
-		TURBOPROP(2),
-		TURBOFAN(3),
-		TURBOJET(4),
-		TURBOSHAFT(5),
-		OTHER(50);
-
+		Other(0),
+		Reciprocating(1),
+		Rotary(2),
+		Turboprop(3),
+		Turbofan(4),
+		Turbojet(5),
+		Turboshaft(6);
+		
 		private final int type;
 
 		private EngineType(int type) {
@@ -212,30 +189,30 @@ public class Constants {
 	}
 	
 	public static enum EquipmentType {
-		GNSS(0),
-		ADSB(1),
-		TRANSPONDER(2),
-		PITOT_STATIC(3),
-		RADIO(4),
-		VOR(5),
-		ILS(6),
-		MLS(7),
-		ADF(8),
-		DME(9),
-		LORANC(10),
-		TACAN(11),
-		AUTOPILOT(12),
-		FLIGHTSTREAM(13),
-		UHF(14),
-		VHF(15),
-		ELT(16),
-		BATTERY(17),
-		NAV(18),
-		LIGHTS(19),
-		ANTENNA(20),
-		STEREO(21),
-		OTHER(50);
-		
+		Other(0),
+		Gnss(1),
+		Adsb(2),
+		Transponder(3),
+		PitotStatic(4),
+		Radio(5),
+		Vor(6),
+		Ils(7),
+		Mls(8),
+		Adf(9),
+		Dme(10),
+		Loranc(11),
+		Tacan(12),
+		Autopilot(13),
+		FlightStream(14),
+		Uhf(15),
+		Vhf(16),
+		Elt(17),
+		Battery(18),
+		Nav(19),
+		Lights(20),
+		Antenna(21),
+		Stereo(22);
+
 		private final int type;
 
 		private EquipmentType(int type) {
@@ -248,14 +225,14 @@ public class Constants {
 	}
 	
 	public static enum MaintenanceAction {
-		INSPECT(0), //25, 50 hours or annual inspection
-		AD(1),
-		STICKER(2),
-		REPAIR(3),
-		ADJUST(4), //adjust or calibrate
-		REPLACE(5),
-		GROUNDED(6),
-		OTHER(50);
+		Other(0),
+		Inspection(1), //25, 50 Hours or Annual Inspection
+		Ad(2),
+		Sticker(3),
+		Repair(4),
+		Adjust(5), //Adjust or Calibrate
+		Replace(6),
+		Grounded(7);
 
 		private final int type;
 
@@ -269,11 +246,11 @@ public class Constants {
 	}
 
 	public static enum RateType {
-		PER_HOUR(0),
-		PER_GALLON(1),
-		PER_FLIGHT(2),
-		PER_LANDING(3),
-		DRY_RATE(4);
+		PerHour(0),
+		PerGallon(1),
+		PerFlight(2),
+		PerLanding(3),
+		DryRate(4);
 
 		private final int type;
 
@@ -287,14 +264,14 @@ public class Constants {
 	}
 	
 	public static enum PaymentType {
-		CASH(0),
-		CREDIT(1),
-		DEBIT(2),
-		CHECK(3),
-		MONEYORDER(4),
-		ELECTRONIC(5),
-		OTHER(50);
-
+		Other(0),
+		Cash(0),
+		Credit(1),
+		Debit(2),
+		Check(3),
+		Moneyorder(4),
+		Electronic(5);
+		
 		private final int type;
 
 		private PaymentType(int type) {
@@ -307,26 +284,27 @@ public class Constants {
 	}
 	
 	public static enum DocumentType {
-		Driverslicense(0),
-		PilotsCertificate(1),
-		MedicalCertificate(2),
-		Passport(3),
-		Birthcertificate(4),
-		TSAFormI20(5),
-		TSAAwarenessTrainingCertificate(6),
-		TSAPaymentReceived(7),
-		RentersInsuranceAgreement(8),
-		Visa(9),
-		AlienResidentDocument(10),
-		Finance(11),
-		PrivatePilotPermission(12),
-		InstrumentRatingPermission(13),
-		MultiCommercialPermission(14),
-		TrainingRequest(15),
-		AircraftCheckoutRecord(16),
-		PilotPicture(17),
-		OnlineDocument(18),
-		Other(50);
+		Other(0),
+		Passport(1),
+		Driverslicense(2),
+		AlienResidentDocument(3),
+		Visa(4),
+		OtherCertificate(5),
+		PilotsCertificate(6),
+		MedicalCertificate(7),
+		BirthCertificate(8),
+		TSAAwarenessTrainingCertificate(9),
+		TSAFormI20(10),
+		TSAPaymentReceived(11),
+		RentersInsuranceAgreement(12),
+		Finance(13),
+		PrivatePilotPermission(14),
+		InstrumentRatingPermission(15),
+		MultiCommercialPermission(16),
+		TrainingRequest(17),
+		AircraftCheckoutRecord(18),
+		PilotPicture(19),
+		OnlineDocument(20);
 
 		private final int type;
 
@@ -340,12 +318,12 @@ public class Constants {
 	}
 	
 	public static enum CourseType {
-		Part61(0),
-		Part141(1),
-		Part147(2),
-		FaaSafety(3),
-		TSA(4),
-		Other(50);
+		Other(0),
+		Part61(1),
+		Part141(2),
+		Part147(3),
+		FaaSafety(4),
+		TSA(5);
 
 		private final int type;
 
@@ -359,10 +337,11 @@ public class Constants {
 	}
 	
 	public static enum MedicalCertificate {
-		ThirdClass(0),
-		SecondClass(1),
-		FirstClass(2),
-		BasicMed(3);
+		Other(0),
+		ThirdClass(1),
+		SecondClass(2),
+		FirstClass(3),
+		BasicMed(4);
 
 		private final int type;
 
@@ -376,36 +355,42 @@ public class Constants {
 	}
 	
 	public static enum EndorsementType {
-		Solo(0),
-		CrossCountry(1),
-		Solo90Days(2),
-		Solo25NM(3),
-		Solo50NM(4),
-		SoloNight(5),
-		SoloBravo(6),
-		KnowledgeTest(7),
-		PracticalTest(8),
-		ProficiencyTest(9),
-		Private(10),
-		Sport(11),
-		Recreational(12),
-		Instrument(13),
-		Commercial(14),
-		Instructor(15),
-		Complex(16),
-		HighPerformance(17),
-		HighAltitude(18),
-		Pressurization(19),
-		TailWheel(20),
-		Rating(21),
-		FlightReview(22),
-		Helicopter(23),
-		Glider(24),
-		GliderAeroTow(25),
-		GliderGroundTow(26),
-		GliderSelfLaunch(27),
-		TowGliderPilot(28),
-		Other(50);
+		Other(0),
+		Solo(1),
+		CrossCountry(2),
+		Solo90Days(3),
+		Solo25NM(4),
+		Solo50NM(5),
+		SoloNight(6),
+		SoloAirspace(7),
+		KnowledgeTest(8),
+		PracticalTest(9),
+		ProficiencyTest(10),
+		Private(11),
+		Sport(12),
+		Recreational(13),
+		Instrument(14),
+		Commercial(15),
+		Instructor(16),
+		ATP(17),
+		Complex(18),
+		HighPerformance(19),
+		HighAltitude(20),
+		Pressurization(21),
+		TailWheel(22),
+		Rating(23),
+		FlightReview(24),
+		Helicopter(25),
+		Glider(26),
+		GliderAeroTow(27),
+		GliderGroundTow(28),
+		GliderSelfLaunch(29),
+		TowPilotGlider(30),
+		SpinTraining(31),
+		HomeStudy(32),
+		Citizenship(33),
+		NVG(33),
+		EFVS(35);
 
 		private final int type;
 
@@ -419,20 +404,20 @@ public class Constants {
 	}
 	
 	public static enum FlightType {
-		Flight(0),
-		Ground(1),
-		PrivateTraining(2),
-		InstrumentTraining(3),
-		CommercialTraining(4),
-		InstructorTraining(5),
-		MultiTraining(6),
-		BusinessFlight(7),
-		DiscoveryFlight(8),
-		CheckRide(9),
-		Charter(10),
-		Event(11),
-		AircraftMaintenance(12),
-		Other(50);
+		Other(0),
+		Flight(1),
+		Ground(2),
+		PrivateTraining(3),
+		InstrumentTraining(4),
+		CommercialTraining(5),
+		InstructorTraining(6),
+		MultiTraining(7),
+		BusinessFlight(8),
+		DiscoveryFlight(9),
+		CheckRide(10),
+		Charter(11),
+		Event(12),
+		AircraftMaintenance(13);
 
 		private final int type;
 
@@ -446,14 +431,14 @@ public class Constants {
 	}
 	
 	public static enum CancelationType {
-		Weather(0),
-		ScheduleError(1),
-		StudentCancel(2),
-		InstructorAvailability(3),
-		AircraftMaintenanceIssue(4),
-		AirportRestriction(5),
-		TFR(6),
-		Other(50);
+		Other(0),
+		Weather(1),
+		ScheduleError(2),
+		StudentCancel(3),
+		InstructorAvailability(4),
+		AircraftMaintenanceIssue(5),
+		AirportRestriction(6),
+		TFR(7);
 
 		private final int type;
 
@@ -465,48 +450,18 @@ public class Constants {
 			return this.type;
 		}
 	}
-	
-	public static enum CertificateType {
-		StudentPilot("STD"),
-		SportPilot("SPL"),
-		RecreationalPilot("RPL"),
-		RemotePilot("RP"),
-		PrivatePilot("PPL"),
-		InstrumentRating("IR"),
-		CommercialPilot("CPL"),
-		AirlineTransportPilot("ATP"),
-		MultiCrewPilot("MCP"),
-		FlightInstructor("CFI"),
-		BasicGroundInstructor("BGI"),
-		AdvancedGroundInstructor("AGI"),
-		InstrumentGroundInstructor("IGI"),
-		MultiEngineRating("ME"),
-		PilotExaminer("DPE"),
-		Other("OTHER");
-
-		@Length(5)
-		private final String key;
-
-		private CertificateType(String key) {
-			this.key = key;
-		}
-
-		@Override
-		public String toString() {
-			return key;
-		}
-	}
 
 	public static enum AddressType {
-		HOME(0),
-		BUSINESS(1),
-		BILLING(2),
-		SHIPPING(3),
-		CONTRACT(4),
-		HANGAR(5),
-		SHELTER(6),
-		TIEDOWN(7),
-		OTHER(50);
+		Other(0),
+		Home(2),
+		Business(3),
+		Billing(4),
+		Shipping(5),
+		Contract(6),
+		Hangar(7),
+		Shelter(8),
+		Tiedown(9),
+		Electronic(10);
 
 		private final int type;
 
@@ -516,6 +471,98 @@ public class Constants {
 		
 		public int getType() {
 			return this.type;
+		}
+	}
+	
+	public static enum AircraftCategory {
+		Other(0),
+		Transport(1),
+		Normal(2),
+		Utility(3),
+		Acrobatic(4),
+		Limited(5),
+		Restricted(6),
+		Provisional(7);
+
+		private final long type;
+
+		private AircraftCategory(int type) {
+			this.type = (long) Math.pow(2, type);
+		}
+
+		public static long  getType(AircraftCategory ...categories) {
+			long type = 0;
+			for (AircraftCategory category : categories) {
+				type |= category.type;
+			}
+			return type;
+		}
+	}
+	
+	public static enum AircraftSpecification {
+		Other(0),
+		Complex(1),
+		HighPerformance(2),
+		Experimental(3),
+		Acrobatic(4),
+		LightSport(5),
+		TailWheel(6),
+		Pressurized(7),
+		Oxygent(8),
+		CertifiedIFR(9),
+		CertifiedNight(10),
+		Certified141(11),
+		ForHire(12),
+		GliderTow(13),
+		Part409(14),
+		Part135(15),
+		Maintenance(16);
+
+		private final long type;
+
+		private AircraftSpecification(int type) {
+			this.type = (long) Math.pow(2, type);
+		}
+
+		public static long  getType(AircraftSpecification ...specifications) {
+			long type = 0;
+			for (AircraftSpecification specification : specifications) {
+				type |= specification.type;
+			}
+			return type;
+		}
+	}
+
+	public static enum CertificateType {
+		Other(0),
+		StudentPilot(1),
+		SportPilot(2),
+		RecreationalPilot(3),
+		RemotePilot(4),
+		PrivatePilot(5),
+		InstrumentRating(6),
+		CommercialPilot(7),
+		AirlineTransportPilot(8),
+		MultiCrewPilot(9),
+		FlightInstructor(10),
+		BasicGroundInstructor(11),
+		AdvancedGroundInstructor(12),
+		InstrumentGroundInstructor(13),
+		MultiEngineRating(14),
+		PilotExaminer(15);
+
+		private final long type;
+
+		private CertificateType(double type) {
+			this.type = (long) Math.pow(2, type);
+		}
+		
+		public static long getType(CertificateType ...certificates) {
+			long type = 0;
+			for (CertificateType certificate : certificates) {
+				type |= certificate.type;
+			}
+			return type;
 		}
 	}
 

@@ -14,9 +14,9 @@ import io.ebean.annotation.NotNull;
 public class Note extends BaseModel {
 	
 	@Length(50)
-	public String type; //RESTRICTION, DEBIT, CREDIT etc.
+	public String type; //type - RESTRICTION, DEBIT, CREDIT etc.
 
 	@DbJsonB
 	@NotNull
-	public String content;
+	public String content; //content
 }

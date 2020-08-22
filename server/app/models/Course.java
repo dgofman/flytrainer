@@ -1,8 +1,6 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -10,6 +8,7 @@ import javax.persistence.Table;
 
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
+import io.ebean.annotation.NotNull;
 import utils.Constants.CourseType;
 
 @Entity
@@ -17,45 +16,46 @@ import utils.Constants.CourseType;
 @Table(name = "course")
 public class Course extends BaseModel {
 
-	public CourseType type;
+	@NotNull
+	public CourseType type = CourseType.TSA; //type
 
 	@Length(30)
-	public String other;
+	public String other; //other
 
 	@Length(100)
-	public String number;
+	public String number; //number
 
 	@Length(100)
-	public String decription;
+	public String description; //description
 
-	public Double cost;
+	public Double cost; //cost
 
-	public Double time;
+	public Double time; //time
 
-	public Date dateCompletion;
+	public Date dateCompletion; //date_completion
 
-	public Date expDate;
+	public Date expDate; //exp_date
 
-	public byte isOnline = 0;
-
-	@Length(100)
-	public String location;
+	public byte isOnline = 0; //is_online
 
 	@Length(100)
-	public String presentedBy;
+	public String presentedBy; //presented_by
 
 	@Length(100)
-	public List<String> credits = new ArrayList<>();
+	public String credits; //credits
 
 	@ManyToOne
-	public Billing billing;
+	public Address location; //location_id
 
 	@ManyToOne
-	public Document document;
+	public Billing billing; //billing_id
 
 	@ManyToOne
-	public User user; // FK User::courses
+	public Document document; //document_id
 
 	@ManyToOne
-	public Note notes;
+	public User user; // FK user_id - User::courses
+
+	@ManyToOne
+	public Note notes; //notes_id
 }

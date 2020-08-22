@@ -1,8 +1,6 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -19,45 +17,48 @@ import utils.Constants.PaymentPeriod;
 @Table(name = "insurance")
 public class Insurance extends BaseModel {
 	
-	public InsuranceType type;
+	@NotNull
+	public InsuranceType type = InsuranceType.Medical; //type
 	
 	@Length(30)
-	public String other;
+	public String other; //other
 
-	public PaymentPeriod period;
+	public PaymentPeriod period; //period
 
 	@NotNull
 	@Length(50)
-	public String name;
+	public String name; //name
 	
 	@NotNull
 	@Length(50)
-	public String company;
+	public String company; //company
 	
 	@Length(50)
-	public String policy; //Policy Number
+	public String policyNo; //policy_no
 	
-	public Double price;
+	public Double price; //price
 	
-	public Double discount;
+	public Double discount; //discount
 	
-	public Date startDate;
+	public Date startDate; //start_date
 
-	public Date endDate;
+	public Date endDate; //end_date
 
-	public List<String> coverages = new ArrayList<>();
+	@Length(500)
+	public String coverages; //coverages
 	
-	public List<String> limits = new ArrayList<>();
+	@Length(500)
+	public String limitations; //limitations
 	
 	@ManyToOne
-	public Document document;
+	public Document document; //document_id
 
 	@ManyToOne
-	public Aircraft aircraft; //FK - Aircraft::insurances
+	public Aircraft aircraft; //FK aircraft_id - Aircraft::insurances
 	
 	@ManyToOne
-	public Account account; //FK - Account::insurances
+	public Account account; //FK account_id - Account::insurances
 	
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

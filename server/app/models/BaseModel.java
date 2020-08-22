@@ -16,26 +16,26 @@ import io.ebean.annotation.WhenModified;
 public abstract class BaseModel extends Model {
 
 	@Version
-	public long version;
+	public long version; //version
 
 	@Id
-	public Integer id;
+	public Integer id; //id
 
 	@WhenCreated
 	@JsonView(Short.class)
-	public Instant createdDate;
+	public Instant createdDate; //created_date
 
 	@WhenModified
-	public Instant modifiedDate;
+	public Instant modifiedDate; //modified_date
 
 	@JsonView(Short.class)
-	private Integer whoCreated;
+	private Integer whoCreated; //who_created
 	public Integer getWhoCreated() {
 		return whoCreated;
 	}
 
 	@JsonView(Short.class)
-	private Integer whoModified;
+	private Integer whoModified; //who_modified
 	public Integer getWhoModified() {
 		return whoModified;
 	}

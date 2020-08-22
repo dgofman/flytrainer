@@ -20,30 +20,31 @@ import utils.Constants.PaymentPeriod;
 public class Billing extends BaseModel {
 
 	@NotNull
-	public ActivityType type;
+	public ActivityType type = ActivityType.Debit; //type
 	
 	@Length(30)
-	public String other;
+	public String other; //other
 	
 	@Length(100)
-	public String description;
+	public String description; //description
 	
-	public PaymentPeriod period;
-
 	@NotNull
-	public Double amount = 0.0;
+	public Double amount = 0.0; //amount
 
-	public Double tax = 0.0;
+	public Double tax = 0.0; //tax
+
+	@ManyToOne
+	public PaymentPeriod period; //period
 	
 	@ManyToOne
-	public TierRate tier;
+	public TierRate tier; //tier_id
 
 	@OneToMany(mappedBy = "billing")
-	public List<Payment> payments = new ArrayList<>();
+	public List<Payment> payments = new ArrayList<>(); //Payment::billing_id
 
 	@ManyToOne
-	public Account account; //FK Account::billing
+	public Account account; //FK account_id - Account::billing
 	
 	@ManyToOne
-	public Note notes;
+	public Note notes; //notes_id
 }

@@ -64,27 +64,27 @@
       <label for="whoModified">{{getLabel('whoModified')}}:</label>
       <input class="ui-inputtext" formControlName="whoModified" />
     </div>
-    <div class="p-md-2">
-      <p-checkbox [label]="getLabel('isMemeber')" binary="true" formControlName="isMemeber"></p-checkbox>
+    <div class="p-md-12">
+      <div class="p-md-2">
+        <p-checkbox [label]="getLabel('resetPassword')" binary="true" formControlName="resetPassword"></p-checkbox>
+      </div>
+      <div class="p-md-2">
+        <p-checkbox [label]="getLabel('isActive')" binary="true" formControlName="isActive"></p-checkbox>
+      </div>
+      <div class="p-md-2">
+        <p-checkbox [label]="getLabel('englishProficient')" binary="true" formControlName="englishProficient"></p-checkbox>
+      </div>
     </div>
-    <div class="p-md-2">
-      <p-checkbox [label]="getLabel('isActive')" binary="true" formControlName="isActive"></p-checkbox>
-    </div>
-    <div class="p-md-2">
-      <p-checkbox [label]="getLabel('resetPassword')" binary="true" formControlName="resetPassword">
-      </p-checkbox>
-    </div>
-    <div class="p-md-2">
-      <p-checkbox [label]="getLabel('isCitizen')" binary="true" formControlName="isCitizen">
-      </p-checkbox>
-    </div>
-    <div class="p-md-2">
-      <p-checkbox [label]="getLabel('englishProficient')" binary="true" formControlName="englishProficient">
-      </p-checkbox>
-    </div>
-    <div class="p-md-2">
-      <p-checkbox [label]="getLabel('schoolEmployee')" binary="true" formControlName="isSchoolEmployee">
-      </p-checkbox>
+    <div class="p-md-12">
+      <div class="p-md-2">
+        <p-checkbox [label]="getLabel('isMemeber')" binary="true" formControlName="isMemeber"></p-checkbox>
+      </div>
+      <div class="p-md-2">
+        <p-checkbox [label]="getLabel('isCitizen')" binary="true" formControlName="isCitizen"></p-checkbox>
+      </div>
+      <div class="p-md-2">
+        <p-checkbox [label]="getLabel('isSchoolEmployee')" binary="true" formControlName="isSchoolEmployee"></p-checkbox>
+      </div>
     </div>
   </div>
   <div>

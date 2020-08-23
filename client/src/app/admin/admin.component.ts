@@ -44,6 +44,7 @@ export class AdminComponent extends AppBaseDirective {
         user.role = Role.USER;
         user.isActive = 1;
         user.resetPassword = 1;
+        user.englishProficient = 1;
         break;
       case EventType.Load:
         const t = event.data as FTTableComponent;

@@ -26,7 +26,7 @@
     </div>
     <div class="p-md-3">
       <label for="role">{{getLabel('role')}}:</label>
-      <p-dropdown [options]="Roles" formControlName="role" ></p-dropdown>
+      <p-dropdown [options]="Roles" formControlName="role" [disabled]="data.id == session.id"></p-dropdown>
     </div>
     <div class="p-md-3">
       <label for="ftn">{{getLabel('ftn')}}:</label>

@@ -7,7 +7,7 @@ import { AdminFormDirective } from '../component/ft-table-form.component';
 import { FTTableFormProviderDirective } from '../component/ft-table.component';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/modules/models/user';
-import { Role, RoleType } from 'src/modules/models/constants';
+import { Session, RoleType } from 'src/modules/models/constants';
 import { FTFormControl } from '../utils/ft-form.control';
 
 @Component({
@@ -18,13 +18,15 @@ export class UserFormComponent extends AdminFormDirective {
   Locales = Locales;
   yearRange = ((new Date().getFullYear() - 80) + ':' + (new Date().getFullYear()));
   Roles: SelectItem[] = [];
+  session: Session;
 
   constructor(formProvider: FTTableFormProviderDirective, private confirmationService: ConfirmationService, private userService: UserService) {
     super(formProvider);
+    this.session = this.AppUtils.getSession();
 
-    const userLevel = RoleType.indexOf(this.AppUtils.getSession().role);
+    const userLevel = RoleType.indexOf(this.session.role);
     RoleType.forEach((role, index) => {
-      if (role !== Role.ADMIN && index <= userLevel) {
+      if (index <= userLevel) {
         this.Roles.push({label: role, value: role});
       }
     });

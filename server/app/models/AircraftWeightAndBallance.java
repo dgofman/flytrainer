@@ -10,7 +10,7 @@ import io.ebean.annotation.NotNull;
 
 @Entity
 @History
-@Table(name = "aircraftWB")
+@Table(name = "wb")
 public class AircraftWeightAndBallance extends BaseModel {
 
 	@NotNull

@@ -25,12 +25,12 @@
     "win": {
       "icon": "src/assets/favicon.png",
       "target": [
-            "nsis"
-        ]
+        "nsis"
+      ]
     },
     "directories": {
-        "buildResources": "resources",
-        "output": "../electorn-release"
+      "buildResources": "resources",
+      "output": "../electorn-release"
     }
   },
   "private": true,
@@ -55,6 +55,7 @@
     "zone.js": "^0.10.3"
   },
   "devDependencies": {
+    "typescript": "^3.9.7",
     "@angular/cli": "*",
     "@angular-devkit/build-angular": "*",
     "@angular/compiler-cli": "*",
@@ -63,7 +64,6 @@
     "codelyzer": "*",
     "ts-node": "*",
     "tslint": "*",
-    "typescript": "*",
     "electron": "*",
     "electron-builder": "*"
   },

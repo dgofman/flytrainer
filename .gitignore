@@ -6,3 +6,4 @@ target
 /RUNNING_PID
 /environment.json
 /electorn-release
+/server/sbt-global-pluginstub

@@ -29,10 +29,14 @@ SET PATH=%PATH%;"C:\Program Files\MySQL\MySQL Server 8.0\bin"
 CD flytrainerapp/database
 mysql -u root -p -e"SET @UserName := '%DB_USERNAME%'; SET @Password := '%DB_PASSWORD%'; \. createdatabase.sql"
 
+#Test
+mysql -u %DB_USERNAME% -p
+
 # Compile client
 cd ./client
 npm install -g @angular/cli
 npm install
+ng version
 
 # Create server
 cd ./server

@@ -14,7 +14,7 @@ object FrontendRunHook {
     object UIBuildHook extends PlayRunHook {
 
       var process: Option[Process] = None
-      var client_dir = base / "../client"
+      var client_dir = base / ".." / "client"
 
       val jsServerValues = Source.fromFile("../environment.json").getLines().mkString.parseJson.asJsObject.getFields("server_port")
       val jsClientValues = Source.fromFile("../client/src/environments/environment.json").getLines().mkString.parseJson.asJsObject.getFields("client_port")
@@ -32,9 +32,9 @@ object FrontendRunHook {
         Process("cmd /c  for /f \"tokens=5\" %a in ('netstat -aon ^| find \"" + jsClientValues(0).toString() + "\"') do taskkill /f /pid %a").!
         install = "cmd /c" + install
         run = "cmd /c" + run
-      } else { 
-        Process("kill -9 $(lsof -t -i:4200)").!
-        Process("kill -9 $(lsof -t -i:9000)").!
+      } else {
+        Process("sh -c kill -9 $(lsof -t -i:" + jsServerValues(0).toString() + ")").!
+        Process("sh -c kill -9 $(lsof -t -i:" + jsClientValues(0).toString() + ")").!
       } 
 
       /**

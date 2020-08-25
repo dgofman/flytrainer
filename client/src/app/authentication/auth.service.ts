@@ -1,7 +1,8 @@
 import { environment } from '@client/environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpEvent, HttpHandler, HttpRequest, HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpInterceptor, HttpEvent, HttpHandler, HttpRequest, HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { CanActivate, Router } from '@angular/router';
 import { AppUtils } from '../utils/app-utils';
 
@@ -29,7 +30,15 @@ export class AuthService implements HttpInterceptor, CanActivate {
                 .set('Authorization', 'Bearer ' + AuthService.AUTH_TOKEN)
                 .set('CorrelationId', String(AuthService.CORRELATION_ID));
         }
-        return next.handle(req.clone({url, headers}));
+        return next.handle(req.clone({url, headers})).pipe(
+            catchError(err => {
+            if (err instanceof HttpErrorResponse) {
+                if (err.status === 401 || err.status === 403) {
+                    this.router.navigate(['login']);
+                }
+            }
+            return throwError(err);
+        }));
     }
 
     reset() {
@@ -48,7 +57,10 @@ export class AuthService implements HttpInterceptor, CanActivate {
         this.http.post('/logout', { cid: environment.clientId, correlationId: AuthService.CORRELATION_ID, token: AuthService.AUTH_TOKEN }).subscribe(_ => {
             this.reset();
             this.router.navigate(['login']);
-        }, (ex) => console.error(ex));
+        }, (ex) => {
+            console.error(ex);
+            this.router.navigate(['login']);
+        });
     }
 
     canActivate(): boolean {

@@ -17,10 +17,10 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 3em; padding-left: 0; padding-right: 0; text-align: center;">
+      <th style="width: 3em; padding-left: 0; padding-right: 0; text-align: center;" [title]="Locales.addNewRow">
         <button pButton icon="pi pi-plus" style="font-size: 12px" (click)="onAddNewRow()"></button>
       </th>
-      <th *ngFor="let col of columns" pResizableColumn pSortableColumn="{{col.field}}">
+      <th *ngFor="let col of columns" pResizableColumn pSortableColumn="{{col.field}}" [title]="col.header">
         {{col.header}}
         <p-sortIcon field="{{col.field}}"></p-sortIcon>
       </th>

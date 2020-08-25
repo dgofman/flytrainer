@@ -17,10 +17,10 @@ export class User extends BaseModel {
     isCitizen: number;
     englishProficient: number;
     isMemeber: number;
-    birthday: Date;
+    birthday: number;
     dl: string; /* driving license */
     dlState: string; /* driving license state */
-    dlExpDate: Date;  /* driving license expiration date */
+    dlExpDate: number;  /* driving license expiration date */
     protected ssn: string;
     protected password: string;
     createdDate: number;

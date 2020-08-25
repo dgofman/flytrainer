@@ -16,7 +16,7 @@ import { UserFormComponent } from './userform.component';
 import { ConfirmationService } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
-import { FTDatePipe } from '../utils/pipes';
+import { FTPipeModule } from '../utils/pipes';
 
 export const routes: Routes = [
   {
@@ -37,10 +37,11 @@ export const routes: Routes = [
     DropdownModule,
     ButtonModule,
     ConfirmDialogModule,
-    FTTableModule
+    FTTableModule,
+    FTPipeModule
   ],
   declarations: [
-    AdminComponent, UserFormComponent, FTDatePipe
+    AdminComponent, UserFormComponent
   ],
   providers: [
     ConfirmationService,

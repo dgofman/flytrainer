@@ -94,7 +94,9 @@ public class AdminController extends BaseController {
 	
 	
 	private void validateRole(User user, User currentUser) {
-		if (user.id == currentUser.id || user.role.getType() > currentUser.role.getType()) {
+		if ((user.id == currentUser.id && 
+			(user.role != currentUser.role || user.isActive == 0)) || 
+			user.role.getType() > currentUser.role.getType()) {
 			throw new RuntimeException(Constants.Errors.ACCESS_DENIED.name());
 		}
 	}

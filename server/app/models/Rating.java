@@ -32,9 +32,9 @@ public class Rating extends BaseModel {
 	public String limitations; //limitations
 
 	@NotNull
-	Date issuedDate; //issued_date
+	public Date issuedDate; //issued_date
 
-	Date renewDate; //renew_date
+	public Date renewDate; //renew_date
 
 	public Date expDate; //exp_date
 

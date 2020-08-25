@@ -4,10 +4,14 @@ import { Directive, Input, NgModule, EventEmitter, Output, Component, TemplateRe
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { FTDatePipe } from '../utils/pipes';
 import { AppUtils } from '../utils/app-utils';
 import { BaseModel } from 'src/modules/models/base.model';
 import { DropdownModule } from 'primeng/dropdown';
+import { AbstractControlOptions, ValidatorFn } from '@angular/forms';
+import { FTFormControl } from '../utils/ft-form.control';
+
+type SHOW_COLUMNS = 'never' | 'table' | 'filter';
+type FORMAT_COLUMNS = 'date' | 'datetime' | 'epoch' | 'bool';
 
 export enum EventType {
   Load,
@@ -21,10 +25,12 @@ export interface EmitEvent {
 
 export interface ColumnType {
   field: string;
-  header: string;
+  header?: string;
   width?: number;
-  format?: string;
   align?: string;
+  validators?: ValidatorFn | ValidatorFn[] | AbstractControlOptions;
+  format?: FORMAT_COLUMNS;
+  show: SHOW_COLUMNS;
 }
 
 @Component({
@@ -37,13 +43,21 @@ export class FTTableComponent implements AfterContentInit {
   isEditorAccess = AppUtils.isEditorAccess;
   lastColumnTemplate: TemplateRef<any>;
 
+  @Input('columns') cols: ColumnType[];
   @Input('expandFormTemplate') public expandFormTemplate: Component;
-  @Input('columns') public columns: Array<ColumnType>;
   @Input('dataKey') public dataKey = 'id';
   @Input('data') public data: Array<BaseModel>;
   @Input('sortField') public sortField: string;
   @Output() public onNotify: EventEmitter<EmitEvent> = new EventEmitter();
   @ContentChildren(PrimeTemplate) templates: QueryList<PrimeTemplate>;
+
+  public set columns(col: Array<ColumnType>) {
+    this.cols = col;
+  }
+
+  public get columns(): Array<ColumnType> {
+    return this.cols.filter(c => c.show === 'table');
+  }
 
   newRow: BaseModel;
   expandedRows: {} = {};
@@ -109,12 +123,10 @@ export class FTTableComponent implements AfterContentInit {
   formatData(col: any, rowData: BaseModel, title: boolean) {
     const data = rowData[col.field];
     switch (col.format) {
-      case 'date':
-        return new FTDatePipe().transform(data);
       case 'bool':
         return title ? '' : '<i class="pi ' + (data ? 'pi-thumbs-up green' : 'pi-thumbs-down red') + '"></i>';
       default:
-        return data;
+        return FTFormControl.Serialize(data, col.format);
     }
   }
 

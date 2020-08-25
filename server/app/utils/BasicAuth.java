@@ -2,7 +2,7 @@ package utils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.time.Instant;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -54,7 +54,7 @@ class BasicAuthAction extends Action<BasicAuth> {
 						.completedFuture(status(Http.Status.FORBIDDEN, Constants.Errors.FORBIDDEN.toString()));
 			}
 			DDoS ddos = Ebean.createNamedQuery(DDoS.class, DDoS.VALIDATE)
-					.setParameter("createdDate", Instant.ofEpochMilli(Long.valueOf(correlationId.get()).longValue()))
+					.setParameter("createdDate", new Date(Long.valueOf(correlationId.get()).longValue()))
 					.findOne();
 			if (ddos == null || !jwt.getSubject().equals(ddos.username)) {
 				return CompletableFuture

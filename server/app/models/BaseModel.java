@@ -1,6 +1,6 @@
 package models;
 
-import java.time.Instant;
+import java.util.Date;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -23,10 +23,10 @@ public abstract class BaseModel extends Model {
 
 	@WhenCreated
 	@JsonView(Short.class)
-	public Instant createdDate; //created_date
+	public Date createdDate; //created_date
 
 	@WhenModified
-	public Instant modifiedDate; //modified_date
+	public Date modifiedDate; //modified_date
 
 	@JsonView(Short.class)
 	private Integer whoCreated; //who_created

@@ -18,7 +18,8 @@ export default {
     maintance: 'Maintance',
     reports: 'Resports',
     total: 'Total',
-    itemsPerPage: 'ItemsPerPage',
+    addNewRow: 'Add New Row',
+    itemsPerPage: 'Items Per Page',
     moreDetails: 'More Details',
 
     noData: 'No data found.',

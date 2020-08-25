@@ -33,7 +33,7 @@ public class MedicalCertificate extends BaseModel {
 	public String examiner; //examiner
 
 	@NotNull
-	Date issuedDate; //issued_date
+	public Date issuedDate; //issued_date
 
 	public Date expDate; //exp_date
 

@@ -1,6 +1,5 @@
 package controllers;
 
-import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -130,7 +129,7 @@ public class HomeController extends BaseController {
 					put(USER_ATTR, user.username);
 					put(VERSION_ATTR, user.version);
 					put(TOKEN_ATTR, authToken);
-					put(DATE_ATTR, user.modifiedDate.toEpochMilli());
+					put(DATE_ATTR, user.modifiedDate.getTime());
 				}
 			};
 			String emailBody = String.format(ACCOUNT_ACTIVATION, user.first, user.last,
@@ -160,13 +159,13 @@ public class HomeController extends BaseController {
 
 			User user = Ebean.createNamedQuery(User.class, User.FIND).setParameter("username", token.jwt.getSubject())
 					.setParameter("uuid", token.jwt.getKeyId()).setParameter("version", body.get(VERSION_ATTR).asLong())
-					.setParameter("modifiedDate", Instant.ofEpochMilli(body.get(DATE_ATTR).asLong())).findOne();
+					.setParameter("modifiedDate", new Date(body.get(DATE_ATTR).asLong())).findOne();
 			if (user == null) {
 				log.error("Invalid version or timestamp=" + body.get(DATE_ATTR).asLong());
 				return forbidden(Constants.Errors.FORBIDDEN.toString());
 			}
 			user.isActive = 1;
-			user.modifiedDate = Instant.ofEpochMilli(new Date().getTime());
+			user.modifiedDate = new Date();
 			user.update();
 		} catch (Exception ex) {
 			DDoS ddos = new DDoS(request, body, username);
@@ -210,7 +209,7 @@ public class HomeController extends BaseController {
 					put(USER_ATTR, user.username);
 					put(VERSION_ATTR, user.version);
 					put(TOKEN_ATTR, authToken);
-					put(DATE_ATTR, user.modifiedDate.toEpochMilli());
+					put(DATE_ATTR, user.modifiedDate.getTime());
 				}
 			};
 			String emailBody = String.format(RESET_PASSWORD, origin + request.getHeaders().get("SourceMap").get()
@@ -242,13 +241,13 @@ public class HomeController extends BaseController {
 
 			User user = Ebean.createNamedQuery(User.class, User.FIND).setParameter("username", token.jwt.getSubject())
 					.setParameter("uuid", token.jwt.getKeyId()).setParameter("version", body.get(VERSION_ATTR).asLong())
-					.setParameter("modifiedDate", Instant.ofEpochMilli(body.get(DATE_ATTR).asLong())).findOne();
+					.setParameter("modifiedDate", new Date(body.get(DATE_ATTR).asLong())).findOne();
 			if (user == null) {
 				log.error("Invalid version or timestamp=" + body.get(DATE_ATTR).asLong());
 				return forbidden(Constants.Errors.FORBIDDEN.toString());
 			}
 			user.password = body.get("new_passwd").asText();
-			user.modifiedDate = Instant.ofEpochMilli(new Date().getTime());
+			user.modifiedDate = new Date();
 			user.update();
 		} catch (Exception ex) {
 			DDoS ddos = new DDoS(request, body, username);
@@ -269,7 +268,7 @@ public class HomeController extends BaseController {
 				return forbidden(Constants.Errors.FORBIDDEN.toString());
 			}
 			DDoS ddos = Ebean.createNamedQuery(DDoS.class, DDoS.VALIDATE).setParameter("username", jwt.getSubject())
-					.setParameter("createdDate", Instant.ofEpochMilli(body.get(Constants.CORRELATION_ID).asLong()))
+					.setParameter("createdDate", new Date(body.get(Constants.CORRELATION_ID).asLong()))
 					.findOne();
 			if (ddos == null) {
 				throw new IllegalAccessException(Errors.FORBIDDEN.toString());

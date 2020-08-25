@@ -36,11 +36,11 @@ public class Certificate extends BaseModel {
 	public String limitations; //limitations
 
 	@NotNull
-	Date issuedDate; //issued_date
+	public Date issuedDate; //issued_date
 
-	Date renewDate; //renew_date
+	public Date renewDate; //renew_date
 
-	Date currentBy; // current_by (BFR)
+	public Date currentBy; // current_by (BFR)
 
 	public Date expDate; //exp_date
 

@@ -14,6 +14,11 @@ export abstract class AdminFormDirective implements OnInit {
   frmGroup: FormGroup;
 
   constructor(protected formProvider: FTTableFormProviderDirective) {
+    const controls = {};
+    formProvider.table.cols.forEach(col => {
+        controls[col.field] = new FTFormControl(col, col.validators);
+    });
+    this.frmGroup = new FormGroup(controls);
   }
 
   get dataKey(): string {
@@ -45,16 +50,17 @@ export abstract class AdminFormDirective implements OnInit {
   getData() {
     const dataKey = this.dataKey,
       version = 'version',
-      data = this.frmGroup.getRawValue(),
       newdata = new BaseModel();
-    for (const key in data) {
-      if (data[key] != null && data[key] !== this.data[key]) {
-        newdata[key] = data[key];
+    this.formProvider.table.cols.forEach(col => {
+      const control = this.frmGroup.get(col.field);
+      const data = (control instanceof  FTFormControl) ? control.deserialize : control.value;
+      if (data != null && data !== this.data[col.field]) {
+        newdata[col.field] = data;
       }
-    }
-    newdata[dataKey] = data[dataKey];
-    newdata[version] = data.version;
-    return newdata.serialize();
+    });
+    newdata[dataKey] = this.data[dataKey];
+    newdata[version] = this.data[version];
+    return newdata;
   }
 
   loading(show: boolean) {

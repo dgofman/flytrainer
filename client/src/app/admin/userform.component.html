@@ -26,7 +26,8 @@
     </div>
     <div class="p-md-3">
       <label for="role">{{getLabel('role')}}:</label>
-      <p-dropdown [options]="Roles" formControlName="role" [disabled]="data.id == session.id"></p-dropdown>
+      <input class="ui-inputtext" [value]="frmGroup.get('role').value" readonly *ngIf="data.id == session.id"/>
+      <p-dropdown [options]="Roles" formControlName="role" *ngIf="data.id != session.id"></p-dropdown>
     </div>
     <div class="p-md-3">
       <label for="ftn">{{getLabel('ftn')}}:</label>
@@ -50,40 +51,40 @@
     </div>
     <div class="p-md-3">
       <label for="createdDate">{{getLabel('createdDate')}}:</label>
-      <input class="ui-inputtext" [value]="frmGroup.get('createdDate').value | ftdate" readonly/>
+      <input class="ui-inputtext" formControlName="createdDate" readonly/>
     </div>
     <div class="p-md-3">
       <label for="whoCreated">{{getLabel('whoCreated')}}:</label>
-      <input class="ui-inputtext" formControlName="whoCreated" />
+      <input class="ui-inputtext" formControlName="whoCreated" readonly/>
     </div>
     <div class="p-md-3">
       <label for="modifiedDate">{{getLabel('modifiedDate')}}:</label>
-      <input class="ui-inputtext" [value]="frmGroup.get('modifiedDate').value | ftdate" readonly/>
+      <input class="ui-inputtext" formControlName="modifiedDate" readonly/>
     </div>
     <div class="p-md-3">
       <label for="whoModified">{{getLabel('whoModified')}}:</label>
-      <input class="ui-inputtext" formControlName="whoModified" />
+      <input class="ui-inputtext" formControlName="whoModified" readonly/>
     </div>
     <div class="p-md-12">
       <div class="p-md-2">
-        <p-checkbox [label]="getLabel('resetPassword')" binary="true" formControlName="resetPassword"></p-checkbox>
+        <p-checkbox [label]="getLabel('isMemeber')" [title]="getLabel('isMemeber')" binary="true" formControlName="isMemeber"></p-checkbox>
       </div>
       <div class="p-md-2">
-        <p-checkbox [label]="getLabel('isActive')" binary="true" formControlName="isActive"></p-checkbox>
+        <p-checkbox [label]="getLabel('resetPassword')" [title]="getLabel('resetPassword')"  binary="true" formControlName="resetPassword"></p-checkbox>
       </div>
       <div class="p-md-2">
-        <p-checkbox [label]="getLabel('englishProficient')" binary="true" formControlName="englishProficient"></p-checkbox>
+        <p-checkbox [label]="getLabel('englishProficient')" [title]="Locales.englishProficientTitle" binary="true" formControlName="englishProficient"></p-checkbox>
       </div>
     </div>
     <div class="p-md-12">
       <div class="p-md-2">
-        <p-checkbox [label]="getLabel('isMemeber')" binary="true" formControlName="isMemeber"></p-checkbox>
+        <p-checkbox [label]="getLabel('isCitizen')" [title]="getLabel('isCitizen')" binary="true" formControlName="isCitizen"></p-checkbox>
       </div>
       <div class="p-md-2">
-        <p-checkbox [label]="getLabel('isCitizen')" binary="true" formControlName="isCitizen"></p-checkbox>
+        <p-checkbox [label]="getLabel('isSchoolEmployee')" [title]="getLabel('isSchoolEmployee')"  binary="true" formControlName="isSchoolEmployee"></p-checkbox>
       </div>
       <div class="p-md-2">
-        <p-checkbox [label]="getLabel('isSchoolEmployee')" binary="true" formControlName="isSchoolEmployee"></p-checkbox>
+        <p-checkbox [label]="getLabel('isActive')" [title]="getLabel('isActive')" binary="true" formControlName="isActive" *ngIf="data.id != session.id"></p-checkbox>
       </div>
     </div>
   </div>

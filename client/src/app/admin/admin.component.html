@@ -44,7 +44,7 @@
       </ul>
     </div>
     <div class="main">
-      <ft-table sortField="last" [columns]="cols" [data]="users" [expandFormTemplate]="tableExpandForm" (onNotify)="eventTableHandler($event)">
+      <ft-table sortField="last" filter="admin-table" [columns]="cols" [data]="users" [expandFormTemplate]="tableExpandForm" (onNotify)="eventTableHandler($event)">
         <ng-template pTemplate="lastColumn" let-rowData="$implicit" *ngIf="AppUtils.isEditorAccess()">
           <button pButton icon="pi pi-id-card" (click)="onMoreDetails(rowData)" [title]="Locales.moreDetails"></button>
         </ng-template>

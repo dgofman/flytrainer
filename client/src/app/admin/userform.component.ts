@@ -7,6 +7,7 @@ import { FTTableFormProviderDirective } from '../component/ft-table.component';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/modules/models/user';
 import { Session, RoleType } from 'src/modules/models/constants';
+import { AppUtils } from '../utils/app-utils';
 
 @Component({
   templateUrl: './userform.component.html',
@@ -14,7 +15,7 @@ import { Session, RoleType } from 'src/modules/models/constants';
 })
 export class UserFormComponent extends AdminFormDirective {
   Locales = Locales;
-  yearRange = ((new Date().getFullYear() - 80) + ':' + (new Date().getFullYear()));
+  yearRange = AppUtils.defaultYearRange;
   Roles: SelectItem[] = [];
   session: Session;
 

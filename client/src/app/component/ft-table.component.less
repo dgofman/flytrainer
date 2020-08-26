@@ -1,8 +1,13 @@
 @import '../../assets/less/layout.less';
 
-td, th {
-    overflow: hidden;
-    text-overflow: ellipsis;
+.filter-wrap {
+    height: 40px;
+    margin-bottom: 4px;
+    background: #eee;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
 th {
@@ -11,15 +16,6 @@ th {
     padding: 0.571em 0.2em !important;
 }
 
-[formcontrolname], .ui-inputtext {
-    height: 33px;
-    display: inline-block;
-    width: 100%;
-}
-
-input[readonly] {
-    background: #eee !important;
-}
 
 .p-form {
     margin: 5px 0;

@@ -37,6 +37,10 @@ export class AppUtils {
         AppToastComponent.add('success', mesage);
     }
 
+    static get defaultYearRange(): string{
+        return ((new Date().getFullYear() - 80) + ':' + (new Date().getFullYear()));
+    }
+
     static getSession(): Session {
         return JSON.parse(sessionStorage.getItem('auth_data') || '{}') as Session;
     }

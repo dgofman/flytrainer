@@ -1,55 +1,93 @@
-<div style="height: 40px">
-  <div style="float: right">
+<div class="filter-wrap">
+  <p-overlayPanel #op appendTo="body" [showCloseIcon]="true" [style]="{width: '700px'}" [dismissable]="false">
+      <h3 style="display: inline;">{{Locales.filter}}</h3>
+      <div class="right">
+        <a (click)="resetFilter()">{{Locales.clearAll}}</a>
+      </div>
+      <ng-template pTemplate>
+        <form [formGroup]="filterGroup" class="p-form">
+          <p-table [value]="getColumns(true)" [rows]="8" [scrollable]="true" scrollHeight="300px">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th width="40">Show</th>
+                    <th width="200">Column</th>
+                    <th>Query</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr>
+                    <td width="40">
+                      <input type="checkbox" [checked]="isShow(rowData)" [name]="rowData.field"/>
+                    </td>  
+                    <td width="200">{{rowData.header}}</td>
+                    <td style="padding: 0.5em;" class="td-controls">
+                      <p-dropdown *ngIf="rowData.type=='popup'" appendTo="body" [options]="rowData.value" [formControlName]="rowData.field"></p-dropdown>
+                      <input *ngIf="rowData.type=='input'" class="ui-inputtext" [formControlName]="rowData.field"/>
+                      <p-calendar *ngIf="rowData.type=='cal'" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" showButtonBar="true" appendTo="body" [formControlName]="rowData.field"></p-calendar>
+                    </td>
+                </tr>
+            </ng-template>
+          </p-table>
+          <input type="checkbox" style="margin: 20px 5px 0 0;" #saveFilter/>{{Locales.save}}
+          <div class="right" style="margin: 10px 0;">
+            <p-button label="{{Locales.apply}}"></p-button>
+            <p-button label="{{Locales.cancel}}"></p-button>
+          </div>
+        </form>
+      </ng-template>
+  </p-overlayPanel>
+  <button pButton icon="pi pi-filter" style="font-size: 12px; border-radius: 50%;" (click)="op.toggle($event)"></button>
+  <div style="position: absolute; right: 5px;">
     {{Locales.itemsPerPage}}
     <p-dropdown [options]="itemsPerPageList" (onChange)="itemsPerPageChanged()"
       [style]="{'minWidth':'80px', 'width': '80px'}"></p-dropdown>
   </div>
 </div>
-<p-table [columns]="columns" [value]="data" [resizableColumns]="true" [scrollable]="true"
+<p-table [columns]="getColumns(false)" [value]="data" [resizableColumns]="true" [scrollable]="true"
   [expandedRowKeys]="expandedRows" [dataKey]="dataKey" [lazy]="true" [paginator]="true" [rows]="itemsPerPage"
   (onLazyLoad)="lazyLoad($event)">
-  <ng-template pTemplate="colgroup">
+  <ng-template pTemplate="colgroup" let-columns>
     <colgroup>
       <col [style.width.px]="45" />
       <col *ngFor="let col of columns" [style.width.px]="col.width" />
       <col *ngIf="lastColumnTemplate" [style.width.px]="50" />
     </colgroup>
   </ng-template>
-  <ng-template pTemplate="header">
+  <ng-template pTemplate="header" let-columns>
     <tr>
       <th style="width: 3em; padding-left: 0; padding-right: 0; text-align: center;" [title]="Locales.addNewRow">
         <button pButton icon="pi pi-plus" style="font-size: 12px" (click)="onAddNewRow()"></button>
       </th>
-      <th *ngFor="let col of columns" pResizableColumn pSortableColumn="{{col.field}}" [title]="col.header">
+      <th *ngFor="let col of columns" pResizableColumn pSortableColumn="{{col.field}}" [title]="col.header" class="ellipsis">
         {{col.header}}
         <p-sortIcon field="{{col.field}}"></p-sortIcon>
       </th>
       <th *ngIf="lastColumnTemplate"></th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-rowData let-expanded="expanded">
+  <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
     <tr>
       <td>
         <a href="#" [pRowToggler]="rowData">
           <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
         </a>
       </td>
-      <td *ngFor="let col of columns" class="ui-resizable-column" [style.text-align]="col.align" [title]="formatData(col, rowData, true)" [innerHTML]="formatData(col, rowData, false)"></td>
+      <td *ngFor="let col of columns" class="ui-resizable-column ellipsis" [style.text-align]="col.align" [title]="formatData(col, rowData, true)" [innerHTML]="formatData(col, rowData, false)"></td>
       <td *ngIf="lastColumnTemplate" style="text-overflow: initial">
         <ng-container *ngTemplateOutlet="lastColumnTemplate; context: {$implicit: rowData}"></ng-container>
       </td>
     </tr>
   </ng-template>
-  <ng-template pTemplate="rowexpansion" let-rowData>
+  <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
     <tr>
-      <td [attr.colspan]="columns.length + 1 + (lastColumnTemplate ? 1 : 0)">
+      <td [attr.colspan]="columns.length + 1 + (lastColumnTemplate ? 1 : 0)" [title]="columns.length">
         <div [ftTableFormProvider]="rowData" [table]="this">
           <ng-container *ngComponentOutlet="expandFormTemplate"></ng-container>
         </div>
       </td>
     </tr>
   </ng-template>
-  <ng-template pTemplate="emptymessage">
+  <ng-template pTemplate="emptymessage" let-columns>
     <tr>
       <td [attr.colspan]="columns.length + 1 + (lastColumnTemplate ? 1 : 0)" style="text-align: center;">{{Locales.noData}}</td>
     </tr>

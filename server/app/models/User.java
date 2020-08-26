@@ -177,6 +177,10 @@ public class User extends BaseModel {
 	@JsonView(Full.class)
 	@OneToMany(mappedBy = "user")
 	public List<Document> documents = new ArrayList<>(); //Document::user_id
+	
+	@JsonView(Full.class)
+	@OneToMany(mappedBy = "user")
+	public List<Filter> filters = new ArrayList<>(); //Filter::user_id
 
 	@JsonView(Full.class)
 	@ManyToOne

@@ -2,6 +2,7 @@ import Locales from './errors';
 
 export default {
     ...Locales,
+    save: 'Save',
     cancel: 'Cancel',
     delete: 'Delete',
     apply: 'Apply',
@@ -18,6 +19,8 @@ export default {
     maintance: 'Maintance',
     reports: 'Resports',
     total: 'Total',
+    filter: 'Filter',
+    clearAll: 'Clear All',
     addNewRow: 'Add New Row',
     itemsPerPage: 'Items Per Page',
     moreDetails: 'More Details',

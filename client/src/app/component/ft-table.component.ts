@@ -1,17 +1,20 @@
 import Locales from '@locales/common';
 import { LazyLoadEvent, SelectItem, PrimeTemplate } from 'primeng/api';
+import { OverlayPanelModule} from 'primeng/overlaypanel';
 import { Directive, Input, NgModule, EventEmitter, Output, Component, TemplateRef, AfterContentInit, ContentChildren, QueryList } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
+import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { AppUtils } from '../utils/app-utils';
 import { BaseModel } from 'src/modules/models/base.model';
 import { DropdownModule } from 'primeng/dropdown';
-import { AbstractControlOptions, ValidatorFn } from '@angular/forms';
+import { AbstractControlOptions, ValidatorFn, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FTFormControl } from '../utils/ft-form.control';
 
-type SHOW_COLUMNS = 'never' | 'table' | 'filter';
+type SHOW_COLUMNS = 'never' | 'default';
 type FORMAT_COLUMNS = 'date' | 'datetime' | 'epoch' | 'bool';
+type TYPET_COLUMNS = 'check' | 'cal' | 'radio' | 'input' | 'disable' | 'popup';
 
 export enum EventType {
   Load,
@@ -30,7 +33,9 @@ export interface ColumnType {
   align?: string;
   validators?: ValidatorFn | ValidatorFn[] | AbstractControlOptions;
   format?: FORMAT_COLUMNS;
-  show: SHOW_COLUMNS;
+  show?: SHOW_COLUMNS;
+  type?: TYPET_COLUMNS;
+  value?: any;
 }
 
 @Component({
@@ -41,7 +46,10 @@ export interface ColumnType {
 export class FTTableComponent implements AfterContentInit {
   Locales = Locales;
   isEditorAccess = AppUtils.isEditorAccess;
+  yearRange = AppUtils.defaultYearRange;
   lastColumnTemplate: TemplateRef<any>;
+  filters: {};
+  filterGroup: FormGroup;
 
   @Input('columns') cols: ColumnType[];
   @Input('expandFormTemplate') public expandFormTemplate: Component;
@@ -51,12 +59,11 @@ export class FTTableComponent implements AfterContentInit {
   @Output() public onNotify: EventEmitter<EmitEvent> = new EventEmitter();
   @ContentChildren(PrimeTemplate) templates: QueryList<PrimeTemplate>;
 
-  public set columns(col: Array<ColumnType>) {
-    this.cols = col;
+  @Input('filter') public set filter(name: any) {
+    this.filters = JSON.parse(sessionStorage.getItem(name) || '{}');
   }
-
-  public get columns(): Array<ColumnType> {
-    return this.cols.filter(c => c.show === 'table');
+  public get filter(): any {
+    return this.filters;
   }
 
   newRow: BaseModel;
@@ -76,6 +83,16 @@ export class FTTableComponent implements AfterContentInit {
   filterQuery: string;
 
   ngAfterContentInit(): void {
+    const controls = {};
+    this.cols.forEach(col => {
+        controls[col.field] = new FTFormControl(col);
+    });
+    this.filterGroup = new FormGroup(controls);
+    this.filterGroup.patchValue({
+      first: 'David',
+      last: 'Gofman'
+    });
+
     this.templates.forEach((item) => {
       switch (item.getType()) {
         case 'lastColumn':
@@ -83,6 +100,26 @@ export class FTTableComponent implements AfterContentInit {
             break;
       }
     });
+  }
+
+  public resetFilter() {
+    this.filterGroup.reset();
+  }
+
+  public getColumns(all: boolean): Array<ColumnType> {
+    if (all) {
+        return this.cols.filter(c => c.show !== 'never');
+    } else {
+        return this.cols.filter(c => this.isShow(c));
+    }
+  }
+
+  isShow(c: ColumnType) {
+    return this.getFilter(c).show !== false && c.show === 'default';
+  }
+
+  getFilter(c: ColumnType) {
+    return this.filters[c.field] || {};
   }
 
   notify(message: EventType, data: any) {
@@ -156,7 +193,7 @@ export class FTTableFormProviderDirective {
 }
 
 @NgModule({
-  imports: [CommonModule, ButtonModule, DropdownModule, TableModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, DropdownModule, CalendarModule, TableModule, OverlayPanelModule],
   exports: [FTTableComponent, FTTableFormProviderDirective],
   declarations: [FTTableComponent, FTTableFormProviderDirective]
 })

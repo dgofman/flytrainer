@@ -1,4 +1,4 @@
-<form [formGroup]="frmGroup" class="p-form">
+<form [formGroup]="frmGroup" class="p-form td-controls">
   <div class="ui-fluid p-grid">
     <div class="p-md-3">
       <label for="username">{{getLabel('username')}}:</label>
@@ -35,7 +35,7 @@
     </div>
     <div class="p-md-3">
       <label for="birthday">{{getLabel('birthday')}}:</label>
-      <p-calendar [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" appendTo="body" formControlName="birthday"></p-calendar>
+      <p-calendar [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" [showIcon]="true" showButtonBar="true" appendTo="body" formControlName="birthday"></p-calendar>
     </div>
     <div class="p-md-3">
       <label for="dl">{{getLabel('dl')}}:</label>
@@ -47,7 +47,7 @@
     </div>
     <div class="p-md-3">
       <label for="dlExpDate">{{getLabel('dlExpDate')}}:</label>
-      <p-calendar [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" appendTo="body" formControlName="dlExpDate"></p-calendar>
+      <p-calendar [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" [showIcon]="true" showButtonBar="true" appendTo="body" formControlName="dlExpDate"></p-calendar>
     </div>
     <div class="p-md-3">
       <label for="createdDate">{{getLabel('createdDate')}}:</label>
@@ -94,6 +94,6 @@
       <p-button label="{{Locales.apply}}" *ngIf="AppUtils.isEditorAccess()" (click)="applyItem($event)"></p-button>
       <p-button label="{{Locales.delete}}" (click)="doDelete()" *ngIf="AppUtils.isEditorAccess() && isNew(data)==false"></p-button>
       <p-button label="{{Locales.cancel}}" (click)="doCancel()"></p-button>
-  </div>
+    </div>
   </div>
 </form>

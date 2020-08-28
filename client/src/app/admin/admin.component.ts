@@ -49,7 +49,7 @@ export class AdminComponent extends AppBaseDirective {
     super();
   }
 
-  onMoreDetails(user: User) {
+  onEdit(user: User) {
     console.log(user);
   }
 

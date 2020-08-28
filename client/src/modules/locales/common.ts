@@ -23,7 +23,6 @@ export default {
     clearAll: 'Clear All',
     addNewRow: 'Add New Row',
     itemsPerPage: 'Items Per Page',
-    moreDetails: 'More Details',
 
     noData: 'No data found.',
     deleteHeader: 'Delete Confirmation',

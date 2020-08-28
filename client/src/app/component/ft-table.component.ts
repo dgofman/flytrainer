@@ -49,6 +49,9 @@ export class FTTableComponent implements AfterContentInit {
   Locales = Locales;
   isEditorAccess = AppUtils.isEditorAccess;
   yearRange = AppUtils.defaultYearRange;
+  firstHeaderTemplate: TemplateRef<any>;
+  lastHeaderTemplate: TemplateRef<any>;
+  firstColumnTemplate: TemplateRef<any>;
   lastColumnTemplate: TemplateRef<any>;
   filters: {_saveFilter: false};
   filterGroup: FormGroup;
@@ -94,8 +97,17 @@ export class FTTableComponent implements AfterContentInit {
     this.filterGroup = new FormGroup(controls);
     this.templates.forEach((item) => {
       switch (item.getType()) {
+        case 'firstColumn':
+            this.firstColumnTemplate = item.template;
+            break;
         case 'lastColumn':
             this.lastColumnTemplate = item.template;
+            break;
+        case 'firstHeader':
+            this.firstHeaderTemplate = item.template;
+            break;
+        case 'lastHeader':
+            this.lastHeaderTemplate = item.template;
             break;
       }
     });

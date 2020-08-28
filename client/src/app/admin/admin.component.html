@@ -44,9 +44,10 @@
       </ul>
     </div>
     <div class="main">
-      <ft-table sortField="last" filter="admin-table" [columns]="cols" [data]="users" [expandFormTemplate]="tableExpandForm" (onNotify)="eventTableHandler($event)">
+      <ft-table sortField="last" filter="admin-table" [columns]="cols" [data]="users" (onNotify)="eventTableHandler($event)">
+        <ng-template pTemplate="lastHeader"></ng-template>
         <ng-template pTemplate="lastColumn" let-rowData="$implicit" *ngIf="AppUtils.isEditorAccess()">
-          <button pButton icon="pi pi-id-card" (click)="onMoreDetails(rowData)" [title]="Locales.moreDetails"></button>
+          <fa-icon [icon]="faPencil" (click)="onEdit(rowData)" style="cursor: pointer"></fa-icon>
         </ng-template>
       </ft-table>
       <p-confirmDialog key="confirmDialog" [header]="Locales.deleteHeader" [message]="Locales.deleteRecord" icon="pi pi-exclamation-triangle"></p-confirmDialog>

@@ -53,39 +53,44 @@
   (onLazyLoad)="lazyLoad($event)">
   <ng-template pTemplate="colgroup" let-columns>
     <colgroup>
-      <col [style.width.px]="45" />
+      <col *ngIf="firstHeaderTemplate" [style.width.px]="45" />
       <col *ngFor="let col of columns" [style.width.px]="col.width" />
-      <col *ngIf="lastColumnTemplate" [style.width.px]="50" />
+      <col *ngIf="lastHeaderTemplate" [style.width.px]="50" />
     </colgroup>
   </ng-template>
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th style="width: 3em; padding-left: 0; padding-right: 0; text-align: center;" [title]="Locales.addNewRow">
-        <button pButton icon="pi pi-plus" style="font-size: 12px" (click)="onAddNewRow()"></button>
+      <th *ngIf="firstHeaderTemplate" style="text-align: center">
+        <ng-container *ngTemplateOutlet="firstHeaderTemplate"></ng-container>
       </th>
       <th *ngFor="let col of columns" pResizableColumn pSortableColumn="{{col.field}}" [title]="col.header" class="ellipsis">
         {{col.header}}
         <p-sortIcon field="{{col.field}}"></p-sortIcon>
       </th>
-      <th *ngIf="lastColumnTemplate"></th>
+      <th *ngIf="lastHeaderTemplate" style="text-align: center">
+        <ng-container *ngTemplateOutlet="lastHeaderTemplate"></ng-container>
+      </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
     <tr>
-      <td>
-        <a href="#" [pRowToggler]="rowData">
+      <td *ngIf="firstColumnTemplate" style="text-align: center">
+        <ng-container *ngTemplateOutlet="firstColumnTemplate; context: {$implicit: rowData}"></ng-container>
+      </td>
+      <td *ngIf="!firstColumnTemplate && firstHeaderTemplate" style="text-align: center">
+        <a href="#" [pRowToggler]="rowData" *ngIf="expandFormTemplate">
           <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
         </a>
       </td>
       <td *ngFor="let col of columns" class="ui-resizable-column ellipsis" [style.text-align]="col.align" [title]="formatData(col, rowData, true)" [innerHTML]="formatData(col, rowData, false)"></td>
-      <td *ngIf="lastColumnTemplate" style="text-overflow: initial">
+      <td *ngIf="lastColumnTemplate" style="text-overflow: initial; text-align: center">
         <ng-container *ngTemplateOutlet="lastColumnTemplate; context: {$implicit: rowData}"></ng-container>
       </td>
     </tr>
   </ng-template>
   <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
     <tr>
-      <td [attr.colspan]="columns.length + 1 + (lastColumnTemplate ? 1 : 0)" [title]="columns.length">
+      <td [attr.colspan]="columns.length + (firstHeaderTemplate ? 1 : 0) + (lastColumnTemplate ? 1 : 0)" [title]="columns.length">
         <div [ftTableFormProvider]="rowData" [table]="this">
           <ng-container *ngComponentOutlet="expandFormTemplate"></ng-container>
         </div>
@@ -94,7 +99,7 @@
   </ng-template>
   <ng-template pTemplate="emptymessage" let-columns>
     <tr>
-      <td [attr.colspan]="columns.length + 1 + (lastColumnTemplate ? 1 : 0)" style="text-align: center;">{{Locales.noData}}</td>
+      <td [attr.colspan]="columns.length + (firstHeaderTemplate ? 1 : 0) + (lastHeaderTemplate ? 1 : 0)" style="text-align: center;">{{Locales.noData}}</td>
     </tr>
   </ng-template>
   <ng-template pTemplate="paginatorright">

@@ -1,6 +1,6 @@
 import { environment } from '@client/environments/environment';
 import { Directive } from '@angular/core';
-import { faPlane, faChalkboardTeacher as faInstructor } from '@fortawesome/free-solid-svg-icons';
+import { faPlane, faPencilAlt, faChalkboardTeacher as faInstructor } from '@fortawesome/free-solid-svg-icons';
 import { Session } from 'src/modules/models/constants';
 import { AppUtils } from './utils/app-utils';
 
@@ -13,6 +13,7 @@ export abstract class AppBaseDirective {
 
     faPlane = faPlane;
     faInstructor = faInstructor;
+    faPencil = faPencilAlt;
 
     constructor() {
         this.session = AppUtils.getSession();

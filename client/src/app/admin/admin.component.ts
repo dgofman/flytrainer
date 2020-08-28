@@ -66,7 +66,7 @@ export class AdminComponent extends AppBaseDirective {
       case EventType.Load:
         const t = event.data as FTTableComponent;
         this.loading(true);
-        this.userService.getUsers(t.firstRow, t.itemsPerPage, t.sortField, t.sortDirection, t.filterColumn).subscribe(users => {
+        this.userService.getUsers(t.firstRow, t.itemsPerPage, t.sortField, t.sortDirection).subscribe(users => {
           this.loading(false);
           this.users = users;
         }, (ex) => this.errorHandler(ex));

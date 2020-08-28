@@ -81,8 +81,6 @@ export class FTTableComponent implements AfterContentInit {
   itemsPerPage = 25;
   firstRow = 0;
   sortDirection = 'asc';
-  filterColumn: string;
-  filterQuery: string;
 
   ngAfterContentInit(): void {
     const controls = {_saveFilter: new FTFormControl({field: '_saveFilter'})};

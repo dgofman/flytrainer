@@ -21,12 +21,11 @@ public class AdminController extends BaseController {
 
 	private static final int ALL_MAX_LIMIT = 10000;
 
-	public Result users(Http.Request request, Integer startIndex, Integer rows, String sortBy, String sortDirection,
-			String filterColumnName, String filterQuery) {
+	public Result users(Http.Request request, Integer startIndex, Integer rows, String sortBy, String sortDirection) {
 		Query<User> query = Ebean.find(User.class);
-		if (!StringUtils.isEmpty(filterColumnName) && !StringUtils.isEmpty(filterColumnName)) {
+		/*if (!StringUtils.isEmpty(filterColumnName) && !StringUtils.isEmpty(filterColumnName)) {
 			query.where().like(filterColumnName, filterQuery);
-		}
+		}*/
 		if (!StringUtils.isEmpty(sortBy) && !StringUtils.isEmpty(sortDirection)) {
 			if ("desc".equals(sortDirection)) {
 				query.orderBy().desc(sortBy);

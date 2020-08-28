@@ -4,7 +4,9 @@ import { OverlayPanelModule} from 'primeng/overlaypanel';
 import { Directive, Input, NgModule, EventEmitter, Output, Component, TemplateRef, AfterContentInit, ContentChildren, QueryList } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
+import {TooltipModule } from 'primeng/tooltip';
 import { CalendarModule } from 'primeng/calendar';
+import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { AppUtils } from '../utils/app-utils';
 import { BaseModel } from 'src/modules/models/base.model';
@@ -48,7 +50,7 @@ export class FTTableComponent implements AfterContentInit {
   isEditorAccess = AppUtils.isEditorAccess;
   yearRange = AppUtils.defaultYearRange;
   lastColumnTemplate: TemplateRef<any>;
-  filters: {};
+  filters: {_saveFilter: false};
   filterGroup: FormGroup;
 
   @Input('columns') cols: ColumnType[];
@@ -83,16 +85,15 @@ export class FTTableComponent implements AfterContentInit {
   filterQuery: string;
 
   ngAfterContentInit(): void {
-    const controls = {};
+    const controls = {_saveFilter: new FTFormControl({field: '_saveFilter'})};
     this.cols.forEach(col => {
         controls[col.field] = new FTFormControl(col);
+        controls[col.field + '_show'] = new FTFormControl(col);
+        if (col.show === 'default') {
+          this.filters[col.field + '_show'] = true;
+        }
     });
     this.filterGroup = new FormGroup(controls);
-    this.filterGroup.patchValue({
-      first: 'David',
-      last: 'Gofman'
-    });
-
     this.templates.forEach((item) => {
       switch (item.getType()) {
         case 'lastColumn':
@@ -102,8 +103,26 @@ export class FTTableComponent implements AfterContentInit {
     });
   }
 
-  public resetFilter() {
+  resetFilter() {
     this.filterGroup.reset();
+    this.filterGroup.patchValue(this.filters);
+  }
+
+  clearFilter() {
+    this.filterGroup.reset();
+  }
+
+  applyFilter() {
+    const data = this.filterGroup.getRawValue();
+    for (const name in data) {
+      if (!data[name] && data[name] !== 0) {
+        delete data[name];
+      }
+    }
+    if (data._saveFilter) {
+      this.filters = data;
+    }
+    this.filters._saveFilter = data._saveFilter;
   }
 
   public getColumns(all: boolean): Array<ColumnType> {
@@ -115,11 +134,11 @@ export class FTTableComponent implements AfterContentInit {
   }
 
   isShow(c: ColumnType) {
-    return this.getFilter(c).show !== false && c.show === 'default';
+    return this.getFilter(c.field + '_show') && c.show === 'default';
   }
 
-  getFilter(c: ColumnType) {
-    return this.filters[c.field] || {};
+  getFilter(name: string) {
+    return this.filters[name] || {};
   }
 
   notify(message: EventType, data: any) {
@@ -193,7 +212,7 @@ export class FTTableFormProviderDirective {
 }
 
 @NgModule({
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, DropdownModule, CalendarModule, TableModule, OverlayPanelModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, TooltipModule, CheckboxModule,  DropdownModule, CalendarModule, TableModule, OverlayPanelModule],
   exports: [FTTableComponent, FTTableFormProviderDirective],
   declarations: [FTTableComponent, FTTableFormProviderDirective]
 })

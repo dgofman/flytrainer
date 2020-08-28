@@ -29,7 +29,7 @@ export class AdminComponent extends AppBaseDirective {
     { field: 'phone', type: 'input', show: 'default', header: Locales.cellphone, width: 150, validators: [Validators.maxLength(30)] },
     { field: 'ftn', type: 'input', header: Locales.ftn, width: 100, validators: [Validators.maxLength(10)] },
     { field: 'role', type: 'popup', value: RoleType.map(role => ({label: role, value: role})), show: 'default', header: Locales.role, width: 100, align: 'center', validators: [Validators.required] },
-    { field: 'isMemeber', header: Locales.isMemeber, width: 70, align: 'center', format: 'bool' },
+    { field: 'isMemeber', type: 'check', header: Locales.isMemeber, width: 70, align: 'center', format: 'bool' },
     { field: 'isActive', type: 'check', show: 'default', header: Locales.isActive, width: 70, align: 'center', format: 'bool' },
     { field: 'resetPassword', type: 'check', header: Locales.resetPassword, width: 70, align: 'center', format: 'bool' },
     { field: 'isCitizen', type: 'check', header: Locales.isCitizen, width: 70, align: 'center', format: 'bool' },
@@ -66,7 +66,7 @@ export class AdminComponent extends AppBaseDirective {
       case EventType.Load:
         const t = event.data as FTTableComponent;
         this.loading(true);
-        this.userService.getUsers(t.firstRow, t.itemsPerPage, t.sortField, t.sortDirection, t.filterColumn, t.filterQuery).subscribe(users => {
+        this.userService.getUsers(t.firstRow, t.itemsPerPage, t.sortField, t.sortDirection, t.filterColumn).subscribe(users => {
           this.loading(false);
           this.users = users;
         }, (ex) => this.errorHandler(ex));

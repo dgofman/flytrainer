@@ -69,3 +69,5 @@ export const routes: Routes = [
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+console.log('%cFlyTrainer.com', 'font: 60px roboto; font-weight:bold; color: red; -webkit-text-stroke:1px black; background-color: yellow; border-radius: 20px; padding: 20px');

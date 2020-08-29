@@ -23,7 +23,10 @@ export default {
     clearAll: 'Clear All',
     addNewRow: 'Add New Row',
     itemsPerPage: 'Items Per Page',
-
+    show: 'Show',
+    columnName: 'Column Name',
+    query: 'Query',
+    sqlQuery: '% - Represents zero, one, or multiple characters<br>_ - Represents a single character',
     noData: 'No data found.',
     deleteHeader: 'Delete Confirmation',
     deleteRecord: 'Are you sure you want to delete this record?',

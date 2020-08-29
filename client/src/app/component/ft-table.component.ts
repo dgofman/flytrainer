@@ -1,9 +1,9 @@
 import Locales from '@locales/common';
 import { LazyLoadEvent, SelectItem, PrimeTemplate } from 'primeng/api';
 import { OverlayPanelModule} from 'primeng/overlaypanel';
-import { Directive, Input, NgModule, EventEmitter, Output, Component, TemplateRef, AfterContentInit, ContentChildren, QueryList } from '@angular/core';
+import { Directive, Input, NgModule, EventEmitter, Output, Component, TemplateRef, AfterContentInit, ContentChildren, QueryList, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
+import { TableModule, Table } from 'primeng/table';
 import {TooltipModule } from 'primeng/tooltip';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -13,8 +13,9 @@ import { BaseModel } from 'src/modules/models/base.model';
 import { DropdownModule } from 'primeng/dropdown';
 import { AbstractControlOptions, ValidatorFn, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FTFormControl } from '../utils/ft-form.control';
+import { DomHandler } from 'primeng/dom';
 
-type SHOW_COLUMNS = 'never' | 'default';
+type SHOW_COLUMNS = 'never' | true | false;
 type FORMAT_COLUMNS = 'date' | 'datetime' | 'epoch' | 'bool';
 type TYPET_COLUMNS = 'check' | 'cal' | 'radio' | 'input' | 'disable' | 'popup';
 
@@ -65,7 +66,17 @@ export class FTTableComponent implements AfterContentInit {
   @ContentChildren(PrimeTemplate) templates: QueryList<PrimeTemplate>;
 
   @Input('filter') public set filter(name: any) {
-    this.filters = JSON.parse(sessionStorage.getItem(name) || '{}');
+    this.filterName = name;
+    this.filters = JSON.parse(sessionStorage.getItem(name) || '{"_saveFilter": true}');
+    Object.keys(this.filters).forEach(key => {
+      if (this.filters[key] instanceof Array) { // calendar range
+        this.filters[key].forEach((val: any, index: number) =>  {
+          if (typeof val === 'string') {
+             this.filters[key][index] = new Date(val);
+          }
+        });
+      }
+    });
   }
   public get filter(): any {
     return this.filters;
@@ -85,13 +96,19 @@ export class FTTableComponent implements AfterContentInit {
   firstRow = 0;
   sortDirection = 'asc';
 
+  private filterName: string;
+  @ViewChild(Table) private table: Table;
+
   ngAfterContentInit(): void {
     const controls = {_saveFilter: new FTFormControl({field: '_saveFilter'})};
     this.cols.forEach(col => {
         controls[col.field] = new FTFormControl(col);
         controls[col.field + '_show'] = new FTFormControl(col);
-        if (col.show === 'default') {
-          this.filters[col.field + '_show'] = true;
+        if (col.show !== 'never') {
+          if (this.filters[col.field + '_show'] !== undefined) {
+            col.show = this.filters[col.field + '_show'] === true;
+          }
+          this.filters[col.field + '_show'] = col.show;
         }
     });
     this.filterGroup = new FormGroup(controls);
@@ -122,10 +139,19 @@ export class FTTableComponent implements AfterContentInit {
     this.filterGroup.reset();
   }
 
+  saveFilter() {
+    sessionStorage.setItem(this.filterName, JSON.stringify(this.filter));
+  }
+
   applyFilter() {
     const data = this.filterGroup.getRawValue();
+    this.cols.forEach(col => {
+      if (col.show !== 'never') {
+        col.show = data[col.field + '_show'] === true;
+      }
+    });
     for (const name in data) {
-      if (!data[name] && data[name] !== 0) {
+      if (data[name] === null) {
         delete data[name];
       }
     }
@@ -133,22 +159,19 @@ export class FTTableComponent implements AfterContentInit {
       this.filters = data;
     }
     this.filters._saveFilter = data._saveFilter;
+    if (data._saveFilter) {
+      this.saveFilter();
+    }
+    this.table.tableService.onColumnsChange(this.cols);
+    this.notify(EventType.Load, this);
   }
 
   public getColumns(all: boolean): Array<ColumnType> {
     if (all) {
         return this.cols.filter(c => c.show !== 'never');
     } else {
-        return this.cols.filter(c => this.isShow(c));
+        return this.cols.filter(c => c.show === true);
     }
-  }
-
-  isShow(c: ColumnType) {
-    return this.getFilter(c.field + '_show') && c.show === 'default';
-  }
-
-  getFilter(name: string) {
-    return this.filters[name] || {};
   }
 
   notify(message: EventType, data: any) {
@@ -167,6 +190,19 @@ export class FTTableComponent implements AfterContentInit {
     }
     this.expandedRows = {};
     this.notify(EventType.Load, this);
+  }
+
+  colResize() {
+    const headers = DomHandler.find(this.table.containerViewChild.nativeElement, '.ui-table-thead > tr:first-child > th');
+    headers.map(header => {
+        delete this.filters[header.id + '_width'];
+        const width = DomHandler.getOuterWidth(header);
+        const col = this.filterGroup.get(header.id) as FTFormControl;
+        if (col && col.type.width && col.type.width !== width) {
+          this.filters[header.id + '_width'] = width;
+        }
+    });
+    this.saveFilter();
   }
 
   onAddNewRow() {

@@ -1,8 +1,6 @@
 <div class="filter-wrap">
   <p-overlayPanel #op appendTo="body" [showCloseIcon]="true" [style]="{width: '600px'}" [dismissable]="false">
-      <h3 style="display: inline;">{{Locales.filter}} <span class="pi pi-info-circle" style="color: #007ad9" [escape]="false" tooltipStyleClass="nowrap-tooltip"
-          pTooltip="% - Represents zero, one, or multiple characters<br>_ - Represents a single character"></span>
-      </h3>
+      <h3 style="display: inline;">{{Locales.filter}}</h3>
       <div class="right">
         <a (click)="clearFilter()">{{Locales.clearAll}}</a>
       </div>
@@ -11,9 +9,9 @@
           <p-table [value]="getColumns(true)" [rows]="8" [scrollable]="true" scrollHeight="300px">
             <ng-template pTemplate="header">
                 <tr>
-                    <th width="40">Show</th>
-                    <th width="200">Column</th>
-                    <th>Query</th>
+                    <th width="40">{{Locales.show}}</th>
+                    <th width="200">{{Locales.columnName}}</th>
+                    <th>{{Locales.query}}</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
@@ -23,10 +21,10 @@
                     </td>  
                     <td width="200">{{rowData.header}}</td>
                     <td style="padding: 0.5em;" class="td-controls">
-                      <input *ngIf="rowData.type=='input'" class="ui-inputtext" [formControlName]="rowData.field"/>
+                      <input *ngIf="rowData.type=='input'" class="ui-inputtext" [formControlName]="rowData.field" [escape]="false" [pTooltip]="Locales.sqlQuery" tooltipStyleClass="nowrap-tooltip"/>
                       <p-dropdown *ngIf="rowData.type=='popup'" appendTo="body" [options]="rowData.value" [formControlName]="rowData.field"></p-dropdown>
                       <p-checkbox *ngIf="rowData.type=='check'" binary="true" [formControlName]="rowData.field"></p-checkbox>
-                      <p-calendar *ngIf="rowData.type=='cal'" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" showButtonBar="true" showIcon="true" selectionMode="range" appendTo="body" [formControlName]="rowData.field"></p-calendar>
+                      <p-calendar *ngIf="rowData.type=='cal'" placeholder="mm/dd/yyyy ( - mm/dd/yyyy)" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" showButtonBar="true" showIcon="true" selectionMode="range" appendTo="body" [formControlName]="rowData.field"></p-calendar>
                     </td>
                 </tr>
             </ng-template>
@@ -50,11 +48,11 @@
 </div>
 <p-table [columns]="getColumns(false)" [value]="data" [resizableColumns]="true" [scrollable]="true"
   [expandedRowKeys]="expandedRows" [dataKey]="dataKey" [lazy]="true" [paginator]="true" [rows]="itemsPerPage"
-  (onLazyLoad)="lazyLoad($event)">
+  (onLazyLoad)="lazyLoad($event)" (onColResize)="colResize()">
   <ng-template pTemplate="colgroup" let-columns>
     <colgroup>
       <col *ngIf="firstHeaderTemplate" [style.width.px]="45" />
-      <col *ngFor="let col of columns" [style.width.px]="col.width" />
+      <col *ngFor="let col of columns" [style.width.px]="filters[col.field + '_width'] || col.width"/>
       <col *ngIf="lastHeaderTemplate" [style.width.px]="50" />
     </colgroup>
   </ng-template>
@@ -63,7 +61,7 @@
       <th *ngIf="firstHeaderTemplate" style="text-align: center">
         <ng-container *ngTemplateOutlet="firstHeaderTemplate"></ng-container>
       </th>
-      <th *ngFor="let col of columns" pResizableColumn pSortableColumn="{{col.field}}" [title]="col.header" class="ellipsis">
+      <th *ngFor="let col of columns" pResizableColumn pSortableColumn="{{col.field}}" [title]="col.header" class="ellipsis"  [id]="col.field">
         {{col.header}}
         <p-sortIcon field="{{col.field}}"></p-sortIcon>
       </th>

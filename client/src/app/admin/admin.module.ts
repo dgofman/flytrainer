@@ -12,7 +12,6 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { FTTableModule } from '../component/ft-table.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { UserFormComponent } from './userform.component';
 import { ConfirmationService } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
@@ -41,7 +40,7 @@ export const routes: Routes = [
     FTPipeModule
   ],
   declarations: [
-    AdminComponent, UserFormComponent
+    AdminComponent
   ],
   providers: [
     ConfirmationService,

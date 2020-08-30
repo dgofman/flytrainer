@@ -24,8 +24,6 @@ export class AuthComponent implements AfterViewInit {
   environment = environment;
   resetPassword: boolean;
   path: string;
-  company: string;
-  phone: string;
   worldtime: any = {};
   currentDateTime: Date;
   metars: { [key: string]: any; } = {};
@@ -36,8 +34,6 @@ export class AuthComponent implements AfterViewInit {
 
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient, private appService: AuthService) {
     this.path = router.url.split('?')[0];
-    this.company = environment.company;
-    this.phone = environment.phone;
     this.metarAirports = environment.metarAirports;
     this.currentDateTime = new Date();
     this.message = Locales.pleaseWait;

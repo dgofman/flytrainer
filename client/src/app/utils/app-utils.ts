@@ -5,6 +5,7 @@ import { Session, Role } from 'src/modules/models/constants';
 export class AppUtils {
 
     static timeoutId: any;
+    static session: Session;
 
     static loading(show: boolean) {
         clearTimeout(AppUtils.timeoutId);
@@ -42,7 +43,7 @@ export class AppUtils {
     }
 
     static getSession(): Session {
-        return JSON.parse(sessionStorage.getItem('auth_data') || '{}') as Session;
+        return  JSON.parse(sessionStorage.getItem('auth_data') || '{}') as Session;
     }
 
     static canViewAdmin(): boolean {

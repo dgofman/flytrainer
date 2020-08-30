@@ -1,5 +1,5 @@
 import { FormControl, ValidatorFn, AbstractControlOptions } from '@angular/forms';
-import { ColumnType } from '../component/ft-table.component';
+import { ColumnType } from '../component/ft-table/ft-table.component';
 import { FTEpochPipe, FTDatePipe, FTDateTimePipe } from './pipes';
 
 export class FTFormControl extends FormControl {

@@ -1,11 +1,7 @@
-<div class="container" [ngClass]="{'menu-layout-open': toggleArroMenu}">
+<div class="container" [ngClass]="{'menu-layout-open': toggleArrowMenu}">
   <div class="topbar">
     <div class="topbar-left">
-      <h3>{{environment.company}}</h3>
-      <h4>{{environment.phone}}</h4>
-      <div class="arrow-menu" (click)="toggleArroMenu = !toggleArroMenu;">
-        <i class="pi pi-chevron-circle-right"></i>
-      </div>
+      <app-header></app-header>
     </div>
     <div class="topbar-right">
       <div style="float: right">
@@ -19,35 +15,14 @@
   </div>
   <div class="wrap">
     <div class="left-menu">
-      <ul class="nav-menu">
-        <li routerLink="../dashboard">
-          <i class="pi pi-home"></i>{{Locales.dashboard}}
-        </li>
-        <li routerLink="schedule">
-          <i class="pi pi-calendar"></i>{{Locales.schedule}}
-        </li>
-        <li routerLink="instructors">
-          <fa-icon [icon]="faInstructor"></fa-icon>{{Locales.instructors}}
-        </li>
-        <li routerLink="students">
-          <i class="pi pi-users"></i>{{Locales.students}}
-        </li>
-        <li routerLink="aircraft">
-          <fa-icon [icon]="faPlane" class="rotate-90"></fa-icon>{{Locales.aircraft}}
-        </li>
-        <li routerLink="billing">
-          <i class="pi pi-money-bill"></i>{{Locales.billing}}
-        </li>
-        <li routerLink="reports">
-          <i class="pi pi-chart-line"></i>{{Locales.reports}}
-        </li>
-      </ul>
+      <ft-menu link="admin"></ft-menu>
     </div>
     <div class="main">
+      <p-breadcrumb [model]="[{label: Locales.admin}, {label: 'Users'}]"></p-breadcrumb>
       <ft-table sortField="last" filter="admin-table" [columns]="cols" [data]="users" (onNotify)="eventTableHandler($event)">
-        <ng-template pTemplate="lastHeader"></ng-template>
-        <ng-template pTemplate="lastColumn" let-rowData="$implicit" *ngIf="AppUtils.isEditorAccess()">
-          <fa-icon [icon]="faPencil" (click)="onEdit(rowData)" style="cursor: pointer"></fa-icon>
+        <ng-template pTemplate="firstHeader"></ng-template>
+        <ng-template pTemplate="firstColumn" let-rowData="$implicit" *ngIf="AppUtils.isEditorAccess()">
+          <fa-icon [icon]="icons.faPencil" (click)="onEdit(rowData)" style="cursor: pointer"></fa-icon>
         </ng-template>
       </ft-table>
       <p-confirmDialog key="confirmDialog" [header]="Locales.deleteHeader" [message]="Locales.deleteRecord" icon="pi pi-exclamation-triangle"></p-confirmDialog>

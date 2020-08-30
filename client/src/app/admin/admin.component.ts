@@ -4,8 +4,9 @@ import { UserService } from 'src/services/user.service';
 import { User } from 'src/modules/models/user';
 import { AuthService } from '../authentication/auth.service';
 import { AppBaseDirective } from '../app.base.component';
-import { ColumnType, FTTableComponent, EmitEvent, EventType } from '../component/ft-table.component';
+import { ColumnType, FTTableComponent, EmitEvent, EventType } from '../component/ft-table/ft-table.component';
 import { Role, RoleType } from 'src/modules/models/constants';
+import { FTIcons } from '../component/ft-menu/ft-menu.component';
 import { Validators } from '@angular/forms';
 
 @Component({
@@ -14,6 +15,7 @@ import { Validators } from '@angular/forms';
 })
 export class AdminComponent extends AppBaseDirective {
   Locales = Locales;
+  icons = FTIcons;
   users: User[];
 
   cols: ColumnType[] = [

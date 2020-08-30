@@ -1,6 +1,6 @@
 import Locales from '@locales/common';
 import { environment } from '@client/environments/environment';
-import { Component, NgModule, ElementRef, Renderer2 } from '@angular/core';
+import { Component, NgModule, ElementRef, Renderer2, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 
@@ -124,6 +124,64 @@ export class AppToastComponent {
 }
 
 @Component({
+  selector: 'app-header',
+  template: `
+  <div>
+      <h3>{{environment.company}}</h3>
+      <h4>{{environment.phone}}</h4>
+      <div [class]="toggleArrowMenu ? 'arrow-menu open' : 'arrow-menu'" (click)="toggleArrowMenu = !toggleArrowMenu;" *ngIf="showArrow">
+        <i class="pi pi-chevron-circle-right"></i>
+      </div>
+    </div>
+  `,
+  styles: [`
+    .arrow-menu {
+          cursor: pointer;
+          position: absolute;
+          top: 15px;
+          right: -15px;
+          font-size: 25px;
+          z-index: 1;
+
+          &:hover {
+              color: #d8dae2;
+          }
+
+          &>i {
+              -moz-transition: all 0.3s;
+              -o-transition: all 0.3s;
+              -webkit-transition: all 0.3s;
+              transition: all 0.3s;
+          }
+      }
+
+      .arrow-menu.open>i {
+          -webkit-transform: rotate(-180deg);
+          -moz-transform: rotate(-180deg);
+          -o-transform: rotate(-180deg);
+          -ms-transform: rotate(-180deg);
+          transform: rotate(-180deg);
+      }
+    `]
+  })
+export class AppHeaderComponent {
+  private static toggle = true;
+  environment = environment;
+
+  @Input('showArrow') showArrow = true;
+
+  set toggleArrowMenu(state: boolean) {
+    AppHeaderComponent.toggle = state;
+  }
+  get toggleArrowMenu(): boolean {
+    return AppHeaderComponent.toggle;
+  }
+  public static get toggleArrowMenu(): boolean {
+    return AppHeaderComponent.toggle;
+  }
+}
+
+@Component({
   selector: 'app-footer',
   template: `<a [href]="tfrLink" target="_blank">TFR</a> | <a [href]="wxbriefLink" target="_blank">1800WXBrief</a> | <a [href]="wxLink" target="_blank">AviationWeather</a> | <a [href]="iplanLink" target="_blank">iFlightPlanner</a> | <a [href]="skyvectorLink" target="_blank">Skyvector</a> <div class="powerby">${Locales.powerBy}</div>`
 })
@@ -137,8 +195,8 @@ export class AppFooterComponent {
 
 @NgModule({
   imports: [CommonModule],
-  exports: [AppFooterComponent],
-  declarations: [AppFooterComponent]
+  exports: [AppHeaderComponent, AppFooterComponent],
+  declarations: [AppHeaderComponent, AppFooterComponent]
 })
 export class AppComponentModule {
 }

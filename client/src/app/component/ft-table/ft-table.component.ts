@@ -8,11 +8,11 @@ import {TooltipModule } from 'primeng/tooltip';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
-import { AppUtils } from '../utils/app-utils';
 import { BaseModel } from 'src/modules/models/base.model';
 import { DropdownModule } from 'primeng/dropdown';
 import { AbstractControlOptions, ValidatorFn, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FTFormControl } from '../utils/ft-form.control';
+import { FTFormControl } from '../../utils/ft-form.control';
+import { AppUtils } from '../../utils/app-utils';
 import { DomHandler } from 'primeng/dom';
 
 type SHOW_COLUMNS = 'never' | true | false;

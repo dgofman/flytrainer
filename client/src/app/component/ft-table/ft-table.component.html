@@ -46,7 +46,7 @@
       [style]="{'minWidth':'80px', 'width': '80px'}"></p-dropdown>
   </div>
 </div>
-<p-table [columns]="getColumns(false)" [value]="data" [resizableColumns]="true" [scrollable]="true"
+<p-table [columns]="getColumns(false)" [value]="data" [resizableColumns]="true" [scrollable]="true" [rowHover]="true"
   [expandedRowKeys]="expandedRows" [dataKey]="dataKey" [lazy]="true" [paginator]="true" [rows]="itemsPerPage"
   (onLazyLoad)="lazyLoad($event)" (onColResize)="colResize()">
   <ng-template pTemplate="colgroup" let-columns>

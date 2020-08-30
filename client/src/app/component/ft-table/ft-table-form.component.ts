@@ -1,9 +1,9 @@
 import Locales from '@locales/common';
 import { OnInit, Directive } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { AppUtils } from '../utils/app-utils';
 import { BaseModel } from 'src/modules/models/base.model';
-import { FTFormControl } from '../utils/ft-form.control';
+import { AppUtils } from '../../utils/app-utils';
+import { FTFormControl } from '../../utils/ft-form.control';
 import { FTTableFormProviderDirective } from './ft-table.component';
 
 @Directive()

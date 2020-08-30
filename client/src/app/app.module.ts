@@ -45,6 +45,31 @@ export const routes: Routes = [
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
   },
   {
+    path: 'schedule',
+    canActivate: [AuthService],
+    loadChildren: () => import('./schedule/schedule.module').then(m => m.ScheduleModule)
+  },
+  {
+    path: 'instructors',
+    canActivate: [AuthService],
+    loadChildren: () => import('./instructor/instructor.module').then(m => m.InstructorModule)
+  },
+  {
+    path: 'aircrafts',
+    canActivate: [AuthService],
+    loadChildren: () => import('./aircraft/aircraft.module').then(m => m.AircraftModule)
+  },
+  {
+    path: 'billing',
+    canActivate: [AuthService],
+    loadChildren: () => import('./billing/billing.module').then(m => m.BillingModule)
+  },
+  {
+    path: 'reports',
+    canActivate: [AuthService],
+    loadChildren: () => import('./report/report.module').then(m => m.ReportModule)
+  },
+  {
     path: '**', component: AppNotFoundComponent
   }
 ];

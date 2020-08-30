@@ -4,6 +4,7 @@ import { HttpInterceptor, HttpEvent, HttpHandler, HttpRequest, HttpClient, HttpE
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CanActivate, Router } from '@angular/router';
+import { Session } from 'src/modules/models/constants';
 import { AppUtils } from '../utils/app-utils';
 
 @Injectable()
@@ -47,7 +48,7 @@ export class AuthService implements HttpInterceptor, CanActivate {
         sessionStorage.removeItem('auth_data');
     }
 
-    login(json: any) {
+    login(json: Session) {
         sessionStorage.setItem('auth_data', JSON.stringify(json));
         AuthService.AUTH_TOKEN = json.token;
         AuthService.CORRELATION_ID = json.correlationId;

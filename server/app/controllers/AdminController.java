@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.ebean.Ebean;
 import io.ebean.Query;
 import models.BaseModel;
+import models.FTTableEvent;
 import models.User;
 import play.libs.Json;
 import play.mvc.Http;
@@ -21,21 +22,28 @@ public class AdminController extends BaseController {
 
 	private static final int ALL_MAX_LIMIT = 10000;
 
-	public Result users(Http.Request request, Integer startIndex, Integer rows, String sortBy, String sortDirection) {
-		Query<User> query = Ebean.find(User.class);
-		/*if (!StringUtils.isEmpty(filterColumnName) && !StringUtils.isEmpty(filterColumnName)) {
-			query.where().like(filterColumnName, filterQuery);
-		}*/
-		if (!StringUtils.isEmpty(sortBy) && !StringUtils.isEmpty(sortDirection)) {
-			if ("desc".equals(sortDirection)) {
-				query.orderBy().desc(sortBy);
-			} else {
-				query.orderBy().asc(sortBy);
+	public Result users(Http.Request request) {
+		try {
+			JsonNode body = request.body().asJson();
+			FTTableEvent event = new ObjectMapper().readerFor(FTTableEvent.class).readValue(body);
+			
+			Query<User> query = Ebean.find(User.class);
+			/*if (!StringUtils.isEmpty(filterColumnName) && !StringUtils.isEmpty(filterColumnName)) {
+				query.where().like(filterColumnName, filterQuery);
+			}*/
+			if (!StringUtils.isEmpty(event.sortField) && !StringUtils.isEmpty(event.sortOrder)) {
+				if ("desc".equals(event.sortOrder)) {
+					query.orderBy().desc(event.sortField);
+				} else {
+					query.orderBy().asc(event.sortField);
+				}
 			}
+			query.setFirstRow(event.start);
+			query.setMaxRows(event.total != -1 ? event.total : ALL_MAX_LIMIT);
+			return okResult(User.class, query.findList());
+		} catch (Exception e) {
+			return badRequest(e);
 		}
-		query.setFirstRow(startIndex);
-		query.setMaxRows(rows != -1 ? rows : ALL_MAX_LIMIT);
-		return okResult(User.class, query.findList());
 	}
 
 	public Result userById(Long userId) {

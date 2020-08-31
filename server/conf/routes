@@ -12,7 +12,7 @@ POST    /forgot                     controllers.HomeController.forgot(request: R
 POST    /reset                      controllers.HomeController.reset(request: Request)
 POST    /logout                     controllers.HomeController.logout(request: Request)
 
-GET     /users                      controllers.AdminController.users(request: Request, startIndex: Integer, rows: Integer, sortBy: String ?= null, sortDirection: String ?= null)
+POST    /users                      controllers.AdminController.users(request: Request)
 GET     /users/:id                  controllers.AdminController.userById(id: Long)
 POST    /users                      controllers.AdminController.saveUser(request: Request)
 DELETE  /users/:id                  controllers.AdminController.deleteUser(request: Request, id: Long)

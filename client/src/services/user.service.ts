@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from 'src/modules/models/user';
+import { FTTableEvent } from 'src/app/component/ft-table/ft-table.component';
 
 @Injectable()
 export class UserService {
@@ -9,9 +10,8 @@ export class UserService {
   public constructor(private http: HttpClient) {
   }
 
-  getUsers(startIndex: number, rows: number, sortBy?: string, sortDirection?: string): Observable<User[]> {
-    const url = `/users?startIndex=${startIndex}&rows=${rows}&sortBy=${sortBy || ''}&sortDirection=${sortDirection || ''}`;
-    return this.http.get<User[]>(url);
+  getUsers(model: FTTableEvent): Observable<User[]> {
+    return this.http.post<User[]>('/users', model);
   }
 
   getUserById(id: number): Observable<User> {

@@ -1,9 +1,9 @@
 @import '../../../assets/less/layout.less';
 
 .filter-wrap {
-    height: 40px;
+    min-height: 40px;
     margin-bottom: 4px;
-    background: #f3c8c8;
+    background: #eaeaea;
     padding: 0 13px;
     display: flex;
     align-items: center;
@@ -33,4 +33,25 @@ th {
 .p-grid>div {
     margin-bottom: .6em;
     padding: .5em;
+}
+
+.chips {
+    padding: 0 5px;
+    width: 100%;
+
+    span {
+        color: #fff;
+        background: #007ad9;
+        border-radius: 3px;
+        display: inline-block;
+        margin: 3px;
+        padding: 3px;
+    }
+
+    a:after {
+        content: '\e90c';
+        color: #fff;
+        font-family: primeicons;
+        padding-left: 6px;
+    }
 }

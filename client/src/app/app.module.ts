@@ -1,7 +1,7 @@
+import { NgModule } from '@angular/core';
 import { environment } from '@client/environments/environment';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
 import { AppComponent, AppOverlayComponent, AppToastComponent } from './app.component';
 import { AppNotFoundComponent } from './app.notfound.component';
 import { Routes, RouterModule, UrlSegment } from '@angular/router';

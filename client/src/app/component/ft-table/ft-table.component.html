@@ -6,7 +6,7 @@
       </div>
       <ng-template pTemplate>
         <form [formGroup]="filterGroup" class="p-form ui-fluid">
-          <p-table [value]="getColumns(true)" [rows]="8" [scrollable]="true" scrollHeight="300px">
+          <p-table [value]="getColumns(1)" [rows]="8" [scrollable]="true" scrollHeight="300px">
             <ng-template pTemplate="header">
                 <tr>
                     <th width="40">{{Locales.show}}</th>
@@ -34,20 +34,21 @@
           </span>
           <div class="right" style="margin: 10px 0;">
             <p-button label="{{Locales.apply}}" (click)="applyFilter(); op.onCloseClick($event)"></p-button>
-            <p-button label="{{Locales.cancel}}" (click)="op.onCloseClick($event)"></p-button>
+            <p-button label="{{Locales.cancel}}" (click)="resetFilter(); op.onCloseClick($event)"></p-button>
           </div>
         </form>
       </ng-template>
   </p-overlayPanel>
   <button pButton icon="pi pi-filter" style="font-size: 12px; border-radius: 50%;" (click)="resetFilter(); op.toggle($event)"></button>
-  <div style="position: absolute; right: 5px;">
+  <div class="chips" #chips><span *ngFor="let col of getColumns(2)">{{col.header}}: {{getChips(col)}}<a (click)="removeChip(col)"></a></span></div>
+  <div style="white-space: nowrap">
     {{Locales.itemsPerPage}}
-    <p-dropdown [options]="itemsPerPageList" (onChange)="itemsPerPageChanged()"
+    <p-dropdown [options]="itemsPerPageList" (onChange)="itemsPerPageChanged($event)" [(ngModel)]="filterModel.total"
       [style]="{'minWidth':'80px', 'width': '80px'}"></p-dropdown>
   </div>
 </div>
-<p-table [columns]="getColumns(false)" [value]="data" [resizableColumns]="true" [scrollable]="true" [rowHover]="true"
-  [expandedRowKeys]="expandedRows" [dataKey]="dataKey" [lazy]="true" [paginator]="true" [rows]="itemsPerPage"
+<p-table [columns]="getColumns(0)" [value]="data" [resizableColumns]="true" [scrollable]="true" [rowHover]="true"
+  [expandedRowKeys]="expandedRows" [dataKey]="dataKey" [lazy]="true" [paginator]="true" [rows]="filterModel.total"
   (onLazyLoad)="lazyLoad($event)" (onColResize)="colResize()">
   <ng-template pTemplate="colgroup" let-columns>
     <colgroup>

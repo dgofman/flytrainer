@@ -55,18 +55,9 @@ export class AdminComponent extends AppBaseDirective {
 
   eventTableHandler(event: EmitEvent) {
     switch (event.message) {
-      case EventType.New:
-        const user = event.data as User;
-        user.dlState = 'CA';
-        user.role = Role.USER;
-        user.isActive = 1;
-        user.resetPassword = 1;
-        user.englishProficient = 1;
-        break;
       case EventType.Load:
-        const t = event.data as FTTableComponent;
         this.loading(true);
-        this.userService.getUsers(t.firstRow, t.itemsPerPage, t.sortField, t.sortDirection).subscribe(users => {
+        this.userService.getUsers(event.data).subscribe(users => {
           this.loading(false);
           this.users = users;
         }, (ex) => this.errorHandler(ex));

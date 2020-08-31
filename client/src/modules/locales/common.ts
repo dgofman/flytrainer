@@ -27,6 +27,7 @@ export default {
     show: 'Show',
     columnName: 'Column Name',
     query: 'Query',
+    selectItem: 'Select Item',
     sqlQuery: '% - Represents zero, one, or multiple characters<br>_ - Represents a single character',
     noData: 'No data found.',
     deleteHeader: 'Delete Confirmation',

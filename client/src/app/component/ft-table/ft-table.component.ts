@@ -156,7 +156,7 @@ export class FTTableComponent implements AfterContentInit {
       }
     });
     for (const name in data) {
-      if (data[name] === null) {
+      if (data[name] === null || data[name] === undefined) {
         delete data[name];
       }
     }
@@ -167,8 +167,9 @@ export class FTTableComponent implements AfterContentInit {
     if (data._saveFilter) {
       this.saveFilter();
     }
+    this.filterModel.filter = this.filter;
     this.table.tableService.onColumnsChange(this.cols);
-    this.notify(EventType.Load, this);
+    this.notify(EventType.Load, this.filterModel);
   }
 
   getColumns(view: number): Array<ColumnType> {

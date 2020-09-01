@@ -18,7 +18,9 @@
       <ft-menu link="admin"></ft-menu>
     </div>
     <div class="main">
-      <p-breadcrumb [model]="[{label: Locales.admin}, {label: 'Users'}]"></p-breadcrumb>
+      <div class="breadcrumb">
+        <span *ngFor="let label of [Locales.admin, 'Users']">{{label}}</span>
+      </div>
       <ft-table sortField="last" filter="admin-table" [columns]="cols" [data]="users" (onNotify)="eventTableHandler($event)">
         <ng-template pTemplate="firstHeader"></ng-template>
         <ng-template pTemplate="firstColumn" let-rowData="$implicit" *ngIf="AppUtils.isEditorAccess()">

@@ -10,16 +10,16 @@ export class UserService {
   public constructor(private http: HttpClient) {
   }
 
-  getUsers(model: FTTableEvent): Observable<User[]> {
+  fetch(model: FTTableEvent): Observable<User[]> {
     return this.http.post<User[]>('/users', model);
   }
 
-  getUserById(id: number): Observable<User> {
+  get(id: number): Observable<User> {
     return this.http.get<User>(`/users/${id}`);
   }
 
   save(user: User): Observable<User> {
-    return this.http.post<User>(`/users`, user);
+    return this.http.post<User>(`/users/${user.id}`, user);
   }
 
   delete(user: User): Observable<void> {

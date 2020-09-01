@@ -7,12 +7,15 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -34,6 +37,7 @@ import utils.Constants.Key;
 		@NamedQuery(name = User.FIND, query = "select(isActive) where username = :username and uuid = :uuid and version = :version and modifiedDate =:modifiedDate"),
 		@NamedQuery(name = User.FIND_BY_UUID, query = "select(role) where username = :username and uuid = :uuid"),
 		@NamedQuery(name = User.FIND_BY_EMAIL, query = "select(isActive) where username = :username and email = :email") })
+@JsonInclude(Include.NON_NULL)
 public class User extends BaseModel {
 
 	public static final TypedKey<User> MODEL = TypedKey.<User>create("userModel");
@@ -63,6 +67,7 @@ public class User extends BaseModel {
 	@Length(50)
 	public String last; //lastname
 
+	@Column(name = "username")
 	@Length(50)
 	@NotNull
 	@Index(unique = true)
@@ -75,51 +80,61 @@ public class User extends BaseModel {
 	@DbComment("CONVERT(AES_DECRYPT(password, `environment.json::encryptKey`) USING  UTF8)")
 	public String password = defaultPassword; //password
 
+	@Column(name = "email")
 	@Length(100)
 	@NotNull
 	public String email; //email
 
-	@Length(30)
 	@Column(name = "cellphone")
+	@Length(30)
 	@DbComment("ex: (+NN) NNN NNN NNN")
 	public String phone; //cellphone
 
+	@Column(name = "active")
 	@NotNull
 	public byte isActive = 0; //is_active
 
+	@Column(name = "resetPassword")
 	@NotNull
 	@JsonView(Short.class)
 	public byte resetPassword = 1; //reset_password
 
+	@Column(name = "employee")
 	@NotNull
 	@JsonView(Short.class)
 	public byte isSchoolEmployee = 0; //is_school_employee
 
+	@Column(name = "citizen")
 	@NotNull
 	@JsonView(Short.class)
 	public byte isCitizen = 0; //is_citizen
 
+	@Column(name = "proficient")
 	@NotNull
 	@JsonView(Short.class)
 	public byte englishProficient = 0; //english_proficient (AC 60-28)
 
+	@Column(name = "member")
 	@NotNull
 	@JsonView(Short.class)
 	public byte isMemeber = 1; //is_memeber
 
+	@Column(name = "role")
 	@NotNull
+	@Enumerated
 	public Constants.Access role = Constants.Access.USER; //role
 
+	@Column(name = "birthday")
 	@JsonView(Short.class)
 	public Date birthday; //birthday
 
-	@Length(10)
 	@Column(name = "driver_license")
+	@Length(10)
 	@JsonView(Short.class)
 	public String dl; //driver_license
 
-	@Length(2)
 	@Column(name = "driver_license_state")
+	@Length(2)
 	@JsonView(Short.class)
 	public String dlState; //driver_license_state
 
@@ -127,10 +142,12 @@ public class User extends BaseModel {
 	@JsonView(Short.class)
 	public Date dlExpDate; //driver_license_exp_date
 
+	@Column(name = "ssn")
 	@Length(10)
 	@JsonView(Admin.class)
 	public String ssn; //ssn
 
+	@Column(name = "ftn")
 	@Length(10)
 	@JsonView(Short.class)
 	public String ftn; //ftn

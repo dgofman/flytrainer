@@ -14,5 +14,5 @@ POST    /logout                     controllers.HomeController.logout(request: R
 
 POST    /users                      controllers.AdminController.users(request: Request)
 GET     /users/:id                  controllers.AdminController.userById(id: Long)
-POST    /users                      controllers.AdminController.saveUser(request: Request)
+POST    /users/:id                  controllers.AdminController.saveUser(request: Request, id: Long)
 DELETE  /users/:id                  controllers.AdminController.deleteUser(request: Request, id: Long)

@@ -21,7 +21,7 @@
                     </td>  
                     <td width="200">{{rowData.header}}</td>
                     <td style="padding: 0.5em;" class="td-controls">
-                      <input *ngIf="rowData.type=='input'" class="ui-inputtext" [formControlName]="rowData.field" [escape]="false" [pTooltip]="Locales.sqlQuery" tooltipStyleClass="nowrap-tooltip"/>
+                      <input *ngIf="rowData.type=='input'" class="ui-inputtext" [formControlName]="rowData.field" [escape]="false" [pTooltip]="Locales.sqlQuery"/>
                       <p-dropdown *ngIf="rowData.type=='popup'" appendTo="body" [options]="rowData.value" [formControlName]="rowData.field" [placeholder]="Locales.selectItem"></p-dropdown>
                       <p-checkbox *ngIf="rowData.type=='check'" binary="true" [formControlName]="rowData.field"></p-checkbox>
                       <p-calendar *ngIf="rowData.type=='cal'" placeholder="mm/dd/yyyy ( - mm/dd/yyyy)" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" showButtonBar="true" showIcon="true" selectionMode="range" appendTo="body" [formControlName]="rowData.field"></p-calendar>

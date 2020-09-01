@@ -13,7 +13,6 @@ import { ButtonModule } from 'primeng/button';
 import { FTTableModule } from '../component/ft-table/ft-table.component';
 import { FTMenuModule } from '../component/ft-menu/ft-menu.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ConfirmationService } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
@@ -31,7 +30,6 @@ import { FTPipeModule } from '../utils/pipes';
     ReactiveFormsModule, /*required for FormGroup, FormControl */
     AppComponentModule, /* required for app-header, app-footer */
     FontAwesomeModule,
-    BreadcrumbModule,
     CalendarModule,
     CheckboxModule,
     DropdownModule,

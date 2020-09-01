@@ -28,7 +28,7 @@ export default {
     columnName: 'Column Name',
     query: 'Query',
     selectItem: 'Select Item',
-    sqlQuery: '% - Represents zero, one, or multiple characters<br>_ - Represents a single character',
+    sqlQuery: '% - Represents the value starts or ends with zero or more characters.',
     noData: 'No data found.',
     deleteHeader: 'Delete Confirmation',
     deleteRecord: 'Are you sure you want to delete this record?',

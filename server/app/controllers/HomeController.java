@@ -5,9 +5,6 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Joiner;
@@ -38,8 +35,6 @@ public class HomeController extends BaseController {
 	private static final String VERSION_ATTR = "v";
 	private static final String TOKEN_ATTR = "t";
 	private static final String DATE_ATTR = "d";
-
-	private static final Logger log = LoggerFactory.getLogger(HomeController.class);
 
 	public Result login(Http.Request request) {
 		JsonNode body = request.body().asJson();

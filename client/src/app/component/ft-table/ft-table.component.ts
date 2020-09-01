@@ -145,7 +145,9 @@ export class FTTableComponent implements AfterContentInit {
   }
 
   saveFilter() {
-    sessionStorage.setItem(this.filterName, JSON.stringify(this.filter));
+    if (this.filterName) {
+      sessionStorage.setItem(this.filterName, JSON.stringify(this.filter));
+    }
   }
 
   applyFilter() {
@@ -167,9 +169,8 @@ export class FTTableComponent implements AfterContentInit {
     if (data._saveFilter) {
       this.saveFilter();
     }
-    this.filterModel.filter = this.filter;
     this.table.tableService.onColumnsChange(this.cols);
-    this.notify(EventType.Load, this.filterModel);
+    this.lazyLoad({});
   }
 
   getColumns(view: number): Array<ColumnType> {
@@ -217,8 +218,8 @@ export class FTTableComponent implements AfterContentInit {
       this.filterModel.sortOrder = event.sortOrder > 0 ? 'asc' : 'desc';
     }
     this.expandedRows = {};
-    this.notify(EventType.Load, this.filterModel);
     this.filterModel.filter = this.filter;
+    this.notify(EventType.Load, this.filterModel);
   }
 
   colResize() {

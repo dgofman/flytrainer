@@ -37,6 +37,7 @@
   <logger name="org.jdbcdslog.ConnectionLogger" level="OFF"  />
   <logger name="org.jdbcdslog.StatementLogger"  level="INFO" />
   <logger name="org.jdbcdslog.ResultSetLogger"  level="OFF"  />
+  <logger name="controllers.BaseController"     level="DEBUG"  />
   <logger name="com.zaxxer.hikari" additivity="false" level="OFF">
     <appender-ref ref="STDOUT"/>
   </logger>

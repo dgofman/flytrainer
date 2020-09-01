@@ -23,11 +23,12 @@ public class AdminController extends BaseController {
 	private static final int ALL_MAX_LIMIT = 10000;
 
 	public Result users(Http.Request request) {
+		log.debug("AdminController::users");
 		try {
 			JsonNode body = request.body().asJson();
 			FTTableEvent event = new ObjectMapper().readerFor(FTTableEvent.class).readValue(body);
-			
 			Query<User> query = Ebean.find(User.class);
+			fetch(event, query, User.class);
 			/*if (!StringUtils.isEmpty(filterColumnName) && !StringUtils.isEmpty(filterColumnName)) {
 				query.where().like(filterColumnName, filterQuery);
 			}*/
@@ -40,23 +41,25 @@ public class AdminController extends BaseController {
 			}
 			query.setFirstRow(event.start);
 			query.setMaxRows(event.total != -1 ? event.total : ALL_MAX_LIMIT);
-			return okResult(User.class, query.findList());
+			return okResult(query.findList());
 		} catch (Exception e) {
 			return badRequest(e);
 		}
 	}
 
 	public Result userById(Long userId) {
+		log.debug("AdminController::userById = " + userId);
 		Query<User> query = Ebean.find(User.class);
 		query.where().eq("id", userId);
 		User user = query.findOne();
 		if (user == null) {
 			return createBadRequest("nouser", Constants.Errors.ERROR);
 		}
-		return okResult(BaseModel.Short.class, user);
+		return okResult(user, BaseModel.Short.class);
 	}
 
-	public Result saveUser(Http.Request request) {
+	public Result saveUser(Http.Request request, Long userId) {
+		log.debug("AdminController::saveUser = " + userId);
 		User currentUser = request.attrs().get(User.MODEL);
 		JsonNode body = request.body().asJson();
 		try {
@@ -78,13 +81,14 @@ public class AdminController extends BaseController {
 				validateRole(user, currentUser);
 				user.update(currentUser);
 			}
-			return okResult(User.class, user);
+			return okResult(user, User.class);
 		} catch (Exception e) {
 			return badRequest(e);
 		}
 	}
 	
 	public Result deleteUser(Http.Request request, Long userId) {
+		log.debug("AdminController::saveUser = " + userId);
 		BaseModel currentUser = request.attrs().get(User.MODEL);
 		Query<User> query = Ebean.find(User.class);
 		query.where().eq("id", userId);
@@ -96,7 +100,7 @@ public class AdminController extends BaseController {
 			return badRequest(Constants.Errors.DELETE_USER.toString());
 		}
 		user.delete(currentUser);
-		return okResult(BaseModel.Short.class, user);
+		return okResult(user, BaseModel.Short.class);
 	}
 	
 	

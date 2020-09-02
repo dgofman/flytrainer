@@ -1,7 +1,9 @@
-import Locales from './common';
+import Common from './common';
+import Menu from './menu';
 
 export default {
-    ...Locales,
+    ...Menu,
+    ...Common,
     username: 'Username',
     firstname: 'First Name',
     lastname: 'Last Name',

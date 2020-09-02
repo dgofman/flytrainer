@@ -6,13 +6,14 @@ import { RouterModule } from '@angular/router';
 import { AppComponentModule } from '../app.component';
 import { AdminAuthService } from '../authentication/auth.service';
 import { CommonModule } from '@angular/common';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
+import { AdminTabsModule } from './tabs/admin.tabs.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FTTableModule } from '../component/ft-table/ft-table.component';
 import { FTMenuModule } from '../component/ft-menu/ft-menu.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FTDialogvModule } from '../component/ft-dialog/ft-dialog.component';
 import { ConfirmationService } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
@@ -34,7 +35,8 @@ import { FTPipeModule } from '../utils/pipes';
     CheckboxModule,
     DropdownModule,
     ButtonModule,
-    ConfirmDialogModule,
+    AdminTabsModule,
+    FTDialogvModule,
     FTMenuModule,
     FTTableModule,
     FTPipeModule

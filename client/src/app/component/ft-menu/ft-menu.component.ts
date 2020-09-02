@@ -1,4 +1,4 @@
-import Locales from '@locales/common';
+import Locales from '@locales/menu';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Component, NgModule, Input } from '@angular/core';

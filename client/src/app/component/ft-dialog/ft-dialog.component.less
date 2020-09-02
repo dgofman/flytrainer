@@ -1,0 +1,55 @@
+@import '../../../assets/less/constants.less';
+@import '../../../assets/less/layout.less';
+
+.modal {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+
+    .close {
+        background-color: #007ad9;
+        color: #fff;
+        width: 1.538em;
+        height: 1.538em;
+        line-height: 1.538em;
+        text-align: center;
+        position: absolute;
+        top: -0.769em;
+        right: -0.769em;
+        border-radius: 100%;
+        border: 1px solid #fff;
+        cursor: pointer;
+    }
+
+    &>div {
+        text-align: left;
+        position: relative;
+        min-width: 200px;
+        min-height: 300px;
+        background: #fff;
+        border: 1px solid #333;
+        display: inline-block;
+        margin-top: @modal-top;
+    }
+}
+
+p-tabview {
+    position: absolute;
+    top: 50px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+}
+
+.ui-tabview {
+    height: calc(100% - 40px); /* Tab menu height */
+}
+
+.ui-tabview-panels {
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+}

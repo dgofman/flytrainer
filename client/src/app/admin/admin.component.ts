@@ -1,5 +1,5 @@
 import Locales from '@locales/admin';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/modules/models/user';
 import { AuthService } from '../authentication/auth.service';
@@ -8,6 +8,7 @@ import { ColumnType, EmitEvent, EventType } from '../component/ft-table/ft-table
 import { RoleType } from 'src/modules/models/constants';
 import { FTIcons } from '../component/ft-menu/ft-menu.component';
 import { Validators } from '@angular/forms';
+import { FTDialogComponent } from '../component/ft-dialog/ft-dialog.component';
 
 @Component({
   templateUrl: './admin.component.html',
@@ -45,12 +46,17 @@ export class AdminComponent extends AppBaseDirective {
     { field: 'whoModified', type: 'input', header: Locales.whoModified, width: 200 }
   ];
 
+  @ViewChild(FTDialogComponent) dialog: FTDialogComponent;
+
+  selectedUser: User;
+
   constructor(private userService: UserService, public appService: AuthService) {
     super();
   }
 
   onEdit(user: User) {
-    console.log(user);
+    this.selectedUser = user;
+    this.dialog.show = true;
   }
 
   eventTableHandler(event: EmitEvent) {

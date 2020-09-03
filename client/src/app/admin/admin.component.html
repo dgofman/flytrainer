@@ -21,13 +21,13 @@
       <div class="breadcrumb">
         <span *ngFor="let label of [Locales.admin, Locales.users]">{{label}}</span>
       </div>
-      <ft-table sortField="last" filter="admin-table" [columns]="cols" [data]="users" (onNotify)="eventTableHandler($event)">
+      <ft-table sortField="last" filter="admin-table" [columns]="cols" [result]="result" (onNotify)="eventTableHandler($event)">
         <ng-template pTemplate="firstHeader"></ng-template>
         <ng-template pTemplate="firstColumn" let-rowData="$implicit" *ngIf="AppUtils.isEditorAccess()">
           <fa-icon [icon]="icons.faPencil" (click)="onEdit(rowData)" style="cursor: pointer"></fa-icon>
         </ng-template>
       </ft-table>
-      <ft-dialog width="70" height="60" [labels]="[Locales.admin, Locales.users, selectedUser?.first + ' ' + selectedUser?.last]">
+      <ft-dialog width="70" height="60" [path]="[Locales.admin, Locales.users, selectedUser?.first + ' ' + selectedUser?.last]">
         <ng-template pTemplate="Account">
           <account-tab></account-tab>
         </ng-template>

@@ -28,10 +28,8 @@ public class AdminController extends BaseController {
 			JsonNode body = request.body().asJson();
 			FTTableEvent event = new ObjectMapper().readerFor(FTTableEvent.class).readValue(body);
 			Query<User> query = Ebean.find(User.class);
-			fetch(event, query, User.class);
-			/*if (!StringUtils.isEmpty(filterColumnName) && !StringUtils.isEmpty(filterColumnName)) {
-				query.where().like(filterColumnName, filterQuery);
-			}*/
+			int total = findCount(event, query, User.class);
+			prepareQuery(event, query, User.class);
 			if (!StringUtils.isEmpty(event.sortField) && !StringUtils.isEmpty(event.sortOrder)) {
 				if ("desc".equals(event.sortOrder)) {
 					query.orderBy().desc(event.sortField);
@@ -39,9 +37,9 @@ public class AdminController extends BaseController {
 					query.orderBy().asc(event.sortField);
 				}
 			}
-			query.setFirstRow(event.start);
+			query.setFirstRow(event.first);
 			query.setMaxRows(event.total != -1 ? event.total : ALL_MAX_LIMIT);
-			return okResult(query.findList());
+			return okResult(event.first, total, query.findList());
 		} catch (Exception e) {
 			return badRequest(e);
 		}

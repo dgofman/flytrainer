@@ -9,6 +9,7 @@ import { RoleType } from 'src/modules/models/constants';
 import { FTIcons } from '../component/ft-menu/ft-menu.component';
 import { Validators } from '@angular/forms';
 import { FTDialogComponent } from '../component/ft-dialog/ft-dialog.component';
+import { TableResult } from 'src/modules/models/table.result';
 
 @Component({
   templateUrl: './admin.component.html',
@@ -17,7 +18,7 @@ import { FTDialogComponent } from '../component/ft-dialog/ft-dialog.component';
 export class AdminComponent extends AppBaseDirective {
   Locales = Locales;
   icons = FTIcons;
-  users: User[];
+  result: TableResult<User>;
 
   cols: ColumnType[] = [
     { field: 'id', show: 'never'},
@@ -30,12 +31,12 @@ export class AdminComponent extends AppBaseDirective {
     { field: 'phone', type: 'input', show: true, header: Locales.cellphone, width: 150, validators: [Validators.maxLength(30)] },
     { field: 'ftn', type: 'input', header: Locales.ftn, width: 100, validators: [Validators.maxLength(10)] },
     { field: 'role', type: 'popup', value: RoleType.map(role => ({label: role, value: role})), show: true, header: Locales.role, width: 100, align: 'center', validators: [Validators.required] },
-    { field: 'isMemeber', type: 'check', header: Locales.isMemeber, width: 70, align: 'center', format: 'bool' },
-    { field: 'isActive', type: 'check', show: true, header: Locales.isActive, width: 70, align: 'center', format: 'bool' },
-    { field: 'resetPassword', type: 'check', header: Locales.resetPassword, width: 70, align: 'center', format: 'bool' },
-    { field: 'isCitizen', type: 'check', header: Locales.isCitizen, width: 70, align: 'center', format: 'bool' },
-    { field: 'isSchoolEmployee', type: 'check', header: Locales.isSchoolEmployee, width: 70, align: 'center', format: 'bool' },
-    { field: 'englishProficient', type: 'check', header: Locales.englishProficient, width: 70, align: 'center', format: 'bool' },
+    { field: 'isMemeber', type: 'radio', header: Locales.isMemeber, width: 70, align: 'center', format: 'bool' },
+    { field: 'isActive', type: 'radio', show: true, header: Locales.isActive, width: 70, align: 'center', format: 'bool' },
+    { field: 'resetPassword', type: 'radio', header: Locales.resetPassword, width: 70, align: 'center', format: 'bool' },
+    { field: 'isCitizen', type: 'radio', header: Locales.isCitizen, width: 70, align: 'center', format: 'bool' },
+    { field: 'isSchoolEmployee', type: 'radio', header: Locales.isSchoolEmployee, width: 70, align: 'center', format: 'bool' },
+    { field: 'englishProficient', type: 'radio', header: Locales.englishProficient, width: 70, align: 'center', format: 'bool' },
     { field: 'birthday', type: 'cal', header: Locales.birthday, width: 200, format: 'epoch' },
     { field: 'dl', type: 'input', header: Locales.driverLicense, width: 100, validators: [Validators.maxLength(10)] },
     { field: 'dlState', type: 'input', header: Locales.driverState, width: 50, validators: [Validators.maxLength(10)] },
@@ -63,9 +64,9 @@ export class AdminComponent extends AppBaseDirective {
     switch (event.message) {
       case EventType.Load:
         this.loading(true);
-        this.userService.fetch(event.data).subscribe(users => {
+        this.userService.fetch(event.data).subscribe(result => {
           this.loading(false);
-          this.users = users;
+          this.result = result;
         }, (ex) => this.errorHandler(ex));
         break;
     }

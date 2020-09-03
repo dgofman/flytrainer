@@ -1,12 +1,13 @@
 import Locales from '@locales/common';
 import { LazyLoadEvent, SelectItem, PrimeTemplate } from 'primeng/api';
 import { OverlayPanelModule} from 'primeng/overlaypanel';
-import { Directive, Input, NgModule, EventEmitter, Output, Component, TemplateRef, AfterContentInit, ContentChildren, QueryList, ViewChild } from '@angular/core';
+import { Directive, Input, NgModule, EventEmitter, Output, Component, TemplateRef, AfterContentInit, ContentChildren, QueryList, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TableModule, Table } from 'primeng/table';
 import {TooltipModule } from 'primeng/tooltip';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
 import { BaseModel } from 'src/modules/models/base.model';
 import { DropdownModule } from 'primeng/dropdown';
@@ -14,13 +15,14 @@ import { AbstractControlOptions, ValidatorFn, FormGroup, ReactiveFormsModule, Fo
 import { FTFormControl } from '../../utils/ft-form.control';
 import { AppUtils } from '../../utils/app-utils';
 import { DomHandler } from 'primeng/dom';
+import { TableResult } from 'src/modules/models/table.result';
 
 type SHOW_COLUMNS = 'never' | true | false;
 type FORMAT_COLUMNS = 'date' | 'datetime' | 'epoch' | 'bool';
 type TYPET_COLUMNS = 'check' | 'cal' | 'radio' | 'input' | 'disable' | 'popup';
 
 export type FTTableEvent = {
-  start: number,
+  first: number,
   total: number,
   sortField?: string,
   sortOrder?: string,
@@ -52,19 +54,22 @@ export interface ColumnType {
 @Component({
   selector: 'ft-table',
   templateUrl: './ft-table.component.html',
-  styleUrls: ['./ft-table.component.less']
+  styleUrls: ['./ft-table.component.less'],
+  encapsulation: ViewEncapsulation.None
 })
 export class FTTableComponent implements AfterContentInit {
   Locales = Locales;
   isEditorAccess = AppUtils.isEditorAccess;
   yearRange = AppUtils.defaultYearRange;
-  filterModel: FTTableEvent = {start: 0, total: 25};
+  filterModel: FTTableEvent = {first: 0, total: 25};
   firstHeaderTemplate: TemplateRef<any>;
   lastHeaderTemplate: TemplateRef<any>;
   firstColumnTemplate: TemplateRef<any>;
   lastColumnTemplate: TemplateRef<any>;
   filters: {_saveFilter: false};
   filterGroup: FormGroup;
+  firstRow = 0;
+  total: number;
 
   @Input('columns') cols: ColumnType[];
   @Input('expandFormTemplate') public expandFormTemplate: Component;
@@ -72,6 +77,15 @@ export class FTTableComponent implements AfterContentInit {
   @Input('data') public data: Array<BaseModel>;
   @Output() public onNotify: EventEmitter<EmitEvent> = new EventEmitter();
   @ContentChildren(PrimeTemplate) templates: QueryList<PrimeTemplate>;
+
+  @Input('result') public set result(value: TableResult<BaseModel>) {
+    if (value) {
+      this.data = value.data;
+      this.total = value.total;
+      this.firstRow = value.first;
+      this.table.first = this.firstRow;
+    }
+  }
 
   @Input('filter') public set filter(name: any) {
     this.filterName = name;
@@ -170,7 +184,8 @@ export class FTTableComponent implements AfterContentInit {
       this.saveFilter();
     }
     this.table.tableService.onColumnsChange(this.cols);
-    this.lazyLoad({});
+    this.firstRow = 0;
+    this.lazyLoad();
   }
 
   getColumns(view: number): Array<ColumnType> {
@@ -207,17 +222,20 @@ export class FTTableComponent implements AfterContentInit {
   }
 
   itemsPerPageChanged(event: any) {
-    this.filterModel.start = 0;
-    this.filterModel.total = event.value;
-    this.lazyLoad({});
+    this.lazyLoad({first: 0, rows: event.value});
   }
 
-  lazyLoad(event: LazyLoadEvent) {
-    if (event.sortField) {
-      this.filterModel.sortField = event.sortField;
-      this.filterModel.sortOrder = event.sortOrder > 0 ? 'asc' : 'desc';
+  lazyLoad(event?: LazyLoadEvent) {
+    if (event) {
+      this.firstRow = event.first;
+      this.filterModel.total = event.rows;
+      if (event.sortField) {
+        this.filterModel.sortField = event.sortField;
+        this.filterModel.sortOrder = event.sortOrder > 0 ? 'asc' : 'desc';
+      }
     }
     this.expandedRows = {};
+    this.filterModel.first = this.firstRow;
     this.filterModel.filter = this.filter;
     this.notify(EventType.Load, this.filterModel);
   }
@@ -288,7 +306,7 @@ export class FTTableFormProviderDirective {
 }
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, TooltipModule, CheckboxModule,  DropdownModule, CalendarModule, TableModule, OverlayPanelModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, TooltipModule, CheckboxModule, RadioButtonModule, DropdownModule, CalendarModule, TableModule, OverlayPanelModule],
   exports: [FTTableComponent, FTTableFormProviderDirective],
   declarations: [FTTableComponent, FTTableFormProviderDirective]
 })

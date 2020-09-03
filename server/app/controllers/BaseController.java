@@ -34,17 +34,21 @@ import utils.Constants;
 public class BaseController extends Controller {
 	
 	protected static final Logger log = LoggerFactory.getLogger(BaseController.class);
-
-	public Result okResult(Object value) {
-		return okResult(value, Object.class);
+	
+	public Result okResult(int first, int total, Object data) {
+		return okResult(new TableResult(first, total, data));
 	}
 
-	public Result okResult(Object value, Class<?> serializationView) {
+	public Result okResult(Object data) {
+		return okResult(data, Object.class);
+	}
+
+	public Result okResult(Object data, Class<?> serializationView) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 		ObjectWriter w = objectMapper.writerWithView(serializationView);
 		try {
-			return ok(w.writeValueAsString(value));
+			return ok(w.writeValueAsString(data));
 		} catch (JsonProcessingException e) {
 			return badRequest(e);
 		}
@@ -64,8 +68,15 @@ public class BaseController extends Controller {
 		}
 		return new RequiredField(body);
 	}
-	
-	public void fetch(FTTableEvent event, Query<?> query, Class<?> type) {
+
+	public int findCount(FTTableEvent event, Query<?> query, Class<?> type) {
+		ExpressionList<?> where = query.where();
+		query.setDisableLazyLoading(true);
+		fetch(event, type, null, where);
+		return query.findCount();
+	}
+
+	public void prepareQuery(FTTableEvent event, Query<?> query, Class<?> type) {
 		List<String> columns = new ArrayList<>();
 		ExpressionList<?> where = query.where();
 		query.setDisableLazyLoading(true);
@@ -73,7 +84,7 @@ public class BaseController extends Controller {
 		fetch(event, type, columns, where);
 		query.select(String.join(",", columns));
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void fetch(FTTableEvent event, Class<?> type, List<String> columns, ExpressionList<?> where) {
 		Field[] fields = type.getDeclaredFields();
@@ -96,7 +107,7 @@ public class BaseController extends Controller {
 					where.eq(field.getName(), node.asLong());
 				} else if (node.isTextual()) {
 					if (node.asText().startsWith("%") || node.asText().endsWith("%")) {
-						where.like(field.getName(), node.asText());
+						where.ilike(field.getName(), node.asText());
 					} else {
 						where.eq(field.getName(), node.asText());
 					}
@@ -104,17 +115,19 @@ public class BaseController extends Controller {
 					log.warn("BaseController::fetch unknown type:" + field.getName() + "=" + node.toPrettyString());
 				}
 			}
-			node = event.filter.get(field.getName() + "_show");
-			if (node == null || !node.asBoolean() || !field.isAnnotationPresent(Column.class) || columns.contains(field.getName())) {
-				continue;
-			}
-			if (!field.isAnnotationPresent(JsonView.class)) {
-				columns.add(field.getName());
-			} else {
-				JsonView annotation = field.getAnnotation(JsonView.class);
-				List<?> annotations = Arrays.asList(annotation.value());
-				if (!annotations.contains(Never.class) && !annotations.contains(Admin.class)) {
+			if (columns != null) {
+				node = event.filter.get(field.getName() + "_show");
+				if (node == null || !node.asBoolean() || !field.isAnnotationPresent(Column.class) || columns.contains(field.getName())) {
+					continue;
+				}
+				if (!field.isAnnotationPresent(JsonView.class)) {
 					columns.add(field.getName());
+				} else {
+					JsonView annotation = field.getAnnotation(JsonView.class);
+					List<?> annotations = Arrays.asList(annotation.value());
+					if (!annotations.contains(Never.class) && !annotations.contains(Admin.class)) {
+						columns.add(field.getName());
+					}
 				}
 			}
 		}
@@ -127,6 +140,18 @@ public class BaseController extends Controller {
 		public RequiredField(JsonNode body) {
 			this.id = body.get("id").asLong();
 			this.version = body.get("version").asLong();
+		}
+	}
+	
+	static class TableResult {
+		public final int first;
+		public final int total;
+		public final Object data;
+		
+		public TableResult(int first, int total, Object data) {
+			this.first = first;
+			this.total = total;
+			this.data = data;
 		}
 	}
 }

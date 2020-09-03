@@ -86,7 +86,7 @@ a {
 
     .topbar {
         color: white;
-        height: @topbar-height;
+        min-height: @topbar-height;
         background-color: #146fd7;
         background-image: -webkit-gradient(linear, left top, right top, from(#146fd7), to(#146fd7));
         background-image: -webkit-linear-gradient(to right, #146fd7, #146fd7);
@@ -138,8 +138,8 @@ a {
     app-footer {
         overflow: hidden;
         display: block;
-        height: @footer-height;
-        padding: 15px 20px;
+        min-height: @footer-height;
+        padding: 0.93rem 1.25rem;
 
         .powerby {
             float: right;

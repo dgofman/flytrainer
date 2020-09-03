@@ -6,6 +6,7 @@ export default {
     cancel: 'Cancel',
     delete: 'Delete',
     apply: 'Apply',
+    reset: 'Reset',
     success: 'Success',
     error: 'Error',
     logout: 'Logout',

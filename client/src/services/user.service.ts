@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from 'src/modules/models/user';
 import { FTTableEvent } from 'src/app/component/ft-table/ft-table.component';
+import { TableResult } from 'src/modules/models/table.result';
 
 @Injectable()
 export class UserService {
@@ -10,8 +11,8 @@ export class UserService {
   public constructor(private http: HttpClient) {
   }
 
-  fetch(model: FTTableEvent): Observable<User[]> {
-    return this.http.post<User[]>('/users', model);
+  fetch(model: FTTableEvent): Observable<TableResult<User>> {
+    return this.http.post<TableResult<User>>('/users', model);
   }
 
   get(id: number): Observable<User> {

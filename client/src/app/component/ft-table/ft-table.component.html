@@ -23,7 +23,11 @@
                     <td style="padding: 0.5em;" class="td-controls">
                       <input *ngIf="rowData.type=='input'" class="ui-inputtext" [formControlName]="rowData.field" [escape]="false" [pTooltip]="Locales.sqlQuery"/>
                       <p-dropdown *ngIf="rowData.type=='popup'" appendTo="body" [options]="rowData.value" [formControlName]="rowData.field" [placeholder]="Locales.selectItem"></p-dropdown>
-                      <p-checkbox *ngIf="rowData.type=='check'" binary="true" [formControlName]="rowData.field"></p-checkbox>
+                      <div *ngIf="rowData.type=='radio'">
+                        <p-radioButton [name]="rowData.field" binary="true" value="1" [formControlName]="rowData.field"></p-radioButton><i class="pi pi-thumbs-up green filter-radio"></i>
+                        <p-radioButton [name]="rowData.field" binary="true" value="0" [formControlName]="rowData.field"></p-radioButton><i class="pi pi-thumbs-down red filter-radio"></i>
+                        <p-button label="{{Locales.reset}}" class="filter-button" (click)="removeChip(rowData)"></p-button>
+                      </div>
                       <p-calendar *ngIf="rowData.type=='cal'" placeholder="mm/dd/yyyy ( - mm/dd/yyyy)" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" showButtonBar="true" showIcon="true" selectionMode="range" appendTo="body" [formControlName]="rowData.field"></p-calendar>
                     </td>
                 </tr>
@@ -49,7 +53,7 @@
 </div>
 <p-table [columns]="getColumns(0)" [value]="data" [resizableColumns]="true" [scrollable]="true" [rowHover]="true"
   [expandedRowKeys]="expandedRows" [dataKey]="dataKey" [lazy]="true" [paginator]="true" [rows]="filterModel.total"
-  (onLazyLoad)="lazyLoad($event)" (onColResize)="colResize()">
+  [totalRecords]="total || data?.length" (onLazyLoad)="lazyLoad($event)" (onColResize)="colResize()">
   <ng-template pTemplate="colgroup" let-columns>
     <colgroup>
       <col *ngIf="firstHeaderTemplate" [style.width.px]="45" />
@@ -103,7 +107,7 @@
   </ng-template>
   <ng-template pTemplate="paginatorright">
     <div style="margin-right: 10px; margin-top: 5px">
-      {{Locales.total}}: {{data?.length}}
+      {{Locales.total}}: {{total || data?.length}}
     </div>
   </ng-template>
 </p-table>

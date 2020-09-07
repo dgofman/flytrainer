@@ -1,9 +1,15 @@
 package controllers;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
 import io.ebean.Ebean;
 import io.ebean.Query;
@@ -29,7 +35,10 @@ public class AdminController extends BaseController {
 			FTTableEvent event = new ObjectMapper().readerFor(FTTableEvent.class).readValue(body);
 			Query<User> query = Ebean.find(User.class);
 			int total = findCount(event, query, User.class);
-			prepareQuery(event, query, User.class);
+			Set<String> columns = new LinkedHashSet<>();
+			columns.add("id");
+			prepareQuery(event, query, columns, User.class);
+			query.select(String.join(",", columns));
 			if (!StringUtils.isEmpty(event.sortField) && !StringUtils.isEmpty(event.sortOrder)) {
 				if ("desc".equals(event.sortOrder)) {
 					query.orderBy().desc(event.sortField);
@@ -39,7 +48,8 @@ public class AdminController extends BaseController {
 			}
 			query.setFirstRow(event.first);
 			query.setMaxRows(event.total != -1 ? event.total : ALL_MAX_LIMIT);
-			return okResult(event.first, total, query.findList());
+			FilterProvider filter = new SimpleFilterProvider().addFilter("UserFilter", SimpleBeanPropertyFilter.filterOutAllExcept(columns));
+			return okResult(new TableResult(event.first, total, query.findList()), filter);
 		} catch (Exception e) {
 			return badRequest(e);
 		}

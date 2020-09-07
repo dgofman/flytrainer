@@ -16,6 +16,7 @@ import { FTFormControl } from '../../utils/ft-form.control';
 import { AppUtils } from '../../utils/app-utils';
 import { DomHandler } from 'primeng/dom';
 import { TableResult } from 'src/modules/models/table.result';
+import { FTStatePipe, FTPipeModule } from 'src/app/utils/pipes';
 
 type SHOW_COLUMNS = 'never' | true | false;
 type FORMAT_COLUMNS = 'date' | 'datetime' | 'epoch' | 'bool';
@@ -274,7 +275,7 @@ export class FTTableComponent implements AfterContentInit {
     const data = rowData[col.field];
     switch (col.format) {
       case 'bool':
-        return title ? '' : '<i class="pi ' + (data ? 'pi-thumbs-up green' : 'pi-thumbs-down red') + '"></i>';
+        return title ? '' : '<i class="' + new FTStatePipe().transform(data) + '"></i>';
       default:
         return FTFormControl.Serialize(data, col.format);
     }
@@ -306,7 +307,7 @@ export class FTTableFormProviderDirective {
 }
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, TooltipModule, CheckboxModule, RadioButtonModule, DropdownModule, CalendarModule, TableModule, OverlayPanelModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, TooltipModule, CheckboxModule, RadioButtonModule, DropdownModule, CalendarModule, TableModule, OverlayPanelModule, FTPipeModule],
   exports: [FTTableComponent, FTTableFormProviderDirective],
   declarations: [FTTableComponent, FTTableFormProviderDirective]
 })

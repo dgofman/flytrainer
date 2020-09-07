@@ -16,6 +16,7 @@ import io.ebean.annotation.WhenModified;
 @MappedSuperclass
 public abstract class BaseModel extends Model {
 
+	@Column(name = "id")
 	@Id
 	public Integer id; //id
 	

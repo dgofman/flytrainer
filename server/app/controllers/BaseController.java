@@ -1,9 +1,9 @@
 package controllers;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Enumerated;
@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.ebean.ExpressionList;
@@ -32,23 +32,29 @@ import utils.Constants;
 
 @JsonInclude(Include.NON_NULL)
 public class BaseController extends Controller {
-	
-	protected static final Logger log = LoggerFactory.getLogger(BaseController.class);
-	
-	public Result okResult(int first, int total, Object data) {
-		return okResult(new TableResult(first, total, data));
-	}
 
-	public Result okResult(Object data) {
-		return okResult(data, Object.class);
-	}
+	protected static final Logger log = LoggerFactory.getLogger(BaseController.class);
 
 	public Result okResult(Object data, Class<?> serializationView) {
+		return okResult(data, serializationView, null);
+	}
+
+	public Result okResult(Object data, FilterProvider filter) {
+		return okResult(data, null, filter);
+	}
+
+	public Result okResult(Object data, Class<?> serializationView, FilterProvider filter) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
-		ObjectWriter w = objectMapper.writerWithView(serializationView);
+		if (filter != null) {
+			objectMapper.setFilterProvider(filter);
+		}
 		try {
-			return ok(w.writeValueAsString(data));
+			if (serializationView != null) {
+				return ok(objectMapper.writerWithView(serializationView).writeValueAsString(data));
+			} else {
+				return ok(objectMapper.writeValueAsString(data));
+			}
 		} catch (JsonProcessingException e) {
 			return badRequest(e);
 		}
@@ -57,11 +63,11 @@ public class BaseController extends Controller {
 	public Result createBadRequest(String code, Constants.Errors error) {
 		return badRequest("{\"code\": \"" + code + "\", \"message\": \"" + error.toString() + "\"}");
 	}
-	
+
 	public Result badRequest(Throwable e) {
 		return badRequest(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 	}
-	
+
 	public RequiredField requiredFields(JsonNode body) {
 		if (body.get("id") == null || body.get("version") == null) {
 			throw new RuntimeException("Affects version and id is required.");
@@ -76,28 +82,27 @@ public class BaseController extends Controller {
 		return query.findCount();
 	}
 
-	public void prepareQuery(FTTableEvent event, Query<?> query, Class<?> type) {
-		List<String> columns = new ArrayList<>();
+	public void prepareQuery(FTTableEvent event, Query<?> query, Set<String> columns, Class<?> type) {
 		ExpressionList<?> where = query.where();
 		query.setDisableLazyLoading(true);
-		fetch(event, type.getSuperclass(), columns, where);
 		fetch(event, type, columns, where);
-		query.select(String.join(",", columns));
+		fetch(event, type.getSuperclass(), columns, where);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void fetch(FTTableEvent event, Class<?> type, List<String> columns, ExpressionList<?> where) {
+	private void fetch(FTTableEvent event, Class<?> type, Set<String> columns, ExpressionList<?> where) {
 		Field[] fields = type.getDeclaredFields();
 		for (Field field : fields) {
 			JsonNode node = event.filter.get(field.getName());
 			if (node != null) {
 				if (field.isAnnotationPresent(Enumerated.class)) {
 					where.eq(field.getName(), Enum.valueOf((Class<Enum>) field.getType(), node.asText()));
-				} else if (node.isArray()) { //date range
+				} else if (node.isArray()) { // date range
 					if (node.get(1) == null || node.get(1).isNull()) {
 						where.gt(field.getName(), new DateTime(node.get(0).asText()));
 					} else {
-						where.between(field.getName(), new DateTime(node.get(0).asText()), new DateTime(node.get(1).asText()));
+						where.between(field.getName(), new DateTime(node.get(0).asText()),
+								new DateTime(node.get(1).asText()));
 					}
 				} else if (node.isBoolean()) {
 					where.eq(field.getName(), node.asBoolean() ? 1 : 0);
@@ -117,7 +122,8 @@ public class BaseController extends Controller {
 			}
 			if (columns != null) {
 				node = event.filter.get(field.getName() + "_show");
-				if (node == null || !node.asBoolean() || !field.isAnnotationPresent(Column.class) || columns.contains(field.getName())) {
+				if (node == null || !node.asBoolean() || !field.isAnnotationPresent(Column.class)
+						|| columns.contains(field.getName())) {
 					continue;
 				}
 				if (!field.isAnnotationPresent(JsonView.class)) {
@@ -132,22 +138,22 @@ public class BaseController extends Controller {
 			}
 		}
 	}
-	
+
 	static class RequiredField {
 		public final Long id;
 		public final long version;
-		
+
 		public RequiredField(JsonNode body) {
 			this.id = body.get("id").asLong();
 			this.version = body.get("version").asLong();
 		}
 	}
-	
+
 	static class TableResult {
 		public final int first;
 		public final int total;
 		public final Object data;
-		
+
 		public TableResult(int first, int total, Object data) {
 			this.first = first;
 			this.total = total;

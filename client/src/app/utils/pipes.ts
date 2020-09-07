@@ -31,9 +31,16 @@ export class FTDateTimePipe implements PipeTransform {
   }
 }
 
+@Pipe({name: 'ftstate'})
+export class FTStatePipe implements PipeTransform {
+  transform(state: boolean): string {
+    return 'pi ' + (state ? 'pi-circle-on green' : 'pi-circle-on red');
+  }
+}
+
 @NgModule({
   imports: [CommonModule],
-  exports: [FTEpochPipe, FTDatePipe, FTDateTimePipe],
-  declarations: [FTEpochPipe, FTDatePipe, FTDateTimePipe]
+  exports: [FTEpochPipe, FTDatePipe, FTDateTimePipe, FTStatePipe],
+  declarations: [FTEpochPipe, FTDatePipe, FTDateTimePipe, FTStatePipe]
 })
 export class FTPipeModule { }

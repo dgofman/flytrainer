@@ -23,10 +23,10 @@
                     <td style="padding: 0.5em;" class="td-controls">
                       <input *ngIf="rowData.type=='input'" class="ui-inputtext" [formControlName]="rowData.field" [escape]="false" [pTooltip]="Locales.sqlQuery"/>
                       <p-dropdown *ngIf="rowData.type=='popup'" appendTo="body" [options]="rowData.value" [formControlName]="rowData.field" [placeholder]="Locales.selectItem"></p-dropdown>
-                      <div *ngIf="rowData.type=='radio'">
-                        <p-radioButton [name]="rowData.field" binary="true" value="1" [formControlName]="rowData.field"></p-radioButton><i class="pi pi-thumbs-up green filter-radio"></i>
-                        <p-radioButton [name]="rowData.field" binary="true" value="0" [formControlName]="rowData.field"></p-radioButton><i class="pi pi-thumbs-down red filter-radio"></i>
-                        <p-button label="{{Locales.reset}}" class="filter-button" (click)="removeChip(rowData)"></p-button>
+                      <div *ngIf="rowData.type=='radio'" class="filter-radio">
+                        <p-radioButton [name]="rowData.field" [value]="true" [formControlName]="rowData.field"></p-radioButton><i [class]="true | ftstate"></i>
+                        <p-radioButton [name]="rowData.field" [value]="false" [formControlName]="rowData.field"></p-radioButton><i [class]="false | ftstate"></i>
+                        <p-button label="{{Locales.reset}}" class="filter-button" (click)="filterGroup.get(rowData.field).setValue(null)"></p-button>
                       </div>
                       <p-calendar *ngIf="rowData.type=='cal'" placeholder="mm/dd/yyyy ( - mm/dd/yyyy)" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" showButtonBar="true" showIcon="true" selectionMode="range" appendTo="body" [formControlName]="rowData.field"></p-calendar>
                     </td>

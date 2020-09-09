@@ -16,3 +16,4 @@ POST    /users                      controllers.AdminController.users(request: R
 GET     /users/:id                  controllers.AdminController.userById(id: Long)
 POST    /users/:id                  controllers.AdminController.saveUser(request: Request, id: Long)
 DELETE  /users/:id                  controllers.AdminController.deleteUser(request: Request, id: Long)
+POST    /admin/address              controllers.AdminController.address(request: Request)

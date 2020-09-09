@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { UserService } from 'src/services/user.service';
+import { AdminService } from 'src/services/admin.service';
 import { AdminComponent } from './admin.component';
 import { RouterModule } from '@angular/router';
 import { AppComponentModule } from '../app.component';
@@ -18,6 +19,7 @@ import { ConfirmationService } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { FTPipeModule } from '../utils/pipes';
+
 
 @NgModule({
   imports: [
@@ -47,6 +49,7 @@ import { FTPipeModule } from '../utils/pipes';
   providers: [
     ConfirmationService,
     UserService,
+    AdminService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AdminAuthService,

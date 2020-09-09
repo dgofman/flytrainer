@@ -1,3 +1,30 @@
 <div>
-    <h1>Addresses</h1>
+    <h1>Address</h1>
+    <div class="card-body">
+        <form [formGroup]="registerForm" class="dialog " #myForm="ngForm">
+            <div class="ui-fluid" *ngFor="let c of controls">
+                <div class="p-col-12 p-md-4 " style="margin: 8px 0">
+                    <label class=" p-col-fixed ">{{c.header}}</label>
+                    <input *ngIf="c.field !='zip' " type="text " [formControlName]="c.field " pInputText [ngClass]="{ 'is-invalid': submitted && f[c.field].errors } " required />
+                    <p-inputMask *ngIf="c.field=='zip' " mask="99999 " placeholder="ex. 95134 " [formControlName]="c.field " [ngClass]="{ 'is-invalid': submitted && f[c.field].errors } "></p-inputMask>
+                    <div *ngIf="f[c.field].errors " style="color: red; ">
+                        <div *ngIf="f[c.field].errors.required ">{{c.header}} is required</div>
+                    </div>
+                </div>
+            </div>
+
+            <!--set as a default by default with switch-->
+            <div class="row">
+                <button class="ui-button ui-button-text" style="margin: 20px 10px 10px 0" type="submit" (click)="onSubmit()" [disabled]="!myForm.form.valid">Save</button>
+                <button class="ui-button ui-button-text" style="margin: 20px 10px 10px 0" (click)="onReset() ">Reset</button>
+            </div>
+        </form>
+    </div>
+
 </div>
+
+<!-- <div class="card-footer ">  
+    <button type="button " class="btn btn-primary btn-sm pull-left " (click)="addNewRow() ">Add Row</button>  
+    <button type="button " class="btn btn-success btn-sm pull-right " title="Save ">Save</button>  
+</div>  
+</div>   -->

@@ -214,7 +214,7 @@ public class HomeController extends BaseController {
 			DDoS ddos = new DDoS(request, body, username);
 			ddos.save();
 			log.error("IP Address: " + ddos.ipaddress + ", UserName: " + username + ", Email: " + email, ex);
-			return unauthorized(ex.getMessage());
+			return badRequest(ex.getMessage());
 		}
 		return ok();
 	}

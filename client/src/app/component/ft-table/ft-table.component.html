@@ -43,7 +43,7 @@
         </form>
       </ng-template>
   </p-overlayPanel>
-  <button pButton icon="pi pi-filter" style="font-size: 12px; border-radius: 50%; padding: 0" (click)="resetFilter(); op.toggle($event)"></button>
+  <button pButton icon="pi pi-filter" style="font-size: 12px; border-radius: 50%" (click)="resetFilter(); op.toggle($event)"></button>
   <div class="chips" #chips><span *ngFor="let col of getColumns(2)">{{col.header}}: {{getChips(col)}}<a (click)="removeChip(col)"></a></span></div>
   <div style="white-space: nowrap">
     {{Locales.itemsPerPage}}

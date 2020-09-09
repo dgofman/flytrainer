@@ -68,7 +68,7 @@ export class FTDialogComponent {
       } else if (elem.msRequestFullscreen) { /* IE/Edge */
         elem.msRequestFullscreen();
       }
-    } else {
+    } else if (doc.fullscreen) {
       if (doc.exitFullscreen) {
         doc.exitFullscreen();
       } else if (doc.mozCancelFullScreen) { /* Firefox */

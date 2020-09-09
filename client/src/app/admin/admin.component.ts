@@ -10,6 +10,7 @@ import { FTIcons } from '../component/ft-menu/ft-menu.component';
 import { Validators } from '@angular/forms';
 import { FTDialogComponent } from '../component/ft-dialog/ft-dialog.component';
 import { TableResult } from 'src/modules/models/table.result';
+import { AppHeaderComponent } from '../app.component';
 
 @Component({
   templateUrl: './admin.component.html',
@@ -58,6 +59,7 @@ export class AdminComponent extends AppBaseDirective {
   onEdit(user: User) {
     this.selectedUser = user;
     this.dialog.show = true;
+    AppHeaderComponent.toggleArrowMenu = false;
   }
 
   eventTableHandler(event: EmitEvent) {

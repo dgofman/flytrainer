@@ -179,6 +179,10 @@ export class AppHeaderComponent {
   public static get toggleArrowMenu(): boolean {
     return AppHeaderComponent.toggle;
   }
+
+  public static set toggleArrowMenu(state: boolean) {
+    AppHeaderComponent.toggle = state;
+  }
 }
 
 @Component({

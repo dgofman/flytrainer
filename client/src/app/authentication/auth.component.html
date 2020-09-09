@@ -10,10 +10,10 @@
             <div>{{currentDateTime | date:"MM/dd/yy"}}, <b><u>{{currentDateTime | date:"HH:mm"}}</u> {{ worldtime.abbreviation }}</b></div>
         </div>
         <div class="main" [ngSwitch]="path">
-            <form method="POST" class="dialog ui-fluid" #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" ngNativeValidate>
+            <form method="POST" class="dialog" #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" ngNativeValidate>
                 <h5 style="color: red; margin: 0 0 8px;">{{error}}&nbsp;</h5>
                 <ng-template [ngSwitchCase]="'/login'">
-                    <div [style.display]="resetPassword ? 'none' : 'block'">
+                    <div class="ui-fluid" [style.display]="resetPassword ? 'none' : 'block'">
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.userId}}</label>
                             <input class="ui-inputtext" name="username" required ngModel autocomplete="off">
@@ -26,11 +26,11 @@
                         <a routerLink="../create" *ngIf="environment.includeCreateAccount">  |  {{Locales.createAccount}}</a>
                     </div>
                     <ng-template *ngIf="resetPassword" [ngTemplateOutlet]="ResetPassword"></ng-template>
-                    <button class="ui-button ui-button-text" style="float: right" type="submit">{{Locales.login}}</button>
+                    <button class="ui-button" style="float: right" type="submit">{{Locales.login}}</button>
                     <div style="margin-top: 40px; text-align: center;">{{Locales.aggrement}}</div>
                 </ng-template>
                 <ng-template [ngSwitchCase]="'/forgot'">
-                    <div>
+                    <div class="ui-fluid">
                         <div style="margin: 10px 0;">{{Locales.enterEmail}}</div>
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.userId}}</label>
@@ -51,42 +51,44 @@
                     <p>{{message}}</p>
                     <div style="float: right">
                         <a href="/login">
-                            <button type="button" class="ui-button ui-button-text">{{Locales.returnToLogin}}</button>
+                            <button type="button" class="ui-button">{{Locales.returnToLogin}}</button>
                         </a>
                     </div>
                 </ng-template>
                 <ng-template [ngSwitchCase]="'/create'">
-                    <div class="row">
-                        <label class="p-col-fixed">{{Locales.userId}}*</label>
-                        <input class="ui-inputtext" name="username" required ngModel autocomplete="off">
-                    </div>
-                    <div class="row">
-                        <label class="p-col-fixed">{{Locales.password}}*</label>
-                        <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
-                    </div>
-                    <div class="row">
-                        <label class="p-col-fixed">{{Locales.confirmPassword}}*</label>
-                        <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off">
-                    </div>
-                    <div class="row">
-                        <label class="p-col-fixed">{{Locales.email}}*</label>
-                        <input type="email" class="ui-inputtext" name="email" required ngModel autocomplete="off">
-                    </div>
-                    <div class="row">
-                        <label class="p-col-fixed">{{Locales.firstName}}*</label>
-                        <input class="ui-inputtext" name="first" required ngModel autocomplete="off">
-                    </div>
-                    <div class="row">
-                        <label class="p-col-fixed">{{Locales.middleName}}</label>
-                        <input class="ui-inputtext" name="middle" ngModel autocomplete="off">
-                    </div>
-                    <div class="row">
-                        <label class="p-col-fixed">{{Locales.lastName}}*</label>
-                        <input class="ui-inputtext" name="last" required ngModel autocomplete="off">
-                    </div>
-                    <div class="row">
-                        <label class="p-col-fixed">{{Locales.phone}}</label>
-                        <input class="ui-inputtext" name="phone" ngModel autocomplete="off">
+                    <div class="ui-fluid">
+                        <div class="row">
+                            <label class="p-col-fixed">{{Locales.userId}}*</label>
+                            <input class="ui-inputtext" name="username" required ngModel autocomplete="off">
+                        </div>
+                        <div class="row">
+                            <label class="p-col-fixed">{{Locales.password}}*</label>
+                            <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
+                        </div>
+                        <div class="row">
+                            <label class="p-col-fixed">{{Locales.confirmPassword}}*</label>
+                            <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off">
+                        </div>
+                        <div class="row">
+                            <label class="p-col-fixed">{{Locales.email}}*</label>
+                            <input type="email" class="ui-inputtext" name="email" required ngModel autocomplete="off">
+                        </div>
+                        <div class="row">
+                            <label class="p-col-fixed">{{Locales.firstName}}*</label>
+                            <input class="ui-inputtext" name="first" required ngModel autocomplete="off">
+                        </div>
+                        <div class="row">
+                            <label class="p-col-fixed">{{Locales.middleName}}</label>
+                            <input class="ui-inputtext" name="middle" ngModel autocomplete="off">
+                        </div>
+                        <div class="row">
+                            <label class="p-col-fixed">{{Locales.lastName}}*</label>
+                            <input class="ui-inputtext" name="last" required ngModel autocomplete="off">
+                        </div>
+                        <div class="row">
+                            <label class="p-col-fixed">{{Locales.phone}}</label>
+                            <input class="ui-inputtext" name="phone" ngModel autocomplete="off">
+                        </div>
                     </div>
                     <ng-template [ngTemplateOutlet]="SubmitButton"></ng-template>
                 </ng-template>
@@ -108,7 +110,7 @@
                 <ng-template #SubmitButton>
                     <div style="float: right">
                         <a routerLink="../login" style="margin-right: 20px">{{Locales.cancel}}</a>
-                        <button class="ui-button ui-button-text" type="submit">{{Locales.submit}}</button>
+                        <button class="ui-button" type="submit">{{Locales.submit}}</button>
                     </div>
                 </ng-template>
             </form>

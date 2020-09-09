@@ -5,7 +5,7 @@
         <a (click)="clearFilter()">{{Locales.clearAll}}</a>
       </div>
       <ng-template pTemplate>
-        <form [formGroup]="filterGroup" class="p-form ui-fluid">
+        <form [formGroup]="filterGroup" class="p-form">
           <p-table [value]="getColumns(1)" [rows]="8" [scrollable]="true" scrollHeight="300px">
             <ng-template pTemplate="header">
                 <tr>
@@ -15,7 +15,7 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
-                <tr>
+                <tr class="ui-fluid">
                     <td width="40">
                       <p-checkbox binary="true" [formControlName]="rowData.field + '_show'"></p-checkbox>
                     </td>  
@@ -43,7 +43,7 @@
         </form>
       </ng-template>
   </p-overlayPanel>
-  <button pButton icon="pi pi-filter" style="font-size: 12px; border-radius: 50%;" (click)="resetFilter(); op.toggle($event)"></button>
+  <button pButton icon="pi pi-filter" style="font-size: 12px; border-radius: 50%; padding: 0" (click)="resetFilter(); op.toggle($event)"></button>
   <div class="chips" #chips><span *ngFor="let col of getColumns(2)">{{col.header}}: {{getChips(col)}}<a (click)="removeChip(col)"></a></span></div>
   <div style="white-space: nowrap">
     {{Locales.itemsPerPage}}

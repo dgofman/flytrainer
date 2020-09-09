@@ -4,7 +4,7 @@ export default {
     confirmPassword: 'Confirm Password',
     email: 'Email',
     login: 'Log In',
-    submit: 'Submmit',
+    submit: 'Submit',
     cancel: 'Cancel',
     firstName: 'First Name',
     middleName: 'Middle Name',

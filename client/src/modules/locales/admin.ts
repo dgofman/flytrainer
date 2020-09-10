@@ -26,5 +26,10 @@ export default {
     createdDate: 'Created Date',
     whoCreated: 'Who Created',
     modifiedDate: 'Modified Date',
-    whoModified: 'Who Modified'
+    whoModified: 'Who Modified',
+    street: 'Street',
+    city: 'City',
+    state: 'State',
+    zipCode: 'Zip Code',
+    country: 'Country'
 };

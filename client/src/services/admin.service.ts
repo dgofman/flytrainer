@@ -10,8 +10,22 @@ export class AdminService {
   public constructor(private http: HttpClient) {
   }
 
-  public address(model: Address): Observable<Address> {
-    return this.http.post<Address>('/admin/address', model);
+  public addAddress(userId: number, model: Address): Observable<Address> {
+    return this.http.post<Address>(`/admin/${userId}/address`, model);
   }
 
+
+  public getAddress(userId: number): Observable<Address[]> {
+    return this.http.get<Address[]>(`/admin/${userId}/address`);
+  }
+
+  public updateAddress(userId: number,  model: Address): Observable<Address> {
+    return this.http.patch<Address>(`/admin/${userId}/address`, model);
+  }
+
+  public deleteAddress(userId: number, addressId: number): Observable<void> {
+    return this.http.delete<void>(`/admin/${userId}/address/${addressId}`);
+  }
 }
+
+

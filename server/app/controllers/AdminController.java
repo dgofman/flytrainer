@@ -112,13 +112,86 @@ public class AdminController extends BaseController {
 		return okResult(user, BaseModel.Short.class);
 	}
 	
-	public Result address(Http.Request request) {
-		log.debug("AdminController::address");
+	public Result addAddress(Http.Request request, Long userId) {
+		log.debug("AdminController::addAddress for user=" + userId);
+		User currentUser = request.attrs().get(User.MODEL);
 		try {
+			Query<User> query = Ebean.find(User.class);
+			query.where().eq("id", userId);
+			User user = query.findOne();
+			if (user == null) {
+				return createBadRequest("nouser", Constants.Errors.ERROR);
+			}
 			JsonNode body = request.body().asJson();
 			Address address = Json.fromJson(body, Address.class);
 			address.save();
+			user.addresses.add(address);
+			user.save(currentUser);
 			return okResult(address, BaseModel.Full.class);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
+
+	public Result getAddress(Long userId) {
+		log.debug("AdminController::getAddress for user=" + userId);
+		try {
+			Query<User> query = Ebean.find(User.class);
+			query.where().eq("id", userId);
+			User user = query.findOne();
+			if (user == null) {
+				return createBadRequest("nouser", Constants.Errors.ERROR);
+			}
+			return okResult(user.addresses, BaseModel.Full.class);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
+
+	public Result updateAddress(Http.Request request, Long userId) {
+		log.debug("AdminController::updateAddress for user=" + userId);
+		User currentUser = request.attrs().get(User.MODEL);
+		try {
+			Query<User> query = Ebean.find(User.class);
+			query.where().eq("id", userId);
+			User user = query.findOne();
+			if (user == null) {
+				return createBadRequest("nouser", Constants.Errors.ERROR);
+			}
+			JsonNode body = request.body().asJson();
+			Address address = Json.fromJson(body, Address.class);
+			int i;
+			for (i = 0; i < user.addresses.size(); i++) {
+				if (user.addresses.get(i).id == address.id) {
+					user.addresses.set(i, address);
+					break;
+				}
+			}
+			user.update(currentUser);
+			return okResult(user.addresses.get(i), BaseModel.Full.class);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
+
+	public Result deleteAddress(Http.Request request, Long userId, Integer addressId) {
+		log.debug("AdminController::deleteAddress id=" + addressId + ", for user=" + userId);
+		User currentUser = request.attrs().get(User.MODEL);
+		try {
+			Query<User> query = Ebean.find(User.class);
+			query.where().eq("id", userId);
+			User user = query.findOne();
+			if (user == null) {
+				return createBadRequest("nouser", Constants.Errors.ERROR);
+			}
+			for (int i = 0; i < user.addresses.size(); i++) {
+				if (user.addresses.get(i).id == addressId) {
+					user.addresses.remove(i);
+					break;
+				}
+			}
+			user.update(currentUser);
+			return ok();
 		} catch (Exception e) {
 			return badRequest(e);
 		}

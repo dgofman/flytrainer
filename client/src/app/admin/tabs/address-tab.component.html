@@ -5,22 +5,28 @@
             <div class="ui-fluid" *ngFor="let c of controls">
                 <div class="p-col-12 p-md-4 " style="margin: 8px 0">
                     <label class=" p-col-fixed ">{{c.header}}</label>
-                    <input *ngIf="c.field !='zip' " type="text " [formControlName]="c.field " pInputText [ngClass]="{ 'is-invalid': submitted && f[c.field].errors } " required />
-                    <p-inputMask *ngIf="c.field=='zip' " mask="99999 " placeholder="ex. 95134 " [formControlName]="c.field " [ngClass]="{ 'is-invalid': submitted && f[c.field].errors } "></p-inputMask>
-                    <div *ngIf="f[c.field].errors " style="color: red; ">
+                    <input *ngIf="c.field !='zip' && c.field !='country'&& c.field !='state'" type="text " [formControlName]="c.field " pInputText [ngClass]="{ 'is-invalid':f[c.field].errors } " required />
+                    <p-autoComplete *ngIf="c.field=='state'" field="label" [formControlName]="c.field " [suggestions]="stateFilter" (completeMethod)="stateFilter($event)" appendTo="body" [dropdown]="true" [ngClass]="{ 'is-invalid': f[c.field].errors }"></p-autoComplete>
+                    <p-inputMask *ngIf="c.field=='zip' " mask="99999 " placeholder="ex. 95134 " [formControlName]="c.field " [ngClass]="{ 'is-invalid': f[c.field].errors } "></p-inputMask>
+                    <p-autoComplete *ngIf="c.field=='country'" field="label" [formControlName]="c.field " [suggestions]="countriesFilter" (completeMethod)="countryFilter($event)" (onSelect)="registerForm.controls.country.setValue($event.data)" appendTo="body" [dropdown]="true"
+                        [ngClass]="{ 'is-invalid': f[c.field].errors }"></p-autoComplete>
+                    <div *ngIf=" f[c.field].errors " style="color: red; ">
                         <div *ngIf="f[c.field].errors.required ">{{c.header}} is required</div>
                     </div>
+
                 </div>
             </div>
-
-            <!--set as a default by default with switch-->
-            <div class="row">
-                <button class="ui-button ui-button-text" style="margin: 20px 10px 10px 0" type="submit" (click)="onSubmit()" [disabled]="!myForm.form.valid">Save</button>
-                <button class="ui-button ui-button-text" style="margin: 20px 10px 10px 0" (click)="onReset() ">Reset</button>
+            <div class="row switch">
+                <p class=" p-col-fixed "> Set this adress as {{switchlable}}</p>
+                <input class='switch-toggle' type="checkbox" id="switch" (click)="bool()" /><label for="switch">Toggle</label>
+                <!--set as a default by default with switch-->
+            </div>
+            <div class="row ">
+                <button class="ui-button ui-button-text " style="margin: 20px 10px 10px 0 " (click)="onSubmit() " [disabled]="!myForm.form.valid ">Save</button>
+                <button class="ui-button ui-button-text ui-button-secondary " style="margin: 20px 10px 10px 0 " (click)="onReset()">Reset</button>
             </div>
         </form>
     </div>
-
 </div>
 
 <!-- <div class="card-footer ">  

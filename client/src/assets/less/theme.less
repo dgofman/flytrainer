@@ -132,17 +132,16 @@ a {
 	background: @color0;
 	border: 1px solid @color5;
 	color: @color1;
-	font-size: 14px;
+	font-size: 1rem;
 	font-weight: 400;
 	margin: 0;
 	outline: medium none;
-	padding: 0.25em;
-	padding: 0.429em;
+	padding: 0.5em;
 	transition: border-color 0.2s, box-shadow 0.2s;
 	&:enabled {
 		&:hover {
 			&:not(.ui-state-error) {
-				border-color: @color3;
+				border-color: @color11;
 			}
 		}
 		&:focus {
@@ -154,6 +153,13 @@ a {
 			}
 		}
 	}
+}
+.ui-inputswitch{
+	position: relative;
+	display: inline-block;
+	width: 3rem;
+	height: 1.75rem;
+	background: @color4
 }
 .ui-radiobutton {
 	-moz-user-select: none;
@@ -213,7 +219,7 @@ a {
 	border: 1px solid @color2;
 	color: @color0;
 	cursor: pointer;
-	display: inline-block;
+	display: inline-flex;
 	font-size: 14px;
 	margin: 0;
 	padding: 0.429em 1em;
@@ -221,8 +227,8 @@ a {
 	transition: background-color 0.2s, box-shadow 0.2s;
 	&:enabled {
 		&:hover {
-			background-color: @color9;
-			border-color: @color9;
+			background-color: @color11;
+			border-color: @color11;
 			color: @color0;
 		}
 		&:active {
@@ -231,7 +237,19 @@ a {
 			color: @color0;
 		}
 	}
+	&:disabled {
+		background-color: @color4;
+		border-color: @color4;
+		color: @color0;
+		cursor:not-allowed;
+	}
 }
+.ui-button-secondary{
+	background-color:@color0;
+	color: @color2;
+	border: 1px solid @color2
+}
+
 .ui-button.ui-button-text-icon-left {
 	.ui-button-text {
 		padding: 0.429em 1em 0.429em 2em;
@@ -419,7 +437,7 @@ a {
 }
 .ui-menu.ui-shadow {
 	border: 1px solid @color4;
-	box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+	box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);	box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
 }
 .ui-icon {
 	background-repeat: no-repeat;
@@ -536,6 +554,7 @@ button, input[type=button], input[type=file]::-webkit-file-upload-button, input[
 	p-autocomplete {
 		width: @width9;
 	}
+
 	.ui-autocomplete.ui-autocomplete-dd {
 		.ui-autocomplete-input {
 			width: calc(@width9 - 2em);
@@ -1338,4 +1357,50 @@ button, input[type=button], input[type=file]::-webkit-file-upload-button, input[
 		margin-left: -0.25em;
 		top: 0;
 	}
+}
+
+/* css switch*/
+.switch{
+input[type=checkbox]{
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+label {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 50px;
+    height: 28px;
+    background: @color4;
+    display: block;
+    border-radius: 25px;
+    position: relative;
+}
+
+label:after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    background: #fff;
+    border-radius: 22px;
+    transition: 0.3s;
+}
+
+input:checked + label {
+    background:@color20;
+}
+
+input:checked + label:after {
+    left: calc(100% - 5px);
+    transform: translateX(-100%);
+}
+
+label:active:after {
+    width: 30px;
+}
+
 }

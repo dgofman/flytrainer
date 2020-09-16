@@ -9,6 +9,8 @@ import { AppBaseDirective } from 'src/app/app.base.component';
 import { ColumnType } from 'src/app/component/ft-table/ft-table.component';
 import { Address } from 'src/modules/models/address';
 import {AdminService} from 'src/services/admin.service';
+import {AutoCompleteModule} from 'primeng/autocomplete';
+import { Country } from 'src/modules/models/constants';
 
 @Component({
     selector: 'account-tab',
@@ -27,6 +29,12 @@ export class AddressTabComponent extends AppBaseDirective {
     Locales = Locales;
     registerForm: FormGroup;
     controls: ColumnType[];
+    countriesFilter = [];
+    statesFilter = [];
+    private states = [];
+    private countries = [];
+    checked = false;
+    switchlable = 'Secondary';
 
     constructor(private adminService: AdminService) {
         super();
@@ -43,12 +51,33 @@ export class AddressTabComponent extends AppBaseDirective {
             controls[c.field] = new FormControl(null, c.validators);
         });
         this.registerForm = new FormGroup(controls);
-        this.registerForm.patchValue({ userName: 'HELLO' });
+        Object.keys(Country).forEach(key => {
+            this.countries.push({data: key, label: Country[key]});
+        });
+        this.countries.sort((a, b) => a.label.localeCompare(b.label));
+
+        this.loading(true);
+        this.adminService.getAddress(this.session.id).subscribe(result => {
+            this.loading(false);
+            console.log(result);
+            this.registerForm.patchValue({});
+        }, (ex) => this.errorHandler(ex));
     }
 
     // convenience getter for easy access to form fields
     get f() { return this.registerForm.controls; }
 
+    countryFilter(event: any){
+        this.countriesFilter = this.countries.filter(e => e.label.startsWith(event.query));
+        console.log(this.countriesFilter );
+    }
+    stateFilter(event: any){
+        this.statesFilter = this.states.filter(e => e.label.startsWith(event.query));
+    }
+    bool(){
+        this.switchlable = (this.checked) ? 'Secondary' : 'Primary' ;
+        this.checked = !this.checked;
+    }
     onSubmit() {
         // stop here if form is invalid
         if (this.registerForm.invalid) {
@@ -56,7 +85,7 @@ export class AddressTabComponent extends AppBaseDirective {
         }
         const address = new Address(this.registerForm.value as any);
         this.loading(true);
-        this.adminService.address(address).subscribe(result => {
+        this.adminService.addAddress(this.session.id, address).subscribe(result => {
             this.loading(false);
             console.log(result);
         }, (ex) => this.errorHandler(ex));
@@ -100,7 +129,7 @@ export class DocumentTabComponent {
 }
 
 @NgModule({
-    imports: [CommonModule, InputTextModule, ButtonModule, InputMaskModule, ReactiveFormsModule],
+    imports: [CommonModule, InputTextModule, ButtonModule, InputMaskModule, ReactiveFormsModule, AutoCompleteModule],
     exports: [AccountTabComponent, AddressTabComponent, CertificateTabComponent, ContactTabComponent, CourseTabComponent, DocumentTabComponent],
     declarations: [AccountTabComponent, AddressTabComponent, CertificateTabComponent, ContactTabComponent, CourseTabComponent, DocumentTabComponent]
 })

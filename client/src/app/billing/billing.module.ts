@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BillingComponent } from './billing.component';
 import { FTLeftNavModule } from '../component/ft-leftnav/ft-leftnav.component';
+import { FTTableModule } from '../component/ft-table/ft-table.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { FTLeftNavModule } from '../component/ft-leftnav/ft-leftnav.component';
     HttpClientModule, /*required for HTTP_INTERCEPTORS*/
     ReactiveFormsModule, /*required for FormGroup, FormControl */
     AppComponentModule, /* required for app-header, app-footer */
-    FTLeftNavModule
+    FTLeftNavModule,
+    FTTableModule
   ],
   declarations: [
     BillingComponent

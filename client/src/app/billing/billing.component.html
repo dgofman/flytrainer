@@ -1,17 +1,18 @@
 <div class="container" [ngClass]="{'menu-layout-open': toggleArrowMenu}">
-  <div class="topbar">
-    <div class="topbar-left">
-      <app-header></app-header>
+    <div class="topbar">
+        <div class="topbar-left">
+            <app-header></app-header>
+        </div>
     </div>
-  </div>
-  <div class="wrap">
-    <div class="left-menu">
-      <ft-leftnav link="billing"></ft-leftnav>
+    <div class="wrap">
+        <div class="left-menu">
+            <ft-leftnav link="billing"></ft-leftnav>
+        </div>
+        <div class="main">
+            <ft-table filter="billing" [columns]="cols">
+            </ft-table>
+        </div>
+        <div class="layout-mask"></div>
     </div>
-    <div class="main">
-
-    </div>
-    <div class="layout-mask"></div>
-  </div>
-  <app-footer></app-footer>
+    <app-footer></app-footer>
 </div>

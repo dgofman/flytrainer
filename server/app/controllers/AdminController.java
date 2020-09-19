@@ -3,16 +3,17 @@ package controllers;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.springframework.util.StringUtils;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
+import org.springframework.util.StringUtils;
+
 import io.ebean.Ebean;
 import io.ebean.Query;
+import models.Address;
 import models.BaseModel;
 import models.FTTableEvent;
 import models.User;
@@ -111,6 +112,18 @@ public class AdminController extends BaseController {
 		return okResult(user, BaseModel.Short.class);
 	}
 	
+	public Result address(Http.Request request) {
+		log.debug("AdminController::address");
+		try {
+			JsonNode body = request.body().asJson();
+			Address address = Json.fromJson(body, Address.class);
+			address.save();
+			return okResult(address, BaseModel.Full.class);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
+
 	
 	private void validateRole(User user, User currentUser) {
 		if ((user.id == currentUser.id && 
@@ -119,4 +132,9 @@ public class AdminController extends BaseController {
 			throw new RuntimeException(Constants.Errors.ACCESS_DENIED.name());
 		}
 	}
+
+
+
+
+
 }

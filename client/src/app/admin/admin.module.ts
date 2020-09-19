@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { UserService } from 'src/services/user.service';
+import { AdminService } from 'src/services/admin.service';
 import { AdminComponent } from './admin.component';
 import { AdminService } from 'src/services/admin.service';
 import { RouterModule } from '@angular/router';
@@ -20,6 +21,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { FTPipeModule } from '../utils/pipes';
 import { AddressTabsModule } from './tabs/address-tab.component';
+
 
 @NgModule({
   imports: [

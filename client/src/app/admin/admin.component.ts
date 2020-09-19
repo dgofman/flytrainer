@@ -58,6 +58,7 @@ export class AdminComponent extends AppBaseDirective {
 
   onEdit(user: User) {
     this.selectedUser = user;
+    this.dialog.selectedItem = user;
     this.dialog.show = true;
     AppHeaderComponent.toggleArrowMenu = false;
   }

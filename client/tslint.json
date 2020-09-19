@@ -131,6 +131,7 @@
         "check-typecast"
       ]
     },
+    "ban-types": false,
     "one-variable-per-declaration": false,
     "no-host-metadata-property": false,
     "no-output-on-prefix": false,

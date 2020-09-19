@@ -453,15 +453,17 @@ public class Constants {
 
 	public static enum AddressType {
 		Other(0),
-		Home(2),
-		Business(3),
-		Billing(4),
-		Shipping(5),
-		Contract(6),
-		Hangar(7),
-		Shelter(8),
-		Tiedown(9),
-		Electronic(10);
+		Home(1),
+		Business(2),
+		Billing(3),
+		Shipping(4),
+		Contract(5),
+		Hangar(6),
+		Shelter(7),
+		Tiedown(8),
+		Mailing(9),
+		Physycal(10),
+		Electronic(11);
 
 		private final int type;
 

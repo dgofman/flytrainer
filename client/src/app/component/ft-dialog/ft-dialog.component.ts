@@ -17,7 +17,9 @@ import { TabViewModule, TabView } from 'primeng/tabview';
           <div class="close pi pi-times" (click)="onFullScreen(false); show=false"></div>
           <p-tabView (onChange)="onTabChange($event.index)">
               <p-tabPanel [header]="item.getType()" *ngFor="let item of this.templates; let i = index" [selected]="i == 0">
-                <ng-container *ngTemplateOutlet="item.template"></ng-container>
+                <div *ngIf="activeView == i">
+                  <ng-container *ngTemplateOutlet="item.template; context: { item: selectedItem }"></ng-container>
+                </div>
               </p-tabPanel>
           </p-tabView>
         </div>
@@ -30,6 +32,8 @@ export class FTDialogComponent {
   path: string[];
   breadcrumb: string[];
   fullscreen: boolean;
+  activeView: number;
+  selectedItem: any;
 
   @ViewChild(TabView) tabView: TabView;
   @ViewChild('dialog') dialog: ElementRef;
@@ -52,6 +56,7 @@ export class FTDialogComponent {
   set show(b: boolean) {
     this.display = b ? 'block' : 'none';
     this.fullscreen = false;
+    this.activeView = 0;
   }
 
   onFullScreen(state: boolean) {
@@ -82,6 +87,7 @@ export class FTDialogComponent {
   }
 
   onTabChange(index: number) {
+    this.activeView = index;
     this.breadcrumb = this.path.concat(this.tabView.tabs[index].header);
   }
 }

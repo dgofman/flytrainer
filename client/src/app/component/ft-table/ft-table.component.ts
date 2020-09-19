@@ -17,10 +17,7 @@ import { AppUtils } from '../../utils/app-utils';
 import { DomHandler } from 'primeng/dom';
 import { TableResult } from 'src/modules/models/table.result';
 import { FTStatePipe, FTPipeModule } from 'src/app/utils/pipes';
-
-type SHOW_COLUMNS = 'never' | true | false;
-type FORMAT_COLUMNS = 'date' | 'datetime' | 'epoch' | 'bool';
-type TYPET_COLUMNS = 'check' | 'cal' | 'radio' | 'input' | 'disable' | 'popup';
+import { FORMAT_COLUMNS, SHOW_COLUMNS, TYPE_COLUMNS } from 'src/modules/models/constants';
 
 export type FTTableEvent = {
   first: number,
@@ -48,8 +45,9 @@ export interface ColumnType {
   validators?: ValidatorFn | ValidatorFn[] | AbstractControlOptions;
   format?: FORMAT_COLUMNS;
   show?: SHOW_COLUMNS;
-  type?: TYPET_COLUMNS;
+  type?: TYPE_COLUMNS;
   value?: any;
+  placeholder?: string;
 }
 
 @Component({

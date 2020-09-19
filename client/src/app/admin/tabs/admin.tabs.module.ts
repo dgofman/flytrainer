@@ -9,13 +9,6 @@ export class AccountTabComponent {
 }
 
 @Component({
-    selector: 'address-tab',
-    templateUrl: './address-tab.component.html'
-})
-export class AddressTabComponent {
-}
-
-@Component({
     selector: 'certificate-tab',
     templateUrl: './certificate-tab.component.html'
 })
@@ -45,8 +38,8 @@ export class DocumentTabComponent {
 
 @NgModule({
   imports: [CommonModule],
-  exports: [AccountTabComponent, AddressTabComponent, CertificateTabComponent, ContactTabComponent, CourseTabComponent, DocumentTabComponent],
-  declarations: [AccountTabComponent, AddressTabComponent, CertificateTabComponent, ContactTabComponent, CourseTabComponent, DocumentTabComponent]
+  exports: [AccountTabComponent, CertificateTabComponent, ContactTabComponent, CourseTabComponent, DocumentTabComponent],
+  declarations: [AccountTabComponent, CertificateTabComponent, ContactTabComponent, CourseTabComponent, DocumentTabComponent]
 })
 export class AdminTabsModule {
 }

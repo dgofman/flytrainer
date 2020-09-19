@@ -12,7 +12,6 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,10 +29,13 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import utils.Constants;
 
-@JsonInclude(Include.NON_NULL)
 public class BaseController extends Controller {
 
 	protected static final Logger log = LoggerFactory.getLogger(BaseController.class);
+
+	public Result okResult(Object data) {
+		return okResult(data, null, null);
+	}
 
 	public Result okResult(Object data, Class<?> serializationView) {
 		return okResult(data, serializationView, null);
@@ -46,6 +48,7 @@ public class BaseController extends Controller {
 	public Result okResult(Object data, Class<?> serializationView, FilterProvider filter) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
+		objectMapper.setSerializationInclusion(Include.NON_NULL);
 		if (filter != null) {
 			objectMapper.setFilterProvider(filter);
 		}
@@ -65,6 +68,7 @@ public class BaseController extends Controller {
 	}
 
 	public Result badRequest(Throwable e) {
+		log.error("BaseController::badRequest", e);
 		return badRequest(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
 	}
 

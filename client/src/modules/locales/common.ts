@@ -10,6 +10,7 @@ export default {
     success: 'Success',
     error: 'Error',
     logout: 'Logout',
+    description: 'Description',
     accountBalance: 'Account Balance',
     total: 'Total',
     filter: 'Filter',
@@ -22,5 +23,6 @@ export default {
     selectItem: 'Select Item',
     sqlQuery: '% - Represents the value starts or ends with zero or more characters.',
     noData: 'No data found.',
+    noMatch: 'No match',
     powerBy: '© Power by FlyTrainer LLC'
 };

@@ -26,5 +26,14 @@ export default {
     createdDate: 'Created Date',
     whoCreated: 'Who Created',
     modifiedDate: 'Modified Date',
-    whoModified: 'Who Modified'
+    whoModified: 'Who Modified',
+    exisitngRecords: 'Existing Records',
+    type: 'Type',
+    street: 'Street',
+    city: 'City',
+    state: 'State',
+    zipCode: 'Zip Code',
+    country: 'Country',
+    isPrimary: 'Set address as primary',
+    selAccountType: 'Select Account Type'
 };

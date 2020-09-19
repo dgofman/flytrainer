@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { UserService } from 'src/services/user.service';
 import { AdminComponent } from './admin.component';
+import { AdminService } from 'src/services/admin.service';
 import { RouterModule } from '@angular/router';
 import { AppComponentModule } from '../app.component';
 import { AdminAuthService } from '../authentication/auth.service';
@@ -18,6 +19,7 @@ import { ConfirmationService } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { FTPipeModule } from '../utils/pipes';
+import { AddressTabsModule } from './tabs/address-tab.component';
 
 @NgModule({
   imports: [
@@ -36,6 +38,7 @@ import { FTPipeModule } from '../utils/pipes';
     DropdownModule,
     ButtonModule,
     AdminTabsModule,
+    AddressTabsModule,
     FTDialogvModule,
     FTMenuModule,
     FTTableModule,
@@ -47,6 +50,7 @@ import { FTPipeModule } from '../utils/pipes';
   providers: [
     ConfirmationService,
     UserService,
+    AdminService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AdminAuthService,

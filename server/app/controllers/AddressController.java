@@ -75,19 +75,11 @@ public class AddressController extends BaseController {
 		log.debug("AddressController::deleteAddress id=" + addressId + ", for user=" + userId);
 		User currentUser = request.attrs().get(User.MODEL);
 		try {
-			Query<User> query = Ebean.find(User.class);
-			query.where().eq("id", userId);
-			User user = query.findOne();
-			if (user == null) {
-				return createBadRequest("nouser", Constants.Errors.ERROR);
+			Address address = Ebean.find(Address.class).where().eq("id", addressId).findOne();
+			if (address == null) {
+				return createBadRequest("noaddress", Constants.Errors.ERROR);
 			}
-			for (int i = 0; i < user.addresses.size(); i++) {
-				if (user.addresses.get(i).id == addressId) {
-					user.addresses.remove(i);
-					break;
-				}
-			}
-			user.update(currentUser);
+			address.delete(currentUser);
 			return ok();
 		} catch (Exception e) {
 			return badRequest(e);

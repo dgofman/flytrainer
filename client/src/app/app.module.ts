@@ -7,8 +7,6 @@ import { AppNotFoundComponent } from './app.notfound.component';
 import { Routes, RouterModule, UrlSegment } from '@angular/router';
 import { AuthService, AdminAuthService } from './authentication/auth.service';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
-
 
 const AuthRouteMatcher = (url: UrlSegment[]) => {
   if (url.length) {
@@ -81,7 +79,6 @@ export const routes: Routes = [
     BrowserModule,
     HttpClientModule,
     NoopAnimationsModule,
-    ReactiveFormsModule,
     RouterModule.forRoot(routes, {
       useHash: environment.native
     })

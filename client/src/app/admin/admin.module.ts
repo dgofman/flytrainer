@@ -3,7 +3,6 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { UserService } from 'src/services/user.service';
 import { AdminService } from 'src/services/admin.service';
 import { AdminComponent } from './admin.component';
-import { AdminService } from 'src/services/admin.service';
 import { RouterModule } from '@angular/router';
 import { AppComponentModule } from '../app.component';
 import { AdminAuthService } from '../authentication/auth.service';

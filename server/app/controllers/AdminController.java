@@ -13,7 +13,6 @@ import org.springframework.util.StringUtils;
 
 import io.ebean.Ebean;
 import io.ebean.Query;
-import models.Address;
 import models.BaseModel;
 import models.FTTableEvent;
 import models.User;
@@ -111,20 +110,7 @@ public class AdminController extends BaseController {
 		user.delete(currentUser);
 		return okResult(user, BaseModel.Short.class);
 	}
-	
-	public Result address(Http.Request request) {
-		log.debug("AdminController::address");
-		try {
-			JsonNode body = request.body().asJson();
-			Address address = Json.fromJson(body, Address.class);
-			address.save();
-			return okResult(address, BaseModel.Full.class);
-		} catch (Exception e) {
-			return badRequest(e);
-		}
-	}
 
-	
 	private void validateRole(User user, User currentUser) {
 		if ((user.id == currentUser.id && 
 			(user.role != currentUser.role || user.isActive == 0)) || 
@@ -132,9 +118,4 @@ public class AdminController extends BaseController {
 			throw new RuntimeException(Constants.Errors.ACCESS_DENIED.name());
 		}
 	}
-
-
-
-
-
 }

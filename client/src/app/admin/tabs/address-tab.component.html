@@ -1,13 +1,12 @@
 <div>
-    <h1>Address</h1>
     <div class="card-body">
         <form [formGroup]="registerForm" #myForm="ngForm">
-            <div class="row ui-fluid p-col-12 p-md-4" *ngIf="addresses.length > 0">
-                <label class=" p-col-fixed">{{Locales.exisitngRecords}}</label>
-                <p-dropdown appendTo="body" [options]="addresses" optionLabel="description"></p-dropdown>
-            </div>
-            <div class="ui-fluid" *ngFor="let c of controls">
-                <div class="row p-col-12 p-md-4">
+            <div class="ui-fluid p-col-12 p-md-4">
+                <div class="row">
+                    <label class=" p-col-fixed">{{Locales.description}}</label>
+                    <p-autoComplete #desc appendTo="body" field="description" [dropdown]="addresses.length > 0"  [(ngModel)]="selectedAddress" [ngModelOptions]="{standalone: true}"  (completeMethod)="filterAddress($event, desc)"></p-autoComplete>
+                </div>
+                <div class="row" *ngFor="let c of controls">
                     <label class=" p-col-fixed">{{c.header}}</label>
                     <input *ngIf="c.type =='input'" [formControlName]="c.field" pInputText required />
                     <p-dropdown *ngIf="c.type=='popup'" appendTo="body" [formControlName]="c.field" [options]="c.value" [placeholder]="c.placeholder"></p-dropdown>
@@ -20,7 +19,7 @@
                 </div>
             </div>
             <div class="row" style="margin: 20px 0">
-                <button class="ui-button ui-button-text " (click)="onDelete()">{{Locales.delete}}</button>
+                <button *ngIf="addresses.length > 0" class="ui-button ui-button-text " (click)="onDelete()" [disabled]="!currentAddress">{{Locales.delete}}</button>
                 <div class="right">
                     <button class="ui-button ui-button-text " (click)="onSubmit()" [disabled]="!myForm.form.valid ">{{Locales.save}}</button>
                     <button class="ui-button ui-button-text ui-button-secondary " style="margin-left: 15px" (click)="onReset()">{{Locales.reset}}</button>

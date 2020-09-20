@@ -27,7 +27,6 @@ export default {
     whoCreated: 'Who Created',
     modifiedDate: 'Modified Date',
     whoModified: 'Who Modified',
-    exisitngRecords: 'Existing Records',
     type: 'Type',
     street: 'Street',
     city: 'City',

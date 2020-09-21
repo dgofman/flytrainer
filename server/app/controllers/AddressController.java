@@ -59,13 +59,16 @@ public class AddressController extends BaseController {
 		try {
 			JsonNode body = request.body().asJson();
 			Address address = Json.fromJson(body, Address.class);
-			address = Ebean.find(Address.class).where().eq("id", address.id).findOne();
-			if (address == null) {
+			Address dbAddress = Ebean.find(Address.class).where().eq("id", address.id).findOne();
+			if (dbAddress == null) {
 				return createBadRequest("noaddress", Constants.Errors.ERROR);
 			}
-			new ObjectMapper().readerForUpdating(address).readValue(body);
-			address.update(currentUser);
-			return okResult(address);
+			if (address.isPrimary == 1) {
+				Ebean.find(Address.class).asUpdate().set("isPrimary", 0) .where().eq("user", dbAddress.user).update();
+			}
+			new ObjectMapper().readerForUpdating(dbAddress).readValue(body);
+			dbAddress.update(currentUser);
+			return okResult(dbAddress);
 		} catch (Exception e) {
 			return badRequest(e);
 		}

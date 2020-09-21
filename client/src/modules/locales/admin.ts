@@ -31,8 +31,13 @@ export default {
     street: 'Street',
     city: 'City',
     state: 'State',
-    zipCode: 'Zip Code',
+    code: 'Zip Code',
     country: 'Country',
-    isPrimary: 'Set address as primary',
-    selAccountType: 'Select Account Type'
+    phone: 'Phone',
+    fax: 'Fax',
+    pobox: 'P.O. Box',
+    isPrimary: 'Set as primary',
+    selAccountType: 'Select Account Type',
+    deleteRecord: 'Are you sure to delete this record?',
+    deleteHeader: 'Delete Confirmation'
 };

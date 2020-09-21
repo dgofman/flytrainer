@@ -29,25 +29,26 @@
       </ft-table>
       <ft-dialog width="70" height="60" [path]="[Locales.admin, Locales.users, selectedUser?.first + ' ' + selectedUser?.last]">
         <ng-template pTemplate="Account" let-user="item">
-          <account-tab></account-tab>
+          <account-tab [user]="user" ></account-tab>
         </ng-template>
         <ng-template pTemplate="Addresses" let-user="item">
           <address-tab [user]="user"></address-tab>
         </ng-template>
         <ng-template pTemplate="Certificates/Ratings" let-user="item">
-          <certificate-tab></certificate-tab>
+          <certificate-tab [user]="user"></certificate-tab>
         </ng-template>
         <ng-template pTemplate="Contacts/Employers" let-user="item">
-          <contact-tab></contact-tab>
+          <contact-tab [user]="user"></contact-tab>
         </ng-template>
         <ng-template pTemplate="Courses/Endorsements" let-user="item">
-          <course-tab></course-tab>
+          <course-tab [user]="user"></course-tab>
         </ng-template>
         <ng-template pTemplate="Documents" let-user="item">
-          <document-tab></document-tab>
+          <document-tab [user]="user"></document-tab>
         </ng-template>
       </ft-dialog>
     </div>
   </div>
   <app-footer></app-footer>
+  <p-confirmDialog key="deleteRecord" appendTo="body" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 </div>

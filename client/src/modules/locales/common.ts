@@ -3,6 +3,7 @@ import Locales from './errors';
 export default {
     ...Locales,
     save: 'Save',
+    new: 'New',
     cancel: 'Cancel',
     delete: 'Delete',
     apply: 'Apply',
@@ -10,6 +11,7 @@ export default {
     success: 'Success',
     error: 'Error',
     logout: 'Logout',
+    other: 'Other',
     description: 'Description',
     accountBalance: 'Account Balance',
     total: 'Total',

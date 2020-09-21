@@ -1,14 +1,22 @@
 <div>
     <div class="card-body">
-        <form [formGroup]="registerForm" #myForm="ngForm">
+        <form [formGroup]="formGroup" #myForm="ngForm">
             <div class="ui-fluid p-col-12 p-md-4">
                 <div class="row">
                     <label class=" p-col-fixed">{{Locales.description}}</label>
                     <p-autoComplete #desc appendTo="body" field="description" [dropdown]="addresses.length > 0"  [(ngModel)]="selectedAddress" [ngModelOptions]="{standalone: true}"  (completeMethod)="filterAddress($event, desc)"></p-autoComplete>
                 </div>
                 <div class="row" *ngFor="let c of controls">
-                    <label class=" p-col-fixed">{{c.header}}</label>
-                    <input *ngIf="c.type =='input'" [formControlName]="c.field" pInputText required />
+                    <label *ngIf="c.header">{{c.header}}</label>
+                    <div  *ngIf="c.field=='other' && formGroup.controls.type.value =='Other'">
+                        <label>{{Locales.other}}</label>
+                        <input formControlName="other" pInputText/>
+                    </div>
+                    <div  *ngIf="c.field=='pobox' && formGroup.controls.type.value !='Home'">
+                        <label>{{Locales.pobox}}</label>
+                        <input formControlName="pobox" pInputText/>
+                    </div>
+                    <input *ngIf="c.type =='input'" [formControlName]="c.field" pInputText />
                     <p-dropdown *ngIf="c.type=='popup'" appendTo="body" [formControlName]="c.field" [options]="c.value" [placeholder]="c.placeholder"></p-dropdown>
                     <p-autoComplete *ngIf="c.type == 'auto'" ftAutoComplete [formControlName]="c.field" [data]="c.value"></p-autoComplete>
                     <p-inputMask *ngIf="c.type=='mask'" [mask]="c.value" [placeholder]="c.placeholder" [formControlName]="c.field"></p-inputMask>
@@ -19,10 +27,10 @@
                 </div>
             </div>
             <div class="row" style="margin: 20px 0">
+                <button class="ui-button ui-button-text ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
                 <button *ngIf="addresses.length > 0" class="ui-button ui-button-text " (click)="onDelete()" [disabled]="!currentAddress">{{Locales.delete}}</button>
                 <div class="right">
                     <button class="ui-button ui-button-text " (click)="onSubmit()" [disabled]="!myForm.form.valid ">{{Locales.save}}</button>
-                    <button class="ui-button ui-button-text ui-button-secondary " style="margin-left: 15px" (click)="onReset()">{{Locales.reset}}</button>
                 </div>
             </div>
         </form>

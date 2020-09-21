@@ -4,6 +4,8 @@
     "company": "Company Name",
     "phone": "(xxx) xxx-xxxx",
     "homeAirport": "KRHV",
+    "homeState": "CA",
+    "homeCountry": "US",
     "tfrLink": "https://tfr.faa.gov/tfr2/list.jsp?sort=d&cns_l_id=ZOA",
     "wxLink": "https://www.aviationweather.gov/gfa/plot",
     "skyvectorLink": "https://skyvector.com/?zoom=3&ll=37.33293,-121.81970&ll1=36.87567,-122.67595&ll2=37.78743,-120.96346&pv=0&res=152.874&windMB=300&windZulu=1597536000&layers=tfr,metar,am-z,am-tt,am-si,am-sm,sm-co,sm-cv,sm-int,sm-unk,avgas,winds,drotam,pirep&rlayers=nexrad,cloudtopfilter&rand=83221",

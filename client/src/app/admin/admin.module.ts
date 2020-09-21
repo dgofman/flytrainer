@@ -17,6 +17,7 @@ import { FTMenuModule } from '../component/ft-menu/ft-menu.component';
 import { FTDialogvModule } from '../component/ft-dialog/ft-dialog.component';
 import { ConfirmationService } from 'primeng/api';
 import { DropdownModule } from 'primeng/dropdown';
+import { ConfirmDialogModule} from 'primeng/confirmdialog';
 import { CalendarModule } from 'primeng/calendar';
 import { FTPipeModule } from '../utils/pipes';
 import { AddressTabsModule } from './tabs/address-tab.component';
@@ -34,6 +35,7 @@ import { AddressTabsModule } from './tabs/address-tab.component';
     ReactiveFormsModule, /*required for FormGroup, FormControl */
     AppComponentModule, /* required for app-header, app-footer */
     FontAwesomeModule,
+    ConfirmDialogModule,
     CalendarModule,
     CheckboxModule,
     DropdownModule,

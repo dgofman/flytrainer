@@ -115,11 +115,13 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             this.adminService.updateAddress(this.session.id, address).subscribe(result => {
                 this.loading(false);
                 this.updateAddressList(result);
+                this.success(Locales.recordUpdated);
             }, (ex) => this.errorHandler(ex));
         } else {
             this.adminService.addAddress(this.session.id, address).subscribe(result => {
                 this.loading(false);
                 this.addresses.push(result);
+                this.success(Locales.recordCreated);
             }, (ex) => this.errorHandler(ex));
         }
     }
@@ -131,6 +133,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             this.addresses.forEach((item, idx) => {
                 if (item.id === this.selectedAddress.id) {
                     this.addresses.splice(idx, 1);
+                    this.success(Locales.recordDeleted);
                     return false;
                 }
             });

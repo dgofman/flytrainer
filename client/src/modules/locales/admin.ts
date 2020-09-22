@@ -38,6 +38,9 @@ export default {
     pobox: 'P.O. Box',
     isPrimary: 'Set as primary',
     selAccountType: 'Select Account Type',
+    recordCreated: 'Record created successfuly',
+    recordUpdated: 'Record updated successfuly',
+    recordDeleted: 'Record deleted successfuly',
     deleteRecord: 'Are you sure to delete this record?',
     deleteHeader: 'Delete Confirmation'
 };

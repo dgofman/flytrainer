@@ -103,10 +103,11 @@ export class AppToastComponent {
     div.className = className;
     close.className = 'pi pi-times close';
     i.className = 'pi pi-check';
+    span.innerHTML = `<b>${Locales.success}</b><br>${message}</p>`;
     if (className === 'error') {
       i.className = 'pi pi-times-circle';
+      span.innerHTML = `<b>${Locales.error}</b><br>${message}</p>`;
     }
-    span.innerHTML = `<b>${Locales.error}</b><br>${message}</p>`;
     r.appendChild(p, close);
     r.appendChild(p, i);
     r.appendChild(p, span);

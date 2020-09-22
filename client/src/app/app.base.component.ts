@@ -22,6 +22,10 @@ export abstract class AppBaseDirective {
         AppUtils.loading(show);
     }
 
+    success(message: string) {
+        AppUtils.success(message);
+    }
+
     errorHandler(ex: any, errorMap: { [code: string]: string } = {}) {
         AppUtils.errorHandler(ex, errorMap);
     }

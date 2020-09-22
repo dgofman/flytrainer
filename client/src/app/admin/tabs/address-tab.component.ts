@@ -5,6 +5,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } 
 import { ButtonModule } from 'primeng/button';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { Address } from 'src/modules/models/address';
 import { AdminService } from 'src/services/admin.service';
 import { AutoCompleteModule, AutoComplete } from 'primeng/autocomplete';
@@ -151,7 +152,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
 }
 
 @NgModule({
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, AutoCompleteModule, InputTextModule, DropdownModule, InputSwitchModule, ButtonModule, InputMaskModule, FTAutoCompleteModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, AutoCompleteModule, InputTextModule, DropdownModule, InputSwitchModule, InputTextareaModule, ButtonModule, InputMaskModule, FTAutoCompleteModule],
     exports: [AddressTabComponent],
     declarations: [AddressTabComponent]
 })

@@ -37,6 +37,7 @@ export default {
     fax: 'Fax',
     pobox: 'P.O. Box',
     isPrimary: 'Set as primary',
+    notes: 'Notes',
     selAccountType: 'Select Account Type',
     recordCreated: 'Record created successfuly',
     recordUpdated: 'Record updated successfuly',

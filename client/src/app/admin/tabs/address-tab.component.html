@@ -1,9 +1,9 @@
 <div>
     <div class="card-body">
-        <form [formGroup]="formGroup" #myForm="ngForm">
-            <div class="ui-fluid p-col-12 p-md-4">
+        <form [formGroup]="formGroup" #myForm="ngForm" class="p-grid">
+            <div class="ui-fluid p-md-5">
                 <div class="row">
-                    <label class=" p-col-fixed">{{Locales.description}}</label>
+                    <label>{{Locales.description}}</label>
                     <p-autoComplete #desc appendTo="body" field="description" [dropdown]="addresses.length > 0"  [(ngModel)]="selectedAddress" [ngModelOptions]="{standalone: true}"  (completeMethod)="filterAddress($event, desc)"></p-autoComplete>
                 </div>
                 <div class="row" *ngFor="let c of controls">
@@ -24,6 +24,12 @@
                     <div *ngIf="f[c.field].errors" style="color: red; ">
                         <div *ngIf="f[c.field].errors.required ">{{c.header}} is required</div>
                     </div>
+                </div>
+            </div>
+            <div class="ui-fluid p-md-6">
+                <div class="row">
+                    <label>{{Locales.notes}}</label>
+                    <textarea pInputTextarea [rows]="15"></textarea>
                 </div>
             </div>
         </form>

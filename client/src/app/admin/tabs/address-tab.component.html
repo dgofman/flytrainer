@@ -26,13 +26,13 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="margin: 20px 0">
-                <button class="ui-button ui-button-text ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
-                <button *ngIf="addresses.length > 0" class="ui-button ui-button-text " (click)="onDelete()" [disabled]="!currentAddress">{{Locales.delete}}</button>
-                <div class="right">
-                    <button class="ui-button ui-button-text " (click)="onSubmit()" [disabled]="!myForm.form.valid ">{{Locales.save}}</button>
-                </div>
-            </div>
         </form>
+        <div class="row footer">
+            <button class="ui-button ui-button-text ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
+            <button *ngIf="addresses.length > 0" class="ui-button ui-button-text " (click)="onDelete()" [disabled]="!currentAddress">{{Locales.delete}}</button>
+            <div class="right">
+                <button class="ui-button ui-button-text " (click)="onSubmit()" [disabled]="!myForm.form.valid ">{{Locales.save}}</button>
+            </div>
+        </div>
     </div>
 </div>

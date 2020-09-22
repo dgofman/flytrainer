@@ -39,25 +39,41 @@
     }
 }
 
-p-tabview, .footer {
+p-tabview {
     position: absolute;
     top: 50px;
-    bottom: 60px;
+    bottom: 20px;
     left: 10px;
     right: 10px;
-}
-
-.footer {
-    top: auto;
-    bottom: 15px;
 }
 
 .ui-tabview {
     height: calc(100% - 40px); /* Tab menu height */
 }
 
-.ui-tabview-panels {
+.ui-tabview-scrollable .ui-tabview-panels {
     overflow: auto;
-    height: 100%;
-    width: 100%;
+}
+
+.ui-tabview-fixed .ui-tabview-panels {
+    position: relative;
+
+    form {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 60px;
+        overflow: auto;
+        padding: 0.571em 1em;
+        border-bottom: 1px dashed #c8c8c8;
+    }
+
+    .footer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0 1em;
+    }
 }

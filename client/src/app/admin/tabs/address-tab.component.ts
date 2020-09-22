@@ -15,7 +15,6 @@ import { FTAutoCompleteModule } from 'src/app/component/ft-autocomplete/ft-autoc
 import { TabBaseDirective } from './tabbase.component';
 import { ConfirmationService } from 'primeng/api';
 
-
 @Component({
     selector: 'address-tab',
     templateUrl: './address-tab.component.html'

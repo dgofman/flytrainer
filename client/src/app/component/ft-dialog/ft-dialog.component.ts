@@ -8,7 +8,7 @@ import { TabViewModule, TabView } from 'primeng/tabview';
   selector: 'ft-dialog',
   template: `
       <div class="layout-mask" style="display: block"></div>
-      <div class="modal">
+      <div class="modal ui-tabview-fixed">
         <div [style.width.em]="width" [style.height.em]="height" #dialog>
           <div class="breadcrumb">
             <span *ngFor="let label of breadcrumb">{{label}}</span>

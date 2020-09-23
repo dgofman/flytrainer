@@ -1,22 +1,16 @@
 import Locales from '@locales/admin';
-import { CommonModule } from '@angular/common';
 import { Component, NgModule, ViewChild, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule, FormBuilder } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputMaskModule } from 'primeng/inputmask';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Address } from 'src/modules/models/address';
 import { AdminService } from 'src/services/admin.service';
-import { AutoCompleteModule, AutoComplete } from 'primeng/autocomplete';
+import { AutoComplete } from 'primeng/autocomplete';
 import { Country, State, AddressType } from 'src/modules/models/constants';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { DropdownModule } from 'primeng/dropdown';
-import { FTAutoCompleteModule } from 'src/app/component/ft-autocomplete/ft-autocomplete.component';
-import { TabBaseDirective } from './tabbase.component';
+import { TabBaseDirective, TabBaseModule } from './tabbase.component';
 import { ConfirmationService } from 'primeng/api';
 import { Note } from 'src/modules/models/base.model';
 import { AppUtils } from 'src/app/utils/app-utils';
+import { CommonModule } from '@angular/common';
+import { AdminSharedModule } from '../admin-shared.module';
 
 @Component({
     selector: 'address-tab',
@@ -109,11 +103,6 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
         ac.suggestions = this.addresses.filter(e => e.description.toLowerCase().indexOf(event.query.toLowerCase()) === 0);
     }
 
-    // convenience getter for easy access to form fields
-    get f() {
-        return this.formGroup.controls;
-    }
-
     onSubmit() {
         const address = new Address(this.formGroup.value as any);
         if (AppUtils.isBlank(this.description.inputEL.nativeElement.value)) {
@@ -163,7 +152,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
 }
 
 @NgModule({
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, AutoCompleteModule, InputTextModule, DropdownModule, InputSwitchModule, InputTextareaModule, ButtonModule, InputMaskModule, FTAutoCompleteModule],
+    imports: [CommonModule, AdminSharedModule, TabBaseModule],
     exports: [AddressTabComponent],
     declarations: [AddressTabComponent]
 })

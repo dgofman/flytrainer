@@ -8,19 +8,15 @@ import { AppComponentModule } from '../app.component';
 import { AdminAuthService } from '../authentication/auth.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CheckboxModule } from 'primeng/checkbox';
-import { ButtonModule } from 'primeng/button';
-import { AdminTabsModule } from './tabs/admin.tabs.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FTTableModule } from '../component/ft-table/ft-table.component';
 import { FTMenuModule } from '../component/ft-menu/ft-menu.component';
 import { FTDialogvModule } from '../component/ft-dialog/ft-dialog.component';
 import { ConfirmationService } from 'primeng/api';
-import { DropdownModule } from 'primeng/dropdown';
 import { ConfirmDialogModule} from 'primeng/confirmdialog';
-import { CalendarModule } from 'primeng/calendar';
 import { FTPipeModule } from '../utils/pipes';
 import { AddressTabsModule } from './tabs/address-tab.component';
+import { TempTabsModule } from './tabs/temp.tabs.module';
 
 
 @NgModule({
@@ -36,11 +32,7 @@ import { AddressTabsModule } from './tabs/address-tab.component';
     AppComponentModule, /* required for app-header, app-footer */
     FontAwesomeModule,
     ConfirmDialogModule,
-    CalendarModule,
-    CheckboxModule,
-    DropdownModule,
-    ButtonModule,
-    AdminTabsModule,
+    TempTabsModule,
     AddressTabsModule,
     FTDialogvModule,
     FTMenuModule,

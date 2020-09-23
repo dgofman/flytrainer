@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
-import { TabBaseDirective } from './tabbase.component';
+import { TabBaseDirective, TabBaseModule } from './tabbase.component';
 
 @Component({
     selector: 'account-tab',
@@ -43,9 +43,9 @@ export class DocumentTabComponent extends TabBaseDirective {
 }
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, TabBaseModule],
   exports: [AccountTabComponent, CertificateTabComponent, ContactTabComponent, CourseTabComponent, DocumentTabComponent],
   declarations: [AccountTabComponent, CertificateTabComponent, ContactTabComponent, CourseTabComponent, DocumentTabComponent]
 })
-export class AdminTabsModule {
+export class TempTabsModule {
 }

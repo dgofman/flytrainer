@@ -21,6 +21,17 @@ import utils.Constants.Access;
 @BasicAuth({ Access.ASSISTANT, Access.MANAGER, Access.ADMIN })
 public class AddressController extends BaseController {
 
+	public Result getAddress(Long userId) {
+		log.debug("AddressController::getAddress for user=" + userId);
+		try {
+			List<Address> addresses = Ebean.createNamedQuery(Address.class, Address.FIND_BY_USERID)
+					.setParameter("userId", userId).findList();
+			return okResult(addresses);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
+
 	public Result addAddress(Http.Request request, Long userId) {
 		log.debug("AddressController::addAddress for user=" + userId);
 		User currentUser = request.attrs().get(User.MODEL);
@@ -45,17 +56,8 @@ public class AddressController extends BaseController {
 		} catch (Exception e) {
 			transaction.rollback();
 			return badRequest(e);
-		}
-	}
-
-	public Result getAddress(Long userId) {
-		log.debug("AddressController::getAddress for user=" + userId);
-		try {
-			List<Address> addresses = Ebean.createNamedQuery(Address.class, Address.FIND_BY_USERID)
-					.setParameter("userId", userId).findList();
-			return okResult(addresses);
-		} catch (Exception e) {
-			return badRequest(e);
+		} finally {
+			  transaction.end();
 		}
 	}
 
@@ -87,6 +89,8 @@ public class AddressController extends BaseController {
 		} catch (Exception e) {
 			transaction.rollback();
 			return badRequest(e);
+		} finally {
+			  transaction.end();
 		}
 	}
 
@@ -108,6 +112,8 @@ public class AddressController extends BaseController {
 		} catch (Exception e) {
 			transaction.rollback();
 			return badRequest(e);
+		} finally {
+			  transaction.end();
 		}
 	}
 }

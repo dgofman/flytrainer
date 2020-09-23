@@ -4,50 +4,59 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import io.ebean.Model;
 import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
+import play.libs.Json;
 
 @MappedSuperclass
 public abstract class BaseModel extends Model {
 
 	@Column(name = "id")
 	@Id
-	public Integer id; //id
+	public Long id; //id
 	
 	@Column(name = "version")
 	@Version
 	public long version; //version
 
-	@Column(name = "created_date")
-	@WhenCreated
 	@JsonView(Short.class)
+	@WhenCreated
 	public Date createdDate; //created_date
 
-	@Column(name = "modified_date")
 	@WhenModified
 	public Date modifiedDate; //modified_date
 
-	@Column(name = "who_created")
 	@JsonView(Short.class)
-	private Integer whoCreated; //who_created
-	public Integer getWhoCreated() {
+	private Long whoCreated; //who_created
+	public Long getWhoCreated() {
 		return whoCreated;
 	}
 
-	@Column(name = "who_modified")
 	@JsonView(Short.class)
-	private Integer whoModified; //who_modified
-	public Integer getWhoModified() {
+	private Long whoModified; //who_modified
+	public Long getWhoModified() {
 		return whoModified;
 	}
 
+	@ManyToOne
+	@JsonView(Full.class)
+	private Note notes; //notes_id
 
+	public Note getNotes() {
+		return this.notes;
+	}
+	public void setNotes(JsonNode body) {
+		this.notes = Json.fromJson(body, Note.class);
+	}
+	
 	public void save(BaseModel currentUser) {
 		whoCreated = currentUser.id;
 		whoModified = currentUser.id;

@@ -46,7 +46,4 @@ public class Contact extends BaseModel {
 
 	@ManyToOne
 	public User user; // FK user_id - User::contacts
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

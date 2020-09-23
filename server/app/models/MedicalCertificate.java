@@ -16,7 +16,6 @@ import utils.Constants;
 @Table(name = "medical")
 public class MedicalCertificate extends BaseModel {
 
-	@Length(10)
 	@NotNull
 	public Constants.MedicalCertificate type = Constants.MedicalCertificate.ThirdClass; //type
 	
@@ -45,7 +44,4 @@ public class MedicalCertificate extends BaseModel {
 
 	@ManyToOne
 	public User user; //FK user_id - User::medicalCertificates
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

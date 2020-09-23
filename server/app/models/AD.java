@@ -42,7 +42,4 @@ public class AD extends BaseModel {
 	
 	@ManyToOne
 	public Maintenance maintenance; //FK maintenance_id - Maintenance::ads
-	
-	@ManyToOne
-	public Note notes; //notes_id
 }

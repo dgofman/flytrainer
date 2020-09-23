@@ -53,7 +53,4 @@ public class Account extends BaseModel {
 
 	@ManyToOne
 	public User user; //FK user_id - User::accounts
-	
-	@ManyToOne
-	public Note notes; //notes_id
 }

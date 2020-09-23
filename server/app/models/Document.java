@@ -17,7 +17,7 @@ import utils.Constants.DocumentType;
 @Entity
 @History
 @Table(name = "document")
-public class Document extends BaseModel {
+public class Document extends AbstractBase {
 
 	@NotNull
 	public DocumentType type = DocumentType.Driverslicense; //type
@@ -56,7 +56,4 @@ public class Document extends BaseModel {
 
 	@ManyToOne
 	public User user; //FK user_id - User::documents
-	
-	@ManyToOne
-	public Note notes; //notes_id
 }

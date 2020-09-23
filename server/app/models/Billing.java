@@ -44,7 +44,4 @@ public class Billing extends BaseModel {
 
 	@ManyToOne
 	public Account account; //FK account_id - Account::billing
-	
-	@ManyToOne
-	public Note notes; //notes_id
 }

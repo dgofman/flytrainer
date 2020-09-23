@@ -58,7 +58,4 @@ public class Insurance extends BaseModel {
 	
 	@ManyToOne
 	public Account account; //FK account_id - Account::insurances
-	
-	@ManyToOne
-	public Note notes; //notes_id
 }

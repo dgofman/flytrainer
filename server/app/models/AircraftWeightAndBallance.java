@@ -48,7 +48,4 @@ public class AircraftWeightAndBallance extends BaseModel {
 
 	@OneToOne
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::wb
-	
-	@ManyToOne
-	public Note notes; //notes_id
 }

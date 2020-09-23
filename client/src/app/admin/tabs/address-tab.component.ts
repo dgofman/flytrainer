@@ -1,7 +1,7 @@
 import Locales from '@locales/admin';
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, ViewChild, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule, FormBuilder } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
@@ -15,6 +15,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { FTAutoCompleteModule } from 'src/app/component/ft-autocomplete/ft-autocomplete.component';
 import { TabBaseDirective } from './tabbase.component';
 import { ConfirmationService } from 'primeng/api';
+import { Note } from 'src/modules/models/base.model';
+import { AppUtils } from 'src/app/utils/app-utils';
 
 @Component({
     selector: 'address-tab',
@@ -26,7 +28,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
 
     @ViewChild('desc') description: AutoComplete;
 
-    constructor(confirmationService: ConfirmationService, private adminService: AdminService) {
+    constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder) {
         super(confirmationService);
         this.addresses = [];
         this.controls = [
@@ -45,11 +47,14 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             { field: 'country', header: Locales.country, type: 'auto', validators: [Validators.required], value: Country },
             { field: 'phone', header: Locales.phone, type: 'input' },
             { field: 'fax', header: Locales.fax, type: 'input' },
-            { field: 'isPrimary', header: Locales.isPrimary, type: 'switch' }
+            { field: 'isPrimary', header: Locales.isPrimary, type: 'switch' },
         ];
-        const controls = { id: new FormControl() };
+        const controls = { id: new FormControl(), notes: null };
         this.controls.forEach(c => {
             controls[c.field] = new FormControl(null, c.validators);
+        });
+        controls.notes = this.formBuilder.group({
+            id: [''], content: ['']
         });
         this.formGroup = new FormGroup(controls);
     }
@@ -64,9 +69,9 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
     }
 
     updateAddressList(update?: Address) {
-        let address = this.onReset();
+        let selectedIndex = -1;
         if (this.addresses.length) {
-            address = this.addresses[0];
+            selectedIndex = 0;
             this.addresses.forEach((item, idx) => {
                 if (update) {
                     if (update.id === item.id) {
@@ -76,9 +81,13 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
                     }
                 }
                 if (item.isPrimary) {
-                    address = item;
+                    selectedIndex = idx;
                 }
             });
+        }
+        const address = selectedIndex !== -1 ? this.addresses[selectedIndex] : this.onReset();
+        if (!address.notes || AppUtils.isBlank(address.notes.content)) {
+            address.notes = new Note({id: null, content: null});
         }
         this.selectedAddress = address;
         this.formGroup.patchValue(address);
@@ -107,21 +116,22 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
 
     onSubmit() {
         const address = new Address(this.formGroup.value as any);
-        if (this.description.inputEL.nativeElement.value.split(' ').join() === '') {
+        if (AppUtils.isBlank(this.description.inputEL.nativeElement.value)) {
             this.description.inputEL.nativeElement.value = address.type;
         }
         address.description = this.description.inputEL.nativeElement.value;
         this.loading(true);
         if (address.id) {
-            this.adminService.updateAddress(this.session.id, address).subscribe(result => {
+            this.adminService.updateAddress(this.user.id, address).subscribe(result => {
                 this.loading(false);
                 this.updateAddressList(result);
                 this.success(Locales.recordUpdated);
             }, (ex) => this.errorHandler(ex));
         } else {
-            this.adminService.addAddress(this.session.id, address).subscribe(result => {
+            this.adminService.addAddress(this.user.id, address).subscribe(result => {
                 this.loading(false);
                 this.addresses.push(result);
+                this.updateAddressList();
                 this.success(Locales.recordCreated);
             }, (ex) => this.errorHandler(ex));
         }
@@ -129,11 +139,12 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
 
     doDelete() {
         this.loading(true);
-        this.adminService.deleteAddress(this.session.id, this.selectedAddress.id).subscribe(_ => {
+        this.adminService.deleteAddress(this.user.id, this.selectedAddress.id).subscribe(_ => {
             this.loading(false);
             this.addresses.forEach((item, idx) => {
                 if (item.id === this.selectedAddress.id) {
                     this.addresses.splice(idx, 1);
+                    this.updateAddressList();
                     this.success(Locales.recordDeleted);
                     return false;
                 }
@@ -143,7 +154,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
     }
 
     onReset() {
-        const address = new Address({ isPrimary: !this.addresses.length ? 1 : 0, state: this.environment.homeState, country: this.environment.homeCountry });
+        const address = new Address({ isPrimary: !this.addresses.length ? 1 : 0, state: this.environment.homeState, country: this.environment.homeCountry, notes: new Note() });
         this.currentAddress = null;
         this.formGroup.reset();
         this.formGroup.patchValue(address);

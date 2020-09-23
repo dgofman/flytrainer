@@ -59,7 +59,4 @@ public class Equipment extends BaseModel {
 
 	@ManyToOne
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::equipments
-	
-	@ManyToOne
-	public Note notes; //notes_id
 }

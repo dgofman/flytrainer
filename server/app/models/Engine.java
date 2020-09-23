@@ -55,7 +55,4 @@ public class Engine extends BaseModel {
 
 	@ManyToOne
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::engines
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

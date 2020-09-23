@@ -50,7 +50,4 @@ public class Flight extends BaseModel {
 
 	@ManyToOne
 	public Account account; //FK account_id - Account::flights
-	
-	@ManyToOne
-	public Note notes; //notes_id
 }

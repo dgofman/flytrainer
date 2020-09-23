@@ -15,5 +15,4 @@ export class Address extends BaseModel {
     isPrimary: number;
     document: number;
     user: number;
-    notes: number;
 }

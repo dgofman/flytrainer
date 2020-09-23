@@ -10,13 +10,10 @@ import io.ebean.annotation.Length;
 @Entity
 @History
 @Table(name = "filter")
-public class Filter extends BaseModel {
-	
+public class Filter extends AbstractBase {
+
 	@Length(50)
-	public String reference2;
-	
-	@ManyToOne
-	public Note notes; //notes_id
+	public String reference;
 
 	@ManyToOne
 	public User user; //FK user_id - User::filters

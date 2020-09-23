@@ -46,7 +46,4 @@ public class Rating extends BaseModel {
 
 	@ManyToOne
 	public User user; // FK user_id - User::ratings
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

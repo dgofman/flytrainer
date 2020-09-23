@@ -7,6 +7,10 @@ export class AppUtils {
     static timeoutId: any;
     static session: Session;
 
+    static isBlank(str: string) {
+        return !str || str.split(' ').join('') === '';
+    }
+
     static loading(show: boolean) {
         clearTimeout(AppUtils.timeoutId);
         AppUtils.timeoutId = setTimeout(() => {

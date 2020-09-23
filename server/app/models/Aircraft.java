@@ -91,7 +91,4 @@ public class Aircraft extends BaseModel {
 	
 	@ManyToOne
 	public Document airworthiness; //airworthiness_id
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

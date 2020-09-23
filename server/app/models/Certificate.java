@@ -53,7 +53,4 @@ public class Certificate extends BaseModel {
 
 	@ManyToOne
 	public User user; // FK user_id - User::certificates
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

@@ -47,7 +47,4 @@ public class Propeller extends BaseModel {
 
 	@ManyToOne
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::propellers
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

@@ -8,7 +8,6 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -197,10 +196,6 @@ public class User extends BaseModel {
 	@JsonView(Full.class)
 	@OneToMany(mappedBy = "user")
 	public List<Filter> filters = new ArrayList<>(); //Filter::user_id
-
-	@JsonView(Full.class)
-	@ManyToOne
-	public Note notes; //notes_id
 
 	public User() {
 	}

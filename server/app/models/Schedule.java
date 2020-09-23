@@ -26,7 +26,4 @@ public class Schedule extends BaseModel {
 	
 	@ManyToOne
 	public Account instructor; //instructor_id
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

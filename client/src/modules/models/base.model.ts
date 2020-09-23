@@ -1,6 +1,8 @@
-export class BaseModel {
-    public id: number;
+export class  AbstractBase {
     protected version: number;
+    id: number;
+    createdDate: number;
+    modifiedDate: number;
 
     constructor(json?: any) {
         if (json) {
@@ -12,5 +14,19 @@ export class BaseModel {
                 }
             });
         }
+    }
+}
+
+export class Note extends AbstractBase {
+    content: string;
+}
+
+export class BaseModel extends AbstractBase {
+    whoCreated: number;
+    whoModified: number;
+    notes: Note;
+
+    constructor(json?: any) {
+        super(json);
     }
 }

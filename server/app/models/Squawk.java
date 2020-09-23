@@ -35,7 +35,4 @@ public class Squawk extends BaseModel {
 	
 	@ManyToOne
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::squawks
-	
-	@ManyToOne
-	public Note notes; //notes_id
 }

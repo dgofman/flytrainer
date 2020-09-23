@@ -43,7 +43,4 @@ public class Endorsement extends BaseModel {
 
 	@ManyToOne
 	public User user; // FK user_id - User::endorsements
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

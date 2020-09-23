@@ -34,7 +34,4 @@ public class Rate extends BaseModel {
 
 	@ManyToOne
 	public Aircraft aircraft; //FK aircraft_id - User::rates
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

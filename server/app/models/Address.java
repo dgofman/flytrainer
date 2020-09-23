@@ -67,10 +67,7 @@ public class Address extends BaseModel {
 	@ManyToOne
 	public Document document; //document_id
 
-	@ManyToOne()
+	@ManyToOne
 	@JsonIgnore
 	public User user; // FK user_id - User::addresses
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

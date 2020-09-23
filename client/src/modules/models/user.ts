@@ -23,10 +23,6 @@ export class User extends BaseModel {
     dlExpDate: number;  /* driving license expiration date */
     protected ssn: string;
     protected password: string;
-    createdDate: number;
-    modifiedDate: number;
-    whoCreated: number;
-    whoModified: number;
 
     currentAccount: Account;
 }

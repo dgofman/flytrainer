@@ -55,7 +55,4 @@ public class Course extends BaseModel {
 
 	@ManyToOne
 	public User user; // FK user_id - User::courses
-
-	@ManyToOne
-	public Note notes; //notes_id
 }

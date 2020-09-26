@@ -41,9 +41,7 @@ public class Payment extends BaseModel {
 
 	@ManyToOne
 	public User diffOwner = null; //diff_owner_id
-	
-	@ManyToOne
-	public Document document; //document_id
+
 	
 	@ManyToOne
 	public Billing billing; // FK billing_id - Billing::payments

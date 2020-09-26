@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { Address } from 'src/modules/models/address';
 import { AdminService } from 'src/services/admin.service';
 import { AutoComplete } from 'primeng/autocomplete';
-import { Country, State, AddressType } from 'src/modules/models/constants';
+import { Country, State, AddressType, DocumentType } from 'src/modules/models/constants';
 import { TabBaseDirective, TabBaseModule } from './tabbase.component';
 import { ConfirmationService } from 'primeng/api';
 import { Note } from 'src/modules/models/base.model';
@@ -18,7 +18,6 @@ import { AdminSharedModule } from '../admin-shared.module';
 })
 export class AddressTabComponent extends TabBaseDirective implements OnInit {
     addresses: Address[];
-    currentAddress: Address;
 
     @ViewChild('desc') description: AutoComplete;
 
@@ -83,16 +82,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
         if (!address.notes || AppUtils.isBlank(address.notes.content)) {
             address.notes = new Note({id: null, content: null});
         }
-        this.selectedAddress = address;
-        this.formGroup.patchValue(address);
-    }
-
-    get selectedAddress() {
-        return this.currentAddress;
-    }
-    set selectedAddress(address: Address) {
-        this.currentAddress = address;
-        this.formGroup.patchValue(address);
+        this.selectedBean = address;
     }
 
     findAddress(id: number) {
@@ -109,6 +99,9 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             this.description.inputEL.nativeElement.value = address.type;
         }
         address.description = this.description.inputEL.nativeElement.value;
+        if (address.document) {
+            address.document.category = DocumentType.AddressProof;
+        }
         this.loading(true);
         if (address.id) {
             this.adminService.updateAddress(this.user.id, address).subscribe(result => {
@@ -128,10 +121,10 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
 
     doDelete() {
         this.loading(true);
-        this.adminService.deleteAddress(this.user.id, this.selectedAddress.id).subscribe(_ => {
+        this.adminService.deleteAddress(this.user.id, this.selectedBean.id).subscribe(_ => {
             this.loading(false);
             this.addresses.forEach((item, idx) => {
-                if (item.id === this.selectedAddress.id) {
+                if (item.id === this.selectedBean.id) {
                     this.addresses.splice(idx, 1);
                     this.updateAddressList();
                     this.success(Locales.recordDeleted);
@@ -143,9 +136,8 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
     }
 
     onReset() {
+        super.onReset();
         const address = new Address({ isPrimary: !this.addresses.length ? 1 : 0, state: this.environment.homeState, country: this.environment.homeCountry, notes: new Note() });
-        this.currentAddress = null;
-        this.formGroup.reset();
         this.formGroup.patchValue(address);
         return address;
     }

@@ -40,8 +40,5 @@ public class MedicalCertificate extends BaseModel {
 	public byte isSuspended = 0; //is_suspended
 
 	@ManyToOne
-	public Document document; //document_id
-
-	@ManyToOne
 	public User user; //FK user_id - User::medicalCertificates
 }

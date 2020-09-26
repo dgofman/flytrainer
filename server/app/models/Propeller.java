@@ -43,8 +43,5 @@ public class Propeller extends BaseModel {
 	public List<Maintenance> maintances = new ArrayList<>(); //Maintenance::aircraft_id
 	
 	@ManyToOne
-	public Document document; //document_id
-
-	@ManyToOne
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::propellers
 }

@@ -1,5 +1,6 @@
 import Locales from '@locales/admin';
 import { User } from 'src/modules/models/user';
+import { Document } from 'src/modules/models/document';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { AppBaseDirective } from 'src/app/app.base.component';
@@ -7,6 +8,7 @@ import { Input, Component, NgModule, Directive } from '@angular/core';
 import { ColumnType } from 'src/app/component/ft-table/ft-table.component';
 import { AdminSharedModule } from '../admin-shared.module';
 import { ConfirmationService } from 'primeng/api';
+import { BaseModel } from 'src/modules/models/base.model';
 
 @Component({
   selector: 'admin-field',
@@ -56,6 +58,9 @@ export abstract class TabBaseDirective extends AppBaseDirective {
     formGroup: FormGroup;
     controls: ColumnType[];
 
+    // tslint:disable-next-line: variable-name
+    private _selectedBean: BaseModel;
+
     @Input() user: User;
 
     constructor(private confirmationService: ConfirmationService) {
@@ -63,6 +68,20 @@ export abstract class TabBaseDirective extends AppBaseDirective {
     }
 
     abstract doDelete(): void;
+
+    get selectedBean(): any {
+        return this._selectedBean;
+    }
+
+    set selectedBean(bean: any) {
+        this._selectedBean = bean;
+        this.formGroup.patchValue(bean);
+    }
+
+    onReset() {
+        this._selectedBean = null;
+        this.formGroup.reset();
+    }
 
     onDelete() {
         this.confirmationService.confirm({
@@ -73,6 +92,34 @@ export abstract class TabBaseDirective extends AppBaseDirective {
                 this.doDelete();
             }
         });
+    }
+
+    onUploadDocument(event: any, error: boolean) {
+        this.loading(false);
+        if (error) {
+            this.errorHandler(event);
+            event.files.splice(0, event.files.length);
+        } else {
+            if (event.files.length) {
+                const file = event.files[0];
+                this.selectedBean.document = new Document({
+                    fileName: file.name,
+                    filePath: event.originalEvent.body,
+                    contentType: file.type,
+                    size: file.size
+                });
+                this.formGroup.patchValue({document: this.selectedBean.document});
+            }
+        }
+    }
+
+    deleteDocument(document: Document) {
+        if (!document.id) {
+            this.selectedBean.document = null;
+        } else {
+            this.selectedBean.document = new Document({id: document.id});
+        }
+        this.formGroup.patchValue({document: this.selectedBean.document});
     }
 }
 

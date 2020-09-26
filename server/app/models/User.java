@@ -46,8 +46,13 @@ public class User extends BaseModel {
 	public static final String FIND_BY_EMAIL = "User.findByEmail";
 
 	private static final String defaultPassword = AppConfig.get(Key.DEFAULT_PWD).asText();
+	
+	public User(Long id) {
+		this.id = id;
+	}
 
 	@JsonView(Never.class)
+	@NotNull
 	public UUID uuid = UUID.randomUUID(); //uuid - internal security verification
 
 	@Column(name = "firstname")

@@ -63,9 +63,6 @@ public class Address extends BaseModel {
 	
 	@NotNull
 	public byte isPrimary = 1; //is_primary
-	
-	@ManyToOne
-	public Document document; //document_id
 
 	@ManyToOne
 	@JsonIgnore

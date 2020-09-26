@@ -12,12 +12,14 @@ POST    /forgot                     controllers.HomeController.forgot(request: R
 POST    /reset                      controllers.HomeController.reset(request: Request)
 POST    /logout                     controllers.HomeController.logout(request: Request)
 
-POST    /users                      controllers.AdminController.users(request: Request)
-GET     /users/:id                  controllers.AdminController.userById(id: Long)
-POST    /users/:id                  controllers.AdminController.saveUser(request: Request, id: Long)
-DELETE  /users/:id                  controllers.AdminController.deleteUser(request: Request, id: Long)
+POST    /users                      controllers.UserController.users(request: Request)
+GET     /users/:id                  controllers.UserController.userById(id: Long)
+POST    /users/:id                  controllers.UserController.saveUser(request: Request, id: Long)
+DELETE  /users/:id                  controllers.UserController.deleteUser(request: Request, id: Long)
 
 POST    /admin/:id/address          controllers.AddressController.addAddress(request: Request, id: Long)
 GET     /admin/:id/address          controllers.AddressController.getAddress(id: Long)
 PATCH   /admin/:id/address          controllers.AddressController.updateAddress(request: Request, id: Long)
-DELETE  /admin/:id/address/:addId   controllers.AddressController.deleteAddress(request: Request, id: Long, addId: Integer) 
+DELETE  /admin/:id/address/:addId   controllers.AddressController.deleteAddress(request: Request, id: Long, addId: Integer)
+
+POST    /document/file/:userId      controllers.DocumentController.saveFile(request: Request, userId: Long)

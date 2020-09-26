@@ -82,9 +82,6 @@ public class Aircraft extends BaseModel {
 
 	@OneToMany(mappedBy = "aircraft")
 	public List<Rate> rates = new ArrayList<>(); //Rate::aircraft_id
-
-	@ManyToOne
-	public Document document;  //document_id
 	
 	@ManyToOne
 	public Document registration; //registration_id

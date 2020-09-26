@@ -4,6 +4,8 @@
     "mailLinkExpireTimeInHours": 48,
     "maxLoginAttempts": 5,
     "maxLockedTime": 15,
+    "pathSavedDocuments": null,
+    "cleanupTempDocuments": 120,
     "issuer": "FlyTrainer LLC",
     "defaultPassword": "pilot",
     "encryptKey": "*******",

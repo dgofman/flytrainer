@@ -5,6 +5,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { FTAutoCompleteModule } from 'src/app/component/ft-autocomplete/ft-autocomplete.component';
+import { FileUploadModule } from 'primeng/fileupload';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -14,33 +15,27 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 @NgModule({
     declarations: [ ],
     imports: [
-        AutoCompleteModule,
-        ButtonModule,
-        CheckboxModule,
-        CommonModule,
-        DropdownModule,
-        FormsModule,
-        FTAutoCompleteModule,
-        InputMaskModule,
-        InputSwitchModule,
-        InputTextareaModule,
-        InputTextModule,
-        ReactiveFormsModule
+        ...AdminSharedModule.list
     ],
     exports: [
-        AutoCompleteModule,
-        ButtonModule,
-        CheckboxModule,
-        CommonModule,
-        DropdownModule,
-        FormsModule,
-        FTAutoCompleteModule,
-        InputMaskModule,
-        InputSwitchModule,
-        InputTextareaModule,
-        InputTextModule,
-        ReactiveFormsModule
+        ...AdminSharedModule.list
     ]
 })
 export class AdminSharedModule {
+
+    static list = [
+        AutoCompleteModule,
+        ButtonModule,
+        CheckboxModule,
+        CommonModule,
+        DropdownModule,
+        FormsModule,
+        FTAutoCompleteModule,
+        FileUploadModule,
+        InputMaskModule,
+        InputSwitchModule,
+        InputTextareaModule,
+        InputTextModule,
+        ReactiveFormsModule
+    ];
 }

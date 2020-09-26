@@ -25,9 +25,6 @@ public class Squawk extends BaseModel {
 	public String description; //description
 	
 	@ManyToOne
-	public Document document; //document_id
-	
-	@ManyToOne
 	public Account reported; //reported_id
 	
 	@ManyToOne

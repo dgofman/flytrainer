@@ -42,9 +42,6 @@ public class AircraftWeightAndBallance extends BaseModel {
 	
 	@ManyToOne
 	public User signed; //signed_id
-	
-	@ManyToOne
-	public Document document; //document_id
 
 	@OneToOne
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::wb

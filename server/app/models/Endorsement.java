@@ -37,9 +37,6 @@ public class Endorsement extends BaseModel {
 
 	@ManyToOne
 	public User signed; //signed_id
-	
-	@ManyToOne
-	public Document document; //document_id
 
 	@ManyToOne
 	public User user; // FK user_id - User::endorsements

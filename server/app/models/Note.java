@@ -18,7 +18,7 @@ public class Note extends AbstractBase {
 	
 	@JsonIgnore
 	@Length(50)
-	public String type; //type - RESTRICTION, DEBIT, CREDIT etc.
+	public String type; //Class name
 
 	@Lob
 	@NotNull

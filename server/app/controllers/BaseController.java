@@ -20,16 +20,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import io.ebean.Ebean;
 import io.ebean.ExpressionList;
 import io.ebean.Query;
-import models.Aircraft;
-import models.BaseModel;
 import models.BaseModel.Admin;
 import models.BaseModel.Never;
 import models.FTTableEvent;
-import models.Note;
-import models.User;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.Constants;
@@ -145,37 +140,6 @@ public class BaseController extends Controller {
 					}
 				}
 			}
-		}
-	}
-
-	public boolean isDeleteNotes(BaseModel model) {
-		Note notes = model.getNotes();
-		if (notes == null || notes.content == null || notes.content.isBlank()) {
-			model.setNotes(null);
-			return true;
-		}
-		return false;
-	}
-
-	public void saveNotes(Note notes, boolean delete) {
-		if (delete) {
-			Ebean.find(Note.class).where().eq("id", notes.id).delete();
-		} else {
-			if (notes.id == null) {
-				notes.save();
-			} else {
-				Ebean.find(Note.class).asUpdate().set("content", notes.content).where().eq("id", notes.id).update();
-			}
-		}
-	}
-
-	public void saveNotes(BaseModel model, User user, Aircraft aircraft) {
-		Note notes = model.getNotes();
-		if (notes != null) {
-			notes.user = user;
-			notes.aircraft = aircraft;
-			notes.type = model.getClass().getSimpleName();
-			this.saveNotes(notes, false);
 		}
 	}
 

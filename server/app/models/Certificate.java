@@ -49,8 +49,5 @@ public class Certificate extends BaseModel {
 	public byte isWithdrawn = 0; //is_withdrawn
 
 	@ManyToOne
-	public Document document; //document_id
-
-	@ManyToOne
 	public User user; // FK user_id - User::certificates
 }

@@ -50,9 +50,6 @@ public class Equipment extends BaseModel {
 	public Double deviation; //deviation
 	
 	public Long inspectionTime; //inspection_time
-	
-	@ManyToOne
-	public Document document; //document_id
 
 	@OneToMany(mappedBy = "aircraft")
 	public List<Maintenance> maintances = new ArrayList<>();  //Maintenance::aircraft_id

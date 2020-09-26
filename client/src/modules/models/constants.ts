@@ -1,6 +1,6 @@
 export type SHOW_COLUMNS = 'never' | true | false;
 export type FORMAT_COLUMNS = 'date' | 'datetime' | 'epoch' | 'bool';
-export  type TYPE_COLUMNS = 'check' | 'cal' | 'radio' | 'input' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask';
+export type TYPE_COLUMNS = 'check' | 'cal' | 'radio' | 'input' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask';
 
 export interface Session {
     correlationId: number;
@@ -45,7 +45,32 @@ export enum AddressType {
     Mailing = 'Mailing',
     Physycal = 'Physycal',
     Electronic = 'Electronic',
+    Other = 'Other'
+}
+
+export enum DocumentType {
     Other = 'Other',
+    Passport = 'Passport',
+    Driverslicense = 'Driverslicense',
+    AlienResidentDocument = 'AlienResidentDocument',
+    Visa = 'Visa',
+    OtherCertificate = 'OtherCertificate',
+    PilotsCertificate = 'PilotsCertificate',
+    MedicalCertificate = 'MedicalCertificate',
+    BirthCertificate = 'BirthCertificate',
+    TSAAwarenessTrainingCertificate = 'TSAAwarenessTrainingCertificate',
+    TSAFormI20 = 'TSAFormI20',
+    TSAPaymentReceived = 'TSAPaymentReceived',
+    RentersInsuranceAgreement = 'RentersInsuranceAgreement',
+    Finance = 'Finance',
+    PrivatePilotPermission = 'PrivatePilotPermission',
+    InstrumentRatingPermission = 'InstrumentRatingPermission',
+    MultiCommercialPermission = 'MultiCommercialPermission',
+    TrainingRequest = 'TrainingRequest',
+    AircraftCheckoutRecord = 'AircraftCheckoutRecord',
+    PilotPicture = 'PilotPicture',
+    AddressProof = 'AddressProof',
+    OnlineDocument = 'OnlineDocument'
 }
 
 export enum Country {

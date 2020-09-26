@@ -38,6 +38,7 @@ export default {
     pobox: 'P.O. Box',
     isPrimary: 'Set as primary',
     notes: 'Notes',
+    documentUpload: 'Document Upload',
     selAccountType: 'Select Account Type',
     recordCreated: 'Record created successfuly',
     recordUpdated: 'Record updated successfuly',

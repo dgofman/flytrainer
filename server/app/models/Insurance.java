@@ -49,9 +49,6 @@ public class Insurance extends BaseModel {
 	
 	@Length(500)
 	public String limitations; //limitations
-	
-	@ManyToOne
-	public Document document; //document_id
 
 	@ManyToOne
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::insurances

@@ -1,5 +1,6 @@
 package models;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,11 +11,11 @@ import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.ebean.Model;
 import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
-import play.libs.Json;
 
 @MappedSuperclass
 public abstract class BaseModel extends Model {
@@ -53,8 +54,19 @@ public abstract class BaseModel extends Model {
 	public Note getNotes() {
 		return this.notes;
 	}
-	public void setNotes(JsonNode body) {
-		this.notes = Json.fromJson(body, Note.class);
+	public void setNotes(JsonNode body) throws IOException {
+		this.notes = new ObjectMapper().readerFor(Note.class).readValue(body);
+	}
+	
+	@ManyToOne
+	@JsonView(Full.class)
+	private Document document; //document_id
+
+	public Document getDocument() {
+		return this.document;
+	}
+	public void setDocument(JsonNode body) throws IOException {
+		this.document = new ObjectMapper().readerFor(Document.class).readValue(body);
 	}
 	
 	public void save(BaseModel currentUser) {

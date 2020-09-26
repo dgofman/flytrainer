@@ -37,9 +37,6 @@ public class Flight extends BaseModel {
 	
 	@Length(100)
 	public String legs; //legs
-	
-	@ManyToOne
-	public Document document; //document_id
 
 	@NotNull
 	@ManyToOne

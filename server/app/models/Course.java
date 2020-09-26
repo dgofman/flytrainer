@@ -51,8 +51,5 @@ public class Course extends BaseModel {
 	public Billing billing; //billing_id
 
 	@ManyToOne
-	public Document document; //document_id
-
-	@ManyToOne
 	public User user; // FK user_id - User::courses
 }

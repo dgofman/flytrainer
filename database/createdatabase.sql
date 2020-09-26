@@ -8,6 +8,10 @@ FLUSH PRIVILEGES;
 
 SET @Database := 'flytrainer';
 
+SET @sqlStr = CONCAT('SET GLOBAL log_bin_trust_function_creators = 1;');
+PREPARE sqlStatment FROM @sqlStr;
+EXECUTE sqlStatment;
+
 SET @sqlStr = CONCAT('DROP USER IF EXISTS "',@UserName,'"@"%"');
 PREPARE sqlStatment FROM @sqlStr;
 EXECUTE sqlStatment;

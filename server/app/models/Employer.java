@@ -29,9 +29,6 @@ public class Employer extends BaseModel {
 	
 	@ManyToOne
 	public Insurance insurance; //insurance_id
-	
-	@ManyToOne
-	public Document document; //document_id
 
 	@ManyToOne
 	public Address address; //address_id

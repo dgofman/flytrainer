@@ -1,3 +1,5 @@
+import { Document } from './document';
+
 export class  AbstractBase {
     protected version: number;
     id: number;
@@ -19,12 +21,15 @@ export class  AbstractBase {
 
 export class Note extends AbstractBase {
     content: string;
+    user: any; // FK -  user_id document
+    aircraft: any; // FK - aircraft_id document
 }
 
 export class BaseModel extends AbstractBase {
     whoCreated: number;
     whoModified: number;
     notes: Note;
+    document: Document;
 
     constructor(json?: any) {
         super(json);

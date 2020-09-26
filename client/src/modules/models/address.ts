@@ -13,6 +13,5 @@ export class Address extends BaseModel {
     phone: string;
     fax: string;
     isPrimary: number;
-    document: number;
     user: number;
 }

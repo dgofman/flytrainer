@@ -74,13 +74,15 @@ export abstract class TabBaseDirective extends AppBaseDirective {
     }
 
     set selectedBean(bean: any) {
-        this._selectedBean = bean;
-        this.formGroup.patchValue(bean);
+        if (typeof bean !== 'string') {
+            this._selectedBean = bean;
+            this.formGroup.patchValue(bean);
+        }
     }
 
     onReset() {
-        this._selectedBean = null;
         this.formGroup.reset();
+        this._selectedBean = this.formGroup.value;
     }
 
     onDelete() {
@@ -101,14 +103,17 @@ export abstract class TabBaseDirective extends AppBaseDirective {
             event.files.splice(0, event.files.length);
         } else {
             if (event.files.length) {
-                const file = event.files[0];
-                this.selectedBean.document = new Document({
-                    fileName: file.name,
-                    filePath: event.originalEvent.body,
-                    contentType: file.type,
-                    size: file.size
-                });
-                this.formGroup.patchValue({document: this.selectedBean.document});
+                const oldDoc = this.selectedBean.document || {},
+                    file = event.files[0],
+                    doc = new Document({
+                        id: oldDoc.id,
+                        fileName: file.name,
+                        filePath: event.originalEvent.body,
+                        contentType: file.type,
+                        size: file.size
+                    });
+                this.selectedBean.document = doc;
+                this.formGroup.patchValue({document: doc});
             }
         }
     }

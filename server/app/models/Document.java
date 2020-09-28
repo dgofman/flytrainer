@@ -58,6 +58,7 @@ public class Document extends AbstractBase {
 	public String password; //password
 
 	@Lob
+	@JsonIgnore
 	public byte[] file; //file
 	
 	@Column(name = "name")

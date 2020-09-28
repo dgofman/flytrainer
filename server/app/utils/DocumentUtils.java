@@ -48,16 +48,17 @@ public class DocumentUtils {
 			if (document.id == null) {
 				create(model, ref);
 			} else if (document.filePath == null) {
-				model.setNotes(null);
+				model.setDocument(null);
 				model.update(currentUser);
 				Ebean.find(Document.class).where().eq("id", document.id).delete();
 			} else {
 				Query<Document> query = Ebean.find(Document.class);
-				query.where().eq("id", document.id).eq("version", document.version);
+				query.where().eq("id", document.id);
 				Document dbDocument = query.findOne();
 				if (dbDocument == null) {
 					create(model, ref);
 				} else if (!dbDocument.filePath.equals(document.filePath) && saveFile(document)) {
+					dbDocument.file = document.file;
 					dbDocument.update();
 				}
 			}

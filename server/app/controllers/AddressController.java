@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.ebean.Ebean;
 import io.ebean.Transaction;
 import models.Address;
+import models.BaseModel;
 import models.User;
 import play.libs.Json;
 import play.mvc.Http;
@@ -26,7 +27,7 @@ public class AddressController extends BaseController {
 		try {
 			List<Address> addresses = Ebean.createNamedQuery(Address.class, Address.FIND_BY_USERID)
 					.setParameter("userId", userId).findList();
-			return okResult(addresses);
+			return okResult(addresses, BaseModel.Short.class);
 		} catch (Exception e) {
 			return badRequest(e);
 		}
@@ -74,7 +75,7 @@ public class AddressController extends BaseController {
 			}
 			new ObjectMapper().readerForUpdating(dbAddress).readValue(body);
 			NotesUtils.update(dbAddress, user, currentUser);
-			DocumentUtils.update(address, user, currentUser);
+			DocumentUtils.update(dbAddress, user, currentUser);
 			dbAddress.save(currentUser);
 			transaction.commit();
 			return okResult(dbAddress);

@@ -8,6 +8,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import play.libs.Files.DelegateTemporaryFile;
 import play.mvc.Http;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -17,8 +19,8 @@ import utils.Constants.Key;
 
 public class DocumentController extends BaseController {
 
-	private static final String DOCUMENTS_SAVE_PATH = AppConfig.get(Key.DOCUMENTS_SAVE_PATH).asText();
-	private static final Long CLEANUP_TEMP_TIME = AppConfig.get(Key.CLEANUP_TEMP_TIME).asLong();
+	private static final JsonNode DOCUMENTS_SAVE_PATH = AppConfig.get(Key.DOCUMENTS_SAVE_PATH);
+	private static final JsonNode CLEANUP_TEMP_TIME = AppConfig.get(Key.CLEANUP_TEMP_TIME);
 
 	public static final File tempDir;
 	public static final File savedDir;
@@ -26,19 +28,20 @@ public class DocumentController extends BaseController {
 	static {
 		tempDir = new File("../files");
 		tempDir.mkdirs();
-		if (DOCUMENTS_SAVE_PATH != null && !DOCUMENTS_SAVE_PATH.isBlank()) {
-			savedDir = new File(DOCUMENTS_SAVE_PATH);
+		
+		if (!DOCUMENTS_SAVE_PATH.isNull() && !DOCUMENTS_SAVE_PATH.asText().isBlank()) {
+			savedDir = new File(DOCUMENTS_SAVE_PATH.asText());
 			savedDir.mkdirs();
 		} else {
 			savedDir = null;
 		}
-		log.debug("DOCUMENTS_SAVE_PATH>>>>>>>>>>>>>>>>>>>>>" +  DOCUMENTS_SAVE_PATH + "+"+ savedDir);
-		if (CLEANUP_TEMP_TIME != null && CLEANUP_TEMP_TIME != 0) {
+		if (!CLEANUP_TEMP_TIME.isNull() && CLEANUP_TEMP_TIME.asLong() != 0) {
 			Timer time = new Timer();
+			long timeout = CLEANUP_TEMP_TIME.asLong();
 			time.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					long cutOff = System.currentTimeMillis() - (CLEANUP_TEMP_TIME * 1000);
+					long cutOff = System.currentTimeMillis() - (timeout * 1000);
 					try {
 						Files.list(tempDir.toPath()).filter(path -> {
 							try {

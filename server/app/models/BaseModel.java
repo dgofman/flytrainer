@@ -48,25 +48,23 @@ public abstract class BaseModel extends Model {
 	}
 
 	@ManyToOne
-	@JsonView(Full.class)
 	private Note notes; //notes_id
 
 	public Note getNotes() {
 		return this.notes;
 	}
 	public void setNotes(JsonNode body) throws IOException {
-		this.notes = new ObjectMapper().readerFor(Note.class).readValue(body);
+		this.notes = body != null ? new ObjectMapper().readerFor(Note.class).readValue(body) : null;
 	}
 	
 	@ManyToOne
-	@JsonView(Full.class)
 	private Document document; //document_id
 
 	public Document getDocument() {
 		return this.document;
 	}
 	public void setDocument(JsonNode body) throws IOException {
-		this.document = new ObjectMapper().readerFor(Document.class).readValue(body);
+		this.document = body != null ? new ObjectMapper().readerFor(Document.class).readValue(body) : null;
 	}
 	
 	public void save(BaseModel currentUser) {

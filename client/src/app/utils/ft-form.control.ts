@@ -1,6 +1,6 @@
 import { FormControl, ValidatorFn, AbstractControlOptions } from '@angular/forms';
 import { ColumnType } from '../component/ft-table/ft-table.component';
-import { FTEpochPipe, FTDatePipe, FTDateTimePipe } from './pipes';
+import { FTDatePipe, FTShortDatePipe, FTDateTimePipe } from './pipes';
 
 export class FTFormControl extends FormControl {
 
@@ -29,10 +29,10 @@ export class FTFormControl extends FormControl {
     static Serialize(val: any, format: string): any {
         if (format && typeof(val) === 'number') {
             switch (format) {
-                case 'epoch':
-                    return new FTEpochPipe().transform(val);
                 case 'date':
                     return new FTDatePipe().transform(val);
+                case 'short':
+                    return new FTShortDatePipe().transform(val);
                 case 'datetime':
                     return new FTDateTimePipe().transform(val);
             }

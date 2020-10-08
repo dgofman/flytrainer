@@ -1,18 +1,18 @@
 import {Pipe, PipeTransform, NgModule} from '@angular/core';
 import { DatePipe, CommonModule } from '@angular/common';
 
-@Pipe({name: 'ftepoch'})
-export class FTEpochPipe implements PipeTransform {
-  transform(seconds: number): Date {
+@Pipe({name: 'ftdate'})
+export class FTDatePipe implements PipeTransform {
+  transform(seconds: number): string {
     if (!seconds) {
-      return null;
+      return '';
     }
-    return new Date(seconds);
+    return new DatePipe('en-US').transform(seconds, 'mediumDate');
   }
 }
 
-@Pipe({name: 'ftdate'})
-export class FTDatePipe implements PipeTransform {
+@Pipe({name: 'ftshortdate'})
+export class FTShortDatePipe implements PipeTransform {
   transform(seconds: number): string {
     if (!seconds) {
       return '';
@@ -40,7 +40,7 @@ export class FTStatePipe implements PipeTransform {
 
 @NgModule({
   imports: [CommonModule],
-  exports: [FTEpochPipe, FTDatePipe, FTDateTimePipe, FTStatePipe],
-  declarations: [FTEpochPipe, FTDatePipe, FTDateTimePipe, FTStatePipe]
+  exports: [FTDatePipe, FTShortDatePipe, FTDateTimePipe, FTStatePipe],
+  declarations: [FTDatePipe, FTShortDatePipe, FTDateTimePipe, FTStatePipe]
 })
 export class FTPipeModule { }

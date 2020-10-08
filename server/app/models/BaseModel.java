@@ -1,47 +1,27 @@
 package models;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.ebean.Model;
-import io.ebean.annotation.WhenCreated;
-import io.ebean.annotation.WhenModified;
-
 @MappedSuperclass
-public abstract class BaseModel extends Model {
-
-	@Column(name = "id")
-	@Id
-	public Long id; //id
-	
-	@Column(name = "version")
-	@Version
-	public long version; //version
+public abstract class BaseModel extends AbstractBase {
 
 	@JsonView(Short.class)
-	@WhenCreated
-	public Date createdDate; //created_date
-
-	@WhenModified
-	public Date modifiedDate; //modified_date
-
-	@JsonView(Short.class)
+	@Column(name = "who_created")
 	private Long whoCreated; //who_created
 	public Long getWhoCreated() {
 		return whoCreated;
 	}
 
 	@JsonView(Short.class)
+	@Column(name = "who_modified")
 	private Long whoModified; //who_modified
 	public Long getWhoModified() {
 		return whoModified;

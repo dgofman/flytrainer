@@ -285,3 +285,45 @@ INSERT INTO flytrainer.user(uuid, username, firstname, lastname, email, active, 
 INSERT INTO flytrainer.user(uuid, username, firstname, lastname, email, active, resetpassword, employee, citizen, proficient, member, role, version, password, created_date, modified_date) VALUES (UUID(), 'dzhao', 'Dongsheng', 'Zhao', 'dzhao@flytrainer.com',1,1,1,1,1,1,0,1,'Welcome1',CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP());
 INSERT INTO flytrainer.user(uuid, username, firstname, lastname, email, active, resetpassword, employee, citizen, proficient, member, role, version, password, created_date, modified_date) VALUES (UUID(), 'czhou', 'Chunnyang', 'Zhou', 'czhou@flytrainer.com',1,1,1,1,1,1,0,1,'Welcome1',CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP());
 INSERT INTO flytrainer.user(uuid, username, firstname, lastname, email, active, resetpassword, employee, citizen, proficient, member, role, version, password, created_date, modified_date) VALUES (UUID(), 'hzhou', 'Henry', 'Zhou', 'hzhou@flytrainer.com',1,1,1,1,1,1,0,1,'Welcome1',CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP());
+
+SET @MIN = '1920-01-31 00:00:00';
+SET @MAX = '2004-01-31 00:00:00';
+UPDATE flytrainer.user SET birthday=TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN) WHERE id != 0;
+
+UPDATE flytrainer.user SET driver_license_exp_date=TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN) WHERE id != 0;
+
+UPDATE flytrainer.user SET middlename='N/A' WHERE id != 0;
+
+UPDATE flytrainer.user SET driver_license=concat('B', round(rand()*9999999 + 1000000)) WHERE id != 0;
+
+UPDATE flytrainer.user SET ftn=concat('A', round(rand()*9999999 + 1000000)) WHERE id != 0;
+
+UPDATE flytrainer.user SET driver_license_state=SUBSTRING('AKALARAZCACOCTDEFLGAHIIAIDIL',  (floor((RAND() * 13)) * 2) + 1, 2) WHERE id != 0;
+
+UPDATE flytrainer.user SET ssn=concat(
+   6,
+   round(rand()*9),
+   round(rand()*9),
+   round(rand()*9),
+   round(rand()*9),
+   round(rand()*9),
+   round(rand()*9),
+   round(rand()*9),
+   round(rand()*9)
+) WHERE id != 0;
+
+UPDATE flytrainer.user SET cellphone=concat(
+   '(',
+   round(rand()*9),
+   round(rand()*9),
+   round(rand()*9),
+   ') ',
+   round(rand()*9),
+   round(rand()*9),
+   round(rand()*9),
+   '-',
+   round(rand()*9),
+   round(rand()*9),
+   round(rand()*9),
+   round(rand()*9)
+) WHERE id != 0;

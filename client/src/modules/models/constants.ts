@@ -1,5 +1,5 @@
 export type SHOW_COLUMNS = 'never' | true | false;
-export type FORMAT_COLUMNS = 'date' | 'datetime' | 'epoch' | 'bool';
+export type FORMAT_COLUMNS = 'datetime' | 'short' | 'date' | 'bool';
 export type TYPE_COLUMNS = 'check' | 'cal' | 'radio' | 'input' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask';
 
 export interface Session {

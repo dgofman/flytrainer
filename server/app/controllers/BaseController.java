@@ -90,7 +90,11 @@ public class BaseController extends Controller {
 		ExpressionList<?> where = query.where();
 		query.setDisableLazyLoading(true);
 		fetch(event, type, columns, where);
-		fetch(event, type.getSuperclass(), columns, where);
+		type = type.getSuperclass();
+		while (type != null) {
+			fetch(event, type, columns, where);
+			type = type.getSuperclass();
+		}
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

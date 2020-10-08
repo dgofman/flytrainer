@@ -16,6 +16,7 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule} from 'primeng/confirmdialog';
 import { FTPipeModule } from '../utils/pipes';
 import { AddressTabsModule } from './tabs/address-tab.component';
+import { DocumentTabsModule } from './tabs/document-tab.component';
 import { TempTabsModule } from './tabs/temp.tabs.module';
 
 
@@ -34,6 +35,7 @@ import { TempTabsModule } from './tabs/temp.tabs.module';
     ConfirmDialogModule,
     TempTabsModule,
     AddressTabsModule,
+    DocumentTabsModule,
     FTDialogvModule,
     FTMenuModule,
     FTTableModule,

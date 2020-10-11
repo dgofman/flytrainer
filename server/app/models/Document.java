@@ -6,7 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -16,28 +17,37 @@ import io.ebean.annotation.Encrypted;
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
+import models.BaseModel.Admin;
+import models.BaseModel.Default;
 import models.BaseModel.Full;
+import models.BaseModel.Short;
 import utils.Constants.DocumentType;
 
 @Entity
 @History
-@Table(name = "document")
+@NamedQueries(value = {
+		@NamedQuery(name = Document.FIND, query = "select contentType, filePath, file where user = :user and id = :id") })
 public class Document extends AbstractBase {
-	
-	@JsonIgnore
+
+	public static final String FIND = "Document.find";
+
 	@Length(50)
-	public String type; //Class name
+	@JsonView(Full.class)
+	public String reference; //Class name
 
 	@NotNull
-	public DocumentType category = DocumentType.Driverslicense;
+	@JsonView(Short.class)
+	public DocumentType type = DocumentType.DriverLicense;
 
 	@Length(30)
+	@JsonView(Full.class)
 	public String other; //other
 
 	@Length(50)
+	@JsonView(Full.class)
 	public String description; //description
 
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public Integer pageNumber = 1; //page_number
 
 	@JsonView(Full.class)
@@ -50,10 +60,12 @@ public class Document extends AbstractBase {
 	public byte isWithdrawn = 0; //is_withdrawn
 
 	@Length(2000)
+	@JsonView(Full.class)
 	public String url; //url
 
 	@Length(25)
 	@Encrypted
+	@JsonView(Admin.class)
 	@DbComment("CONVERT(AES_DECRYPT(password, `environment.json::encryptKey`) USING  UTF8)")
 	public String password; //password
 
@@ -63,21 +75,27 @@ public class Document extends AbstractBase {
 	
 	@Column(name = "name")
 	@Length(100)
+	@JsonView(Default.class)
 	public String fileName;
 	
 	@Column(name = "path")
 	@Length(500)
+	@JsonView(Full.class)
 	public String filePath;
 	
 	@Column(name = "contentType")
 	@Length(50)
+	@JsonView(Full.class)
 	public String contentType;
 
 	@Column(name = "size")
+	@JsonView(Default.class)
 	public Long size;
 
+	@JsonView(Full.class)
 	public Date issuedDate; //issued_date
 
+	@JsonView(Full.class)
 	public Date expDate; //exp_date
 	
 	@ManyToOne

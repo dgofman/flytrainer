@@ -7,4 +7,4 @@ target
 /environment.json
 /electorn-release
 /server/sbt-global-pluginstub
-/files
+/tmp_files

@@ -184,6 +184,10 @@ a {
 			}
 		}
 	}
+
+	&[disabled=true] {
+		background: #ccc;
+	}
 }
 
 .ui-radiobutton {
@@ -331,6 +335,29 @@ a {
 			border-color: @color18;
 			color: @color0;
 		}
+	}
+}
+
+.ui-inputnumber {
+	display: inline-flex;
+}
+
+.ui-inputnumber-buttons-stacked {
+
+	.ui-inputnumber-button-group {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.ui-inputnumber-button {
+		flex: 1 1 auto;
+		width: 2.357em;
+		border-radius: 0;
+		padding: 0;
+	}
+
+	.ui-button-text {
+		display: none;
 	}
 }
 
@@ -679,15 +706,18 @@ input[type=submit] {
 }
 
 .ui-calendar {
-	display: inline-block;
+	display: inline-flex;
 	position: relative;
+
+	.ui-button-text {
+		display: none;
+	}
 
 	.ui-calendar-button {
 		vertical-align: top;
 		border-bottom-left-radius: 0;
 		border-left: 0;
 		border-top-left-radius: 0;
-		height: @height5;
 		width: @width15;
 
 		&:enabled {
@@ -1514,7 +1544,8 @@ p-fileupload {
 
 	.ui-inputtext,
 	.ui-calendar,
-	.ui-dropdown {
+	.ui-dropdown,
+	.ui-inputnumber {
 		width: @width9;
 	}
 

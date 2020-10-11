@@ -31,8 +31,8 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             { field: 'document' },
             { field: 'notes' },
             { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], placeholder: Locales.selAccountType, value: Object.keys(AddressType).map(value => ({ label: AddressType[value], value })) },
-            { field: 'other' },
-            { field: 'pobox' },
+            { field: 'other', type: 'hide' },
+            { field: 'pobox', type: 'hide' },
             { field: 'street', header: Locales.street, type: 'input', validators: [Validators.required] },
             { field: 'city', header: Locales.city, type: 'input', validators: [Validators.required] },
             { field: 'state', header: Locales.state, type: 'auto', validators: [Validators.required], value: State },
@@ -42,7 +42,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             { field: 'fax', header: Locales.fax, type: 'input' },
             { field: 'isPrimary', header: Locales.isPrimary, type: 'switch' },
         ];
-        const controls = { id: new FormControl(), notes: null };
+        const controls = { notes: null };
         this.controls.forEach(c => {
             controls[c.field] = new FormControl(null, c.validators);
         });
@@ -100,7 +100,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
         }
         address.description = this.description.inputEL.nativeElement.value;
         if (address.document) {
-            address.document.category = DocumentType.AddressProof;
+            address.document.type = DocumentType.AddressProof[0];
         }
         this.loading(true);
         if (address.id) {

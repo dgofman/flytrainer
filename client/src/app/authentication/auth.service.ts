@@ -18,6 +18,10 @@ export class AuthService implements HttpInterceptor, CanActivate {
         AuthService.CORRELATION_ID = session.correlationId;
     }
 
+    static get token(): string {
+        return AuthService.AUTH_TOKEN;
+    }
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let url = req.url;
         if (environment.native) {

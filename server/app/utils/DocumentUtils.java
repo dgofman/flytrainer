@@ -18,11 +18,15 @@ public class DocumentUtils {
 	
 	public static boolean saveFile(Document document) throws IOException {
 		File file;
-		if ((file = new File(document.filePath)).exists()) {
+		if (document.filePath != null && (file = new File(document.filePath)).exists()) {
 			if (DocumentController.savedDir != null) {
-				Files.move(file.toPath(), new File(DocumentController.savedDir, document.fileName).toPath());
+				File newPath = new File(DocumentController.savedDir, file.getName());
+				document.filePath = newPath.getAbsolutePath();
+				Files.move(file.toPath(), newPath.toPath());
 			} else {
+				document.filePath = null;
 				document.file = Files.readAllBytes(file.toPath());
+				file.delete();
 			}
 			return true;
 		}
@@ -37,27 +41,38 @@ public class DocumentUtils {
 			} else {
 				document.aircraft = (Aircraft) ref;
 			}
-			document.type = model.getClass().getSimpleName();
+			document.reference = model.getClass().getSimpleName();
 			document.save();
 		}
 	}
 
 	public static <T>  void update(BaseModel model, T ref, User currentUser) throws IOException {
 		Document document = model.getDocument();
+		File file;
 		if (document != null) {
 			if (document.id == null) {
 				create(model, ref);
-			} else if (document.filePath == null) {
+			} else if (document.fileName == null) {
 				model.setDocument(null);
 				model.update(currentUser);
-				Ebean.find(Document.class).where().eq("id", document.id).delete();
+				Query<Document> query = Ebean.find(Document.class);
+				query.where().eq("id", document.id);
+				Document dbDocument = query.findOne();
+				if (dbDocument.filePath != null && (file = new File(dbDocument.filePath)).exists()) {
+					file.delete();
+				}
+				query.delete();
 			} else {
 				Query<Document> query = Ebean.find(Document.class);
 				query.where().eq("id", document.id);
 				Document dbDocument = query.findOne();
 				if (dbDocument == null) {
 					create(model, ref);
-				} else if (!dbDocument.filePath.equals(document.filePath) && saveFile(document)) {
+				} else if (saveFile(document)) {
+					if (dbDocument.filePath != null && (file = new File(dbDocument.filePath)).exists()) {
+						file.delete();
+					}
+					dbDocument.filePath = document.filePath;
 					dbDocument.file = document.file;
 					dbDocument.update();
 				}

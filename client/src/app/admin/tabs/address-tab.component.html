@@ -1,36 +1,32 @@
-<div>
-    <div class="card-body">
-        <form [formGroup]="formGroup" #myForm="ngForm" class="p-grid">
-            <div class="ui-fluid p-md-5">
-                <div class="row">
-                    <label>{{Locales.description}}</label>
-                    <p-autoComplete #desc appendTo="body" field="description" [dropdown]="addresses.length > 0"  [(ngModel)]="selectedBean" [ngModelOptions]="{standalone: true}" (completeMethod)="filterAddress($event, desc)"></p-autoComplete>
-                </div>
-                <div class="row" *ngFor="let control of controls">
-                    <admin-field [parentGroup]="formGroup" [c]="control"></admin-field>
-                </div>
+<form [formGroup]="formGroup" #myForm="ngForm" class="p-grid">
+    <div class="ui-fluid p-md-5">
+        <div class="row">
+            <label>{{Locales.description}}</label>
+            <p-autoComplete #desc appendTo="body" field="description" [dropdown]="addresses.length > 0"  [(ngModel)]="selectedBean" [ngModelOptions]="{standalone: true}" (completeMethod)="filterAddress($event, desc)"></p-autoComplete>
+        </div>
+        <div *ngFor="let control of controls">
+            <admin-field [parentGroup]="formGroup" [c]="control"></admin-field>
+        </div>
+    </div>
+    <div class="ui-fluid p-md-6">
+        <div class="row" formGroupName="notes">
+            <label>{{Locales.notes}}</label>
+            <textarea formControlName="content" pInputTextarea [rows]="25"></textarea>
+        </div>
+        <div class="row">
+            <div class="row">
+                <p-fileUpload mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.documentUpload"></p-fileUpload>
             </div>
-            <div class="ui-fluid p-md-6">
-                <div class="row" formGroupName="notes">
-                    <label>{{Locales.notes}}</label>
-                    <textarea formControlName="content" pInputTextarea [rows]="25"></textarea>
-                </div>
-                <div class="row">
-                    <div class="row">
-                        <p-fileUpload mode="basic" [auto]="true" url="/document/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.documentUpload"></p-fileUpload>
-                    </div>
-                    <div class="row" *ngIf="selectedBean?.document as doc">
-                        <span *ngIf="doc.fileName"><b>{{doc.fileName}}</b> - {{doc.size}} bytes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button pButton icon="pi pi-times" style="padding: 0; font-size: 9px;" (click)="deleteDocument(doc)"></button></span>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <div class="row footer">
-            <button *ngIf="addresses.length > 0" class="ui-button ui-button-text ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
-            <button *ngIf="addresses.length > 0" class="ui-button ui-button-text " (click)="onDelete()" [disabled]="!selectedBean">{{Locales.delete}}</button>
-            <div class="right">
-                <button class="ui-button ui-button-text " (click)="onSubmit()" [disabled]="!myForm.form.valid ">{{Locales.save}}</button>
+            <div class="row" *ngIf="selectedBean?.document as doc">
+                <span *ngIf="doc.fileName"><b>{{doc.fileName}}</b> - {{doc.size}} bytes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button pButton icon="pi pi-times" style="padding: 0; font-size: 9px;" (click)="deleteDocument(doc)"></button></span>
             </div>
         </div>
+    </div>
+</form>
+<div class="row footer">
+    <button *ngIf="addresses.length > 0" class="ui-button ui-button-text ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
+    <button *ngIf="addresses.length > 0" class="ui-button ui-button-text " (click)="onDelete()" [disabled]="!selectedBean">{{Locales.delete}}</button>
+    <div class="right">
+        <button class="ui-button ui-button-text " (click)="onSubmit()" [disabled]="!myForm.form.valid ">{{Locales.save}}</button>
     </div>
 </div>

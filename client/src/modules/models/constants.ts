@@ -1,6 +1,6 @@
 export type SHOW_COLUMNS = 'never' | true | false;
 export type FORMAT_COLUMNS = 'datetime' | 'short' | 'date' | 'bool';
-export type TYPE_COLUMNS = 'check' | 'cal' | 'radio' | 'input' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask';
+export type TYPE_COLUMNS = 'hide' | 'check' | 'cal' | 'radio' | 'input' | 'password' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask' | 'number';
 
 export interface Session {
     correlationId: number;
@@ -48,30 +48,29 @@ export enum AddressType {
     Other = 'Other'
 }
 
-export enum DocumentType {
-    Other = 'Other',
-    Passport = 'Passport',
-    Driverslicense = 'Driverslicense',
-    AlienResidentDocument = 'AlienResidentDocument',
-    Visa = 'Visa',
-    OtherCertificate = 'OtherCertificate',
-    PilotsCertificate = 'PilotsCertificate',
-    MedicalCertificate = 'MedicalCertificate',
-    BirthCertificate = 'BirthCertificate',
-    TSAAwarenessTrainingCertificate = 'TSAAwarenessTrainingCertificate',
-    TSAFormI20 = 'TSAFormI20',
-    TSAPaymentReceived = 'TSAPaymentReceived',
-    RentersInsuranceAgreement = 'RentersInsuranceAgreement',
-    Finance = 'Finance',
-    PrivatePilotPermission = 'PrivatePilotPermission',
-    InstrumentRatingPermission = 'InstrumentRatingPermission',
-    MultiCommercialPermission = 'MultiCommercialPermission',
-    TrainingRequest = 'TrainingRequest',
-    AircraftCheckoutRecord = 'AircraftCheckoutRecord',
-    PilotPicture = 'PilotPicture',
-    AddressProof = 'AddressProof',
-    OnlineDocument = 'OnlineDocument'
-}
+export const DocumentType = {
+    Other: ['Other', 'Other'],
+    Passport: ['Passport', 'Passport'],
+    DriverLicense: ['DriverLicense', 'Driver License'],
+    AlienResident: ['AlienResident', 'Alien Resident'],
+    Visa: ['Visa', 'Visa'],
+    PilotCertificate: ['PilotCertificate', 'Pilot Certificate'],
+    MedicalCertificate: ['MedicalCertificate', 'Medical Certificate'],
+    BirthCertificate: ['BirthCertificate', 'Birth Certificate'],
+    TSATrainingCertificate: ['TSATrainingCertificate', 'TSA Awareness Training Certificate'],
+    TSAFormI20: ['TSAFormI20', 'TSA Form I-20'],
+    TSAPaymentReceived: ['TSAPaymentReceived', 'TSA Payment Received'],
+    RentersInsuranceAgreement: ['RentersInsuranceAgreement', 'Renters Insurance Agreement'],
+    Finance: ['Finance', 'Finance'],
+    PrivatePilotPermission: ['PrivatePilotPermission', 'Private Pilot Permission'],
+    InstrumentRatingPermission: ['InstrumentRatingPermission', 'Instrument Rating Permission'],
+    MultiCommercialPermission: ['MultiCommercialPermission', 'Multi/Commercial Permission'],
+    TrainingRequest: ['TrainingRequest', 'Training Request'],
+    AircraftCheckoutRecord: ['AircraftCheckoutRecord', 'Aircraft Checkout Record'],
+    PilotPicture: ['PilotPicture', 'Pilot Picture'],
+    AddressProof: ['AddressProof', 'Address Proof of Residence'],
+    OnlineDocument: ['OnlineDocument', 'Online Document']
+};
 
 export enum Country {
     AF = 'Afghanistan',

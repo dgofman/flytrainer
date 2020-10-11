@@ -6,22 +6,26 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
+import models.BaseModel.Default;
+import models.BaseModel.Full;
 
 @Entity
 @History
 @Table(name = "note")
 public class Note extends AbstractBase {
-	
-	@JsonIgnore
+
 	@Length(50)
+	@JsonView(Full.class)
 	public String type; //Class name
 
 	@Lob
 	@NotNull
+	@JsonView(Default.class)
 	public String content; //content
 	
 	@ManyToOne

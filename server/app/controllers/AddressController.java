@@ -27,7 +27,7 @@ public class AddressController extends BaseController {
 		try {
 			List<Address> addresses = Ebean.createNamedQuery(Address.class, Address.FIND_BY_USERID)
 					.setParameter("userId", userId).findList();
-			return okResult(addresses, BaseModel.Short.class);
+			return okResult(addresses, BaseModel.Default.class);
 		} catch (Exception e) {
 			return badRequest(e);
 		}

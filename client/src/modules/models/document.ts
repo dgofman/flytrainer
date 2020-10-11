@@ -1,8 +1,8 @@
 import { AbstractBase } from './base.model';
 
 export class Document extends AbstractBase {
+    reference: string;
     type: string;
-    category: string;
     other: string;
     description: string;
     pageNumber: number;

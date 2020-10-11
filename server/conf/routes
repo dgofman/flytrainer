@@ -2,24 +2,27 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /init                       controllers.HomeController.initDatabase()
+GET     /init                           controllers.HomeController.initDatabase()
 
 # Test post request
-POST    /login                      controllers.HomeController.login(request: Request)
-POST    /create                     controllers.HomeController.create(request: Request)
-POST    /activate                   controllers.HomeController.activate(request: Request)
-POST    /forgot                     controllers.HomeController.forgot(request: Request)
-POST    /reset                      controllers.HomeController.reset(request: Request)
-POST    /logout                     controllers.HomeController.logout(request: Request)
+POST    /login                          controllers.HomeController.login(request: Request)
+POST    /create                         controllers.HomeController.create(request: Request)
+POST    /activate                       controllers.HomeController.activate(request: Request)
+POST    /forgot                         controllers.HomeController.forgot(request: Request)
+POST    /reset                          controllers.HomeController.reset(request: Request)
+POST    /logout                         controllers.HomeController.logout(request: Request)
 
-POST    /users                      controllers.UserController.users(request: Request)
-GET     /users/:id                  controllers.UserController.userById(id: Long)
-POST    /users/:id                  controllers.UserController.saveUser(request: Request, id: Long)
-DELETE  /users/:id                  controllers.UserController.deleteUser(request: Request, id: Long)
+POST    /users                          controllers.UserController.users(request: Request)
+GET     /users/:userId                  controllers.UserController.userById(userId: Long)
+POST    /users/:userId                  controllers.UserController.saveUser(request: Request, userId: Long)
+DELETE  /users/:userId                  controllers.UserController.deleteUser(request: Request, userId: Long)
 
-POST    /admin/:id/address          controllers.AddressController.addAddress(request: Request, id: Long)
-GET     /admin/:id/address          controllers.AddressController.getAddress(id: Long)
-PATCH   /admin/:id/address          controllers.AddressController.updateAddress(request: Request, id: Long)
-DELETE  /admin/:id/address/:addId   controllers.AddressController.deleteAddress(request: Request, id: Long, addId: Integer)
+POST    /address/:userId                controllers.AddressController.addAddress(request: Request, userId: Long)
+GET     /address/:userId                controllers.AddressController.getAddress(userId: Long)
+PATCH   /address/:userId                controllers.AddressController.updateAddress(request: Request, userId: Long)
+DELETE  /address/:userId/:addId         controllers.AddressController.deleteAddress(request: Request, userId: Long, addId: Integer)
 
-POST    /document/file/:userId      controllers.DocumentController.saveFile(request: Request, userId: Long)
+POST    /file/:userId                   controllers.DocumentController.saveFile(request: Request, userId: Long)
+GET     /file/:userId/:docId            controllers.DocumentController.getFile(userId: Long, docId: Long)
+GET     /document/:userId               controllers.DocumentController.getDocuments(userId: Long, offset: Integer)
+GET     /document/:userId/:docId        controllers.DocumentController.getDocument(userId: Long, docId: Long)

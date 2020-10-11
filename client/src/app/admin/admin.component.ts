@@ -19,7 +19,7 @@ import { AppHeaderComponent } from '../app.component';
 export class AdminComponent extends AppBaseDirective {
   Locales = Locales;
   icons = FTIcons;
-  result: TableResult<User>;
+  result: TableResult<User[]>;
 
   cols: ColumnType[] = [
     { field: 'id', show: 'never'},

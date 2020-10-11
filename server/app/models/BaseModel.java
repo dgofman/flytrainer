@@ -62,12 +62,14 @@ public abstract class BaseModel extends AbstractBase {
 		whoModified = currentUser.id;
 		super.delete();
 	}
-
-	public static class Admin {};
-
-	public static class Short {};
 	
-	public static class Full {};
+	public static class Default {};
+
+	public static class Short extends Default {};
+	
+	public static class Full extends Short {};
+	
+	public static class Admin extends Full {};
 	
 	public static class Never {};
 }

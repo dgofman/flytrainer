@@ -286,6 +286,8 @@ INSERT INTO flytrainer.user(uuid, username, firstname, lastname, email, active, 
 INSERT INTO flytrainer.user(uuid, username, firstname, lastname, email, active, resetpassword, employee, citizen, proficient, member, role, version, password, created_date, modified_date) VALUES (UUID(), 'czhou', 'Chunnyang', 'Zhou', 'czhou@flytrainer.com',1,1,1,1,1,1,0,1,'Welcome1',CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP());
 INSERT INTO flytrainer.user(uuid, username, firstname, lastname, email, active, resetpassword, employee, citizen, proficient, member, role, version, password, created_date, modified_date) VALUES (UUID(), 'hzhou', 'Henry', 'Zhou', 'hzhou@flytrainer.com',1,1,1,1,1,1,0,1,'Welcome1',CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP());
 
+
+--  Update other columns --
 SET @MIN = '1920-01-31 00:00:00';
 SET @MAX = '2004-01-31 00:00:00';
 UPDATE flytrainer.user SET birthday=TIMESTAMPADD(SECOND, FLOOR(RAND() * TIMESTAMPDIFF(SECOND, @MIN, @MAX)), @MIN) WHERE id != 0;

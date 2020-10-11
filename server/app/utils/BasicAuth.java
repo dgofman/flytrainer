@@ -36,29 +36,32 @@ class BasicAuthAction extends Action<BasicAuth> {
 	@Override
 	public CompletionStage<Result> call(Http.Request req) {
 		User user = null;
-		Optional<String> authHeader = req.getHeaders().get(Constants.AUTHORIZATION);
-		if (!authHeader.isPresent() || !authHeader.get().startsWith(Constants.TOKEN_FORMAT)) {
-			return CompletableFuture
-					.completedFuture(status(Http.Status.UNAUTHORIZED, Constants.Errors.UNAUTHORIZED.toString()));
-		}
-		Optional<String> correlationId = req.getHeaders().get(Constants.CORRELATION_ID);
-		if (!correlationId.isPresent()) {
-			return CompletableFuture
-					.completedFuture(status(Http.Status.UNAUTHORIZED, Constants.Errors.UNAUTHORIZED.toString()));
+		String token;
+		if (req.queryString("token").isPresent()) {
+			token = req.queryString("token").get();
+		} else {
+			Optional<String> authHeader = req.getHeaders().get(Constants.AUTHORIZATION);
+			if (!authHeader.isPresent() || !authHeader.get().startsWith(Constants.TOKEN_FORMAT)) {
+				return CompletableFuture
+						.completedFuture(status(Http.Status.UNAUTHORIZED, Constants.Errors.UNAUTHORIZED.toString()));
+			}
+			token = authHeader.get().substring(Constants.TOKEN_FORMAT.length() + 1);
 		}
 		try {
-			DecodedJWT jwt = AuthenticationUtils
-					.validateToken(authHeader.get().substring(Constants.TOKEN_FORMAT.length() + 1));
+			DecodedJWT jwt = AuthenticationUtils.validateToken(token);
 			if (jwt == null) {
 				return CompletableFuture
 						.completedFuture(status(Http.Status.FORBIDDEN, Constants.Errors.FORBIDDEN.toString()));
 			}
-			DDoS ddos = Ebean.createNamedQuery(DDoS.class, DDoS.VALIDATE)
-					.setParameter("createdDate", new Date(Long.valueOf(correlationId.get()).longValue()))
-					.findOne();
-			if (ddos == null || !jwt.getSubject().equals(ddos.username)) {
-				return CompletableFuture
-						.completedFuture(status(Http.Status.UNAUTHORIZED, Constants.Errors.UNAUTHORIZED.toString()));
+			Optional<String> correlationId = req.getHeaders().get(Constants.CORRELATION_ID);
+			if (correlationId.isPresent()) {
+				DDoS ddos = Ebean.createNamedQuery(DDoS.class, DDoS.VALIDATE)
+						.setParameter("createdDate", new Date(Long.valueOf(correlationId.get()).longValue()))
+						.findOne();
+				if (ddos == null || !jwt.getSubject().equals(ddos.username)) {
+					return CompletableFuture
+							.completedFuture(status(Http.Status.UNAUTHORIZED, Constants.Errors.UNAUTHORIZED.toString()));
+				}
 			}
 			Set<Access> roles = new HashSet<>();
 			for (Access role : configuration.value()) {

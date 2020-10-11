@@ -46,6 +46,7 @@ export interface ColumnType {
   format?: FORMAT_COLUMNS;
   show?: SHOW_COLUMNS;
   type?: TYPE_COLUMNS;
+  class?: string;
   value?: any;
   placeholder?: string;
 }
@@ -112,6 +113,10 @@ export class FTTableComponent implements AfterContentInit {
     { label: '50', value: 50 },
     { label: '100', value: 100 },
     { label: 'All', value: -1 }];
+
+  constructor() {
+    this.filters = {_saveFilter: false};
+  }
 
   private filterName: string;
   @ViewChild(Table) private table: Table;

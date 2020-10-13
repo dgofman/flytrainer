@@ -17,10 +17,6 @@ import io.ebean.annotation.Encrypted;
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
-import models.BaseModel.Admin;
-import models.BaseModel.Default;
-import models.BaseModel.Full;
-import models.BaseModel.Short;
 import utils.Constants.DocumentType;
 
 @Entity
@@ -65,7 +61,7 @@ public class Document extends AbstractBase {
 
 	@Length(25)
 	@Encrypted
-	@JsonView(Admin.class)
+	@JsonView(Full.class)
 	@DbComment("CONVERT(AES_DECRYPT(password, `environment.json::encryptKey`) USING  UTF8)")
 	public String password; //password
 
@@ -108,8 +104,4 @@ public class Document extends AbstractBase {
 	@ManyToOne
 	@JsonIgnore
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::engines
-	
-	public Long getVersion() {
-		return null;
-	}
 }

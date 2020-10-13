@@ -11,8 +11,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
-import models.BaseModel.Default;
-import models.BaseModel.Full;
 
 @Entity
 @History

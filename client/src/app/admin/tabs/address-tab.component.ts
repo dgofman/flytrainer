@@ -47,7 +47,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             controls[c.field] = new FormControl(null, c.validators);
         });
         controls.notes = this.formBuilder.group({
-            id: [''], content: ['']
+            id: [null], content: [null]
         });
         this.formGroup = new FormGroup(controls);
     }
@@ -57,7 +57,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
         this.adminService.getAddress(this.user.id).subscribe(result => {
             this.loading(false);
             this.addresses = result;
-            this.updateAddressList();
+            this.selectedBean = this.updateAddressList();
         }, (ex) => this.errorHandler(ex));
     }
 
@@ -78,11 +78,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
                 }
             });
         }
-        const address = selectedIndex !== -1 ? this.addresses[selectedIndex] : this.onReset();
-        if (!address.notes || AppUtils.isBlank(address.notes.content)) {
-            address.notes = new Note({id: null, content: null});
-        }
-        this.selectedBean = address;
+        return selectedIndex !== -1 ? this.addresses[selectedIndex] : this.onReset();
     }
 
     findAddress(id: number) {
@@ -107,13 +103,14 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             this.adminService.updateAddress(this.user.id, address).subscribe(result => {
                 this.loading(false);
                 this.updateAddressList(result);
+                this.selectedBean = result;
                 this.success(Locales.recordUpdated);
             }, (ex) => this.errorHandler(ex));
         } else {
             this.adminService.addAddress(this.user.id, address).subscribe(result => {
                 this.loading(false);
                 this.addresses.push(result);
-                this.updateAddressList();
+                this.selectedBean = this.updateAddressList();
                 this.success(Locales.recordCreated);
             }, (ex) => this.errorHandler(ex));
         }
@@ -126,7 +123,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             this.addresses.forEach((item, idx) => {
                 if (item.id === this.selectedBean.id) {
                     this.addresses.splice(idx, 1);
-                    this.updateAddressList();
+                    this.selectedBean = this.updateAddressList();
                     this.success(Locales.recordDeleted);
                     return false;
                 }

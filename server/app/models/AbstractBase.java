@@ -12,16 +12,17 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.ebean.Model;
 import io.ebean.annotation.WhenCreated;
 import io.ebean.annotation.WhenModified;
-import models.BaseModel.Full;
 
 @MappedSuperclass
 public abstract class AbstractBase extends Model {
-	@Column(name = "id")
+
 	@Id
+	@Column(name = "id")
 	public Long id; //id
 	
-	@Column(name = "version")
 	@Version
+	@Column(name = "version")
+	@JsonView(Full.class)
 	public Long version; //version
 
 	@WhenCreated
@@ -33,4 +34,14 @@ public abstract class AbstractBase extends Model {
 	@JsonView(Full.class)
 	@Column(name = "modified_date")
 	public Date modifiedDate; //modified_date
+	
+	public static class Default {};
+
+	public static class Short extends Default {};
+	
+	public static class Full extends Short {};
+	
+	public static class Admin extends Full {};
+	
+	public static class Never {};
 }

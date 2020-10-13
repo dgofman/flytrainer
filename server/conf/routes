@@ -26,3 +26,5 @@ POST    /file/:userId                   controllers.DocumentController.saveFile(
 GET     /file/:userId/:docId            controllers.DocumentController.getFile(userId: Long, docId: Long)
 GET     /document/:userId               controllers.DocumentController.getDocuments(userId: Long, offset: Integer)
 GET     /document/:userId/:docId        controllers.DocumentController.getDocument(userId: Long, docId: Long)
+POST    /document/:userId               controllers.DocumentController.saveDocument(request: Request, userId: Long)
+DELETE  /document/:userId/:docId        controllers.DocumentController.deleteDocument(userId: Long, docId: Long)

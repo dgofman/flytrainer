@@ -29,11 +29,19 @@ export class AdminService {
     }
 
     // Document
-    public getDocuments(userId: number, offset: number): Observable<TableResult<Document[]>> {
-        return this.http.get<TableResult<Document[]>>(`/document/${userId}?offset=${offset}`);
+    public getDocuments(userId: number, offset: number): Observable<TableResult<Document>> {
+        return this.http.get<TableResult<Document>>(`/document/${userId}?offset=${offset}`);
     }
 
     public getDocument(userId: number, docId: number): Observable<Document> {
         return this.http.get<Document>(`/document/${userId}/${docId}`);
+    }
+
+    public saveDocument(userId: number, model: Document): Observable<Document> {
+        return this.http.post<Document>(`/document/${userId}`, model);
+    }
+
+     public deleteDocument(userId: number, docId: number): Observable<void> {
+        return this.http.delete<void>(`/document/${userId}/${docId}`);
     }
 }

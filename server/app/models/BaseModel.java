@@ -34,7 +34,7 @@ public abstract class BaseModel extends AbstractBase {
 		return this.notes;
 	}
 	public void setNotes(JsonNode body) throws IOException {
-		this.notes = body != null ? new ObjectMapper().readerFor(Note.class).readValue(body) : null;
+		this.notes = body != null && !body.get("content").isNull() ? new ObjectMapper().readerFor(Note.class).readValue(body) : null;
 	}
 	
 	@ManyToOne
@@ -62,14 +62,4 @@ public abstract class BaseModel extends AbstractBase {
 		whoModified = currentUser.id;
 		super.delete();
 	}
-	
-	public static class Default {};
-
-	public static class Short extends Default {};
-	
-	public static class Full extends Short {};
-	
-	public static class Admin extends Full {};
-	
-	public static class Never {};
 }

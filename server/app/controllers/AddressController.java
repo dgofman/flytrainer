@@ -49,7 +49,7 @@ public class AddressController extends BaseController {
 			address.user = user;
 			address.save(currentUser);
 			transaction.commit();
-			return okResult(address);
+			return okResult(address, BaseModel.Default.class);
 		} catch (Exception e) {
 			transaction.rollback();
 			return badRequest(e);
@@ -78,7 +78,7 @@ public class AddressController extends BaseController {
 			DocumentUtils.update(dbAddress, user, currentUser);
 			dbAddress.save(currentUser);
 			transaction.commit();
-			return okResult(dbAddress);
+			return okResult(dbAddress, BaseModel.Default.class);
 		} catch (Exception e) {
 			transaction.rollback();
 			return badRequest(e);

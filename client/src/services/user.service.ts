@@ -11,8 +11,8 @@ export class UserService {
   public constructor(private http: HttpClient) {
   }
 
-  fetch(model: FTTableEvent): Observable<TableResult<User[]>> {
-    return this.http.post<TableResult<User[]>>('/users', model);
+  fetch(model: FTTableEvent): Observable<TableResult<User>> {
+    return this.http.post<TableResult<User>>('/users', model);
   }
 
   get(id: number): Observable<User> {

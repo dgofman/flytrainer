@@ -22,8 +22,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.ebean.ExpressionList;
 import io.ebean.Query;
-import models.BaseModel.Admin;
-import models.BaseModel.Never;
+import models.AbstractBase.Admin;
+import models.AbstractBase.Never;
 import models.FTTableEvent;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -47,6 +47,7 @@ public class BaseController extends Controller {
 
 	public Result okResult(Object data, Class<?> serializationView, FilterProvider filter) {
 		ObjectMapper objectMapper = new ObjectMapper();
+		//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 		objectMapper.registerModule(new JavaTimeModule());
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
 		if (filter != null) {

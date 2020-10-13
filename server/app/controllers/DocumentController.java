@@ -10,13 +10,16 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.ebean.Ebean;
 import io.ebean.Query;
+import models.Aircraft;
 import models.BaseModel;
 import models.Document;
 import models.User;
 import play.libs.Files.DelegateTemporaryFile;
+import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
@@ -137,7 +140,55 @@ public class DocumentController extends BaseController {
 			if (document == null) {
 				return createBadRequest("nodocument", Constants.Errors.ERROR);
 			}
-			return okResult(document, BaseModel.Full.class);
+			return okResult(document, models.BaseModel.Full.class);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
+
+	public Result saveDocument(Http.Request request, Long userId) {
+		log.debug("DocumentController::saveFile for user=" + userId);
+		try {
+			Document dbDocument = null;
+			JsonNode body = request.body().asJson();
+			Document document = Json.fromJson(body, Document.class);
+			Query<Document> query = Ebean.find(Document.class);
+			if (document.id == null) {
+				dbDocument = document;
+			} else {
+				query.where()
+					.eq("user", new User(userId))
+					.eq("id", document.id);
+				dbDocument = query.findOne();
+				if (dbDocument == null) {
+					return createBadRequest("nodocument", Constants.Errors.ERROR);
+				}
+				new ObjectMapper().readerForUpdating(dbDocument).readValue(body);
+			}
+			dbDocument.save();
+			return okResult(dbDocument);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
+	
+	public Result deleteDocument(Long userId, Long docId) {
+		log.debug("DocumentController::deleteDocument for user=" + userId  + ", docId=" + docId);
+		try {
+			Query<Document> query = Ebean.find(Document.class);
+			query.where().eq("user", new User(userId)).eq("id", docId);
+			Document document = query.findOne();
+			if (document == null) {
+				return createBadRequest("nodocument", Constants.Errors.ERROR);
+			}
+			if (document.user != null) {
+				Ebean.delete(User.class, document.user.id);
+			}
+			if (document.aircraft != null) {
+				Ebean.delete(Aircraft.class, document.aircraft.id);
+			}
+			document.delete();
+			return ok();
 		} catch (Exception e) {
 			return badRequest(e);
 		}

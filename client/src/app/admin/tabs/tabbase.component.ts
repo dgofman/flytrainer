@@ -28,8 +28,8 @@ import { BaseModel } from 'src/modules/models/base.model';
             <input formControlName="url" pInputText placeholder="http://www.company.com"/>
         </div>
         <p-inputNumber *ngIf="c.type =='number'" [showButtons]="true" [formControlName]="c.field" [min]="c.value[0]" [max]="c.value[1]"></p-inputNumber>
-        <input *ngIf="c.type =='input'" [formControlName]="c.field" pInputText [attr.disabled]="c.value === 'disabled' ? true : null" />
-        <input *ngIf="c.type =='password'" [formControlName]="c.field" type="password" pPassword autocomplete="off new-password"/>
+        <input *ngIf="c.type =='input'" [formControlName]="c.field" pInputText [attr.disabled]="isDisabled(c)" />
+        <input *ngIf="c.type =='password'" [formControlName]="c.field" type="password" pPassword autocomplete="off new-password" [attr.disabled]="isDisabled(c)"/>
         <p-dropdown *ngIf="c.type=='popup'" appendTo="body" [formControlName]="c.field" [options]="c.value" [placeholder]="c.placeholder"></p-dropdown>
         <p-autoComplete *ngIf="c.type == 'auto'" ftAutoComplete [formControlName]="c.field" [data]="c.value"></p-autoComplete>
         <p-inputMask *ngIf="c.type=='mask'" [mask]="c.value" [placeholder]="c.placeholder" [formControlName]="c.field"></p-inputMask>
@@ -56,6 +56,10 @@ export class AdminFieldComponent {
     // convenience getter for easy access to form fields
     get f() {
         return this.parentGroup.controls;
+    }
+
+    isDisabled(c: ColumnType) {
+        return c.class && c.class.indexOf('disabled') !== -1 ? true : null;
     }
 }
 
@@ -88,6 +92,7 @@ export abstract class TabBaseDirective extends AppBaseDirective {
 
     updateSelectedBean(bean: any) {
         this._selectedBean = bean;
+        this.formGroup.reset();
         this.formGroup.patchValue(bean);
     }
 

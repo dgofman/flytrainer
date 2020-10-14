@@ -1,6 +1,8 @@
 package controllers;
 
 import java.lang.reflect.Field;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +24,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.ebean.ExpressionList;
 import io.ebean.Query;
+import models.AbstractBase;
 import models.AbstractBase.Admin;
 import models.AbstractBase.Never;
 import models.FTTableEvent;
@@ -32,6 +35,7 @@ import utils.Constants;
 public class BaseController extends Controller {
 
 	protected static final Logger log = LoggerFactory.getLogger(BaseController.class);
+	protected final DateFormat dateFormat = new SimpleDateFormat(AbstractBase.DATE_FORMAT_PATTERN);
 
 	public Result okResult(Object data) {
 		return okResult(data, null, null);
@@ -48,6 +52,7 @@ public class BaseController extends Controller {
 	public Result okResult(Object data, Class<?> serializationView, FilterProvider filter) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+		objectMapper.setDateFormat(dateFormat);
 		objectMapper.registerModule(new JavaTimeModule());
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
 		if (filter != null) {

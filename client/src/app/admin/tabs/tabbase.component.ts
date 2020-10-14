@@ -8,7 +8,8 @@ import { Input, Component, NgModule, Directive } from '@angular/core';
 import { ColumnType } from 'src/app/component/ft-table/ft-table.component';
 import { AdminSharedModule } from '../admin-shared.module';
 import { ConfirmationService } from 'primeng/api';
-import { BaseModel } from 'src/modules/models/base.model';
+import {  AbstractBase } from 'src/modules/models/base.model';
+import { FTFormControl } from 'src/app/utils/ft-form.control';
 
 @Component({
   selector: 'admin-field',
@@ -70,7 +71,7 @@ export abstract class TabBaseDirective extends AppBaseDirective {
     controls: ColumnType[];
 
     // tslint:disable-next-line: variable-name
-    private _selectedBean: BaseModel;
+    private _selectedBean: AbstractBase;
 
     @Input() user: User;
 
@@ -96,6 +97,19 @@ export abstract class TabBaseDirective extends AppBaseDirective {
         this.formGroup.patchValue(bean);
     }
 
+    patchValue(model: AbstractBase) {
+        this.controls.forEach(c => {
+            if (model[c.field]) {
+                switch (c.type) {
+                    case 'cal':
+                        return model[c.field] = new Date(model[c.field]);
+                    default:
+                        return model[c.field] = FTFormControl.Serialize(model[c.field], c.format);
+                }
+            }
+        });
+    }
+
     onReset() {
         this.formGroup.reset();
         this._selectedBean = this.formGroup.value;
@@ -117,21 +131,22 @@ export abstract class TabBaseDirective extends AppBaseDirective {
         if (error) {
             this.errorHandler(event);
             event.files.splice(0, event.files.length);
-        } else {
-            if (event.files.length) {
-                const oldDoc = this.selectedBean.document || {},
-                    file = event.files[0],
-                    doc = new Document({
-                        id: oldDoc.id,
-                        fileName: file.name,
-                        filePath: event.originalEvent.body,
-                        contentType: file.type,
-                        size: file.size
-                    });
-                this.selectedBean.document = doc;
-                this.formGroup.patchValue({document: doc});
-            }
+        } else if (event.files.length) {
+            const file = event.files[0],
+                doc = new Document({
+                    id: (this.selectedBean && this.selectedBean.document || {}).id,
+                    fileName: file.name,
+                    filePath: event.originalEvent.body,
+                    contentType: file.type,
+                    size: file.size
+                });
+            this.documentLoaded(doc);
         }
+    }
+
+    documentLoaded(doc: Document) {
+        this.selectedBean.document = doc;
+        this.formGroup.patchValue({document: doc});
     }
 
     deleteDocument(document: Document) {

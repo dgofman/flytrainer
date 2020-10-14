@@ -27,7 +27,7 @@ export class FTFormControl extends FormControl {
     }
 
     static Serialize(val: any, format: string): any {
-        if (format && typeof(val) === 'number') {
+        if (format && typeof(val) !== 'boolean') {
             switch (format) {
                 case 'date':
                     return new FTDatePipe().transform(val);

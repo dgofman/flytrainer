@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.ebean.Ebean;
 import io.ebean.Transaction;
 import models.Address;
-import models.BaseModel;
 import models.User;
 import play.libs.Json;
 import play.mvc.Http;
@@ -19,6 +18,8 @@ import utils.Constants.Access;
 import utils.DocumentUtils;
 import utils.NotesUtils;
 
+import models.AbstractBase.Short;
+
 @BasicAuth({ Access.ASSISTANT, Access.MANAGER, Access.ADMIN })
 public class AddressController extends BaseController {
 
@@ -27,7 +28,7 @@ public class AddressController extends BaseController {
 		try {
 			List<Address> addresses = Ebean.createNamedQuery(Address.class, Address.FIND_BY_USERID)
 					.setParameter("userId", userId).findList();
-			return okResult(addresses, BaseModel.Default.class);
+			return okResult(addresses, Short.class);
 		} catch (Exception e) {
 			return badRequest(e);
 		}
@@ -49,7 +50,7 @@ public class AddressController extends BaseController {
 			address.user = user;
 			address.save(currentUser);
 			transaction.commit();
-			return okResult(address, BaseModel.Default.class);
+			return okResult(address, Short.class);
 		} catch (Exception e) {
 			transaction.rollback();
 			return badRequest(e);
@@ -78,7 +79,7 @@ public class AddressController extends BaseController {
 			DocumentUtils.update(dbAddress, user, currentUser);
 			dbAddress.save(currentUser);
 			transaction.commit();
-			return okResult(dbAddress, BaseModel.Default.class);
+			return okResult(dbAddress, Short.class);
 		} catch (Exception e) {
 			transaction.rollback();
 			return badRequest(e);

@@ -28,7 +28,13 @@
                         <p-radioButton [name]="rowData.field" [value]="false" [formControlName]="rowData.field"></p-radioButton><i [class]="false | ftstate"></i>
                         <p-button label="{{Locales.reset}}" class="filter-button" (click)="filterGroup.get(rowData.field).setValue(null)"></p-button>
                       </div>
-                      <p-calendar *ngIf="rowData.type=='cal'" placeholder="mm/dd/yyyy ( - mm/dd/yyyy)" dateFormat="@" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" showButtonBar="true" showIcon="true" selectionMode="range" appendTo="body" [formControlName]="rowData.field"></p-calendar>
+                      <p-calendar #cal *ngIf="rowData.type=='cal'" placeholder="mm/dd/yyyy ( - mm/dd/yyyy)" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" showButtonBar="true" showIcon="true" selectionMode="range" appendTo="body" [formControlName]="rowData.field">
+                        <p-header style="display: inline-block; height: 10px;">
+                          <a class="cal-popup-close" (click)="cal.hideOverlay()">
+                            <span class="ui-overlaypanel-close-icon pi pi-times ng-tns-c26-1"></span>
+                          </a>
+                        </p-header>
+                      </p-calendar>
                     </td>
                 </tr>
             </ng-template>

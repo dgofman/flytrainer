@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -89,12 +90,15 @@ public class Document extends AbstractBase {
 	public Long size;
 
 	@JsonView(Full.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT_PATTERN)
 	public Date issuedDate; //issued_date
 
 	@JsonView(Full.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT_PATTERN)
 	public Date expDate; //exp_date
 	
 	@ManyToOne
+	@JsonView(Short.class)
 	public Document parent; //parent_id
 
 	@ManyToOne

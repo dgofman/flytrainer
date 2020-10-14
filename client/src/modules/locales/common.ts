@@ -17,7 +17,6 @@ export default {
     url: 'URL',
     path: 'Path',
     size: 'Size',
-    name: 'Name',
     accountBalance: 'Account Balance',
     total: 'Total',
     filter: 'Filter',

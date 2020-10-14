@@ -31,7 +31,7 @@ export class DocumentTabComponent extends TabBaseDirective {
             { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], placeholder: Locales.selDocumentType, value: Object.keys(DocumentType).map(key => ({ label: DocumentType[key][1], value: key })) },
             { field: 'other', type: 'hide' },
             { field: 'url', type: 'hide' },
-            { field: 'fileName', header: Locales.name, type: 'input', class: 'inlineL' },
+            { field: 'fileName', header: Locales.fileName, type: 'input', class: 'inlineL' },
             { field: 'password', header: Locales.password, type: 'input', class: 'inlineL' },
             { field: 'filePath', header: Locales.path, type: 'input', class: 'disabled' },
             { field: 'size', header: Locales.size, type: 'input', class: 'inlineL disabled' },
@@ -58,6 +58,7 @@ export class DocumentTabComponent extends TabBaseDirective {
         this.loading(true);
         this.adminService.getDocument(this.user.id, bean.id).subscribe(document => {
             this.loading(false);
+            this.patchValue(document);
             this.formGroup.patchValue(document);
         }, (ex) => this.errorHandler(ex));
     }
@@ -75,7 +76,9 @@ export class DocumentTabComponent extends TabBaseDirective {
         this.loading(true);
         this.adminService.saveDocument(this.user.id, document).subscribe(result => {
             this.loading(false);
-            this.selectedBean = result;
+            if (this.selectedBean) {
+                Object.assign(this.selectedBean, result);
+            }
             this.formGroup.patchValue(result);
             this.success(document.id ? Locales.recordUpdated : Locales.recordCreated);
         }, (ex) => this.errorHandler(ex));
@@ -88,12 +91,17 @@ export class DocumentTabComponent extends TabBaseDirective {
             this.result.data.forEach((item, idx) => {
                 if (item.id === this.selectedBean.id) {
                     this.result.data.splice(idx, 1);
-                    super.onReset();
+                    this.selectedBean = null;
                     this.success(Locales.recordDeleted);
                     return false;
                 }
             });
         }, (ex) => this.errorHandler(ex));
+    }
+
+    documentLoaded(doc: Document) {
+        this.result.data.push(doc);
+        super.documentLoaded(this.result.data[this.result.data.length - 1]);
     }
 }
 

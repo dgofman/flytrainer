@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.ebean.Ebean;
 import io.ebean.Query;
-import models.Aircraft;
 import models.BaseModel;
 import models.Document;
 import models.User;
@@ -122,7 +121,10 @@ public class DocumentController extends BaseController {
 			if (document.filePath != null && (file = new File(document.filePath)) != null) {
 				return ok(file).as(document.contentType).withHeader(CACHE_CONTROL, "max-age=3600").withHeader(CONNECTION, "keep-alive");
 			} else if (document.file != null) {
-				return ok(document.file).as(document.contentType).withHeader(CACHE_CONTROL, "max-age=3600").withHeader(CONNECTION, "keep-alive");
+				return ok(document.file).as(document.contentType)
+						.withHeader(CACHE_CONTROL, "max-age=3600")
+						.withHeader(CONNECTION, "keep-alive")
+						.withHeader(CONTENT_DISPOSITION, "attachment; filename=" + document.fileName);
 			} else {
 				return notFound();
 			}
@@ -181,11 +183,11 @@ public class DocumentController extends BaseController {
 			if (document == null) {
 				return createBadRequest("nodocument", Constants.Errors.ERROR);
 			}
-			if (document.user != null) {
-				Ebean.delete(User.class, document.user.id);
-			}
-			if (document.aircraft != null) {
-				Ebean.delete(Aircraft.class, document.aircraft.id);
+			if (document.reference != null) {
+				Ebean.find(Class.forName("models." + document.reference)).asUpdate()
+					.set("document", null).where()
+					.eq("document", document)
+					.eq("user", document.user).update();
 			}
 			document.delete();
 			return ok();

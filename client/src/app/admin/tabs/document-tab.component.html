@@ -5,7 +5,7 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th style="width: 3rem"></th>
-                    <th>{{Locales.type}}</th>
+                    <th>{{Locales.fileName}} / {{Locales.type}}</th>
                     <th style="width: 4rem">{{Locales.page_num}}</th>
                 </tr>
             </ng-template>
@@ -14,7 +14,7 @@
                     <td style="width: 3rem">
                         <p-tableRadioButton [value]="doc"></p-tableRadioButton>
                     </td>
-                    <td>{{doc.type}}</td>
+                    <td *ngIf="!doc.parent"><b>{{doc.fileName}}</b><br>{{doc.type}}</td>
                     <td style="width: 4rem">{{doc.pageNumber}}</td>
                 </tr>
             </ng-template>
@@ -46,9 +46,11 @@
         </div>
     </div>
 </form>
-<div class="row footer">
-    <button class="ui-button ui-button-text " (click)="onDelete()" [disabled]="!selectedBean">{{Locales.delete}}</button>
+<div class="row footer left">
+    <p-fileUpload [disabled]="!selectedBean" mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.uploadNextPage"></p-fileUpload>
+    <button pButton (click)="onDelete()" [label]="Locales.delete" [disabled]="!selectedBean"></button>
     <div class="right">
-        <button class="ui-button ui-button-text " (click)="onSubmit()">{{Locales.save}}</button>
+        <p-fileUpload mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.uploadNewDocument"></p-fileUpload>
+        <button pButton (click)="onSubmit()" [label]="Locales.save"></button>
     </div>
 </div>

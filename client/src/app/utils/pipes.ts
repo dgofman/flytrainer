@@ -3,31 +3,22 @@ import { DatePipe, CommonModule } from '@angular/common';
 
 @Pipe({name: 'ftdate'})
 export class FTDatePipe implements PipeTransform {
-  transform(seconds: number): string {
-    if (!seconds) {
-      return '';
-    }
-    return new DatePipe('en-US').transform(seconds, 'mediumDate');
+  transform(value: any): string {
+    return new DatePipe('en-US').transform(value, 'mediumDate');
   }
 }
 
 @Pipe({name: 'ftshortdate'})
 export class FTShortDatePipe implements PipeTransform {
-  transform(seconds: number): string {
-    if (!seconds) {
-      return '';
-    }
-    return new DatePipe('en-US').transform(seconds, 'short');
+  transform(value: any): string {
+    return new DatePipe('en-US').transform(value, 'short');
   }
 }
 
 @Pipe({name: 'ftdatetime'})
 export class FTDateTimePipe implements PipeTransform {
-  transform(seconds: number): string {
-    if (!seconds) {
-      return '';
-    }
-    return new DatePipe('en-US').transform(seconds, 'medium');
+  transform(value: any): string {
+    return new DatePipe('en-US').transform(value, 'medium');
   }
 }
 

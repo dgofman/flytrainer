@@ -18,15 +18,19 @@
                 <p-fileUpload mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.documentUpload"></p-fileUpload>
             </div>
             <div class="row" *ngIf="selectedBean?.document as doc">
-                <span *ngIf="doc.fileName"><b>{{doc.fileName}}</b> - {{doc.size}} bytes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button pButton icon="pi pi-times" style="padding: 0; font-size: 9px;" (click)="deleteDocument(doc)"></button></span>
+                <span *ngIf="doc.fileName">
+                    <a href="/file/{{user.id}}/{{doc.id}}?token={{token}}" download>{{Locales.download}}</a>&nbsp;&nbsp;
+                    <b>{{doc.fileName}}</b> - {{doc.size}} bytes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button pButton icon="pi pi-times" style="padding: 0; font-size: 9px;" (click)="deleteDocument(doc)"></button>
+                </span>
             </div>
         </div>
     </div>
 </form>
 <div class="row footer">
-    <button *ngIf="addresses.length > 0" class="ui-button ui-button-text ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
-    <button *ngIf="addresses.length > 0" class="ui-button ui-button-text " (click)="onDelete()" [disabled]="!selectedBean">{{Locales.delete}}</button>
+    <button *ngIf="addresses.length > 0" class="ui-button ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
+    <button *ngIf="addresses.length > 0" class="ui-button " (click)="onDelete()" [disabled]="!selectedBean">{{Locales.delete}}</button>
     <div class="right">
-        <button class="ui-button ui-button-text " (click)="onSubmit()" [disabled]="!myForm.form.valid ">{{Locales.save}}</button>
+        <button class="ui-button " (click)="onSubmit()" [disabled]="!myForm.form.valid ">{{Locales.save}}</button>
     </div>
 </div>

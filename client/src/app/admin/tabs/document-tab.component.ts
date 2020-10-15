@@ -60,8 +60,7 @@ export class DocumentTabComponent extends TabBaseDirective {
             this.loading(true);
             this.adminService.getDocument(this.user.id, bean.id).subscribe(document => {
                 this.loading(false);
-                this.patchValue(document);
-                this.formGroup.patchValue(document);
+                this.formGroup.patchValue(this.patch(document));
             }, (ex) => this.errorHandler(ex));
         } else {
             this.onReset();
@@ -88,7 +87,7 @@ export class DocumentTabComponent extends TabBaseDirective {
             if (this.selectedBean) {
                 Object.assign(this.selectedBean, result);
             }
-            this.formGroup.patchValue(result);
+            this.formGroup.patchValue(this.patch(result));
             this.success(document.id ? Locales.recordUpdated : Locales.recordCreated);
         }, (ex) => this.errorHandler(ex));
     }
@@ -119,6 +118,8 @@ export class DocumentTabComponent extends TabBaseDirective {
                                 return false;
                             }
                         });
+                    } else {
+                        this.result.total--;
                     }
                     this.result.data.splice(idx, 1);
                     this.selectedBean = null;
@@ -145,6 +146,7 @@ export class DocumentTabComponent extends TabBaseDirective {
         if (doc) {
             doc.type = this.formGroup.controls.type.value;
             doc.total = 1;
+            this.result.total++;
             this.saveDocument(doc, true);
         }
     }

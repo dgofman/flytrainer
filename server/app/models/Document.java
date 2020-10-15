@@ -112,7 +112,7 @@ public class Document extends AbstractBase {
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::engines
 
 	@Transient
-	public int total;
+	public Integer total;
 
 	@JsonView(Short.class)
 	public Long getParentId() {

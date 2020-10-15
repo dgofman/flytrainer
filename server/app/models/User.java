@@ -173,10 +173,6 @@ public class User extends BaseModel {
 
 	@JsonView(Full.class)
 	@OneToMany(mappedBy = "user")
-	public List<Rating> ratings = new ArrayList<>(); //Rating::user_id
-
-	@JsonView(Full.class)
-	@OneToMany(mappedBy = "user")
 	public List<MedicalCertificate> medicalCertificates = new ArrayList<>(); //MedicalCertificate::user_id
 
 	@JsonView(Full.class)

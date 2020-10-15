@@ -91,7 +91,7 @@ export abstract class TabBaseDirective extends AppBaseDirective {
         this.formGroup.patchValue(bean || {});
     }
 
-    patchValue(model: AbstractBase) {
+    patch(model: AbstractBase) {
         this.controls.forEach(c => {
             if (model[c.field]) {
                 switch (c.type) {
@@ -102,6 +102,7 @@ export abstract class TabBaseDirective extends AppBaseDirective {
                 }
             }
         });
+        return model;
     }
 
     onReset() {

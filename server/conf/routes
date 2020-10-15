@@ -24,7 +24,10 @@ DELETE  /address/:userId/:addId         controllers.AddressController.deleteAddr
 
 POST    /file/:userId                   controllers.DocumentController.saveFile(request: Request, userId: Long)
 GET     /file/:userId/:docId            controllers.DocumentController.getFile(userId: Long, docId: Long)
-GET     /document/:userId               controllers.DocumentController.getDocuments(userId: Long, offset: Integer)
+
+GET     /documents/:userId              controllers.DocumentController.getDocuments(userId: Long, offset: Integer, rows: Integer)
+GET     /documents/:userId/:docId       controllers.DocumentController.lazyLoadDocuments(userId: Long, docId: Long)
+
 GET     /document/:userId/:docId        controllers.DocumentController.getDocument(userId: Long, docId: Long)
 POST    /document/:userId               controllers.DocumentController.saveDocument(request: Request, userId: Long)
 DELETE  /document/:userId/:docId        controllers.DocumentController.deleteDocument(userId: Long, docId: Long)

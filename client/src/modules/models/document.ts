@@ -18,7 +18,6 @@ export class Document extends AbstractBase {
     size: number;
     issuedDate: Date;
     expDate: Date;
-    parent: number; // FK -  parent_id document
-    user: any; // FK -  user_id document
-    aircraft: any; // FK - aircraft_id document
+    parentId: number;
+    total: number;
 }

@@ -32,7 +32,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             { field: 'notes' },
             { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], placeholder: Locales.selAccountType, value: Object.keys(AddressType).map(value => ({ label: AddressType[value], value })) },
             { field: 'other', type: 'hide' },
-            { field: 'pobox', type: 'hide' },
+            { field: 'pobox', type: 'hide', template: 'pobox' },
             { field: 'street', header: Locales.street, type: 'input', validators: [Validators.required] },
             { field: 'city', header: Locales.city, type: 'input', validators: [Validators.required] },
             { field: 'state', header: Locales.state, type: 'auto', validators: [Validators.required], value: State },

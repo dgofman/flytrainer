@@ -16,17 +16,10 @@ import { FTFormControl } from 'src/app/utils/ft-form.control';
   template: `
     <div [formGroup]="parentGroup" class="row" *ngIf="c.type">
         <label *ngIf="c.header">{{c.header}}</label>
+        <ng-container *ngIf="c.template" [ngTemplateOutlet]="templates[c.template]" [ngTemplateOutletContext]="{control:c, formGroup: parentGroup}"></ng-container>
         <div  *ngIf="c.field=='other' && parentGroup.controls.type.value == 'Other'">
             <label>{{Locales.other}}</label>
             <input formControlName="other" pInputText/>
-        </div>
-        <div  *ngIf="c.field=='pobox' && parentGroup.controls.type.value != 'Home'">
-            <label>{{Locales.pobox}}</label>
-            <input formControlName="pobox" pInputText/>
-        </div>
-        <div  *ngIf="c.field=='url' && parentGroup.controls.type.value == 'OnlineDocument'">
-            <label>{{Locales.url}}</label>
-            <input formControlName="url" pInputText placeholder="http://www.company.com"/>
         </div>
         <p-inputNumber *ngIf="c.type =='number'" [showButtons]="true" [formControlName]="c.field" [min]="c.value[0]" [max]="c.value[1]"></p-inputNumber>
         <input *ngIf="c.type =='input'" [formControlName]="c.field" pInputText [attr.disabled]="isDisabled(c)" />
@@ -53,6 +46,7 @@ export class AdminFieldComponent {
     Locales = Locales;
     @Input() parentGroup: FormGroup;
     @Input() c: ColumnType;
+    @Input() templates: any = {};
 
     // convenience getter for easy access to form fields
     get f() {
@@ -94,7 +88,7 @@ export abstract class TabBaseDirective extends AppBaseDirective {
     updateSelectedBean(bean: any) {
         this._selectedBean = bean;
         this.formGroup.reset();
-        this.formGroup.patchValue(bean);
+        this.formGroup.patchValue(bean || {});
     }
 
     patchValue(model: AbstractBase) {
@@ -127,26 +121,27 @@ export abstract class TabBaseDirective extends AppBaseDirective {
     }
 
     onUploadDocument(event: any, error: boolean) {
+        const doc = this.doUpload(event, error);
+        this.selectedBean.document = doc;
+        this.formGroup.patchValue({document: doc});
+    }
+
+    doUpload(event: any, error: boolean): Document {
         this.loading(false);
         if (error) {
             this.errorHandler(event);
             event.files.splice(0, event.files.length);
         } else if (event.files.length) {
-            const file = event.files[0],
-                doc = new Document({
-                    id: (this.selectedBean && this.selectedBean.document || {}).id,
-                    fileName: file.name,
-                    filePath: event.originalEvent.body,
-                    contentType: file.type,
-                    size: file.size
-                });
-            this.documentLoaded(doc);
+            const file = event.files[0];
+            return new Document({
+                id: (this.selectedBean && this.selectedBean.document || {}).id,
+                fileName: file.name,
+                filePath: event.originalEvent.body,
+                contentType: file.type,
+                size: file.size
+            });
         }
-    }
-
-    documentLoaded(doc: Document) {
-        this.selectedBean.document = doc;
-        this.formGroup.patchValue({document: doc});
+        return null;
     }
 
     deleteDocument(document: Document) {

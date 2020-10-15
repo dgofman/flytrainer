@@ -47,7 +47,12 @@ public class User extends BaseModel {
 
 	private static final String defaultPassword = AppConfig.get(Key.DEFAULT_PWD).asText();
 	
+	public User() {
+		super();
+	}
+
 	public User(Long id) {
+		super();
 		this.id = id;
 	}
 
@@ -201,9 +206,6 @@ public class User extends BaseModel {
 	@JsonView(Full.class)
 	@OneToMany(mappedBy = "user")
 	public List<Filter> filters = new ArrayList<>(); //Filter::user_id
-
-	public User() {
-	}
 
 	public User(JsonNode body) {
 		this.username = body.get("username").asText();

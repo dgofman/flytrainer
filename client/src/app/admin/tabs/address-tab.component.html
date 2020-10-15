@@ -5,7 +5,7 @@
             <p-autoComplete #desc appendTo="body" field="description" [dropdown]="addresses.length > 0"  [(ngModel)]="selectedBean" [ngModelOptions]="{standalone: true}" (completeMethod)="filterAddress($event, desc)"></p-autoComplete>
         </div>
         <div *ngFor="let control of controls">
-            <admin-field [parentGroup]="formGroup" [c]="control"></admin-field>
+            <admin-field [parentGroup]="formGroup" [c]="control" [templates]="{ pobox: pobox }"></admin-field>
         </div>
     </div>
     <div class="ui-fluid p-md-6">
@@ -31,6 +31,12 @@
     <button *ngIf="addresses.length > 0" class="ui-button ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
     <button *ngIf="addresses.length > 0" class="ui-button " (click)="onDelete()" [disabled]="!selectedBean">{{Locales.delete}}</button>
     <div class="right">
-        <button class="ui-button " (click)="onSubmit()" [disabled]="!myForm.form.valid ">{{Locales.save}}</button>
+        <button class="ui-button " (click)="onSubmit()" [disabled]="!myForm.form.valid">{{Locales.save}}</button>
     </div>
 </div>
+<ng-template #pobox let-c="control" let-group="formGroup">
+    <div *ngIf="formGroup.controls.type.value != 'Home'" [formGroup]="group">
+        <label>{{Locales.pobox}}</label>
+        <input formControlName="pobox" pInputText/>
+    </div>
+</ng-template>

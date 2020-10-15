@@ -48,6 +48,7 @@ export interface ColumnType {
   type?: TYPE_COLUMNS;
   class?: string;
   value?: any;
+  template?: string;
   placeholder?: string;
 }
 

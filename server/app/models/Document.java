@@ -8,6 +8,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,10 +24,11 @@ import utils.Constants.DocumentType;
 @Entity
 @History
 @NamedQueries(value = {
-		@NamedQuery(name = Document.FIND, query = "select contentType, filePath, file where user = :user and id = :id") })
+		@NamedQuery(name = Document.FIND_FILE, query = "select contentType, filePath, file where user = :user and id = :id") })
 public class Document extends AbstractBase {
 
-	public static final String FIND = "Document.find";
+	public static final String FIND_FILE = "Document.findFile";
+	public static final String FIND_DOCUMENTS =  "select id, parent_id, type, name, page_number, (select count(*) + 1 from document c where c.parent_id=p.id) total from document p where user_id = :userId";
 
 	@Length(50)
 	@JsonView(Full.class)
@@ -98,7 +100,7 @@ public class Document extends AbstractBase {
 	public Date expDate; //exp_date
 	
 	@ManyToOne
-	@JsonView(Short.class)
+	@JsonIgnore
 	public Document parent; //parent_id
 
 	@ManyToOne
@@ -108,4 +110,17 @@ public class Document extends AbstractBase {
 	@ManyToOne
 	@JsonIgnore
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::engines
+
+	@Transient
+	public int total;
+
+	@JsonView(Short.class)
+	public Long getParentId() {
+		return parent != null ? parent.id : null;
+	}
+	
+	public void setParentId(Long id) {
+		parent = new Document();
+		parent.id = id;
+	}
 }

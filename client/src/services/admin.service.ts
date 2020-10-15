@@ -30,7 +30,11 @@ export class AdminService {
 
     // Document
     public getDocuments(userId: number, offset: number): Observable<TableResult<Document>> {
-        return this.http.get<TableResult<Document>>(`/document/${userId}?offset=${offset}`);
+        return this.http.get<TableResult<Document>>(`/documents/${userId}?rows=25&offset=${offset}`);
+    }
+
+    public lazyDocuments(userId: number, docId: number): Observable<Document[]> {
+        return this.http.get<Document[]>(`/documents/${userId}/${docId}`);
     }
 
     public getDocument(userId: number, docId: number): Observable<Document> {

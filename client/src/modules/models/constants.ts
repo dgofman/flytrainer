@@ -49,7 +49,6 @@ export enum AddressType {
 }
 
 export const DocumentType = {
-    Other: ['Other', 'Other'],
     Passport: ['Passport', 'Passport'],
     DriverLicense: ['DriverLicense', 'Driver License'],
     AlienResident: ['AlienResident', 'Alien Resident'],
@@ -69,7 +68,8 @@ export const DocumentType = {
     AircraftCheckoutRecord: ['AircraftCheckoutRecord', 'Aircraft Checkout Record'],
     PilotPicture: ['PilotPicture', 'Pilot Picture'],
     AddressProof: ['AddressProof', 'Address Proof of Residence'],
-    OnlineDocument: ['OnlineDocument', 'Online Document']
+    OnlineDocument: ['OnlineDocument', 'Online Document'],
+    Other: ['Other', 'Other']
 };
 
 export enum Country {

@@ -25,6 +25,7 @@ import play.mvc.Result;
 import utils.AppConfig;
 import utils.BasicAuth;
 import utils.Constants;
+import utils.DocumentUtils;
 import utils.Constants.Access;
 import utils.Constants.Key;
 
@@ -94,23 +95,10 @@ public class DocumentController extends BaseController {
 		}
 	}
 
-	public Result getDocuments(Long userId, Integer offset) {
-		log.debug("DocumentController::getDocuments for user=" + userId);
-		try {
-			Query<Document> query = Ebean.createQuery(Document.class).setParameter("userId", userId);
-			int rows = 25;
-			int total = query.findCount();
-			List<Document> documents = query.setFirstRow(offset).setMaxRows(rows).findList();
-			return okResult(new TableResult(offset, total, documents), BaseModel.Short.class);
-		} catch (Exception e) {
-			return badRequest(e);
-		}
-	}
-
 	public Result getFile(Long userId, Long docId) {
 		log.debug("DocumentController::getFile for user=" + userId + ", docId=" + docId);
 		try {
-			Query<Document> query = Ebean.createNamedQuery(Document.class, Document.FIND)
+			Query<Document> query = Ebean.createNamedQuery(Document.class, Document.FIND_FILE)
 					.setParameter("user", new User(userId))
 					.setParameter("id", docId);
 			Document document = query.findOne();
@@ -132,6 +120,29 @@ public class DocumentController extends BaseController {
 			return badRequest(e);
 		}
 	}
+
+	public Result getDocuments(Long userId, Integer offset, Integer rows) {
+		log.debug("DocumentController::getDocuments for user=" + userId);
+		try {
+			Query<Document> query = Ebean.findNative(Document.class, Document.FIND_DOCUMENTS + " and parent_id is null").setParameter("userId", userId);
+			int total = query.findCount();
+			List<Document> documents = query.setFirstRow(offset).setMaxRows(rows).findList();
+			return okResult(new TableResult(offset, total, documents), BaseModel.Short.class);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
+	
+	public Result lazyLoadDocuments(Long userId, Long docId) {
+		log.debug("DocumentController::getDocuments for user=" + userId + ", docId=" + docId);
+		try {
+			Query<Document> query = Ebean.findNative(Document.class, Document.FIND_DOCUMENTS + " and parent_id = :docId order by page_number").setParameter("userId", userId).setParameter("docId", docId);
+			return okResult(query.findList(), BaseModel.Short.class);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
+
 	
 	public Result getDocument(Long userId, Long docId) {
 		log.debug("DocumentController::getDocument for user=" + userId + ", docId=" + docId);
@@ -149,17 +160,20 @@ public class DocumentController extends BaseController {
 	}
 
 	public Result saveDocument(Http.Request request, Long userId) {
-		log.debug("DocumentController::saveFile for user=" + userId);
+		log.debug("DocumentController::saveDocument for user=" + userId);
 		try {
+			User user = new User(userId);
 			Document dbDocument = null;
 			JsonNode body = request.body().asJson();
 			Document document = Json.fromJson(body, Document.class);
 			Query<Document> query = Ebean.find(Document.class);
 			if (document.id == null) {
+				DocumentUtils.saveFile(document);
 				dbDocument = document;
+				document.user = user;
 			} else {
 				query.where()
-					.eq("user", new User(userId))
+					.eq("user", user)
 					.eq("id", document.id);
 				dbDocument = query.findOne();
 				if (dbDocument == null) {
@@ -189,6 +203,7 @@ public class DocumentController extends BaseController {
 					.eq("document", document)
 					.eq("user", document.user).update();
 			}
+			Ebean.find(Document.class).where().eq("parent", document).delete();
 			document.delete();
 			return ok();
 		} catch (Exception e) {

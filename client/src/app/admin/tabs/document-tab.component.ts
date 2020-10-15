@@ -21,6 +21,7 @@ import { TableResult } from 'src/modules/models/table.result';
 })
 export class DocumentTabComponent extends TabBaseDirective {
     result: TableResult<Document>;
+    children: any = {};
 
     constructor(confirmationService: ConfirmationService, private adminService: AdminService) {
         super(confirmationService);
@@ -28,12 +29,12 @@ export class DocumentTabComponent extends TabBaseDirective {
             { field: 'id' },
             { field: 'version' },
             { field: 'description', header: Locales.description, type: 'input' },
-            { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], placeholder: Locales.selDocumentType, value: Object.keys(DocumentType).map(key => ({ label: DocumentType[key][1], value: key })) },
+            { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], value: Object.keys(DocumentType).map(key => ({ label: DocumentType[key][1], value: key })) },
             { field: 'other', type: 'hide' },
-            { field: 'url', type: 'hide' },
+            { field: 'url', type: 'hide', template: 'url' },
             { field: 'fileName', header: Locales.fileName, type: 'input', class: 'inlineL' },
             { field: 'password', header: Locales.password, type: 'input', class: 'inlineL' },
-            { field: 'filePath', header: Locales.path, type: 'input', class: 'disabled' },
+            { field: 'filePath', type: 'hide', template: 'path' },
             { field: 'size', header: Locales.size, type: 'input', class: 'inlineL disabled' },
             { field: 'contentType', header: Locales.contentType, type: 'input', class: 'inlineR disabled' },
             { field: 'issuedDate', header: Locales.issuedDate, type: 'cal', value: this.AppUtils.defaultYearRange, class: 'inlineL' },
@@ -50,17 +51,25 @@ export class DocumentTabComponent extends TabBaseDirective {
             controls[c.field] = new FormControl(null, c.validators);
         });
         this.formGroup = new FormGroup(controls);
-        this.formGroup.patchValue({ pageNumber: 1, isFrontSide: 1 });
+        this.onReset();
     }
 
     updateSelectedBean(bean: any) {
         super.updateSelectedBean(bean);
-        this.loading(true);
-        this.adminService.getDocument(this.user.id, bean.id).subscribe(document => {
-            this.loading(false);
-            this.patchValue(document);
-            this.formGroup.patchValue(document);
-        }, (ex) => this.errorHandler(ex));
+        if (bean != null) {
+            this.loading(true);
+            this.adminService.getDocument(this.user.id, bean.id).subscribe(document => {
+                this.loading(false);
+                this.patchValue(document);
+                this.formGroup.patchValue(document);
+            }, (ex) => this.errorHandler(ex));
+        } else {
+            this.onReset();
+        }
+    }
+
+    getType(key: any) {
+        return DocumentType[key][1];
     }
 
     lazyLoad(event?: LazyLoadEvent) {
@@ -86,10 +95,22 @@ export class DocumentTabComponent extends TabBaseDirective {
 
     doDelete(): void {
         this.loading(true);
+        if (this.children[this.selectedBean.id] && this.selectedBean.expended) {
+            this.onToggle(this.selectedBean);
+        }
         this.adminService.deleteDocument(this.user.id, this.selectedBean.id).subscribe(_  => {
             this.loading(false);
             this.result.data.forEach((item, idx) => {
                 if (item.id === this.selectedBean.id) {
+                    delete this.children[item.id];
+                    if (this.children[item.parentId]) {
+                        this.children[item.parentId].forEach((child, childIdx) => {
+                            if (child.id === item.id) {
+                                this.children[item.parentId].splice(childIdx, 1);
+                                return false;
+                            }
+                        });
+                    }
                     this.result.data.splice(idx, 1);
                     this.selectedBean = null;
                     this.success(Locales.recordDeleted);
@@ -99,9 +120,78 @@ export class DocumentTabComponent extends TabBaseDirective {
         }, (ex) => this.errorHandler(ex));
     }
 
-    documentLoaded(doc: Document) {
-        this.result.data.push(doc);
-        super.documentLoaded(this.result.data[this.result.data.length - 1]);
+    onNextPageUpload(event: any, error: boolean) {
+        const doc = this.doUpload(event, error);
+        if (doc) {
+            doc.type = this.formGroup.controls.type.value;
+            doc.parentId = this.selectedBean.id;
+            doc.pageNumber = this.selectedBean.total + 1;
+            this.selectedBean.total++;
+            this.saveDocument(doc, false);
+        }
+    }
+
+    onNewUploadDocument(event: any, error: boolean) {
+        const doc = this.doUpload(event, error);
+        if (doc) {
+            doc.type = this.formGroup.controls.type.value;
+            doc.total = 1;
+            this.saveDocument(doc, true);
+        }
+    }
+
+    saveDocument(doc: Document, isNew: boolean) {
+        this.loading(true);
+        this.adminService.saveDocument(this.user.id, doc).subscribe(result => {
+            this.loading(false);
+            if (isNew) {
+                this.result.data.push(result);
+            } else {
+                if (this.selectedBean && this.children[this.selectedBean.id]) {
+                    if (this.selectedBean.expended) {
+                        this.result.data.forEach((item, idx) => {
+                            if (item.id === this.selectedBean.id) {
+                                this.result.data.splice(idx + this.children[this.selectedBean.id].length + 1, 0, result);
+                                return false;
+                            }
+                        });
+                    }
+                    this.children[this.selectedBean.id].push(result);
+                }
+            }
+        }, (ex) => this.errorHandler(ex));
+    }
+
+    onToggle(doc: any) {
+        doc.expended = !doc.expended;
+        let rowIndex = -1;
+        this.result.data.forEach((item, idx) => {
+            if (item.id === doc.id) {
+                rowIndex = idx;
+                return false;
+            }
+        });
+        if (rowIndex === -1) {
+            return;
+        }
+        if (!this.children[doc.id]) {
+            this.loading(true);
+            this.adminService.lazyDocuments(this.user.id, doc.id).subscribe(result => {
+                this.loading(false);
+                this.children[doc.id] = result;
+                this.result.data.splice(rowIndex + 1, 0, ...result);
+            }, (ex) => this.errorHandler(ex));
+        } else {
+            if (doc.expended) {
+                this.result.data.splice(rowIndex + 1, 0, ...this.children[doc.id]);
+            } else {
+                this.result.data.splice(rowIndex + 1, this.children[doc.id].length);
+            }
+        }
+    }
+
+    onReset() {
+        this.formGroup.patchValue({ type: DocumentType.PilotPicture[0], pageNumber: 1, isFrontSide: 1 });
     }
 }
 

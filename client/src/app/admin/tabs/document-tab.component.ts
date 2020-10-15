@@ -21,7 +21,7 @@ import { TableResult } from 'src/modules/models/table.result';
 })
 export class DocumentTabComponent extends TabBaseDirective {
     result: TableResult<Document>;
-    children: any = {};
+    children: { [id: number]: Document[] } = {};
 
     constructor(confirmationService: ConfirmationService, private adminService: AdminService) {
         super(confirmationService);
@@ -101,12 +101,21 @@ export class DocumentTabComponent extends TabBaseDirective {
         this.adminService.deleteDocument(this.user.id, this.selectedBean.id).subscribe(_  => {
             this.loading(false);
             this.result.data.forEach((item, idx) => {
-                if (item.id === this.selectedBean.id) {
+                if (this.selectedBean && item.id === this.selectedBean.id) {
                     delete this.children[item.id];
-                    if (this.children[item.parentId]) {
-                        this.children[item.parentId].forEach((child, childIdx) => {
+                    const documents = this.children[item.parentId];
+                    if (documents) {
+                        documents.forEach((child, childIdx) => {
                             if (child.id === item.id) {
-                                this.children[item.parentId].splice(childIdx, 1);
+                                documents.splice(childIdx, 1);
+                                return false;
+                            }
+                        });
+                    }
+                    if (item.parentId) {
+                        this.result.data.forEach(child => {
+                            if (child.id === item.parentId) {
+                                child.total--;
                                 return false;
                             }
                         });

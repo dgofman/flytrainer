@@ -5,11 +5,10 @@ import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { AppBaseDirective } from 'src/app/app.base.component';
 import { Input, Component, NgModule, Directive } from '@angular/core';
-import { ColumnType } from 'src/app/component/ft-table/ft-table.component';
+import { ColumnType } from 'src/modules/models/constants';
 import { AdminSharedModule } from '../admin-shared.module';
 import { ConfirmationService } from 'primeng/api';
 import {  AbstractBase } from 'src/modules/models/base.model';
-import { FTFormControl } from 'src/app/utils/ft-form.control';
 
 @Component({
   selector: 'admin-field',
@@ -22,12 +21,12 @@ import { FTFormControl } from 'src/app/utils/ft-form.control';
             <input formControlName="other" pInputText/>
         </div>
         <p-inputNumber *ngIf="c.type =='number'" [showButtons]="true" [formControlName]="c.field" [min]="c.value[0]" [max]="c.value[1]"></p-inputNumber>
-        <input *ngIf="c.type =='input'" [formControlName]="c.field" pInputText [attr.disabled]="isDisabled(c)" />
-        <input *ngIf="c.type =='password'" [formControlName]="c.field" type="password" pPassword autocomplete="off new-password" [attr.disabled]="isDisabled(c)"/>
-        <p-dropdown *ngIf="c.type=='popup'" appendTo="body" [formControlName]="c.field" [options]="c.value" [placeholder]="c.placeholder"></p-dropdown>
+        <input *ngIf="c.type =='input'" ftFTFormatter [control]="c" [formControlName]="c.field" pInputText [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''"/>
+        <input *ngIf="c.type =='password'" [formControlName]="c.field" type="password" pPassword autocomplete="off new-password" [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''"/>
+        <p-dropdown *ngIf="c.type=='popup'" appendTo="body" [formControlName]="c.field" [options]="c.value" [placeholder]="c.placeholder || ''"></p-dropdown>
         <p-autoComplete *ngIf="c.type == 'auto'" ftAutoComplete [formControlName]="c.field" [data]="c.value"></p-autoComplete>
-        <p-inputMask *ngIf="c.type=='mask'" [mask]="c.value" [placeholder]="c.placeholder" [formControlName]="c.field"></p-inputMask>
-        <p-calendar *ngIf="c.type=='cal'" placeholder="mm/dd/yyyy" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="c.value" showButtonBar="true" showIcon="true" appendTo="body" [formControlName]="c.field"></p-calendar>
+        <p-inputMask *ngIf="c.type=='mask'" [mask]="c.value" [placeholder]="c.placeholder || ''" [formControlName]="c.field"></p-inputMask>
+        <p-calendar *ngIf="c.type=='cal'" ftCalendar [formControlName]="c.field"></p-calendar>
         <div *ngIf="c.type=='switch'"><p-inputSwitch [formControlName]="c.field" binary="true"></p-inputSwitch></div>
         <div *ngIf="f[c.field].errors" style="color: red; ">
             <div *ngIf="f[c.field].errors.required ">{{c.header}} is required</div>
@@ -89,20 +88,6 @@ export abstract class TabBaseDirective extends AppBaseDirective {
         this._selectedBean = bean;
         this.formGroup.reset();
         this.formGroup.patchValue(bean || {});
-    }
-
-    patch(model: AbstractBase) {
-        this.controls.forEach(c => {
-            if (model[c.field]) {
-                switch (c.type) {
-                    case 'cal':
-                        return model[c.field] = new Date(model[c.field]);
-                    default:
-                        return model[c.field] = FTFormControl.Serialize(model[c.field], c.format);
-                }
-            }
-        });
-        return model;
     }
 
     onReset() {

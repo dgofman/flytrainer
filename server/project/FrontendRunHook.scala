@@ -1,5 +1,6 @@
 import play.sbt.PlayRunHook
 import scala.io.Source
+import java.util.TimeZone
 import spray.json._
 import sbt._
 
@@ -12,6 +13,9 @@ import scala.sys.process.Process
 object FrontendRunHook {
   def apply(base: File): PlayRunHook = {
     object UIBuildHook extends PlayRunHook {
+
+      System.setProperty("user.timezone", "GMT")
+      TimeZone.setDefault(TimeZone.getTimeZone("GMT"))
 
       var process: Option[Process] = None
       var client_dir = base / ".." / "client"

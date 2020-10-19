@@ -2,8 +2,6 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,11 +15,7 @@ import utils.Constants.AddressType;
 @Entity
 @History
 @Table(name = "address")
-@NamedQueries(value = {
-		@NamedQuery(name = Address.FIND_BY_USERID, query = "where user_id = :userId") })
 public class Address extends BaseModel {
-
-	public static final String FIND_BY_USERID = "User.findByUserId";
 
 	@NotNull
 	public AddressType type = AddressType.Home; //type

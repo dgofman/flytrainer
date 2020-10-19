@@ -52,4 +52,10 @@ FLUSH PRIVILEGES;
 SELECT user, host FROM mysql.user;
 SHOW DATABASES;
 
+SELECT @@global.time_zone, @@session.time_zone;
+SET @@session.time_zone='+00:00';
+SELECT @@global.time_zone, @@session.time_zone;
+SELECT CURRENT_TIMESTAMP();
+
+
 DEALLOCATE PREPARE sqlStatment;

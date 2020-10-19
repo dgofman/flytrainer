@@ -28,22 +28,22 @@
         </ng-template>
       </ft-table>
       <ft-dialog width="70" height="60" [path]="[Locales.admin, Locales.users, selectedUser?.first + ' ' + selectedUser?.last]">
-        <ng-template pTemplate="Account" let-user="item">
+        <ng-template pTemplate="{{Locales.accounts}}" let-user="item">
           <account-tab [user]="user" ></account-tab>
         </ng-template>
-        <ng-template pTemplate="Addresses" let-user="item">
+        <ng-template pTemplate="{{Locales.addresses}}" let-user="item">
           <address-tab [user]="user"></address-tab>
         </ng-template>
-        <ng-template pTemplate="Certificates/Ratings" let-user="item">
+        <ng-template pTemplate="{{Locales.certificates}}" let-user="item">
           <certificate-tab [user]="user"></certificate-tab>
         </ng-template>
-        <ng-template pTemplate="Contacts/Employers" let-user="item">
+        <ng-template pTemplate="{{Locales.contacts}}" let-user="item">
           <contact-tab [user]="user"></contact-tab>
         </ng-template>
         <ng-template pTemplate="Courses/Endorsements" let-user="item">
           <course-tab [user]="user"></course-tab>
         </ng-template>
-        <ng-template pTemplate="Documents" let-user="item">
+        <ng-template pTemplate="{{Locales.documents}}" let-user="item">
           <document-tab [user]="user"></document-tab>
         </ng-template>
       </ft-dialog>

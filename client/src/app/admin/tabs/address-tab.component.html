@@ -1,14 +1,14 @@
 <form [formGroup]="formGroup" #myForm="ngForm" class="p-grid">
-    <div class="ui-fluid p-md-5">
+    <div class="ui-fluid p-md-7">
         <div class="row">
             <label>{{Locales.description}}</label>
-            <p-autoComplete #desc appendTo="body" field="description" [dropdown]="addresses.length > 0"  [(ngModel)]="selectedBean" [ngModelOptions]="{standalone: true}" (completeMethod)="filterAddress($event, desc)"></p-autoComplete>
+            <p-autoComplete #desc appendTo="body" field="description" [dropdown]="addresses.length > 0"  [(ngModel)]="selectedBean" [ngModelOptions]="{standalone: true}" (completeMethod)="filterDescription($event, desc)"></p-autoComplete>
         </div>
-        <div *ngFor="let control of controls">
+        <div *ngFor="let control of controls" [class]="control.class">
             <admin-field [parentGroup]="formGroup" [c]="control" [templates]="{ pobox: pobox }"></admin-field>
         </div>
     </div>
-    <div class="ui-fluid p-md-6">
+    <div class="ui-fluid p-md-5">
         <div class="row" formGroupName="notes">
             <label>{{Locales.notes}}</label>
             <textarea formControlName="content" pInputTextarea [rows]="25"></textarea>
@@ -19,9 +19,9 @@
             </div>
             <div class="row" *ngIf="selectedBean?.document as doc">
                 <span *ngIf="doc.fileName">
+                    <button pButton icon="pi pi-times" style="padding: 0; font-size: 9px;" (click)="deleteDocument(doc)"></button>&nbsp;&nbsp;
                     <a href="/file/{{user.id}}/{{doc.id}}?token={{token}}" download>{{Locales.download}}</a>&nbsp;&nbsp;
-                    <b>{{doc.fileName}}</b> - {{doc.size}} bytes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button pButton icon="pi pi-times" style="padding: 0; font-size: 9px;" (click)="deleteDocument(doc)"></button>
+                    <b>{{doc.fileName}}</b> - {{doc.size}} bytes
                 </span>
             </div>
         </div>

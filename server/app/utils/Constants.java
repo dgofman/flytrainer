@@ -520,18 +520,14 @@ public class Constants {
 		Part135(15),
 		Maintenance(16);
 
-		private final long type;
+		private final int type;
 
 		private AircraftSpecification(int type) {
-			this.type = (long) Math.pow(2, type);
+			this.type = type;
 		}
 
-		public static long  getType(AircraftSpecification ...specifications) {
-			long type = 0;
-			for (AircraftSpecification specification : specifications) {
-				type |= specification.type;
-			}
-			return type;
+		public int getType() {
+			return this.type;
 		}
 	}
 
@@ -542,29 +538,26 @@ public class Constants {
 		RecreationalPilot(3),
 		RemotePilot(4),
 		PrivatePilot(5),
-		InstrumentRating(6),
-		CommercialPilot(7),
-		AirlineTransportPilot(8),
-		MultiCrewPilot(9),
-		FlightInstructor(10),
-		BasicGroundInstructor(11),
-		AdvancedGroundInstructor(12),
-		InstrumentGroundInstructor(13),
-		MultiEngineRating(14),
-		PilotExaminer(15);
+		CommercialPilot(6),
+		AirlineTransportPilot(7),
+		MultiCrewPilot(8),
+		InstrumentRating(9),
+		MultiEngineRating(10),
+		FlightInstructor(11),
+		GoldSealInstructor(12),
+		BasicGroundInstructor(13),
+		AdvancedGroundInstructor(14),
+		InstrumentGroundInstructor(15),
+		PilotExaminer(16);
 
-		private final long type;
+		private final int type;
 
-		private CertificateType(double type) {
-			this.type = (long) Math.pow(2, type);
+		private CertificateType(int type) {
+			this.type = type;
 		}
 		
-		public static long getType(CertificateType ...certificates) {
-			long type = 0;
-			for (CertificateType certificate : certificates) {
-				type |= certificate.type;
-			}
-			return type;
+		public int getType() {
+			return this.type;
 		}
 	}
 

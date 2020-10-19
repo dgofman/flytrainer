@@ -29,27 +29,26 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             { field: 'version' },
             { field: 'description' },
             { field: 'document' },
-            { field: 'notes' },
-            { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], placeholder: Locales.selAccountType, value: Object.keys(AddressType).map(value => ({ label: AddressType[value], value })) },
+            { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], value: Object.keys(AddressType).map(key => ({ label: AddressType[key], value: key })) },
             { field: 'other', type: 'hide' },
             { field: 'pobox', type: 'hide', template: 'pobox' },
             { field: 'street', header: Locales.street, type: 'input', validators: [Validators.required] },
             { field: 'city', header: Locales.city, type: 'input', validators: [Validators.required] },
-            { field: 'state', header: Locales.state, type: 'auto', validators: [Validators.required], value: State },
-            { field: 'code', header: Locales.code, type: 'mask', validators: [Validators.required], value: '99999', placeholder: 'ex. 95134' },
-            { field: 'country', header: Locales.country, type: 'auto', validators: [Validators.required], value: Country },
-            { field: 'phone', header: Locales.phone, type: 'input' },
-            { field: 'fax', header: Locales.fax, type: 'input' },
-            { field: 'isPrimary', header: Locales.isPrimary, type: 'switch' },
+            { field: 'code', header: Locales.code, type: 'input', validators: [Validators.required], placeholder: 'ex. 95134' },
+            { field: 'state', header: Locales.state, type: 'auto', validators: [Validators.required], value: State, class: 'inlineL' },
+            { field: 'country', header: Locales.country, type: 'auto', validators: [Validators.required], value: Country, class: 'inlineR' },
+            { field: 'phone', header: Locales.phone, type: 'input', class: 'inlineL' },
+            { field: 'fax', header: Locales.fax, type: 'input', class: 'inlineR' },
+            { field: 'isPrimary', header: Locales.isPrimary, type: 'switch' }
         ];
-        const controls = { notes: null };
+        const controls = { notes: this.formBuilder.group({
+            id: [null], content: [null]
+        })};
         this.controls.forEach(c => {
             controls[c.field] = new FormControl(null, c.validators);
         });
-        controls.notes = this.formBuilder.group({
-            id: [null], content: [null]
-        });
         this.formGroup = new FormGroup(controls);
+        this.onReset();
     }
 
     ngOnInit() {
@@ -81,11 +80,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
         return selectedIndex !== -1 ? this.addresses[selectedIndex] : this.onReset();
     }
 
-    findAddress(id: number) {
-        return this.addresses.filter(e => e.id === id)[0];
-    }
-
-    filterAddress(event: any, ac: AutoComplete) {
+    filterDescription(event: any, ac: AutoComplete) {
         ac.suggestions = this.addresses.filter(e => e.description.toLowerCase().indexOf(event.query.toLowerCase()) === 0);
     }
 
@@ -96,7 +91,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
         }
         address.description = this.description.inputEL.nativeElement.value;
         if (address.document) {
-            address.document.type = DocumentType.AddressProof[0];
+            address.document.type = AppUtils.getKey(DocumentType, 'AddressProof');
         }
         this.loading(true);
         if (address.id) {
@@ -134,7 +129,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
 
     onReset() {
         super.onReset();
-        const address = new Address({ isPrimary: !this.addresses.length ? 1 : 0, state: this.environment.homeState, country: this.environment.homeCountry, notes: new Note() });
+        const address = new Address({ type: AppUtils.getKey(AddressType, 'Home'), isPrimary: !this.addresses.length ? 1 : 0, state: this.environment.homeState, country: this.environment.homeCountry, notes: new Note() });
         this.formGroup.patchValue(address);
         return address;
     }
@@ -145,5 +140,5 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
     exports: [AddressTabComponent],
     declarations: [AddressTabComponent]
 })
-export class AddressTabsModule {
+export class AddressTabModule {
 }

@@ -42,6 +42,13 @@ export class AppUtils {
         AppToastComponent.add('success', mesage);
     }
 
+    static getKey(model: any, key: string) {
+        if (!model[key]) {
+            throw new Error(`The key: ${key} is not defined. Available keys: ${Object.keys(model)}`);
+        }
+        return key;
+    }
+
     static get defaultYearRange(): string{
         return ((new Date().getFullYear() - 80) + ':' + (new Date().getFullYear()));
     }

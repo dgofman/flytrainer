@@ -11,14 +11,6 @@ export class AccountTabComponent extends TabBaseDirective {
 }
 
 @Component({
-    selector: 'certificate-tab',
-    templateUrl: './certificate-tab.component.html'
-})
-export class CertificateTabComponent extends TabBaseDirective {
-    doDelete() {}
-}
-
-@Component({
     selector: 'contact-tab',
     templateUrl: './contact-tab.component.html'
 })
@@ -35,10 +27,12 @@ export class CourseTabComponent extends TabBaseDirective {
 }
 
 
+
+
 @NgModule({
   imports: [CommonModule],
-  exports: [AccountTabComponent, CertificateTabComponent, ContactTabComponent, CourseTabComponent],
-  declarations: [AccountTabComponent, CertificateTabComponent, ContactTabComponent, CourseTabComponent]
+  exports: [AccountTabComponent, ContactTabComponent, CourseTabComponent],
+  declarations: [AccountTabComponent, ContactTabComponent, CourseTabComponent]
 })
 export class TempTabsModule {
 }

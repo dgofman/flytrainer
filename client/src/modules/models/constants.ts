@@ -1,6 +1,23 @@
+import { ValidatorFn, AbstractControlOptions } from '@angular/forms';
+
 export type SHOW_COLUMNS = 'never' | true | false;
 export type FORMAT_COLUMNS = 'datetime' | 'short' | 'date' | 'bool';
 export type TYPE_COLUMNS = 'hide' | 'check' | 'cal' | 'radio' | 'input' | 'password' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask' | 'number';
+
+export interface ColumnType {
+  field: string;
+  header?: string;
+  width?: number;
+  align?: string;
+  validators?: ValidatorFn | ValidatorFn[] | AbstractControlOptions;
+  format?: FORMAT_COLUMNS;
+  show?: SHOW_COLUMNS;
+  type?: TYPE_COLUMNS;
+  class?: string;
+  value?: any;
+  template?: string;
+  placeholder?: string;
+}
 
 export interface Session {
     correlationId: number;
@@ -49,27 +66,66 @@ export enum AddressType {
 }
 
 export const DocumentType = {
-    Passport: ['Passport', 'Passport'],
-    DriverLicense: ['DriverLicense', 'Driver License'],
-    AlienResident: ['AlienResident', 'Alien Resident'],
-    Visa: ['Visa', 'Visa'],
-    PilotCertificate: ['PilotCertificate', 'Pilot Certificate'],
-    MedicalCertificate: ['MedicalCertificate', 'Medical Certificate'],
-    BirthCertificate: ['BirthCertificate', 'Birth Certificate'],
-    TSATrainingCertificate: ['TSATrainingCertificate', 'TSA Awareness Training Certificate'],
-    TSAFormI20: ['TSAFormI20', 'TSA Form I-20'],
-    TSAPaymentReceived: ['TSAPaymentReceived', 'TSA Payment Received'],
-    RentersInsuranceAgreement: ['RentersInsuranceAgreement', 'Renters Insurance Agreement'],
-    Finance: ['Finance', 'Finance'],
-    PrivatePilotPermission: ['PrivatePilotPermission', 'Private Pilot Permission'],
-    InstrumentRatingPermission: ['InstrumentRatingPermission', 'Instrument Rating Permission'],
-    MultiCommercialPermission: ['MultiCommercialPermission', 'Multi/Commercial Permission'],
-    TrainingRequest: ['TrainingRequest', 'Training Request'],
-    AircraftCheckoutRecord: ['AircraftCheckoutRecord', 'Aircraft Checkout Record'],
-    PilotPicture: ['PilotPicture', 'Pilot Picture'],
-    AddressProof: ['AddressProof', 'Address Proof of Residence'],
-    OnlineDocument: ['OnlineDocument', 'Online Document'],
-    Other: ['Other', 'Other']
+    Passport: 'Passport',
+    DriverLicense: 'Driver License',
+    AlienResident: 'Alien Resident',
+    Visa: 'Visa',
+    PilotCertificate: 'Pilot Certificate',
+    MedicalCertificate: 'Medical Certificate',
+    BirthCertificate: 'Birth Certificate',
+    TSATrainingCertificate: 'TSA Awareness Training Certificate',
+    TSAFormI20: 'TSA Form I-20',
+    TSAPaymentReceived: 'TSA Payment Received',
+    RentersInsuranceAgreement: 'Renters Insurance Agreement',
+    Finance: 'Finance',
+    PrivatePilotPermission: 'Private Pilot Permission',
+    InstrumentRatingPermission: 'Instrument Rating Permission',
+    MultiCommercialPermission: 'Multi/Commercial Permission',
+    TrainingRequest: 'Training Request',
+    AircraftCheckoutRecord: 'Aircraft Checkout Record',
+    PilotPicture: 'Pilot Picture',
+    AddressProof: 'Address Proof of Residence',
+    OnlineDocument: 'Online Document',
+    Other: 'Other'
+};
+
+export const CertificateType = {
+    StudentPilot: 'Student Pilot',
+    SportPilot: 'Sport Pilot',
+    RecreationalPilot: 'Recreational Pilot',
+    RemotePilot: 'Remote Pilot',
+    PrivatePilot: 'Private Pilot',
+    CommercialPilot: 'Commercial Pilot',
+    AirlineTransportPilot: 'Airline Transport Pilot',
+    MultiCrewPilot: 'Multi Crew Pilot',
+    InstrumentRating: 'Instrument Rating',
+    MultiEngineRating: 'Multi-Engine Rating',
+    FlightInstructor: 'Flight Instructor',
+    GoldSealInstructor: 'Gold Seal Instructor',
+    BasicGroundInstructor: 'Basic Ground Instructor',
+    AdvancedGroundInstructor: 'Advanced Ground Instructor',
+    InstrumentGroundInstructor: 'Instrument Ground Instructor',
+    PilotExaminer: 'Pilot Examiner',
+    Other: 'Other'
+};
+
+export const AircraftCategoryClass = {
+    SingleEngineLand: 'Single Engine Land',
+    SingleEngineSea: 'Single Engine Sea',
+    MultiengineLand: 'Multi-Engine Land',
+    MultiengineSea: 'Multi-Engine Sea',
+    Rotorcraft: 'Rotorcraft',
+    Helicopter: 'Helicopter',
+    Gyroplane: 'Gyroplane',
+    Balloon: 'Balloon',
+    Airship: 'Airship',
+    Glider: 'Glider',
+    PoweredLift: 'Powered Lift',
+    WeightShift: 'Weight Shift',
+    PoweredParachute: 'Powered Parachute',
+    Rocket: 'Rocket',
+    Sim: 'Simulator',
+    UAV: 'Unmanned Aerial Vehicle'
 };
 
 export enum Country {

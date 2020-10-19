@@ -9,6 +9,7 @@ import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '../admin-shared.module';
 import { TableResult } from 'src/modules/models/table.result';
+import { AppUtils } from 'src/app/utils/app-utils';
 
 @Component({
     selector: 'document-tab',
@@ -29,7 +30,7 @@ export class DocumentTabComponent extends TabBaseDirective {
             { field: 'id' },
             { field: 'version' },
             { field: 'description', header: Locales.description, type: 'input' },
-            { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], value: Object.keys(DocumentType).map(key => ({ label: DocumentType[key][1], value: key })) },
+            { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], value: Object.keys(DocumentType).map(key => ({ label: DocumentType[key], value: key })) },
             { field: 'other', type: 'hide' },
             { field: 'url', type: 'hide', template: 'url' },
             { field: 'fileName', header: Locales.fileName, type: 'input', class: 'inlineL' },
@@ -60,7 +61,7 @@ export class DocumentTabComponent extends TabBaseDirective {
             this.loading(true);
             this.adminService.getDocument(this.user.id, bean.id).subscribe(document => {
                 this.loading(false);
-                this.formGroup.patchValue(this.patch(document));
+                this.formGroup.patchValue(document);
             }, (ex) => this.errorHandler(ex));
         } else {
             this.onReset();
@@ -68,7 +69,7 @@ export class DocumentTabComponent extends TabBaseDirective {
     }
 
     getType(key: any) {
-        return DocumentType[key][1];
+        return DocumentType[key];
     }
 
     lazyLoad(event?: LazyLoadEvent) {
@@ -87,7 +88,7 @@ export class DocumentTabComponent extends TabBaseDirective {
             if (this.selectedBean) {
                 Object.assign(this.selectedBean, result);
             }
-            this.formGroup.patchValue(this.patch(result));
+            this.formGroup.patchValue(result);
             this.success(document.id ? Locales.recordUpdated : Locales.recordCreated);
         }, (ex) => this.errorHandler(ex));
     }
@@ -202,7 +203,7 @@ export class DocumentTabComponent extends TabBaseDirective {
     }
 
     onReset() {
-        this.formGroup.patchValue({ type: DocumentType.PilotPicture[0], pageNumber: 1, isFrontSide: 1 });
+        this.formGroup.patchValue({ type: AppUtils.getKey(DocumentType, 'PilotPicture'), pageNumber: 1, isFrontSide: 1 });
     }
 }
 
@@ -211,5 +212,5 @@ export class DocumentTabComponent extends TabBaseDirective {
     exports: [DocumentTabComponent],
     declarations: [DocumentTabComponent]
 })
-export class DocumentTabsModule {
+export class DocumentTabModule {
 }

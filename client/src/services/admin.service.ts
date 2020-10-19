@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Address } from 'src/modules/models/address';
+import { Certificate } from 'src/modules/models/certificate';
 import { Document } from 'src/modules/models/document';
 import { TableResult } from 'src/modules/models/table.result';
 
@@ -26,6 +27,23 @@ export class AdminService {
 
     public deleteAddress(userId: number, addressId: number): Observable<void> {
         return this.http.delete<void>(`/address/${userId}/${addressId}`);
+    }
+
+    // Certificate
+    public addCertificate(userId: number, model: Certificate): Observable<Certificate> {
+        return this.http.post<Certificate>(`/certificate/${userId}`, model);
+    }
+
+    public getCertificate(userId: number): Observable<Certificate[]> {
+        return this.http.get<Certificate[]>(`/certificate/${userId}`);
+    }
+
+    public updateCertificate(userId: number, model: Certificate): Observable<Certificate> {
+        return this.http.patch<Certificate>(`/certificate/${userId}`, model);
+    }
+
+    public deleteCertificate(userId: number, addressId: number): Observable<void> {
+        return this.http.delete<void>(`/certificate/${userId}/${addressId}`);
     }
 
     // Document

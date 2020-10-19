@@ -15,10 +15,10 @@ import { FTDialogvModule } from '../component/ft-dialog/ft-dialog.component';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule} from 'primeng/confirmdialog';
 import { FTPipeModule } from '../utils/pipes';
-import { AddressTabsModule } from './tabs/address-tab.component';
-import { DocumentTabsModule } from './tabs/document-tab.component';
+import { AddressTabModule } from './tabs/address-tab.component';
+import { CertificateTabModule } from './tabs/certificate-tab.component';
+import { DocumentTabModule } from './tabs/document-tab.component';
 import { TempTabsModule } from './tabs/temp.tabs.module';
-
 
 @NgModule({
   imports: [
@@ -34,8 +34,9 @@ import { TempTabsModule } from './tabs/temp.tabs.module';
     FontAwesomeModule,
     ConfirmDialogModule,
     TempTabsModule,
-    AddressTabsModule,
-    DocumentTabsModule,
+    AddressTabModule,
+    CertificateTabModule,
+    DocumentTabModule,
     FTDialogvModule,
     FTMenuModule,
     FTTableModule,

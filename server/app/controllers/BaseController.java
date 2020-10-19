@@ -51,9 +51,9 @@ public class BaseController extends Controller {
 
 	public Result okResult(Object data, Class<?> serializationView, FilterProvider filter) {
 		ObjectMapper objectMapper = new ObjectMapper();
-		//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 		objectMapper.setDateFormat(dateFormat);
 		objectMapper.registerModule(new JavaTimeModule());
+		//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
 		if (filter != null) {
 			objectMapper.setFilterProvider(filter);

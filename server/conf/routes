@@ -22,6 +22,11 @@ GET     /address/:userId                controllers.AddressController.getAddress
 PATCH   /address/:userId                controllers.AddressController.updateAddress(request: Request, userId: Long)
 DELETE  /address/:userId/:addId         controllers.AddressController.deleteAddress(request: Request, userId: Long, addId: Integer)
 
+POST    /certificate/:userId            controllers.CertificateController.addCertificate(request: Request, userId: Long)
+GET     /certificate/:userId            controllers.CertificateController.getCertificate(userId: Long)
+PATCH   /certificate/:userId            controllers.CertificateController.updateCertificate(request: Request, userId: Long)
+DELETE  /certificate/:userId/:addId     controllers.CertificateController.deleteCertificate(request: Request, userId: Long, addId: Integer)
+
 POST    /file/:userId                   controllers.DocumentController.saveFile(request: Request, userId: Long)
 GET     /file/:userId/:docId            controllers.DocumentController.getFile(userId: Long, docId: Long)
 

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.ebean.Ebean;
 import io.ebean.Transaction;
+import models.AbstractBase.Short;
 import models.Address;
 import models.User;
 import play.libs.Json;
@@ -18,16 +19,13 @@ import utils.Constants.Access;
 import utils.DocumentUtils;
 import utils.NotesUtils;
 
-import models.AbstractBase.Short;
-
 @BasicAuth({ Access.ASSISTANT, Access.MANAGER, Access.ADMIN })
 public class AddressController extends BaseController {
 
 	public Result getAddress(Long userId) {
 		log.debug("AddressController::getAddress for user=" + userId);
 		try {
-			List<Address> addresses = Ebean.createNamedQuery(Address.class, Address.FIND_BY_USERID)
-					.setParameter("userId", userId).findList();
+			List<Address> addresses = Ebean.find(Address.class).where().eq("user", new User(userId)).findList();
 			return okResult(addresses, Short.class);
 		} catch (Exception e) {
 			return badRequest(e);

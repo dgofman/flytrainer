@@ -3,12 +3,15 @@ package models;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import io.ebean.annotation.DbJson;
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
@@ -26,7 +29,9 @@ public class Aircraft extends BaseModel {
 
 	public long categories = AircraftCategory.getType(AircraftCategory.Normal); //categories
 	
-	public long specifications = AircraftSpecification.getType(AircraftSpecification.ForHire); //specifications
+	@DbJson
+	@Column(name = "spec")
+	public Map<AircraftSpecification, Boolean> specifications;
 
 	@Length(30)
 	public String other; //other

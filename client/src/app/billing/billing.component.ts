@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../authentication/auth.service';
 import { AppBaseDirective } from '../app.base.component';
 import { Validators } from '@angular/forms';
-import { ColumnType } from '../component/ft-table/ft-table.component';
+import { ColumnType } from 'src/modules/models/constants';
 
 @Component({
   templateUrl: './billing.component.html',

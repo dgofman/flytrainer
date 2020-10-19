@@ -4,20 +4,20 @@ import { OverlayPanelModule} from 'primeng/overlaypanel';
 import { Directive, Input, NgModule, EventEmitter, Output, Component, TemplateRef, AfterContentInit, ContentChildren, QueryList, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TableModule, Table } from 'primeng/table';
-import {TooltipModule } from 'primeng/tooltip';
+import { TooltipModule } from 'primeng/tooltip';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
 import { BaseModel } from 'src/modules/models/base.model';
 import { DropdownModule } from 'primeng/dropdown';
-import { AbstractControlOptions, ValidatorFn, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FTFormControl } from '../../utils/ft-form.control';
 import { AppUtils } from '../../utils/app-utils';
 import { DomHandler } from 'primeng/dom';
 import { TableResult } from 'src/modules/models/table.result';
 import { FTStatePipe, FTPipeModule } from 'src/app/utils/pipes';
-import { FORMAT_COLUMNS, SHOW_COLUMNS, TYPE_COLUMNS } from 'src/modules/models/constants';
+import { ColumnType } from 'src/modules/models/constants';
 
 export type FTTableEvent = {
   first: number,
@@ -35,21 +35,6 @@ export enum EventType {
 export interface EmitEvent {
   message: EventType;
   data: any;
-}
-
-export interface ColumnType {
-  field: string;
-  header?: string;
-  width?: number;
-  align?: string;
-  validators?: ValidatorFn | ValidatorFn[] | AbstractControlOptions;
-  format?: FORMAT_COLUMNS;
-  show?: SHOW_COLUMNS;
-  type?: TYPE_COLUMNS;
-  class?: string;
-  value?: any;
-  template?: string;
-  placeholder?: string;
 }
 
 @Component({

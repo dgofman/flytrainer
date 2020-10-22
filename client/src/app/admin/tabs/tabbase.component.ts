@@ -1,6 +1,6 @@
 import Locales from '@locales/admin';
 import { User } from 'src/modules/models/user';
-import { Document } from 'src/modules/models/document';
+import { Document } from 'src/modules/models/base.model';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { AppBaseDirective } from 'src/app/app.base.component';
@@ -64,7 +64,7 @@ export abstract class TabBaseDirective extends AppBaseDirective {
     controls: ColumnType[];
 
     // tslint:disable-next-line: variable-name
-    private _selectedBean: AbstractBase;
+    protected _selectedBean: AbstractBase;
 
     @Input() user: User;
 

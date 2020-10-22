@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import controllers.DocumentController;
 import io.ebean.Ebean;
 import io.ebean.Query;
@@ -80,11 +78,11 @@ public class DocumentUtils {
 		}
 	}
 
-	public static JsonNode delete(BaseModel model) {
+	public static void delete(BaseModel model) throws IOException {
 		Document document = model.getDocument();
 		if (document != null) {
 			Ebean.find(Document.class).where().eq("id", document.id).delete();
 		}
-		return null;
+		model.setDocument(null);
 	}
 }

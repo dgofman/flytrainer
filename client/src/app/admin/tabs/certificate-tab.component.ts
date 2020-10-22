@@ -1,12 +1,11 @@
 import Locales from '@locales/admin';
 import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Certificate } from 'src/modules/models/certificate';
+import { CommonModel, Note } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { AircraftCategoryClass, DocumentType, CertificateType } from 'src/modules/models/constants';
 import { TabBaseDirective, TabBaseModule } from './tabbase.component';
 import { ConfirmationService } from 'primeng/api';
-import { Note } from 'src/modules/models/base.model';
 import { AppUtils } from 'src/app/utils/app-utils';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '../admin-shared.module';
@@ -17,7 +16,7 @@ import { AutoComplete } from 'primeng/autocomplete/public_api';
     templateUrl: './certificate-tab.component.html'
 })
 export class CertificateTabComponent extends TabBaseDirective implements OnInit {
-    certificates: Certificate[];
+    certificates: CommonModel[];
     aircraftCategory = AircraftCategoryClass;
 
     @ViewChild('desc') description: AutoComplete;
@@ -41,21 +40,20 @@ export class CertificateTabComponent extends TabBaseDirective implements OnInit 
             { field: 'isSuspended' },
             { field: 'isWithdrawn' }
         ];
-        const types = {};
+        const fields = {};
         Object.keys(AircraftCategoryClass).forEach(key => {
-            types[key] = [null];
+            fields[key] = [null];
         });
         const controls = {
             notes: this.formBuilder.group({
                 id: [null], content: [null]
             }),
-            aircraftClass: this.formBuilder.group(types)
+            aircraftClass: this.formBuilder.group(fields)
         };
         this.controls.forEach(c => {
             controls[c.field] = new FormControl(null, c.validators);
         });
         this.formGroup = new FormGroup(controls);
-        this.onReset();
     }
 
     ngOnInit() {
@@ -67,7 +65,7 @@ export class CertificateTabComponent extends TabBaseDirective implements OnInit 
         }, (ex) => this.errorHandler(ex));
     }
 
-    updateCertificateList(update?: Certificate) {
+    updateCertificateList(update?: CommonModel) {
         let selectedIndex = -1;
         if (this.certificates.length) {
             selectedIndex = 0;
@@ -87,16 +85,13 @@ export class CertificateTabComponent extends TabBaseDirective implements OnInit 
     }
 
     onSubmit() {
-        const certificate = new Certificate(this.formGroup.value as any);
-        if (AppUtils.isBlank(this.description.inputEL.nativeElement.value)) {
-            this.description.inputEL.nativeElement.value = certificate.type;
-        }
-        certificate.description = this.description.inputEL.nativeElement.value;
+        this.loading(true);
+        const certificate = new CommonModel(this.formGroup.value);
         if (certificate.document) {
             certificate.document.type = AppUtils.getKey(DocumentType, 'PilotCertificate');
         }
-        this.loading(true);
         if (certificate.id) {
+            certificate.description = this.description.inputEL.nativeElement.value;
             this.adminService.updateCertificate(this.user.id, certificate).subscribe(result => {
                 this.loading(false);
                 this.updateCertificateList(result);
@@ -104,6 +99,10 @@ export class CertificateTabComponent extends TabBaseDirective implements OnInit 
                 this.success(Locales.recordUpdated);
             }, (ex) => this.errorHandler(ex));
         } else {
+            if (AppUtils.isBlank(this.description.inputEL.nativeElement.value)) {
+                this.description.inputEL.nativeElement.value = certificate.type;
+            }
+            certificate.description = this.description.inputEL.nativeElement.value;
             this.adminService.addCertificate(this.user.id, certificate).subscribe(result => {
                 this.loading(false);
                 this.certificates.push(result);
@@ -131,7 +130,7 @@ export class CertificateTabComponent extends TabBaseDirective implements OnInit 
 
     onReset() {
         super.onReset();
-        const certificate = new Certificate({ type: AppUtils.getKey(CertificateType, 'PrivatePilot'), aircraftClass: {}, notes: new Note() });
+        const certificate = new CommonModel({ type: AppUtils.getKey(CertificateType, 'PrivatePilot'), aircraftClass: {}, notes: new Note() });
         this.formGroup.patchValue(certificate);
         return certificate;
     }

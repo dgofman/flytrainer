@@ -1,4 +1,4 @@
-import { NgModule, Directive, HostListener, Input, DoCheck, Optional, OnInit } from '@angular/core';
+import { NgModule, Directive, HostListener, Input, DoCheck, Optional, AfterViewInit } from '@angular/core';
 import { FormGroupDirective, NgControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AutoComplete } from 'primeng/autocomplete';
@@ -10,14 +10,13 @@ import Locales from '@locales/common';
         class: 'table-dropdown'
     }
 })
-export class FTAutoCompleteDirective implements DoCheck, OnInit {
+export class FTAutoCompleteDirective implements DoCheck, AfterViewInit {
 
     @Input() data: any;
     @Input() dataField: string;
     @Input() field: string;
     @Input() placeholder: string;
 
-    private formControls: any;
     private selectedItem: any;
     private suggests: Array<any>;
 
@@ -28,7 +27,7 @@ export class FTAutoCompleteDirective implements DoCheck, OnInit {
         ac.dropdown = true;
     }
 
-    ngOnInit(): void {
+    ngAfterViewInit(): void {
         if (!this.dataField && this.control) {
             this.dataField = String(this.control.name);
         }
@@ -48,22 +47,28 @@ export class FTAutoCompleteDirective implements DoCheck, OnInit {
         }
 
         this.ac.field = this.field;
-
-        if (this.formGroup) {
-            this.formGroup.valueChanges.subscribe(value => {
-                    const data = value[this.control.name];
-                    this.formControls = value;
-                    this.suggests.forEach(e => {
-                        if (e[this.field] === data || e[this.dataField] === data) {
-                            this.selectedItem = e;
-                            this.ac.inputEL.nativeElement.value = this.selectedItem ? this.selectedItem[this.field] : null;
-                            return;
-                        }
-                        this.formControls[this.control.name] = this.selectedItem ? this.selectedItem[this.dataField] : null;
-                    });
-                }
-            );
+        this.formGroup.valueChanges.subscribe(val => {
+            this.valueChanges(val[this.control.name]);
+        });
+        const value = this.formGroup.form.value[this.control.name];
+        if (value) {
+            this.valueChanges(value);
         }
+    }
+
+    valueChanges(data: any) {
+        this.suggests.forEach(e => {
+            if (e[this.field] === data || e[this.dataField] === data || (data instanceof Object && e[this.dataField] === data[this.dataField])) {
+                this.selectedItem = e;
+                this.updateValue();
+                return false;
+            }
+        });
+    }
+
+    updateValue() {
+        this.formGroup.form.value[this.control.name] = this.selectedItem ? this.selectedItem[this.dataField] : null;
+        this.ac.inputEL.nativeElement.value = this.selectedItem ? this.selectedItem[this.field] : null;
     }
 
     ngDoCheck() {
@@ -99,8 +104,7 @@ export class FTAutoCompleteDirective implements DoCheck, OnInit {
         } else {
             this.selectedItem = option;
         }
-        this.formControls[this.control.name] = this.selectedItem ? this.selectedItem[this.dataField] : null;
-        this.ac.inputEL.nativeElement.value = this.selectedItem ? this.selectedItem[this.field] : null;
+        this.updateValue();
     }
 }
 

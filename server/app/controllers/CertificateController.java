@@ -80,7 +80,7 @@ public class CertificateController extends BaseController {
 		}
 	}
 
-	public Result deleteCertificate(Http.Request request, Long userId, Integer certificateId) {
+	public Result deleteCertificate(Http.Request request, Long userId, Long certificateId) {
 		log.debug("CertificateController::deleteCertificate id=" + certificateId + ", for user=" + userId);
 		User currentUser = request.attrs().get(User.MODEL);
 		Transaction transaction = Ebean.beginTransaction();
@@ -89,9 +89,8 @@ public class CertificateController extends BaseController {
 			if (dbCertificate == null) {
 				return createBadRequest("nocertificate", Constants.Errors.ERROR);
 			}
-			dbCertificate.setNotes(NotesUtils.delete(dbCertificate));
-			dbCertificate.setNotes(DocumentUtils.delete(dbCertificate));
-			dbCertificate.setDocument(null);
+			NotesUtils.delete(dbCertificate);
+			DocumentUtils.delete(dbCertificate);
 			dbCertificate.delete(currentUser);
 			transaction.commit();
 			return ok();

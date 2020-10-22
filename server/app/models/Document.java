@@ -35,7 +35,7 @@ public class Document extends AbstractBase {
 	public String reference; //Class name
 
 	@NotNull
-	@JsonView(Short.class)
+	@JsonView(Default.class)
 	public DocumentType type = DocumentType.DriverLicense;
 
 	@Length(30)
@@ -46,7 +46,7 @@ public class Document extends AbstractBase {
 	@JsonView(Full.class)
 	public String description; //description
 
-	@JsonView(Short.class)
+	@JsonView(Default.class)
 	public Integer pageNumber = 1; //page_number
 
 	@JsonView(Full.class)
@@ -88,7 +88,7 @@ public class Document extends AbstractBase {
 	public String contentType;
 
 	@Column(name = "size")
-	@JsonView(Default.class)
+	@JsonView(Short.class)
 	public Long size;
 
 	@JsonView(Full.class)

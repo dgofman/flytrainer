@@ -2,8 +2,6 @@ package utils;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import io.ebean.Ebean;
 import models.Aircraft;
 import models.BaseModel;
@@ -44,11 +42,11 @@ public class NotesUtils {
 		}
 	}
 
-	public static JsonNode delete(BaseModel model) {
+	public static void delete(BaseModel model) throws IOException {
 		Note notes = model.getNotes();
 		if (notes != null) {
 			Ebean.find(Note.class).where().eq("id", notes.id).delete();
 		}
-		return null;
+		model.setNotes(null);
 	}
 }

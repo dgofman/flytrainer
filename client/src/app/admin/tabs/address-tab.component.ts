@@ -1,13 +1,12 @@
 import Locales from '@locales/admin';
 import { Component, NgModule, ViewChild, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Address } from 'src/modules/models/address';
 import { AdminService } from 'src/services/admin.service';
 import { AutoComplete } from 'primeng/autocomplete';
 import { Country, State, AddressType, DocumentType } from 'src/modules/models/constants';
 import { TabBaseDirective, TabBaseModule } from './tabbase.component';
 import { ConfirmationService } from 'primeng/api';
-import { Note } from 'src/modules/models/base.model';
+import { Address, Note } from 'src/modules/models/base.model';
 import { AppUtils } from 'src/app/utils/app-utils';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '../admin-shared.module';
@@ -48,7 +47,6 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             controls[c.field] = new FormControl(null, c.validators);
         });
         this.formGroup = new FormGroup(controls);
-        this.onReset();
     }
 
     ngOnInit() {
@@ -81,27 +79,27 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
     }
 
     filterDescription(event: any, ac: AutoComplete) {
-        ac.suggestions = this.addresses.filter(e => e.description.toLowerCase().indexOf(event.query.toLowerCase()) === 0);
+        ac.suggestions = this.addresses.filter(e => (e.description || '').toLowerCase().indexOf(event.query.toLowerCase()) === 0);
     }
 
     onSubmit() {
-        const address = new Address(this.formGroup.value as any);
-        if (AppUtils.isBlank(this.description.inputEL.nativeElement.value)) {
-            this.description.inputEL.nativeElement.value = address.type;
-        }
-        address.description = this.description.inputEL.nativeElement.value;
-        if (address.document) {
-            address.document.type = AppUtils.getKey(DocumentType, 'AddressProof');
-        }
         this.loading(true);
+        const address = new Address(this.formGroup.value as any);
         if (address.id) {
+            address.description = this.description.inputEL.nativeElement.value;
             this.adminService.updateAddress(this.user.id, address).subscribe(result => {
                 this.loading(false);
-                this.updateAddressList(result);
-                this.selectedBean = result;
+                this.selectedBean = this.updateAddressList(result);
                 this.success(Locales.recordUpdated);
             }, (ex) => this.errorHandler(ex));
         } else {
+            if (AppUtils.isBlank(this.description.inputEL.nativeElement.value)) {
+                this.description.inputEL.nativeElement.value = address.type;
+            }
+            address.description = this.description.inputEL.nativeElement.value;
+            if (address.document) {
+                address.document.type = AppUtils.getKey(DocumentType, 'AddressProof');
+            }
             this.adminService.addAddress(this.user.id, address).subscribe(result => {
                 this.loading(false);
                 this.addresses.push(result);

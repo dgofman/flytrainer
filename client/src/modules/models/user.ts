@@ -1,5 +1,4 @@
 import { BaseModel } from './base.model';
-import { Account } from './account';
 
 export class User extends BaseModel {
     username: string;
@@ -24,5 +23,5 @@ export class User extends BaseModel {
     protected ssn: string;
     protected password: string;
 
-    currentAccount: Account;
+    currentAccount: BaseModel;
 }

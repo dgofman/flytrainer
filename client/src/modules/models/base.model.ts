@@ -1,5 +1,3 @@
-import { Document } from './document';
-
 export class  AbstractBase {
     protected version: number;
     id: number;
@@ -34,4 +32,25 @@ export class BaseModel extends AbstractBase {
     constructor(json?: any) {
         super(json);
     }
+}
+
+export class CommonModel extends BaseModel {
+    type: string;
+    description: string;
+    address: Address;
+}
+
+export class Address extends CommonModel {
+    isPrimary: number;
+}
+
+export class Document extends CommonModel {
+    file: any;
+    fileName: string;
+    filePath: string;
+    contentType: string;
+    size: number;
+    pageNumber: number;
+    parentId: number;
+    total: number;
 }

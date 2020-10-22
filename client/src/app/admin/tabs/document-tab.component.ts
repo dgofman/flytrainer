@@ -1,7 +1,7 @@
 import Locales from '@locales/admin';
 import { Component, NgModule } from '@angular/core';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
-import { Document } from 'src/modules/models/document';
+import { Document } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { DocumentType } from 'src/modules/models/constants';
 import { TabBaseDirective, TabBaseModule } from './tabbase.component';

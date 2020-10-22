@@ -127,7 +127,7 @@ public class DocumentController extends BaseController {
 			Query<Document> query = Ebean.findNative(Document.class, Document.FIND_DOCUMENTS + " and parent_id is null").setParameter("userId", userId);
 			int total = query.findCount();
 			List<Document> documents = query.setFirstRow(offset).setMaxRows(rows).findList();
-			return okResult(new TableResult(offset, total, documents), BaseModel.Short.class);
+			return okResult(new TableResult(offset, total, documents), BaseModel.Default.class);
 		} catch (Exception e) {
 			return badRequest(e);
 		}

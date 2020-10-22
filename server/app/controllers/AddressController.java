@@ -86,7 +86,7 @@ public class AddressController extends BaseController {
 		}
 	}
 
-	public Result deleteAddress(Http.Request request, Long userId, Integer addressId) {
+	public Result deleteAddress(Http.Request request, Long userId, Long addressId) {
 		log.debug("AddressController::deleteAddress id=" + addressId + ", for user=" + userId);
 		User currentUser = request.attrs().get(User.MODEL);
 		Transaction transaction = Ebean.beginTransaction();
@@ -95,9 +95,14 @@ public class AddressController extends BaseController {
 			if (dbAddress == null) {
 				return createBadRequest("noaddress", Constants.Errors.ERROR);
 			}
-			dbAddress.setNotes(NotesUtils.delete(dbAddress));
-			dbAddress.setNotes(DocumentUtils.delete(dbAddress));
-			dbAddress.setDocument(null);
+			if (dbAddress.reference != null) {
+				Ebean.find(Class.forName("models." + dbAddress.reference)).asUpdate()
+					.set("address", null).where()
+					.eq("address", dbAddress)
+					.eq("user", dbAddress.user).update();
+			}
+			NotesUtils.delete(dbAddress);
+			DocumentUtils.delete(dbAddress);
 			dbAddress.delete(currentUser);
 			transaction.commit();
 			return ok();

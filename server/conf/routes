@@ -20,12 +20,18 @@ DELETE  /users/:userId                  controllers.UserController.deleteUser(re
 POST    /address/:userId                controllers.AddressController.addAddress(request: Request, userId: Long)
 GET     /address/:userId                controllers.AddressController.getAddress(userId: Long)
 PATCH   /address/:userId                controllers.AddressController.updateAddress(request: Request, userId: Long)
-DELETE  /address/:userId/:addId         controllers.AddressController.deleteAddress(request: Request, userId: Long, addId: Integer)
+DELETE  /address/:userId/:addId         controllers.AddressController.deleteAddress(request: Request, userId: Long, addId: Long)
 
 POST    /certificate/:userId            controllers.CertificateController.addCertificate(request: Request, userId: Long)
 GET     /certificate/:userId            controllers.CertificateController.getCertificate(userId: Long)
 PATCH   /certificate/:userId            controllers.CertificateController.updateCertificate(request: Request, userId: Long)
-DELETE  /certificate/:userId/:addId     controllers.CertificateController.deleteCertificate(request: Request, userId: Long, addId: Integer)
+DELETE  /certificate/:userId/:addId     controllers.CertificateController.deleteCertificate(request: Request, userId: Long, addId: Long)
+
+POST    /contact/:userId                controllers.ContactController.addContact(request: Request, userId: Long)
+GET     /contact/:userId                controllers.ContactController.getContacts(userId: Long, offset: Integer, rows: Integer)
+GET     /contact/:userId/:cId           controllers.ContactController.getContact(userId: Long, cId: Long)
+PATCH   /contact/:userId                controllers.ContactController.updateContact(request: Request, userId: Long)
+DELETE  /contact/:userId/:cId           controllers.ContactController.deleteContact(request: Request, userId: Long, cId: Long)
 
 POST    /file/:userId                   controllers.DocumentController.saveFile(request: Request, userId: Long)
 GET     /file/:userId/:docId            controllers.DocumentController.getFile(userId: Long, docId: Long)

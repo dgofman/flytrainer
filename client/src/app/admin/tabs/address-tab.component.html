@@ -34,8 +34,8 @@
         <button class="ui-button " (click)="onSubmit()" [disabled]="!myForm.form.valid">{{Locales.save}}</button>
     </div>
 </div>
-<ng-template #pobox let-c="control" let-group="formGroup">
-    <div *ngIf="formGroup.controls.type.value != 'Home'" [formGroup]="group">
+<ng-template #pobox let-group="group">
+    <div class="noshadow" *ngIf="group.controls.type.value != 'Home'" [formGroup]="group">
         <label>{{Locales.pobox}}</label>
         <input formControlName="pobox" pInputText/>
     </div>

@@ -1,4 +1,19 @@
 <form [formGroup]="formGroup" #myForm="ngForm" class="p-grid document">
+    <div class="ui-fluid p-md-7" style="padding-top: 0">
+        <div *ngFor="let control of controls" [class]="control.class">
+            <admin-field [parentGroup]="formGroup" [c]="control" [templates]="{ path: filePath, url: url }"></admin-field>
+        </div>
+        <div class="row">
+            <p-checkbox [label]="Locales.isFrontSide" binary="true" formControlName="isFrontSide" class="gap"></p-checkbox>
+            <p-checkbox [label]="Locales.isSuspended" binary="true" formControlName="isSuspended" class="gap"></p-checkbox>
+            <p-checkbox [label]="Locales.isWithdrawn" binary="true" formControlName="isWithdrawn"></p-checkbox>
+        </div>
+        <div class="row" *ngIf="selectedBean?.id">
+            <h3>{{Locales.preview}}</h3>
+            <a href="/file/{{user.id}}/{{selectedBean.id}}?token={{token}}" download>{{Locales.download}}</a>
+            <img style="max-width: 100%" src="/file/{{user.id}}/{{selectedBean.id}}?token={{token}}" onerror="this.src='/assets/no-image-available.jpeg';"/>
+        </div>
+    </div>
     <div class="ui-fluid p-md-5">
         <p-table [value]="result?.data" [lazy]="true" (onLazyLoad)="lazyLoad($event)" [(selection)]="selectedBean"
             [paginator]="true" [rows]="25" [totalRecords]="result?.total" [scrollable]="true">
@@ -19,7 +34,7 @@
             <ng-template pTemplate="body" let-doc>
                 <tr>
                     <td style="cursor: pointer" (click)="onToggle(doc)" aria-hidden="true">
-                        <span class="pi {{doc.expended ? 'pi-chevron-down' : 'pi-chevron-right'}}" [style.visibility]="doc.total > 1 ? 'visible' : 'hidden'"></span>
+                        <span class="pi {{doc.expanded ? 'pi-chevron-down' : 'pi-chevron-right'}}" [style.visibility]="doc.total > 1 ? 'visible' : 'hidden'"></span>
                         {{doc.pageNumber}}<span *ngIf="!doc.parentId"> / {{doc.total}}</span>
                     </td>
                     <td *ngIf="!doc.parent"><b>{{getType(doc.type)}}</b><br>{{doc.fileName}}</td>
@@ -39,21 +54,6 @@
                 </div>
             </ng-template>
         </p-table>
-    </div>
-    <div class="ui-fluid p-md-7" style="padding-top: 0">
-        <div *ngFor="let control of controls" [class]="control.class">
-            <admin-field [parentGroup]="formGroup" [c]="control" [templates]="{ path: filePath, url: url }"></admin-field>
-        </div>
-        <div class="row">
-            <p-checkbox [label]="Locales.isFrontSide" binary="true" formControlName="isFrontSide" class="gap"></p-checkbox>
-            <p-checkbox [label]="Locales.isSuspended" binary="true" formControlName="isSuspended" class="gap"></p-checkbox>
-            <p-checkbox [label]="Locales.isWithdrawn" binary="true" formControlName="isWithdrawn"></p-checkbox>
-        </div>
-        <div class="row" *ngIf="selectedBean">
-            <h3>{{Locales.preview}}</h3>
-            <a href="/file/{{user.id}}/{{selectedBean.id}}?token={{token}}" download>{{Locales.download}}</a>
-            <img style="max-width: 100%" src="/file/{{user.id}}/{{selectedBean.id}}?token={{token}}" onerror="this.src='/assets/no-image-available.jpeg';"/>
-        </div>
     </div>
 </form>
 <div class="row footer left">

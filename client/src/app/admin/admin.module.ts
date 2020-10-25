@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { UserService } from 'src/services/user.service';
 import { AdminService } from 'src/services/admin.service';
 import { AdminComponent } from './admin.component';
 import { RouterModule } from '@angular/router';
@@ -20,6 +19,7 @@ import { ContactTabModule } from './tabs/contact-tab.component';
 import { CertificateTabModule } from './tabs/certificate-tab.component';
 import { DocumentTabModule } from './tabs/document-tab.component';
 import { TempTabsModule } from './tabs/temp.tabs.module';
+import { UserTabModule } from './tabs/user-tab.component';
 
 @NgModule({
   imports: [
@@ -39,6 +39,7 @@ import { TempTabsModule } from './tabs/temp.tabs.module';
     ContactTabModule,
     CertificateTabModule,
     DocumentTabModule,
+    UserTabModule,
     FTDialogvModule,
     FTMenuModule,
     FTTableModule,
@@ -49,7 +50,6 @@ import { TempTabsModule } from './tabs/temp.tabs.module';
   ],
   providers: [
     ConfirmationService,
-    UserService,
     AdminService,
     {
       provide: HTTP_INTERCEPTORS,

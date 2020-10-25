@@ -40,8 +40,17 @@ export class CommonModel extends BaseModel {
     address: Address;
 }
 
+export class User extends CommonModel {
+    first: string;
+    last: string;
+}
+
 export class Address extends CommonModel {
     isPrimary: number;
+}
+
+export class Contact extends CommonModel {
+    relationship: string;
 }
 
 export class Document extends CommonModel {

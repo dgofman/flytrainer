@@ -1,12 +1,9 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import io.ebean.annotation.History;
@@ -54,9 +51,6 @@ public class Maintenance extends BaseModel {
 	public byte isCritical = 0; //is_critical
 	
 	public byte isESign = 0; //is_esign
-
-	@OneToMany(mappedBy = "maintenance")
-	public List<AD> ads = new ArrayList<>(); //AD::maintenance_id
 
 	@ManyToOne
 	public Account mechanic; //mechanic_id

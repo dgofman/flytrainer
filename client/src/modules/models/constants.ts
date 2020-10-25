@@ -35,13 +35,6 @@ export enum Role {
     ADMIN = 'ADMIN'
 }
 
-export const RoleType = [
-    Role.USER,
-    Role.ASSISTANT,
-    Role.MANAGER,
-    Role.ADMIN
-];
-
 export enum AccountType {
     STUDENT,
     PILOT,
@@ -55,7 +48,7 @@ export enum AddressType {
     Business = 'Business',
     Billing = 'Billing',
     Shipping = 'Shipping',
-    Contract = 'Contract',
+    Contact = 'Contact',
     Hangar = 'Hangar',
     Shelter = 'Shelter',
     Tiedown = 'Tiedown',

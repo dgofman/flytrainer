@@ -1,11 +1,11 @@
 import Locales from '@locales/admin';
 import { Component, ViewChild } from '@angular/core';
-import { UserService } from 'src/services/user.service';
-import { User } from 'src/modules/models/user';
+import { AdminService } from 'src/services/admin.service';
+import { User } from 'src/modules/models/base.model';
 import { AuthService } from '../authentication/auth.service';
 import { AppBaseDirective } from '../app.base.component';
 import { EmitEvent, EventType } from '../component/ft-table/ft-table.component';
-import { RoleType, ColumnType } from 'src/modules/models/constants';
+import { Role, ColumnType } from 'src/modules/models/constants';
 import { FTIcons } from '../component/ft-menu/ft-menu.component';
 import { Validators } from '@angular/forms';
 import { FTDialogComponent } from '../component/ft-dialog/ft-dialog.component';
@@ -31,7 +31,7 @@ export class AdminComponent extends AppBaseDirective {
     { field: 'email', type: 'input', show: true, header: Locales.email, width: 200, validators: [Validators.required, Validators.email, Validators.maxLength(100)] },
     { field: 'phone', type: 'input', show: true, header: Locales.cellphone, width: 150, validators: [Validators.maxLength(30)] },
     { field: 'ftn', type: 'input', header: Locales.ftn, width: 100, validators: [Validators.maxLength(10)] },
-    { field: 'role', type: 'popup', value: RoleType.map(role => ({label: role, value: role})), show: true, header: Locales.role, width: 100, align: 'center', validators: [Validators.required] },
+    { field: 'role', type: 'popup', value: Object.keys(Role).map(key => ({ label: Role[key], value: key })), show: true, header: Locales.role, width: 100, align: 'center', validators: [Validators.required] },
     { field: 'isMemeber', type: 'radio', header: Locales.isMemeber, width: 70, align: 'center', format: 'bool' },
     { field: 'isActive', type: 'radio', show: true, header: Locales.isActive, width: 70, align: 'center', format: 'bool' },
     { field: 'resetPassword', type: 'radio', header: Locales.resetPassword, width: 70, align: 'center', format: 'bool' },
@@ -52,7 +52,7 @@ export class AdminComponent extends AppBaseDirective {
 
   selectedUser: User;
 
-  constructor(private userService: UserService, public appService: AuthService) {
+  constructor(private adminService: AdminService, public appService: AuthService) {
     super();
   }
 
@@ -67,7 +67,7 @@ export class AdminComponent extends AppBaseDirective {
     switch (event.message) {
       case EventType.Load:
         this.loading(true);
-        this.userService.fetch(event.data).subscribe(result => {
+        this.adminService.getUsers(event.data).subscribe(result => {
           this.loading(false);
           this.result = result;
         }, (ex) => this.errorHandler(ex));

@@ -1,11 +1,7 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import io.ebean.annotation.History;
@@ -38,9 +34,6 @@ public class Billing extends BaseModel {
 	
 	@ManyToOne
 	public TierRate tier; //tier_id
-
-	@OneToMany(mappedBy = "billing")
-	public List<Payment> payments = new ArrayList<>(); //Payment::billing_id
 
 	@ManyToOne
 	public Account account; //FK account_id - Account::billing

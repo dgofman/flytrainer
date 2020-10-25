@@ -1,12 +1,9 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import io.ebean.annotation.History;
@@ -50,9 +47,6 @@ public class Equipment extends BaseModel {
 	public Double deviation; //deviation
 	
 	public Long inspectionTime; //inspection_time
-
-	@OneToMany(mappedBy = "aircraft")
-	public List<Maintenance> maintances = new ArrayList<>();  //Maintenance::aircraft_id
 
 	@ManyToOne
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::equipments

@@ -95,7 +95,7 @@ export class DocumentTabComponent extends TabBaseDirective {
 
     doDelete(): void {
         this.loading(true);
-        if (this.children[this.selectedBean.id] && this.selectedBean.expended) {
+        if (this.children[this.selectedBean.id] && this.selectedBean.expanded) {
             this.onToggle(this.selectedBean);
         }
         this.adminService.deleteDocument(this.user.id, this.selectedBean.id).subscribe(_  => {
@@ -160,7 +160,7 @@ export class DocumentTabComponent extends TabBaseDirective {
                 this.result.data.push(result);
             } else {
                 if (this.selectedBean && this.children[this.selectedBean.id]) {
-                    if (this.selectedBean.expended) {
+                    if (this.selectedBean.expanded) {
                         this.result.data.forEach((item, idx) => {
                             if (item.id === this.selectedBean.id) {
                                 this.result.data.splice(idx + this.children[this.selectedBean.id].length + 1, 0, result);
@@ -175,7 +175,7 @@ export class DocumentTabComponent extends TabBaseDirective {
     }
 
     onToggle(doc: any) {
-        doc.expended = !doc.expended;
+        doc.expanded = !doc.expanded;
         let rowIndex = -1;
         this.result.data.forEach((item, idx) => {
             if (item.id === doc.id) {
@@ -194,7 +194,7 @@ export class DocumentTabComponent extends TabBaseDirective {
                 this.result.data.splice(rowIndex + 1, 0, ...result);
             }, (ex) => this.errorHandler(ex));
         } else {
-            if (doc.expended) {
+            if (doc.expanded) {
                 this.result.data.splice(rowIndex + 1, 0, ...this.children[doc.id]);
             } else {
                 this.result.data.splice(rowIndex + 1, this.children[doc.id].length);

@@ -5,6 +5,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FTAutoCompleteModule } from 'src/app/component/ft-autocomplete/ft-autocomplete.component';
 import { FTCalendarDirectiveModule } from '../component/ft-calendar/ft-calendar.component';
 import { FTFormatterDirectiveModule } from '../component/ft-formatter/ft-formatter.component';
@@ -37,6 +38,7 @@ export class AdminSharedModule {
         CommonModule,
         DropdownModule,
         FormsModule,
+        FontAwesomeModule,
         FTAutoCompleteModule,
         FTCalendarDirectiveModule,
         FTFormatterDirectiveModule,

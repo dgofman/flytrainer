@@ -1,6 +1,6 @@
 import Locales from '@locales/admin';
-import { User } from 'src/modules/models/user';
-import { Document } from 'src/modules/models/base.model';
+import { FTIcons } from '../../component/ft-menu/ft-menu.component';
+import { Document, User } from 'src/modules/models/base.model';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { AppBaseDirective } from 'src/app/app.base.component';
@@ -14,12 +14,8 @@ import {  AbstractBase } from 'src/modules/models/base.model';
   selector: 'admin-field',
   template: `
     <div [formGroup]="parentGroup" class="row" *ngIf="c.type">
-        <label *ngIf="c.header">{{c.header}}</label>
-        <ng-container *ngIf="c.template" [ngTemplateOutlet]="templates[c.template]" [ngTemplateOutletContext]="{control:c, formGroup: parentGroup}"></ng-container>
-        <div  *ngIf="c.field=='other' && parentGroup.controls.type.value == 'Other'">
-            <label>{{Locales.other}}</label>
-            <input formControlName="other" pInputText/>
-        </div>
+        <label *ngIf="c.type!='check' && c.header">{{c.header}}</label>
+        <p-checkbox *ngIf="c.type=='check'" [label]="c.header" [formControlName]="c.field" binary="true"></p-checkbox>
         <p-inputNumber *ngIf="c.type =='number'" [showButtons]="true" [formControlName]="c.field" [min]="c.value[0]" [max]="c.value[1]"></p-inputNumber>
         <input *ngIf="c.type =='input'" ftFTFormatter [control]="c" [formControlName]="c.field" pInputText [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''"/>
         <input *ngIf="c.type =='password'" [formControlName]="c.field" type="password" pPassword autocomplete="off new-password" [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''"/>
@@ -28,6 +24,11 @@ import {  AbstractBase } from 'src/modules/models/base.model';
         <p-inputMask *ngIf="c.type=='mask'" [mask]="c.value" [placeholder]="c.placeholder || ''" [formControlName]="c.field"></p-inputMask>
         <p-calendar *ngIf="c.type=='cal'" ftCalendar [formControlName]="c.field"></p-calendar>
         <div *ngIf="c.type=='switch'"><p-inputSwitch [formControlName]="c.field" binary="true"></p-inputSwitch></div>
+        <div *ngIf="c.field=='other' && parentGroup.controls.type.value == 'Other'">
+            <label>{{Locales.other}}</label>
+            <input formControlName="other" pInputText/>
+        </div>
+        <ng-container *ngIf="c.template" [ngTemplateOutlet]="templates[c.template]" [ngTemplateOutletContext]="{control:c, group: parentGroup}"></ng-container>
         <div *ngIf="f[c.field].errors" style="color: red; ">
             <div *ngIf="f[c.field].errors.required ">{{c.header}} is required</div>
         </div>
@@ -60,6 +61,7 @@ export class AdminFieldComponent {
 @Directive()
 export abstract class TabBaseDirective extends AppBaseDirective {
     Locales = Locales;
+    icons = FTIcons;
     formGroup: FormGroup;
     controls: ColumnType[];
 

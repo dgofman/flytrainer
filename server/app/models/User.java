@@ -1,8 +1,6 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -10,10 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -35,7 +31,6 @@ import utils.Constants.Key;
 		@NamedQuery(name = User.FIND, query = "select(isActive) where username = :username and uuid = :uuid and version = :version and modifiedDate =:modifiedDate"),
 		@NamedQuery(name = User.FIND_BY_UUID, query = "select(role) where username = :username and uuid = :uuid"),
 		@NamedQuery(name = User.FIND_BY_EMAIL, query = "select(isActive) where username = :username and email = :email") })
-@JsonFilter("UserFilter")
 public class User extends BaseModel {
 
 	public static final TypedKey<User> MODEL = TypedKey.<User>create("userModel");
@@ -162,46 +157,6 @@ public class User extends BaseModel {
 
 	@OneToOne
 	public Account defaultAccount; //default_account_id
-
-	@JsonView(Full.class)
-	@OneToMany(mappedBy = "user")
-	public List<Account> accounts = new ArrayList<>(); //Account::user_id
-
-	@JsonView(Full.class)
-	@OneToMany(mappedBy = "user")
-	public List<Certificate> certificates = new ArrayList<>(); //Certificate::user_id
-
-	@JsonView(Full.class)
-	@OneToMany(mappedBy = "user")
-	public List<MedicalCertificate> medicalCertificates = new ArrayList<>(); //MedicalCertificate::user_id
-
-	@JsonView(Full.class)
-	@OneToMany(mappedBy = "user")
-	public List<Address> addresses = new ArrayList<>(); //Address::user_id
-
-	@JsonView(Full.class)
-	@OneToMany(mappedBy = "user")
-	public List<Course> courses = new ArrayList<>(); //Course::user_id
-
-	@JsonView(Full.class)
-	@OneToMany(mappedBy = "user")
-	public List<Endorsement> endorsements = new ArrayList<>(); //Endorsement::user_id
-
-	@JsonView(Full.class)
-	@OneToMany(mappedBy = "user")
-	public List<Contact> contacts = new ArrayList<>(); //Contact::user_id
-
-	@JsonView(Full.class)
-	@OneToMany(mappedBy = "user")
-	public List<Employer> employers = new ArrayList<>(); //Employer::user_id
-
-	@JsonView(Full.class)
-	@OneToMany(mappedBy = "user")
-	public List<Document> documents = new ArrayList<>(); //Document::user_id
-	
-	@JsonView(Full.class)
-	@OneToMany(mappedBy = "user")
-	public List<Filter> filters = new ArrayList<>(); //Filter::user_id
 
 	public User(JsonNode body) {
 		this.username = body.get("username").asText();

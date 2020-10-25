@@ -1,14 +1,11 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import io.ebean.annotation.DbJson;
@@ -63,30 +60,6 @@ public class Aircraft extends BaseModel {
 
 	@ManyToOne
 	public Address location; //location_id
-
-	@OneToMany(mappedBy = "aircraft")
-	public List<AircraftWeightAndBallance> wb = new ArrayList<>(); //AircraftWeightAndBallance::aircraft_id
-	
-	@OneToMany(mappedBy = "aircraft")
-	public List<Engine> engines = new ArrayList<>(); //Engine::aircraft_id
-	
-	@OneToMany(mappedBy = "aircraft")
-	public List<Propeller> propellers = new ArrayList<>(); //Propeller::aircraft_id
-
-	@OneToMany(mappedBy = "aircraft")
-	public List<Equipment> equipments = new ArrayList<>(); //Equipment::aircraft_id
-	
-	@OneToMany(mappedBy = "aircraft")
-	public List<Maintenance> maintenances = new ArrayList<>(); //Maintenance::aircraft_id
-
-	@OneToMany(mappedBy = "aircraft")
-	public List<Insurance> insurance = new ArrayList<>(); //Insurance::aircraft_id
-
-	@OneToMany(mappedBy = "aircraft")
-	public List<Squawk> squawks = new ArrayList<>(); //Squawks::aircraft_id
-
-	@OneToMany(mappedBy = "aircraft")
-	public List<Rate> rates = new ArrayList<>(); //Rate::aircraft_id
 	
 	@ManyToOne
 	public Document registration; //registration_id

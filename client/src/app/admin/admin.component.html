@@ -28,8 +28,8 @@
         </ng-template>
       </ft-table>
       <ft-dialog width="70" height="60" [path]="[Locales.admin, Locales.users, selectedUser?.first + ' ' + selectedUser?.last]">
-        <ng-template pTemplate="{{Locales.accounts}}" let-user="item">
-          <account-tab [user]="user" ></account-tab>
+        <ng-template pTemplate="{{Locales.users}}" let-user="item">
+          <user-tab [user]="user" ></user-tab>
         </ng-template>
         <ng-template pTemplate="{{Locales.contacts}}" let-user="item">
           <contact-tab [user]="user"></contact-tab>

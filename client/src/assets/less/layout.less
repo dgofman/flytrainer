@@ -4,7 +4,12 @@
     margin-bottom: 1em;
 }
 
+.inline {
+    display: inline-block;
+}
+
 .inlineL, .inlineR {
+    vertical-align: top;
     display: inline-block;
     width: 50%;
 }
@@ -30,6 +35,12 @@
 
 input[readonly] {
     background: #eee !important;
+}
+
+.noshadow {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
 }
 
 .ellipsis {

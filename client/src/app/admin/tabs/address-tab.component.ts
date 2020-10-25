@@ -94,7 +94,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
             }, (ex) => this.errorHandler(ex));
         } else {
             if (AppUtils.isBlank(this.description.inputEL.nativeElement.value)) {
-                this.description.inputEL.nativeElement.value = address.type;
+                this.description.inputEL.nativeElement.value = address.type + ' Address';
             }
             address.description = this.description.inputEL.nativeElement.value;
             if (address.document) {

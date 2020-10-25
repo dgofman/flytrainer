@@ -1,19 +1,18 @@
 import Locales from '@locales/admin';
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { Contact, Note, Address } from 'src/modules/models/base.model';
+import { CommonModel, User, Note, Address } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
-import { Country, State, AddressType, ColumnType } from 'src/modules/models/constants';
+import { Country, State, AddressType, Role, ColumnType, DocumentType } from 'src/modules/models/constants';
 import { TabBaseDirective, TabBaseModule } from './tabbase.component';
-import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '../admin-shared.module';
-import { TableResult } from 'src/modules/models/table.result';
 import { AppUtils } from 'src/app/utils/app-utils';
 
 @Component({
-    selector: 'contact-tab',
-    templateUrl: './contact-tab.component.html',
+    selector: 'user-tab',
+    templateUrl: './user-tab.component.html',
     styles: [
         `p.row {
             cursor: pointer;
@@ -22,8 +21,9 @@ import { AppUtils } from 'src/app/utils/app-utils';
         `
     ]
 })
-export class ContactTabComponent extends TabBaseDirective {
-    result: TableResult<Contact>;
+export class UserTabComponent extends TabBaseDirective implements OnInit {
+
+    accounts: CommonModel[];
     addressControls: ColumnType[];
     showAddress: boolean;
 
@@ -33,12 +33,25 @@ export class ContactTabComponent extends TabBaseDirective {
             { field: 'id' },
             { field: 'version' },
             { field: 'document' },
-            { field: 'description', header: Locales.description, type: 'input' },
+            { field: 'username', header: Locales.username, type: 'input', validators: [Validators.required], class: 'inlineL' },
+            { field: 'email', header: Locales.email, type: 'input', validators: [Validators.required], class: 'inlineR' },
             { field: 'first', header: Locales.firstname, type: 'input', validators: [Validators.required] },
             { field: 'middle', header: Locales.middlename, type: 'input' },
             { field: 'last', header: Locales.lastname, type: 'input', validators: [Validators.required] },
-            { field: 'relationship', header: Locales.relationship, type: 'input', validators: [Validators.required] },
-            { field: 'phone', header: Locales.phone, type: 'input' }
+            { field: 'role', header: Locales.role, type: 'popup', value: Object.keys(Role).map(key => ({ label: Role[key], value: key })), class: 'inlineL' },
+            { field: 'ssn' , header: Locales.ssn, type: 'input', class: 'inlineR' },
+            { field: 'phone', header: Locales.phone, type: 'input', class: 'inlineL' },
+            { field: 'ftn', header: Locales.ftn, type: 'input', class: 'inlineR' },
+            { field: 'dl', header: Locales.driverLicense, type: 'input', class: 'inlineL' },
+            { field: 'dlState', header: Locales.driverState, type: 'input', class: 'inlineR' },
+            { field: 'dl', header: Locales.dlExpDate, type: 'cal', class: 'inlineL' },
+            { field: 'birthday', header: Locales.birthday, type: 'cal', class: 'inlineR' },
+            { field: 'isActive', header: Locales.isActive, type: 'check', class: 'inline gap' },
+            { field: 'isCitizen', header: Locales.isCitizen, type: 'check', class: 'inline gap' },
+            { field: 'isMemeber', header: Locales.isMemeber, type: 'check', class: 'inline gap' },
+            { field: 'isSchoolEmployee', header: Locales.isSchoolEmployee, type: 'check', class: 'inline gap' },
+            { field: 'englishProficient', header: Locales.englishProficient, type: 'check', class: 'inline gap' },
+            { field: 'resetPassword', header: Locales.resetPassword, type: 'check', class: 'inline' }
         ];
         this.addressControls = [
             { field: 'id' },
@@ -72,18 +85,18 @@ export class ContactTabComponent extends TabBaseDirective {
         this.onReset();
     }
 
-    updateSelectedBean(bean: any) {
-        super.updateSelectedBean(bean);
-        if (bean != null) {
+    ngOnInit(): void {
+        if (this.user && this.user.id) {
             this.loading(true);
-            this.adminService.getContact(this.user.id, bean.id).subscribe(e => {
+            this.adminService.getUser(this.user.id).subscribe(result => {
                 this.loading(false);
-                this.formGroup.patchValue(Object.assign(this.defaultBean, e))   ;
-                this.includeAddress(e.address && e.address.id !== null, this.formGroup.controls);
+                this.selectedBean = result;
             }, (ex) => this.errorHandler(ex));
-        } else {
-            this.onReset();
         }
+    }
+
+    get isAdmin(): boolean {
+        return AppUtils.canViewAdmin();
     }
 
     includeAddress(state: boolean, controls: any) {
@@ -95,69 +108,74 @@ export class ContactTabComponent extends TabBaseDirective {
         }
     }
 
-    lazyLoad(event?: LazyLoadEvent) {
-        this.loading(true);
-        this.adminService.getContacts(this.user.id, event.first).subscribe(result => {
-            this.loading(false);
-            this.result = result;
-        }, (ex) => this.errorHandler(ex));
+    lazyLoad() {
+        if (this.user && this.user.id) {
+            this.loading(true);
+            this.adminService.getAccounts(this.user.id).subscribe(result => {
+                this.loading(false);
+                this.accounts = result;
+            }, (ex) => this.errorHandler(ex));
+        }
     }
 
     onSubmit() {
-        const contact = new Contact(this.formGroup.value),
-            address = contact.address;
+        const user = new User(this.formGroup.value),
+            address = user.address,
+            document = user.document;
         this.loading(true);
         if (address && !address.id) {
-            address.description = contact.relationship +  `, Contact Address`;
+            address.description = address.type + ' Address';
             address.isPrimary = 0;
         }
-        if (contact.id) {
-            this.adminService.updateContact(this.user.id, contact).subscribe(result => {
+        if (document && !document.id) {
+            document.type = AppUtils.getKey(DocumentType, 'PilotPicture');
+        }
+        if (user.id) {
+            this.adminService.updateContact(this.user.id, user).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
                 this.success(Locales.recordUpdated);
             }, (ex) => this.errorHandler(ex));
         } else {
-            this.adminService.addContact(this.user.id, contact).subscribe(result => {
+            this.adminService.addUser(user).subscribe(result => {
                 this.loading(false);
-                this.result.data.push(result);
+                //this.result.data.push(result);
+
                 this.formGroup.patchValue(result);
                 this.success(Locales.recordCreated);
             }, (ex) => this.errorHandler(ex));
         }
     }
 
+    showPassword() {
+
+    }
+
     doDelete(): void {
         this.loading(true);
-        this.adminService.deleteContact(this.user.id, this.selectedBean.id).subscribe(_  => {
+        this.adminService.deleteContact(this.user.id, this.selectedBean.id).subscribe(_ => {
             this.loading(false);
-            this.result.data.forEach((item, idx) => {
+            /*this.result.data.forEach((item, idx) => {
                 if (this.selectedBean && item.id === this.selectedBean.id) {
                     this.result.data.splice(idx, 1);
                     super.onReset();
                     this.success(Locales.recordDeleted);
                     return false;
                 }
-            });
+            });*/
         }, (ex) => this.errorHandler(ex));
     }
 
     onReset() {
-        this.formGroup.reset();
-        this.formGroup.patchValue(this.defaultBean);
-        this.showAddress = false;
-        this._selectedBean = null;
-    }
-
-    get defaultBean() {
-       return { notes: new Note(), address: new Address({type: AppUtils.getKey(AddressType, 'Contact'), state: this.environment.homeState, country: this.environment.homeCountry}) };
+        super.onReset();
+        this.formGroup.patchValue({ notes: new Note(), address: new Address({type: AppUtils.getKey(AddressType, 'Home'), state: this.environment.homeState, country: this.environment.homeCountry}) });
     }
 }
 
 @NgModule({
     imports: [CommonModule, AdminSharedModule, TabBaseModule],
-    exports: [ContactTabComponent],
-    declarations: [ContactTabComponent]
+    exports: [UserTabComponent],
+    declarations: [UserTabComponent]
 })
-export class ContactTabModule {
+export class UserTabModule {
 }

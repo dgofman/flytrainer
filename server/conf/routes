@@ -12,29 +12,35 @@ POST    /forgot                         controllers.HomeController.forgot(reques
 POST    /reset                          controllers.HomeController.reset(request: Request)
 POST    /logout                         controllers.HomeController.logout(request: Request)
 
-POST    /users                          controllers.UserController.users(request: Request)
-GET     /users/:userId                  controllers.UserController.userById(userId: Long)
-POST    /users/:userId                  controllers.UserController.saveUser(request: Request, userId: Long)
-DELETE  /users/:userId                  controllers.UserController.deleteUser(request: Request, userId: Long)
+GET     /user/:userId                   controllers.UserController.getUser(userId: Long)
+POST    /user                           controllers.UserController.addUser(request: Request)
+PUT     /user                           controllers.UserController.getUsers(request: Request)
+PATCH   /user/:userId                   controllers.UserController.updateUser(request: Request, userId: Long)
 
-POST    /address/:userId                controllers.AddressController.addAddress(request: Request, userId: Long)
+GET     /account/:userId                controllers.AccountController.getAccounts(userId: Long)
+GET     /account/:userId/:aId           controllers.AccountController.getAccount(userId: Long, aId: Long)
+POST    /account/:userId                controllers.AccountController.addAccount(request: Request, userId: Long)
+PATCH   /account/:userId                controllers.AccountController.updateAccount(request: Request, userId: Long)
+DELETE  /account/:userId/:aId           controllers.AccountController.deleteAccount(request: Request, userId: Long, aId: Long)
+
 GET     /address/:userId                controllers.AddressController.getAddress(userId: Long)
+POST    /address/:userId                controllers.AddressController.addAddress(request: Request, userId: Long)
 PATCH   /address/:userId                controllers.AddressController.updateAddress(request: Request, userId: Long)
 DELETE  /address/:userId/:addId         controllers.AddressController.deleteAddress(request: Request, userId: Long, addId: Long)
 
-POST    /certificate/:userId            controllers.CertificateController.addCertificate(request: Request, userId: Long)
 GET     /certificate/:userId            controllers.CertificateController.getCertificate(userId: Long)
+POST    /certificate/:userId            controllers.CertificateController.addCertificate(request: Request, userId: Long)
 PATCH   /certificate/:userId            controllers.CertificateController.updateCertificate(request: Request, userId: Long)
 DELETE  /certificate/:userId/:addId     controllers.CertificateController.deleteCertificate(request: Request, userId: Long, addId: Long)
 
-POST    /contact/:userId                controllers.ContactController.addContact(request: Request, userId: Long)
 GET     /contact/:userId                controllers.ContactController.getContacts(userId: Long, offset: Integer, rows: Integer)
 GET     /contact/:userId/:cId           controllers.ContactController.getContact(userId: Long, cId: Long)
+POST    /contact/:userId                controllers.ContactController.addContact(request: Request, userId: Long)
 PATCH   /contact/:userId                controllers.ContactController.updateContact(request: Request, userId: Long)
 DELETE  /contact/:userId/:cId           controllers.ContactController.deleteContact(request: Request, userId: Long, cId: Long)
 
-POST    /file/:userId                   controllers.DocumentController.saveFile(request: Request, userId: Long)
 GET     /file/:userId/:docId            controllers.DocumentController.getFile(userId: Long, docId: Long)
+POST    /file/:userId                   controllers.DocumentController.saveFile(request: Request, userId: Long)
 
 GET     /documents/:userId              controllers.DocumentController.getDocuments(userId: Long, offset: Integer, rows: Integer)
 GET     /documents/:userId/:docId       controllers.DocumentController.lazyLoadDocuments(userId: Long, docId: Long)

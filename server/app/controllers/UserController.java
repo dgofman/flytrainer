@@ -13,7 +13,8 @@ import org.springframework.util.StringUtils;
 
 import io.ebean.Ebean;
 import io.ebean.Query;
-import models.BaseModel;
+import models.AbstractBase.Short;
+import models.AbstractBase.Full;
 import models.FTTableEvent;
 import models.User;
 import play.libs.Json;
@@ -28,8 +29,18 @@ public class UserController extends BaseController {
 
 	private static final int ALL_MAX_LIMIT = 10000;
 
-	public Result users(Http.Request request) {
-		log.debug("AdminController::users");
+	public Result addUser(Http.Request request) {
+		log.debug("UserController::addtUser");
+		Query<User> query = Ebean.find(User.class);
+		User user = query.findOne();
+		if (user == null) {
+			return createBadRequest("nouser", Constants.Errors.ERROR);
+		}
+		return okResult(user, Short.class);
+	}
+
+	public Result getUsers(Http.Request request) {
+		log.debug("UserController::getUsers");
 		try {
 			JsonNode body = request.body().asJson();
 			FTTableEvent event = new ObjectMapper().readerFor(FTTableEvent.class).readValue(body);
@@ -55,19 +66,19 @@ public class UserController extends BaseController {
 		}
 	}
 
-	public Result userById(Long userId) {
-		log.debug("AdminController::userById = " + userId);
+	public Result getUser(Long userId) {
+		log.debug("UserController::getUser = " + userId);
 		Query<User> query = Ebean.find(User.class);
 		query.where().eq("id", userId);
 		User user = query.findOne();
 		if (user == null) {
 			return createBadRequest("nouser", Constants.Errors.ERROR);
 		}
-		return okResult(user, BaseModel.Short.class);
+		return okResult(user, Full.class);
 	}
 
-	public Result saveUser(Http.Request request, Long userId) {
-		log.debug("AdminController::saveUser = " + userId);
+	public Result updateUser(Http.Request request, Long userId) {
+		log.debug("UserController::updateUser = " + userId);
 		User currentUser = request.attrs().get(User.MODEL);
 		JsonNode body = request.body().asJson();
 		try {
@@ -93,22 +104,6 @@ public class UserController extends BaseController {
 		} catch (Exception e) {
 			return badRequest(e);
 		}
-	}
-	
-	public Result deleteUser(Http.Request request, Long userId) {
-		log.debug("AdminController::saveUser = " + userId);
-		BaseModel currentUser = request.attrs().get(User.MODEL);
-		Query<User> query = Ebean.find(User.class);
-		query.where().eq("id", userId);
-		User user = query.findOne();
-		if (user == null) {
-			return createBadRequest("nouser", Constants.Errors.ERROR);
-		}
-		if (user.id == currentUser.id) {
-			return badRequest(Constants.Errors.DELETE_USER.toString());
-		}
-		user.delete(currentUser);
-		return okResult(user, BaseModel.Short.class);
 	}
 
 	private void validateRole(User user, User currentUser) {

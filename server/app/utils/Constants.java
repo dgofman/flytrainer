@@ -457,7 +457,7 @@ public class Constants {
 		Business(2),
 		Billing(3),
 		Shipping(4),
-		Contract(5),
+		Contact(5),
 		Hangar(6),
 		Shelter(7),
 		Tiedown(8),

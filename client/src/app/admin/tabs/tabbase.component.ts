@@ -70,7 +70,7 @@ export abstract class TabBaseDirective extends AppBaseDirective {
 
     @Input() user: User;
 
-    constructor(private confirmationService: ConfirmationService) {
+    constructor(protected confirmationService: ConfirmationService) {
         super();
     }
 
@@ -99,7 +99,8 @@ export abstract class TabBaseDirective extends AppBaseDirective {
 
     onDelete() {
         this.confirmationService.confirm({
-            key: 'deleteRecord',
+            key: 'confDialog',
+            icon: 'pi pi-exclamation-triangle',
             header: Locales.deleteHeader,
             message: Locales.deleteRecord,
             accept: () => {

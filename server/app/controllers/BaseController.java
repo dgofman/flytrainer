@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.ebean.ExpressionList;
@@ -57,6 +58,8 @@ public class BaseController extends Controller {
 		objectMapper.setSerializationInclusion(Include.NON_NULL);
 		if (filter != null) {
 			objectMapper.setFilterProvider(filter);
+		} else {
+			objectMapper.setFilterProvider(new SimpleFilterProvider().setFailOnUnknownId(false));
 		}
 		try {
 			if (serializationView != null) {

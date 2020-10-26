@@ -4,13 +4,14 @@ import { AdminService } from 'src/services/admin.service';
 import { User } from 'src/modules/models/base.model';
 import { AuthService } from '../authentication/auth.service';
 import { AppBaseDirective } from '../app.base.component';
-import { EmitEvent, EventType } from '../component/ft-table/ft-table.component';
 import { Role, ColumnType } from 'src/modules/models/constants';
 import { FTIcons } from '../component/ft-menu/ft-menu.component';
 import { Validators } from '@angular/forms';
 import { FTDialogComponent } from '../component/ft-dialog/ft-dialog.component';
 import { TableResult } from 'src/modules/models/table.result';
 import { AppHeaderComponent } from '../app.component';
+import { EventService, EmitEvent, EventType } from 'src/services/event.service';
+import { FTTableComponent } from '../component/ft-table/ft-table.component';
 
 @Component({
   templateUrl: './admin.component.html',
@@ -48,18 +49,44 @@ export class AdminComponent extends AppBaseDirective {
     { field: 'whoModified', type: 'input', header: Locales.whoModified, width: 200 }
   ];
 
+  @ViewChild(FTTableComponent) table: FTTableComponent;
   @ViewChild(FTDialogComponent) dialog: FTDialogComponent;
 
   selectedUser: User;
 
-  constructor(private adminService: AdminService, public appService: AuthService) {
+  constructor(private adminService: AdminService, public appService: AuthService, eventService: EventService) {
     super();
+    eventService.emmiter.subscribe((event: EmitEvent) => {
+      switch (event.message) {
+        case EventType.Refresh:
+          this.updateDialog(event.data);
+          this.table.refresh();
+          break;
+      }
+    });
   }
 
-  onEdit(user: User) {
+  updateDialog(user: User) {
+    let path = [Locales.admin, Locales.users];
+    if (user.id) {
+      path = path.concat(user.first + ' ' + user.last);
+    }
+    this.dialog.path = path;
+    for (let i = 1; i < this.dialog.tabView.tabs.length; i++) {
+      this.dialog.tabView.tabs[i].disabled = !user.id;
+    }
     this.selectedUser = user;
     this.dialog.selectedItem = user;
     this.dialog.show = true;
+  }
+
+  onAddUser() {
+    this.updateDialog(new User());
+    AppHeaderComponent.toggleArrowMenu = false;
+  }
+
+  onEdit(user: User) {
+    this.updateDialog(user);
     AppHeaderComponent.toggleArrowMenu = false;
   }
 

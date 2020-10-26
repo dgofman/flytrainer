@@ -20,6 +20,7 @@ import { CertificateTabModule } from './tabs/certificate-tab.component';
 import { DocumentTabModule } from './tabs/document-tab.component';
 import { TempTabsModule } from './tabs/temp.tabs.module';
 import { UserTabModule } from './tabs/user-tab.component';
+import { EventService } from 'src/services/event.service';
 
 @NgModule({
   imports: [
@@ -50,6 +51,7 @@ import { UserTabModule } from './tabs/user-tab.component';
   ],
   providers: [
     ConfirmationService,
+    EventService,
     AdminService,
     {
       provide: HTTP_INTERCEPTORS,

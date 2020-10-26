@@ -8,5 +8,6 @@ export default {
     billing: 'Billing',
     maintance: 'Maintance',
     reports: 'Resports',
-    users: 'Users'
+    users: 'Users',
+    user: 'User'
 };

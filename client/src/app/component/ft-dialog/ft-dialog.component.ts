@@ -57,7 +57,7 @@ export class FTDialogComponent {
     this.display = b ? 'block' : 'none';
     this.fullscreen = false;
     if (b) {
-      this.onTabChange(this.tabView.activeIndex || 0);
+      this.onTabChange(0);
     } else {
       this.activeIndex  = -1;
     }

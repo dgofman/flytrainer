@@ -1,17 +1,21 @@
 package models;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.ebean.annotation.DbComment;
 import io.ebean.annotation.Encrypted;
@@ -19,6 +23,7 @@ import io.ebean.annotation.History;
 import io.ebean.annotation.Index;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
+import models.Address.IsAddressable;
 import play.libs.typedmap.TypedKey;
 import utils.AppConfig;
 import utils.Constants;
@@ -30,8 +35,10 @@ import utils.Constants.Key;
 		@NamedQuery(name = User.LOGIN, query = "select(uuid, isActive, resetPassword) where username = :username and password = :password"),
 		@NamedQuery(name = User.FIND, query = "select(isActive) where username = :username and uuid = :uuid and version = :version and modifiedDate =:modifiedDate"),
 		@NamedQuery(name = User.FIND_BY_UUID, query = "select(role) where username = :username and uuid = :uuid"),
-		@NamedQuery(name = User.FIND_BY_EMAIL, query = "select(isActive) where username = :username and email = :email") })
-public class User extends BaseModel {
+		@NamedQuery(name = User.FIND_BY_EMAIL, query = "select(isActive) where username = :username and email = :email"),
+		@NamedQuery(name = User.PASSWORD, query = "select(password) where username = :username and id = :id") })
+@JsonFilter("UserFilter")
+public class User extends BaseModel implements IsAddressable {
 
 	public static final TypedKey<User> MODEL = TypedKey.<User>create("userModel");
 
@@ -39,6 +46,7 @@ public class User extends BaseModel {
 	public static final String FIND = "User.find";
 	public static final String FIND_BY_UUID = "User.findByUuid";
 	public static final String FIND_BY_EMAIL = "User.findByEmail";
+	public static final String PASSWORD = "User.password";
 
 	private static final String defaultPassword = AppConfig.get(Key.DEFAULT_PWD).asText();
 	
@@ -98,28 +106,23 @@ public class User extends BaseModel {
 	public byte isActive = 0; //is_active
 
 	@Column(name = "resetPassword")
-	@NotNull
-	@JsonView(Short.class)
+	@JsonView(Full.class)
 	public byte resetPassword = 1; //reset_password
 
 	@Column(name = "employee")
-	@NotNull
-	@JsonView(Short.class)
+	@JsonView(Full.class)
 	public byte isSchoolEmployee = 0; //is_school_employee
 
 	@Column(name = "citizen")
-	@NotNull
-	@JsonView(Short.class)
+	@JsonView(Full.class)
 	public byte isCitizen = 0; //is_citizen
 
 	@Column(name = "proficient")
-	@NotNull
-	@JsonView(Short.class)
+	@JsonView(Full.class)
 	public byte englishProficient = 0; //english_proficient (AC 60-28)
 
 	@Column(name = "member")
-	@NotNull
-	@JsonView(Short.class)
+	@JsonView(Full.class)
 	public byte isMemeber = 1; //is_memeber
 
 	@Column(name = "role")
@@ -128,32 +131,42 @@ public class User extends BaseModel {
 	public Constants.Access role = Constants.Access.USER; //role
 
 	@Column(name = "birthday")
-	@JsonView(Short.class)
+	@JsonView(Full.class)
 	public Date birthday; //birthday
 
 	@Column(name = "driver_license")
 	@Length(10)
-	@JsonView(Short.class)
+	@JsonView(Full.class)
 	public String dl; //driver_license
 
 	@Column(name = "driver_license_state")
 	@Length(2)
-	@JsonView(Short.class)
+	@JsonView(Full.class)
 	public String dlState; //driver_license_state
 
 	@Column(name = "driver_license_exp_date")
-	@JsonView(Short.class)
+	@JsonView(Full.class)
 	public Date dlExpDate; //driver_license_exp_date
 
 	@Column(name = "ssn")
 	@Length(10)
-	@JsonView(Admin.class)
+	@JsonView(Full.class)
 	public String ssn; //ssn
 
 	@Column(name = "ftn")
 	@Length(10)
-	@JsonView(Short.class)
+	@JsonView(Full.class)
 	public String ftn; //ftn
+	
+	@ManyToOne
+	private Address address; //address_id
+
+	public Address getAddress() {
+		return this.address;
+	}
+	public void setAddress(JsonNode body) throws IOException {
+		this.address = body != null ? new ObjectMapper().readerFor(Address.class).readValue(body) : null;
+	}
 
 	@OneToOne
 	public Account defaultAccount; //default_account_id

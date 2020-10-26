@@ -18,6 +18,7 @@ import { DomHandler } from 'primeng/dom';
 import { TableResult } from 'src/modules/models/table.result';
 import { FTStatePipe, FTPipeModule } from 'src/app/utils/pipes';
 import { ColumnType } from 'src/modules/models/constants';
+import { EmitEvent, EventType } from 'src/services/event.service';
 
 export type FTTableEvent = {
   first: number,
@@ -26,16 +27,6 @@ export type FTTableEvent = {
   sortOrder?: string,
   filter?: {}
 };
-
-export enum EventType {
-  Load,
-  New
-}
-
-export interface EmitEvent {
-  message: EventType;
-  data: any;
-}
 
 @Component({
   selector: 'ft-table',
@@ -227,6 +218,10 @@ export class FTTableComponent implements AfterContentInit {
     this.expandedRows = {};
     this.filterModel.first = this.firstRow;
     this.filterModel.filter = this.filter;
+    this.refresh();
+  }
+
+  refresh() {
     this.notify(EventType.Load, this.filterModel);
   }
 

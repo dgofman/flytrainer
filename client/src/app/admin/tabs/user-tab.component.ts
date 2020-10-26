@@ -9,6 +9,7 @@ import { ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '../admin-shared.module';
 import { AppUtils } from 'src/app/utils/app-utils';
+import { EventType, EventService } from 'src/services/event.service';
 
 @Component({
     selector: 'user-tab',
@@ -27,7 +28,7 @@ export class UserTabComponent extends TabBaseDirective implements OnInit {
     addressControls: ColumnType[];
     showAddress: boolean;
 
-    constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder) {
+    constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder, private eventService: EventService) {
         super(confirmationService);
         this.controls = [
             { field: 'id' },
@@ -44,7 +45,7 @@ export class UserTabComponent extends TabBaseDirective implements OnInit {
             { field: 'ftn', header: Locales.ftn, type: 'input', class: 'inlineR' },
             { field: 'dl', header: Locales.driverLicense, type: 'input', class: 'inlineL' },
             { field: 'dlState', header: Locales.driverState, type: 'input', class: 'inlineR' },
-            { field: 'dl', header: Locales.dlExpDate, type: 'cal', class: 'inlineL' },
+            { field: 'dlExpDate', header: Locales.dlExpDate, type: 'cal', class: 'inlineL' },
             { field: 'birthday', header: Locales.birthday, type: 'cal', class: 'inlineR' },
             { field: 'isActive', header: Locales.isActive, type: 'check', class: 'inline gap' },
             { field: 'isCitizen', header: Locales.isCitizen, type: 'check', class: 'inline gap' },
@@ -90,7 +91,8 @@ export class UserTabComponent extends TabBaseDirective implements OnInit {
             this.loading(true);
             this.adminService.getUser(this.user.id).subscribe(result => {
                 this.loading(false);
-                this.selectedBean = result;
+                this.selectedBean = Object.assign(this.defaultBean, result);
+                this.includeAddress(result.address && result.address.id !== null, this.formGroup.controls);
             }, (ex) => this.errorHandler(ex));
         }
     }
@@ -125,13 +127,13 @@ export class UserTabComponent extends TabBaseDirective implements OnInit {
         this.loading(true);
         if (address && !address.id) {
             address.description = address.type + ' Address';
-            address.isPrimary = 0;
+            address.isPrimary = 1;
         }
         if (document && !document.id) {
             document.type = AppUtils.getKey(DocumentType, 'PilotPicture');
         }
         if (user.id) {
-            this.adminService.updateContact(this.user.id, user).subscribe(result => {
+            this.adminService.updateUser(this.user.id, user).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
                 this.success(Locales.recordUpdated);
@@ -139,36 +141,39 @@ export class UserTabComponent extends TabBaseDirective implements OnInit {
         } else {
             this.adminService.addUser(user).subscribe(result => {
                 this.loading(false);
-                //this.result.data.push(result);
-
-                this.formGroup.patchValue(result);
+                this.selectedBean = result;
+                this.eventService.emit(EventType.Refresh, result);
                 this.success(Locales.recordCreated);
             }, (ex) => this.errorHandler(ex));
         }
     }
 
     showPassword() {
-
+        this.loading(true);
+        this.adminService.getPassword(this.user.id, this.user.username).subscribe(pwd => {
+            this.loading(false);
+            const dlg = this.confirmationService.confirm({
+                key: 'confDialog',
+                header: Locales.password,
+                message: pwd,
+                accept: () => {
+                    dlg.close();
+                }
+            });
+        }, (ex) => this.errorHandler(ex));
     }
 
     doDelete(): void {
-        this.loading(true);
-        this.adminService.deleteContact(this.user.id, this.selectedBean.id).subscribe(_ => {
-            this.loading(false);
-            /*this.result.data.forEach((item, idx) => {
-                if (this.selectedBean && item.id === this.selectedBean.id) {
-                    this.result.data.splice(idx, 1);
-                    super.onReset();
-                    this.success(Locales.recordDeleted);
-                    return false;
-                }
-            });*/
-        }, (ex) => this.errorHandler(ex));
+        throw new Error('Cannot delete user from UI');
     }
 
     onReset() {
         super.onReset();
-        this.formGroup.patchValue({ notes: new Note(), address: new Address({type: AppUtils.getKey(AddressType, 'Home'), state: this.environment.homeState, country: this.environment.homeCountry}) });
+        this.formGroup.patchValue(this.defaultBean);
+    }
+
+    get defaultBean() {
+       return { role: Role.USER, notes: new Note(), address: new Address({type: AppUtils.getKey(AddressType, 'Home'), state: this.environment.homeState, country: this.environment.homeCountry}) };
     }
 }
 

@@ -57,7 +57,7 @@ public class ContactController extends BaseController {
 			JsonNode body = request.body().asJson();
 			Contact contact = Json.fromJson(body, Contact.class);
 			NotesUtils.create(contact, user);
-			contact.address = AddressUtils.create(contact, body.get("address"), user, currentUser);
+			AddressUtils.create(contact, user, currentUser);
 			contact.user = user;
 			contact.save(currentUser);
 			transaction.commit();
@@ -84,7 +84,7 @@ public class ContactController extends BaseController {
 			}
 			new ObjectMapper().readerForUpdating(dbContact).readValue(body);
 			NotesUtils.update(dbContact, user, currentUser);
-			dbContact.address = AddressUtils.update(dbContact, body.get("address"), user, currentUser);
+			AddressUtils.update(dbContact, user, currentUser);
 			dbContact.save(currentUser);
 			transaction.commit();
 			return okResult(dbContact, Short.class);
@@ -105,7 +105,7 @@ public class ContactController extends BaseController {
 			if (dbContact == null) {
 				return createBadRequest("nocontact", Constants.Errors.ERROR);
 			}
-			AddressUtils.delete(dbContact.address);
+			AddressUtils.delete(dbContact);
 			NotesUtils.delete(dbContact);
 			dbContact.delete(currentUser);
 			transaction.commit();

@@ -1,5 +1,7 @@
 package models;
 
+import java.io.IOException;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -7,16 +9,19 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.ebean.annotation.DbComment;
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
+import models.Address.IsAddressable;
 
 @Entity
 @History
 @Table(name = "contact")
-public class Contact extends BaseModel {
+public class Contact extends BaseModel implements IsAddressable {
 
 	@Length(30)
 	@JsonView(Full.class)
@@ -55,4 +60,13 @@ public class Contact extends BaseModel {
 	@ManyToOne
 	@JsonIgnore
 	public User user; // FK user_id - User::contacts
+
+	@Override
+	public Address getAddress() {
+		return address;
+	}
+	
+	public void setAddress(JsonNode body) throws IOException {
+		this.address = body != null ? new ObjectMapper().readerFor(Address.class).readValue(body) : null;
+	}
 }

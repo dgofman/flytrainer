@@ -28,6 +28,10 @@ export class AdminService {
         return this.http.patch<User>(`/user/${userId}`, model);
     }
 
+    public getPassword(userId: number, username: string): Observable<string> {
+        return this.http.get<string>(`/user/${userId}/${username}`);
+    }
+
     // Accounts
     public addAccount(userId: number, model: CommonModel): Observable<CommonModel> {
         return this.http.post<CommonModel>(`/account/${userId}`, model);

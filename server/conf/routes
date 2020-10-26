@@ -16,6 +16,7 @@ GET     /user/:userId                   controllers.UserController.getUser(userI
 POST    /user                           controllers.UserController.addUser(request: Request)
 PUT     /user                           controllers.UserController.getUsers(request: Request)
 PATCH   /user/:userId                   controllers.UserController.updateUser(request: Request, userId: Long)
+GET     /user/:userId/:username         controllers.UserController.getPassword(request: Request, userId: Long, username: String)
 
 GET     /account/:userId                controllers.AccountController.getAccounts(userId: Long)
 GET     /account/:userId/:aId           controllers.AccountController.getAccount(userId: Long, aId: Long)

@@ -41,6 +41,7 @@ export class CommonModel extends BaseModel {
 }
 
 export class User extends CommonModel {
+    username: string;
     first: string;
     last: string;
 }

@@ -9,15 +9,15 @@ import io.ebean.Ebean;
 import models.Address;
 import models.Aircraft;
 import models.BaseModel;
+import models.Address.IsAddressable;
 import models.User;
 import play.libs.Json;
 
 public class AddressUtils {
 
-	public static <T> Address create(BaseModel model, JsonNode body, T ref, User currentUser) throws IOException {
-		Address address = null;
-		if (body != null && !body.isNull()) {
-			address = Json.fromJson(body, Address.class);
+	public static <T> void create(IsAddressable model, T ref, User currentUser) throws IOException {
+		Address address = model.getAddress();
+		if (address != null) {
 			if (ref instanceof User) {
 				address.user = (User) ref;
 			} else {
@@ -26,29 +26,45 @@ public class AddressUtils {
 			address.reference = model.getClass().getSimpleName();
 			address.save(currentUser);
 		}
-		return address;
 	}
 
-	public static <T> Address update(BaseModel model, JsonNode body,  T ref, User currentUser) throws IOException {
-		if (body != null && !body.isNull()) {
-			Address address = Json.fromJson(body, Address.class);
+	public static <T> void update(IsAddressable model, T ref, User currentUser) throws IOException {
+		Address address = model.getAddress();
+		if (address != null) {
 			if (address.id != null) {
-				Address dbAddress = Ebean.find(Address.class).where().eq("id", address.id).findOne();
-				if (dbAddress != null) {
-					new ObjectMapper().readerForUpdating(dbAddress).readValue(body);
-					dbAddress.save(currentUser);
-					return dbAddress;
-				}
+				Ebean.update(model);
+				//new ObjectMapper().readerForUpdating(dbAddress).readValue(body);
+				//model.save(currentUser);
+				
+				/*if (address.content == null || address.content.isBlank()) {
+					model.setAddress(null);
+					model.update(currentUser);
+					Ebean.find(Address.class).where().eq("id", address.id).delete();
+				} else {
+					Ebean.find(Address.class).asUpdate().set("content", address.content).where().eq("id", address.id).update();
+				}*/
+			} else {
+				create(model, ref, currentUser);
 			}
-			return create(model, body, ref, currentUser);
 		}
-		return null;
+		
+		/*Address address = model.getAddress();
+		if (address.id != null) {
+			Address dbAddress = Ebean.find(Address.class).where().eq("id", address.id).findOne();
+			if (dbAddress != null) {
+				new ObjectMapper().readerForUpdating(dbAddress).readValue(body);
+				dbAddress.save(currentUser);
+				return dbAddress;
+			}
+		}
+		return create(model, ref, currentUser);*/
 	}
 
-	public static void delete(Address address) {
+	public static void delete(IsAddressable model) throws IOException {
+		Address address = model.getAddress();
 		if (address != null) {
 			Ebean.find(Address.class).where().eq("id", address.id).delete();
-			address.id = null;
 		}
+		model.setAddress(null);
 	}
 }

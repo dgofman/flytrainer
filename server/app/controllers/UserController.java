@@ -3,26 +3,29 @@ package controllers;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.springframework.util.StringUtils;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
-import org.springframework.util.StringUtils;
-
 import io.ebean.Ebean;
 import io.ebean.Query;
-import models.AbstractBase.Short;
+import io.ebean.Transaction;
 import models.AbstractBase.Full;
 import models.FTTableEvent;
 import models.User;
 import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
+import utils.AddressUtils;
 import utils.BasicAuth;
 import utils.Constants;
 import utils.Constants.Access;
+import utils.DocumentUtils;
+import utils.NotesUtils;
 
 @BasicAuth({ Access.ASSISTANT, Access.MANAGER, Access.ADMIN })
 public class UserController extends BaseController {
@@ -31,12 +34,23 @@ public class UserController extends BaseController {
 
 	public Result addUser(Http.Request request) {
 		log.debug("UserController::addtUser");
-		Query<User> query = Ebean.find(User.class);
-		User user = query.findOne();
-		if (user == null) {
-			return createBadRequest("nouser", Constants.Errors.ERROR);
+		User currentUser = request.attrs().get(User.MODEL);
+		Transaction transaction = Ebean.beginTransaction();
+		try {
+			JsonNode body = request.body().asJson();
+			User user = Json.fromJson(body, User.class);
+			NotesUtils.create(user, user);
+			DocumentUtils.create(user, user);
+			AddressUtils.create(user, user, currentUser);
+			user.save(currentUser);
+			transaction.commit();
+			return okResult(user, Full.class);
+		} catch (Exception e) {
+			transaction.rollback();
+			return badRequest(e);
+		} finally {
+			  transaction.end();
 		}
-		return okResult(user, Short.class);
 	}
 
 	public Result getUsers(Http.Request request) {
@@ -78,32 +92,45 @@ public class UserController extends BaseController {
 	}
 
 	public Result updateUser(Http.Request request, Long userId) {
-		log.debug("UserController::updateUser = " + userId);
+		log.debug("UserController::updateUser for user=" + userId);
 		User currentUser = request.attrs().get(User.MODEL);
-		JsonNode body = request.body().asJson();
+		Transaction transaction = Ebean.beginTransaction();
 		try {
-			RequiredField require = requiredFields(body);
-			User user;
-			if (require.id == -1) { // create
-				user = Json.fromJson(body, User.class);
-				user.id = null;
-				validateRole(user, currentUser);
-				user.save(currentUser);
-			} else {
-				Query<User> query = Ebean.find(User.class);
-				query.where().eq("id", require.id).eq("version", require.version);
-				user = query.findOne();
-				if (user == null) {
-					return createBadRequest("nouser", Constants.Errors.ERROR);
-				}
-				new ObjectMapper().readerForUpdating(user).readValue(body);
-				validateRole(user, currentUser);
-				user.update(currentUser);
+			JsonNode body = request.body().asJson();
+			User user = Json.fromJson(body, User.class);
+			User dbUser = Ebean.find(User.class).where().eq("id", user.id).findOne();
+			if (dbUser == null) {
+				return createBadRequest("nouser", Constants.Errors.ERROR);
 			}
-			return okResult(user, User.class);
+			validateRole(user, currentUser);
+			new ObjectMapper().readerForUpdating(dbUser).readValue(body);
+			NotesUtils.update(dbUser, user, currentUser);
+			DocumentUtils.create(dbUser, user);
+			AddressUtils.update(dbUser, user, currentUser);
+			dbUser.save(currentUser);
+			transaction.commit();
+			return okResult(dbUser, Full.class);
 		} catch (Exception e) {
+			transaction.rollback();
 			return badRequest(e);
+		} finally {
+			  transaction.end();
 		}
+	}
+
+	public Result getPassword(Http.Request request, Long userId, String username) {
+		log.debug("UserController::getPassword for user=" + userId + ", username=" + username);
+		User currentUser = request.attrs().get(User.MODEL);
+		if (currentUser.role != Constants.Access.ADMIN) {
+			return status(Http.Status.NOT_ACCEPTABLE, Constants.Errors.ACCESS_DENIED.toString());
+		}
+		User dbUser = Ebean.createNamedQuery(User.class, User.PASSWORD)
+				.setParameter("username", username)
+				.setParameter("id", userId).findOne();
+		if (dbUser == null) {
+			return createBadRequest("nouser", Constants.Errors.ERROR);
+		}
+		return okResult(dbUser.password);
 	}
 
 	private void validateRole(User user, User currentUser) {

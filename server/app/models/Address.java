@@ -1,11 +1,14 @@
 package models;
 
+import java.io.IOException;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import io.ebean.annotation.DbComment;
 import io.ebean.annotation.History;
@@ -70,4 +73,9 @@ public class Address extends BaseModel {
 	@ManyToOne
 	@JsonIgnore
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::location
+	
+	public static interface IsAddressable {
+		Address getAddress();
+		void setAddress(JsonNode body) throws IOException;
+	}
 }

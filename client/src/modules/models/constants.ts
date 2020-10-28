@@ -35,14 +35,6 @@ export enum Role {
     ADMIN = 'ADMIN'
 }
 
-export enum AccountType {
-    STUDENT,
-    PILOT,
-    INSTRUCTOR,
-    MECHANIC,
-    INSPECTOR
-}
-
 export enum AddressType {
     Home = 'Home',
     Business = 'Business',
@@ -55,6 +47,16 @@ export enum AddressType {
     Mailing = 'Mailing',
     Physycal = 'Physycal',
     Electronic = 'Electronic',
+    Other = 'Other'
+}
+
+export enum AccountType {
+    Student = 'Student',
+    Pilot = 'Pilot',
+    Instructor = 'Instructor',
+    Mechanic = 'Mechanic',
+    Inspector = 'Inspector',
+    Station = 'Station',
     Other = 'Other'
 }
 

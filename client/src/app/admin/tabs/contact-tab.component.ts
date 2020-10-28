@@ -25,7 +25,7 @@ import { AppUtils } from 'src/app/utils/app-utils';
 export class ContactTabComponent extends TabBaseDirective {
     result: TableResult<Contact>;
     addressControls: ColumnType[];
-    showAddress: boolean;
+    isAddress: boolean;
 
     constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder) {
         super(confirmationService);
@@ -79,15 +79,15 @@ export class ContactTabComponent extends TabBaseDirective {
             this.adminService.getContact(this.user.id, bean.id).subscribe(e => {
                 this.loading(false);
                 this.formGroup.patchValue(Object.assign(this.defaultBean, e))   ;
-                this.includeAddress(e.address && e.address.id !== null, this.formGroup.controls);
+                this.showAddress(e.address && e.address.id !== null, this.formGroup.controls);
             }, (ex) => this.errorHandler(ex));
         } else {
             this.onReset();
         }
     }
 
-    includeAddress(state: boolean, controls: any) {
-        this.showAddress = state;
+    showAddress(state: boolean, controls: any) {
+        this.isAddress = state;
         if (state) {
             controls.address.enable();
         } else {
@@ -145,7 +145,7 @@ export class ContactTabComponent extends TabBaseDirective {
     onReset() {
         this.formGroup.reset();
         this.formGroup.patchValue(this.defaultBean);
-        this.showAddress = false;
+        this.isAddress = false;
         this._selectedBean = null;
     }
 

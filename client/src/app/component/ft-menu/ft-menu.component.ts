@@ -1,7 +1,7 @@
 import Locales from '@locales/menu';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { Component, NgModule, Input } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
+import { Component, NgModule } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlane, faPencilAlt, faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons';
 import { AppUtils } from 'src/app/utils/app-utils';
@@ -16,26 +16,49 @@ export const FTIcons = {
     selector: 'ft-menu',
     template: `
     <ul class="nav-menu">
-        <li routerLink="../admin" *ngIf="isAdmin" [class]="getClass('admin')">
-            <i class="pi pi-unlock"></i>{{Locales.admin}}
+        <li routerLink="/admin/users" *ngIf="isAdmin" (click)="isOpenAdmin = !isOpenAdmin">
+            <div>
+                <i class="pi pi-unlock"></i>{{Locales.admin}}
+                <span class="pi {{isOpenAdmin ? 'pi-folder-open' : 'pi-folder'}}" style="float: right"></span>
+            </div>
+            <ul class="nav-sub-menu" [style.display]="isOpenAdmin ? 'block' : 'none'">
+                <li routerLink="/admin/users" routerLinkActive="active">
+                    <div>{{Locales.users}}</div>
+                </li>
+                <li routerLink="/admin/accounts" routerLinkActive="active">
+                    <div>{{Locales.accounts}}</div>
+                </li>
+                <li routerLink="/admin/tierRates" routerLinkActive="active">
+                    <div>{{Locales.tierRates}}</div>
+                </li>
+                <li routerLink="/admin/aircrafts" routerLinkActive="active">
+                    <div>{{Locales.aircrafts}}</div>
+                </li>
+                <li routerLink="/admin/billing" routerLinkActive="active">
+                    <div>{{Locales.billing}}</div>
+                </li>
+                <li routerLink="/admin/documents" routerLinkActive="active">
+                    <div>{{Locales.documents}}</div>
+                </li>
+            </ul>
         </li>
-        <li routerLink="../dashboard" [class]="getClass('dashboard')">
-            <i class="pi pi-home"></i>{{Locales.dashboard}}
+        <li routerLink="/dashboard" routerLinkActive="active">
+            <div><i class="pi pi-home"></i>{{Locales.dashboard}}</div>
         </li>
-        <li routerLink="../schedule" [class]="getClass('schedule')">
-            <i class="pi pi-calendar"></i>{{Locales.schedule}}
+        <li routerLink="/schedule" routerLinkActive="active">
+            <div><i class="pi pi-calendar"></i>{{Locales.schedule}}</div>
         </li>
-        <li routerLink="../instructors" [class]="getClass('instructors')">
-            <fa-icon [icon]="icons.faInstructor"></fa-icon>{{Locales.instructors}}
+        <li routerLink="/instructors" routerLinkActive="active">
+            <div><fa-icon [icon]="icons.faInstructor"></fa-icon>{{Locales.instructors}}</div>
         </li>
-        <li routerLink="../aircrafts" [class]="getClass('aircrafts')">
-            <fa-icon [icon]="icons.faPlane" class="rotate-90"></fa-icon>{{Locales.aircrafts}}
+        <li routerLink="/aircrafts" routerLinkActive="active">
+            <div><fa-icon [icon]="icons.faPlane" class="rotate-90"></fa-icon>{{Locales.aircrafts}}</div>
         </li>
-        <li routerLink="../billing" [class]="getClass('billing')">
-            <i class="pi pi-money-bill"></i>{{Locales.billing}}
+        <li routerLink="/billing" routerLinkActive="active">
+            <div><i class="pi pi-money-bill"></i>{{Locales.billing}}</div>
         </li>
-        <li routerLink="../reports" [class]="getClass('reports')">
-            <i class="pi pi-chart-line"></i>{{Locales.reports}}
+        <li routerLink="/reports" routerLinkActive="active">
+            <div><i class="pi pi-chart-line"></i>{{Locales.reports}}</div>
         </li>
     </ul>`,
     styleUrls: ['./ft-menu.component.less']
@@ -43,15 +66,18 @@ export const FTIcons = {
 export class FTMenuComponent {
     Locales = Locales;
     icons = FTIcons;
+    isOpenAdmin: boolean;
+    path: string;
 
-    @Input('link') link: string;
+    constructor(router: Router) {
+        this.path = router.url.split('?')[0];
+        if (this.path.startsWith('/admin')) {
+            this.isOpenAdmin = true;
+        }
+    }
 
     get isAdmin(): boolean {
         return AppUtils.canViewAdmin();
-    }
-
-    getClass(link: string): string {
-        return this.link === link ? 'selected' : null;
     }
 }
 

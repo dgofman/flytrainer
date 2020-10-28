@@ -70,7 +70,6 @@ public class User extends BaseModel implements IsAddressable {
 
 	@Column(name = "middlename")
 	@Length(50)
-	@JsonView(Short.class)
 	public String middle; //middlename
 
 	@Column(name = "lastname")
@@ -106,23 +105,18 @@ public class User extends BaseModel implements IsAddressable {
 	public byte isActive = 0; //is_active
 
 	@Column(name = "resetPassword")
-	@JsonView(Full.class)
 	public byte resetPassword = 1; //reset_password
 
 	@Column(name = "employee")
-	@JsonView(Full.class)
 	public byte isSchoolEmployee = 0; //is_school_employee
 
 	@Column(name = "citizen")
-	@JsonView(Full.class)
 	public byte isCitizen = 0; //is_citizen
 
 	@Column(name = "proficient")
-	@JsonView(Full.class)
 	public byte englishProficient = 0; //english_proficient (AC 60-28)
 
 	@Column(name = "member")
-	@JsonView(Full.class)
 	public byte isMemeber = 1; //is_memeber
 
 	@Column(name = "role")
@@ -131,31 +125,25 @@ public class User extends BaseModel implements IsAddressable {
 	public Constants.Access role = Constants.Access.USER; //role
 
 	@Column(name = "birthday")
-	@JsonView(Full.class)
 	public Date birthday; //birthday
 
 	@Column(name = "driver_license")
 	@Length(10)
-	@JsonView(Full.class)
 	public String dl; //driver_license
 
 	@Column(name = "driver_license_state")
 	@Length(2)
-	@JsonView(Full.class)
 	public String dlState; //driver_license_state
 
 	@Column(name = "driver_license_exp_date")
-	@JsonView(Full.class)
 	public Date dlExpDate; //driver_license_exp_date
 
 	@Column(name = "ssn")
 	@Length(10)
-	@JsonView(Full.class)
 	public String ssn; //ssn
 
 	@Column(name = "ftn")
 	@Length(10)
-	@JsonView(Full.class)
 	public String ftn; //ftn
 	
 	@ManyToOne

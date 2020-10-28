@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.ebean.Ebean;
 import io.ebean.Query;
 import io.ebean.Transaction;
-import models.AbstractBase.Full;
 import models.AbstractBase.Short;
 import models.BaseModel;
 import models.Account;
@@ -37,7 +36,7 @@ public class AccountController extends BaseController {
 		log.debug("AccountController::getAccount for user=" + userId);
 		try {
 			Account account = Ebean.find(Account.class).where().eq("user", new User(userId)).eq("id",  accountId).findOne();
-			return okResult(account, Full.class);
+			return okResult(account, Short.class);
 		} catch (Exception e) {
 			return badRequest(e);
 		}

@@ -7,7 +7,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import io.ebean.annotation.DbComment;
@@ -25,7 +24,6 @@ public class Address extends BaseModel {
 	public AddressType type = AddressType.Home; //type
 	
 	@Length(50)
-	@JsonView(Full.class)
 	public String reference; //Class name
 
 	@Length(30)

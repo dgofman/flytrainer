@@ -3,7 +3,10 @@ package models;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import io.ebean.annotation.History;
@@ -16,6 +19,8 @@ import utils.Constants.AccountType;
 @Table(name = "account")
 public class Account extends BaseModel {
 	
+	public static final int AccountIdStartValue = 6000;
+	
 	@NotNull
 	public AccountType type = AccountType.Pilot; //type
 	
@@ -23,7 +28,9 @@ public class Account extends BaseModel {
 	public String other; //other
 
 	@NotNull
-	public Integer accountId; //account_id
+	@SequenceGenerator(name = "mysequence", initialValue = AccountIdStartValue)//Account.initValue)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mysequence")
+	public Long accountId; //account_id
 	
 	@NotNull
 	public byte isActive = 0; //is_active

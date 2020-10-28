@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.ebean.Ebean;
 import io.ebean.Query;
 import io.ebean.Transaction;
-import models.AbstractBase.Full;
 import models.AbstractBase.Short;
 import models.BaseModel;
 import models.Contact;
@@ -42,7 +41,7 @@ public class ContactController extends BaseController {
 		log.debug("ContactController::getContact for user=" + userId);
 		try {
 			Contact contact = Ebean.find(Contact.class).where().eq("user", new User(userId)).eq("id",  contactId).findOne();
-			return okResult(contact, Full.class);
+			return okResult(contact, Short.class);
 		} catch (Exception e) {
 			return badRequest(e);
 		}

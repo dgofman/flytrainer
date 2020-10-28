@@ -16,6 +16,10 @@ export abstract class AppBaseDirective {
         this.session = AppUtils.getSession();
     }
 
+    get baseURL() {
+        return environment.native ? environment.endpoint : '';
+    }
+
     get toggleArrowMenu(): boolean {
         return AppHeaderComponent.toggleArrowMenu;
     }

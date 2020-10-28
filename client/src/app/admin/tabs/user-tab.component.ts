@@ -26,7 +26,7 @@ export class UserTabComponent extends TabBaseDirective implements OnInit {
 
     accounts: CommonModel[];
     addressControls: ColumnType[];
-    showAddress: boolean;
+    isAddress: boolean;
 
     constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder, private eventService: EventService) {
         super(confirmationService);
@@ -92,7 +92,7 @@ export class UserTabComponent extends TabBaseDirective implements OnInit {
             this.adminService.getUser(this.user.id).subscribe(result => {
                 this.loading(false);
                 this.selectedBean = Object.assign(this.defaultBean, result);
-                this.includeAddress(result.address && result.address.id !== null, this.formGroup.controls);
+                this.showAddress(result.address && result.address.id !== null, this.formGroup.controls);
             }, (ex) => this.errorHandler(ex));
         }
     }
@@ -101,8 +101,8 @@ export class UserTabComponent extends TabBaseDirective implements OnInit {
         return AppUtils.canViewAdmin();
     }
 
-    includeAddress(state: boolean, controls: any) {
-        this.showAddress = state;
+    showAddress(state: boolean, controls: any) {
+        this.isAddress = state;
         if (state) {
             controls.address.enable();
         } else {

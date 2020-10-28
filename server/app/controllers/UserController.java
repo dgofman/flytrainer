@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import io.ebean.Ebean;
 import io.ebean.Query;
 import io.ebean.Transaction;
-import models.AbstractBase.Full;
+import models.AbstractBase.Short;
 import models.FTTableEvent;
 import models.User;
 import play.libs.Json;
@@ -44,7 +44,7 @@ public class UserController extends BaseController {
 			AddressUtils.create(user, user, currentUser);
 			user.save(currentUser);
 			transaction.commit();
-			return okResult(user, Full.class);
+			return okResult(user, Short.class);
 		} catch (Exception e) {
 			transaction.rollback();
 			return badRequest(e);
@@ -88,7 +88,7 @@ public class UserController extends BaseController {
 		if (user == null) {
 			return createBadRequest("nouser", Constants.Errors.ERROR);
 		}
-		return okResult(user, Full.class);
+		return okResult(user, Short.class);
 	}
 
 	public Result updateUser(Http.Request request, Long userId) {
@@ -105,11 +105,11 @@ public class UserController extends BaseController {
 			validateRole(user, currentUser);
 			new ObjectMapper().readerForUpdating(dbUser).readValue(body);
 			NotesUtils.update(dbUser, user, currentUser);
-			DocumentUtils.create(dbUser, user);
+			DocumentUtils.update(dbUser, user, currentUser);
 			AddressUtils.update(dbUser, user, currentUser);
 			dbUser.save(currentUser);
 			transaction.commit();
-			return okResult(dbUser, Full.class);
+			return okResult(dbUser, Short.class);
 		} catch (Exception e) {
 			transaction.rollback();
 			return badRequest(e);

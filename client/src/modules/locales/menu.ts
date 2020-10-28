@@ -9,5 +9,8 @@ export default {
     maintance: 'Maintance',
     reports: 'Resports',
     users: 'Users',
-    user: 'User'
+    user: 'User',
+    accounts: 'Accounts',
+    tierRates: 'Tier Rates',
+    documents: 'Documents'
 };

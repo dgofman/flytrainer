@@ -1,6 +1,6 @@
 import Locales from '@locales/common';
 import { CommonModule } from '@angular/common';
-import { Component, NgModule, Input } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { Session } from 'src/modules/models/constants';
 import { AppUtils } from 'src/app/utils/app-utils';
 import { AuthService } from 'src/app/authentication/auth.service';
@@ -15,7 +15,7 @@ import { FTMenuModule } from '../ft-menu/ft-menu.component';
           style="padding-left: 10px;">{{0 | currency}}</span>
         <br><a style="float: right" (click)="appService.logout()">{{Locales.logout}}</a>
       </div>
-      <ft-menu [link]="link"></ft-menu>
+      <ft-menu></ft-menu>
     `,
     styles: [`
         .profile {
@@ -33,8 +33,6 @@ import { FTMenuModule } from '../ft-menu/ft-menu.component';
 export class FTLeftNavComponent {
     Locales = Locales;
     session: Session;
-
-    @Input('link') link: string;
 
     constructor(public appService: AuthService) {
       this.session = AppUtils.getSession();

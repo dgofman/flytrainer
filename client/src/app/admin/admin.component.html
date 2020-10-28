@@ -13,9 +13,10 @@
       </div>
     </div>
   </div>
+  
   <div class="wrap">
     <div class="left-menu">
-      <ft-menu link="admin"></ft-menu>
+      <ft-leftnav></ft-leftnav>
     </div>
     <div class="main">
       <div class="breadcrumb">
@@ -32,6 +33,9 @@
       <ft-dialog width="70" height="60" >
         <ng-template pTemplate="{{Locales.user}}" let-user="item">
           <user-tab [user]="user"></user-tab>
+        </ng-template>
+        <ng-template pTemplate="{{Locales.accounts}}" let-user="item">
+          <account-tab [user]="user"></account-tab>
         </ng-template>
         <ng-template pTemplate="{{Locales.contacts}}" let-user="item">
           <contact-tab [user]="user"></contact-tab>

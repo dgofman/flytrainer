@@ -20,7 +20,7 @@
             <div class="row" *ngIf="selectedBean?.document as doc">
                 <span *ngIf="doc.fileName">
                     <button pButton icon="pi pi-times" style="padding: 0; font-size: 9px;" (click)="deleteDocument(doc)"></button>&nbsp;&nbsp;
-                    <a href="/file/{{user.id}}/{{doc.id}}?token={{token}}" download>{{Locales.download}}</a>&nbsp;&nbsp;
+                    <a href="{{baseURL}}/file/{{user.id}}/{{doc.id}}?token={{token}}" download>{{Locales.download}}</a>&nbsp;&nbsp;
                     <b>{{doc.fileName}}</b> - {{doc.size}} bytes
                 </span>
             </div>

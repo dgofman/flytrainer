@@ -10,8 +10,8 @@
         </div>
         <div class="row" *ngIf="selectedBean?.id">
             <h3>{{Locales.preview}}</h3>
-            <a href="/file/{{user.id}}/{{selectedBean.id}}?token={{token}}" download>{{Locales.download}}</a>
-            <img style="max-width: 100%" src="/file/{{user.id}}/{{selectedBean.id}}?token={{token}}" onerror="this.src='/assets/no-image-available.jpeg';"/>
+            <a href="{{baseURL}}/file/{{user.id}}/{{selectedBean.id}}?token={{token}}" download>{{Locales.download}}</a>
+            <img style="max-width: 100%" src="{{baseURL}}/file/{{user.id}}/{{selectedBean.id}}?token={{token}}" onerror="this.src='assets/no-image-available.jpeg';"/>
         </div>
     </div>
     <div class="ui-fluid p-md-5">

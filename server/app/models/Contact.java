@@ -24,7 +24,7 @@ import models.Address.IsAddressable;
 public class Contact extends BaseModel implements IsAddressable {
 
 	@Length(30)
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public String description; //description
 
 	@Column(name = "firstname")
@@ -35,7 +35,7 @@ public class Contact extends BaseModel implements IsAddressable {
 
 	@Column(name = "middlename")
 	@Length(50)
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public String middle; //middlename
 
 	@Column(name = "lastname")
@@ -51,7 +51,7 @@ public class Contact extends BaseModel implements IsAddressable {
 
 	@Length(30)
 	@DbComment("ex: (+NN) NNN NNN NNN")
-	@JsonView(Full.class)
+	@JsonView(Short.class)
 	public String phone; //phone
 
 	@ManyToOne

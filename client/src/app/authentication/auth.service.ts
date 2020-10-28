@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { CanActivate, Router } from '@angular/router';
 import { Session } from 'src/modules/models/constants';
 import { AppUtils } from '../utils/app-utils';
+import { RouterOutlet } from 'src/modules/models/constants';
 
 @Injectable()
 export class AuthService implements HttpInterceptor, CanActivate {
@@ -29,7 +30,7 @@ export class AuthService implements HttpInterceptor, CanActivate {
                 url = environment.endpoint + req.url;
             }
         }
-        let headers = req.headers.set('SourceMap', environment.native ? '#' : '/');
+        let headers = req.headers.set('SourceMap', RouterOutlet.useHash ? '/#' : '/');
         if (AuthService.AUTH_TOKEN) {
             headers = headers
                 .set('Authorization', 'Bearer ' + AuthService.AUTH_TOKEN)

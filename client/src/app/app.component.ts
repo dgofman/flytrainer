@@ -8,10 +8,12 @@ import { Title } from '@angular/platform-browser';
   selector: 'app-root',
   template: `
     <router-outlet></router-outlet>
+    <router-outlet name="view"></router-outlet>
     <app-toast></app-toast>
     <app-overlay></app-overlay>`
 })
 export class AppComponent {
+
   constructor(provider: Title) {
     provider.setTitle(environment.company);
   }

@@ -22,31 +22,18 @@ import { AddressTabModule } from './tabs/address-tab.component';
 import { ContactTabModule } from './tabs/contact-tab.component';
 import { DocumentTabModule } from './tabs/document-tab.component';
 import { CertificateTabModule } from './tabs/certificate-tab.component';
+import { RouterOutlet } from 'src/modules/models/constants';
 
 @NgModule({
   imports: [
     RouterModule.forChild([
-      {
-        path: '', component: AdminComponent
-      },
-      {
-        path: 'users', component: AdminComponent
-      },
-      {
-        path: 'accounts', component: AdminComponent
-      },
-      {
-        path: 'tierRates', component: AdminComponent
-      },
-      {
-        path: 'aircrafts', component: AdminComponent
-      },
-      {
-        path: 'billing', component: AdminComponent
-      },
-      {
-        path: 'documents', component: AdminComponent
-      }
+      Object.assign(RouterOutlet.defineLink('', AdminComponent), {redirectTo: 'users', pathMatch: 'full'}),
+      RouterOutlet.defineLink('users', AdminComponent),
+      RouterOutlet.defineLink('accounts', AdminComponent),
+      RouterOutlet.defineLink('tierRates', AdminComponent),
+      RouterOutlet.defineLink('aircrafts', AdminComponent),
+      RouterOutlet.defineLink('billing', AdminComponent),
+      RouterOutlet.defineLink('documents', AdminComponent)
     ]),
     CommonModule,
     HttpClientModule, /*required for HTTP_INTERCEPTORS*/

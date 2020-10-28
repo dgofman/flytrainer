@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { environment } from '@client/environments/environment';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent, AppOverlayComponent, AppToastComponent } from './app.component';
@@ -7,6 +6,7 @@ import { AppNotFoundComponent } from './app.notfound.component';
 import { Routes, RouterModule, UrlSegment } from '@angular/router';
 import { AuthService, AdminAuthService } from './authentication/auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterOutlet } from 'src/modules/models/constants';
 
 const AuthRouteMatcher = (url: UrlSegment[]) => {
   if (url.length) {
@@ -80,7 +80,7 @@ export const routes: Routes = [
     HttpClientModule,
     NoopAnimationsModule,
     RouterModule.forRoot(routes, {
-      useHash: environment.native
+      useHash: RouterOutlet.useHash
     })
   ],
   declarations: [

@@ -4,19 +4,31 @@ export type SHOW_COLUMNS = 'never' | true | false;
 export type FORMAT_COLUMNS = 'datetime' | 'short' | 'date' | 'bool';
 export type TYPE_COLUMNS = 'hide' | 'check' | 'cal' | 'radio' | 'input' | 'password' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask' | 'number';
 
+export const RouterOutlet = {
+    name: 'view',  // src/app/app.component.ts = <router-outlet name="view"></router-outlet>
+    useHash: true, // issue on refresh page in the children level, plus '**' cannot catch invalid path
+    useChildOutlet: false,
+    defineLink: (path: string, component: any) => {
+        return RouterOutlet.useChildOutlet ? { path, component, outlet: RouterOutlet.name } : { path, component };
+    },
+    createLink: (parent: string, path: string) => {
+        return RouterOutlet.useChildOutlet ? [parent, { outlets: { [RouterOutlet.name]: path } }] : [parent, path];
+    }
+};
+
 export interface ColumnType {
-  field: string;
-  header?: string;
-  width?: number;
-  align?: string;
-  validators?: ValidatorFn | ValidatorFn[] | AbstractControlOptions;
-  format?: FORMAT_COLUMNS;
-  show?: SHOW_COLUMNS;
-  type?: TYPE_COLUMNS;
-  class?: string;
-  value?: any;
-  template?: string;
-  placeholder?: string;
+    field: string;
+    header?: string;
+    width?: number;
+    align?: string;
+    validators?: ValidatorFn | ValidatorFn[] | AbstractControlOptions;
+    format?: FORMAT_COLUMNS;
+    show?: SHOW_COLUMNS;
+    type?: TYPE_COLUMNS;
+    class?: string;
+    value?: any;
+    template?: string;
+    placeholder?: string;
 }
 
 export interface Session {

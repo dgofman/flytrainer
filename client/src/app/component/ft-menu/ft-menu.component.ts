@@ -5,6 +5,7 @@ import { Component, NgModule } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlane, faPencilAlt, faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons';
 import { AppUtils } from 'src/app/utils/app-utils';
+import { RouterOutlet } from 'src/modules/models/constants';
 
 export const FTIcons = {
     faPlane,
@@ -16,28 +17,28 @@ export const FTIcons = {
     selector: 'ft-menu',
     template: `
     <ul class="nav-menu">
-        <li routerLink="/admin/users" *ngIf="isAdmin" (click)="isOpenAdmin = !isOpenAdmin">
+        <li [routerLink]="createLink('users')" *ngIf="isAdmin" (click)="isOpenAdmin = !isOpenAdmin">
             <div>
                 <i class="pi pi-unlock"></i>{{Locales.admin}}
                 <span class="pi {{isOpenAdmin ? 'pi-folder-open' : 'pi-folder'}}" style="float: right"></span>
             </div>
             <ul class="nav-sub-menu" [style.display]="isOpenAdmin ? 'block' : 'none'">
-                <li routerLink="/admin/users" routerLinkActive="active">
+                <li [routerLink]="createLink('users')" routerLinkActive="active">
                     <div>{{Locales.users}}</div>
                 </li>
-                <li routerLink="/admin/accounts" routerLinkActive="active">
+                <li [routerLink]="createLink('accounts')" routerLinkActive="active">
                     <div>{{Locales.accounts}}</div>
                 </li>
-                <li routerLink="/admin/tierRates" routerLinkActive="active">
+                <li [routerLink]="createLink('tierRates')" routerLinkActive="active">
                     <div>{{Locales.tierRates}}</div>
                 </li>
-                <li routerLink="/admin/aircrafts" routerLinkActive="active">
+                <li [routerLink]="createLink('aircrafts')" routerLinkActive="active">
                     <div>{{Locales.aircrafts}}</div>
                 </li>
-                <li routerLink="/admin/billing" routerLinkActive="active">
+                <li [routerLink]="createLink('billing')" routerLinkActive="active">
                     <div>{{Locales.billing}}</div>
                 </li>
-                <li routerLink="/admin/documents" routerLinkActive="active">
+                <li [routerLink]="createLink('documents')" routerLinkActive="active">
                     <div>{{Locales.documents}}</div>
                 </li>
             </ul>
@@ -74,6 +75,10 @@ export class FTMenuComponent {
         if (this.path.startsWith('/admin')) {
             this.isOpenAdmin = true;
         }
+    }
+
+    createLink(path: string) {
+        return RouterOutlet.createLink('/admin', path);
     }
 
     get isAdmin(): boolean {

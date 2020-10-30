@@ -190,7 +190,12 @@ export class AppHeaderComponent {
 
 @Component({
   selector: 'app-footer',
-  template: `<a [href]="tfrLink" target="_blank">TFR</a> | <a [href]="wxbriefLink" target="_blank">1800WXBrief</a> | <a [href]="wxLink" target="_blank">AviationWeather</a> | <a [href]="iplanLink" target="_blank">iFlightPlanner</a> | <a [href]="skyvectorLink" target="_blank">Skyvector</a> <div class="powerby">${Locales.powerBy}</div>`
+  template: `<a [href]="tfrLink" target="_blank">TFR</a>&nbsp;|&nbsp;
+            <a [href]="wxbriefLink" target="_blank">1800WXBrief</a>&nbsp;|&nbsp;
+            <a [href]="wxLink" target="_blank">AviationWeather</a>&nbsp;|&nbsp;
+            <a [href]="iplanLink" target="_blank">iFlightPlanner</a>&nbsp;|&nbsp;
+            <a [href]="skyvectorLink" target="_blank">Skyvector</a>
+            <div class="powerby">${Locales.powerBy}</div>`
 })
 export class AppFooterComponent {
   tfrLink = environment.tfrLink || 'https://tfr.faa.gov/tfr2/list.jsp';

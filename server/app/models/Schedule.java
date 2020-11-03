@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "schedule")
-public class Schedule extends BaseModel {
+public class Schedule extends AbstractBase {
 
 	public Date startDate; //start_date
 	

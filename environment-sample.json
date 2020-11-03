@@ -6,6 +6,7 @@
     "maxLockedTime": 15,
     "pathSavedDocuments": null,
     "cleanupTempDocuments": 120,
+    "initialAccountId": 60000,
     "issuer": "FlyTrainer LLC",
     "defaultPassword": "pilot",
     "encryptKey": "*******",

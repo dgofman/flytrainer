@@ -33,7 +33,7 @@ public class Billing extends BaseModel {
 	public PaymentPeriod period; //period
 	
 	@ManyToOne
-	public TierRate tier; //tier_id
+	public Tier tier; //tier_id
 
 	@ManyToOne
 	public Account account; //FK account_id - Account::billing

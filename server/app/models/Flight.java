@@ -13,7 +13,7 @@ import utils.Constants.FlightType;
 @Entity
 @History
 @Table(name = "flight")
-public class Flight extends BaseModel {
+public class Flight extends AbstractBase {
 	
 	@NotNull
 	public FlightType type = FlightType.Flight; //type

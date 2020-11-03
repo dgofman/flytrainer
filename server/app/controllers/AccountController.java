@@ -7,8 +7,8 @@ import io.ebean.Ebean;
 import io.ebean.Query;
 import io.ebean.Transaction;
 import models.AbstractBase.Short;
-import models.BaseModel;
 import models.Account;
+import models.BaseModel;
 import models.User;
 import play.libs.Json;
 import play.mvc.Http;
@@ -50,6 +50,10 @@ public class AccountController extends BaseController {
 			User user = new User(userId);
 			JsonNode body = request.body().asJson();
 			Account account = Json.fromJson(body, Account.class);
+			if (account.accountId == null) {
+				Account dbAccount = Ebean.createNamedQuery(Account.class, Account.FIND).findOne();
+				account.accountId = (dbAccount.maxAccountId == null ? Account.INITIAL_ACCOUNT_ID : dbAccount.maxAccountId) + 1;
+			}
 			NotesUtils.create(account, user);
 			account.user = user;
 			account.save(currentUser);

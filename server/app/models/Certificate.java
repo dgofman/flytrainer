@@ -52,6 +52,8 @@ public class Certificate extends BaseModel {
 	public byte isSuspended = 0; //is_suspended
 	
 	public byte isWithdrawn = 0; //is_withdrawn
+	
+	public Integer monthInterval; //month_interval
 
 	@ManyToOne
 	@JsonIgnore

@@ -3,34 +3,47 @@ package models;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
+import io.ebean.annotation.Aggregation;
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
+import utils.AppConfig;
 import utils.Constants.AccountType;
+import utils.Constants.Key;
 
 @Entity
 @History
 @Table(name = "account")
+@NamedQueries(value = { 
+	@NamedQuery(name = Account.FIND, query = "select maxAccountId"),
+})
 public class Account extends BaseModel {
 	
-	public static final int AccountIdStartValue = 6000;
+	public static final String FIND = "Account.find";
+
+	public static final long INITIAL_ACCOUNT_ID = AppConfig.get(Key.INITIAL_ACCOUNT_ID).asLong();
 	
+	@Length(30)
+	@JsonView(Short.class)
+	public String description; //description
+
 	@NotNull
 	public AccountType type = AccountType.Pilot; //type
 	
 	@Length(30)
 	public String other; //other
 
-	@NotNull
-	@SequenceGenerator(name = "mysequence", initialValue = AccountIdStartValue)//Account.initValue)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mysequence")
 	public Long accountId; //account_id
+	
+	@Aggregation("max(accountId)")
+	public Long maxAccountId;
 	
 	@NotNull
 	public byte isActive = 0; //is_active
@@ -41,7 +54,7 @@ public class Account extends BaseModel {
 	public Payment autoPayment; //auto_payment_id
 	
 	@ManyToOne
-	public TierRate defaultTier; //default_tier_id
+	public Tier defaultTier; //default_tier_id
 
 	@ManyToOne
 	public User user; //FK user_id - User::accounts

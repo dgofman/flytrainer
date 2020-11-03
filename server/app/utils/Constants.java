@@ -597,7 +597,7 @@ public class Constants {
 		DEFAULT_PWD("defaultPassword"), ENCRYPT_KEY("encryptKey"), EMAIL("email"),
 		LOGIN_ATTEMPTS("maxLoginAttempts"), LOCKED_TIME("maxLockedTime"),
 		DOCUMENTS_SAVE_PATH("pathSavedDocuments"), CLEANUP_TEMP_TIME("cleanupTempDocuments"),
-		ACCOUNT_ACTIVATION("messages->accountActivation"),
+		ACCOUNT_ACTIVATION("messages->accountActivation"), INITIAL_ACCOUNT_ID("initialAccountId"),
 		RESET_PASSWORD("messages->resetPassword");
 
 		private final String key;

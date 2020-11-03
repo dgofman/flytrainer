@@ -6,7 +6,9 @@ export enum EventType {
     Add,
     Update,
     Delete,
-    Refresh
+    Refresh,
+    Expand,
+    Collapse
 }
 
 export interface EmitEvent {

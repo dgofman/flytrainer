@@ -1,5 +1,5 @@
 <div class="container" [ngClass]="{'menu-layout-open': toggleArrowMenu}">
-  <admin-topbar></admin-topbar> 
+  <admin-topbar></admin-topbar>
   <div class="wrap">
     <div class="left-menu">
       <ft-leftnav></ft-leftnav>
@@ -15,8 +15,27 @@
         <ng-template pTemplate="firstColumn" let-rowData="$implicit" *ngIf="AppUtils.isEditorAccess()">
           <fa-icon [icon]="icons.faPencil" (click)="onEdit(rowData)" style="cursor: pointer"></fa-icon>
         </ng-template>
+        <ng-template pTemplate="expandForm" let-rowData="$implicit">
+          <div *ngIf="!rowData.accounts?.length" style="text-align: center;">
+            <p-button [label]="Locales.addAccount" (click)="onAddAccount(rowData)"></p-button>
+          </div>
+          <div *ngIf="rowData.accounts?.length"><b style="padding-left: 5px; color: #1c8445">{{Locales.accounts}}</b>
+            <p-table [value]="rowData.accounts">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th *ngFor="let c of accCols" [style.width.px]="c.width">{{c.header}}</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="accCols">
+                <tr>
+                  <td *ngFor="let col of accCols" [style.text-align]="col.align" [title]="formatColData(col, rowData, true)" [innerHTML]="formatColData(col, rowData, false)"></td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </ng-template>
       </ft-table>
-      <ft-dialog width="70" height="60" >
+      <ft-dialog width="70" height="60">
         <ng-template pTemplate="{{Locales.user}}" let-user="item">
           <user-tab [user]="user"></user-tab>
         </ng-template>

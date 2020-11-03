@@ -9,9 +9,11 @@
                 <span *ngFor="let label of [Locales.admin, Locales.tierRates]">{{label}}</span>
             </div>
             <ft-table filter="billing" [columns]="cols">
+                <ng-template pTemplate="expandFormTemplate">
+                    <p>HELLLO</p>
+                </ng-template>
             </ft-table>
         </div>
-        <div class="layout-mask"></div>
     </div>
     <app-footer></app-footer>
 </div>

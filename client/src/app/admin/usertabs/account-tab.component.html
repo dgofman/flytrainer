@@ -5,32 +5,34 @@
         </div>
         <div class="row" formGroupName="notes">
             <label>{{Locales.notes}}</label>
-            <textarea formControlName="content" pInputTextarea [rows]="4"></textarea>
+            <textarea formControlName="content" pInputTextarea [rows]="8"></textarea>
         </div>
     </div>
     <div class="ui-fluid p-md-5">
-        <p-table [value]="result?.data" [lazy]="true" (onLazyLoad)="lazyLoad($event)" [(selection)]="selectedBean"
-            [paginator]="true" [rows]="25" [totalRecords]="result?.total" [scrollable]="true">
+        <p-table [value]="result" [lazy]="true" (onLazyLoad)="lazyLoad()" [(selection)]="selectedBean">
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
                 <col/>
-                <col [style.width.rem]="4" />
+                <col [style.width.rem]="5" />
+                <col [style.width.rem]="3" />
                 <col [style.width.rem]="3" />
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th>{{Locales.accountNumber}}</th>
+                    <th>{{Locales.type}}</th>
+                    <th align="center">{{Locales.accNum}}</th>
                     <th align="center">{{Locales.isActive}}</th>
                     <th align="center"><i class="pi pi-check"></i></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-contact>
+            <ng-template pTemplate="body" let-data>
                 <tr>
-                    <td>{{contact.last}}, {{contact.first}}</td>
-                    <td>{{contact.relationship}}</td>
+                    <td>{{data.type}}</td>
+                    <td>{{data.accountId}}</td>
+                    <td [innerHTML]="formatData(data.isActive, 'bool')"></td>
                     <td>
-                        <p-tableRadioButton [value]="contact"></p-tableRadioButton>
+                        <p-tableRadioButton [value]="data"></p-tableRadioButton>
                     </td>
                 </tr>
             </ng-template>
@@ -39,17 +41,12 @@
                     <td [attr.colspan]="4" style="text-align: center;">{{Locales.noData}}</td>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="paginatorright">
-                <div style="margin-right: 10px; margin-top: 5px">
-                {{Locales.total}}: {{result?.total}}
-                </div>
-            </ng-template>
         </p-table>
     </div>
 </form>
 <div class="row footer left">
-    <button *ngIf="result?.data.length > 0" class="ui-button ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
-    <button *ngIf="result?.data.length > 0" class="ui-button " (click)="onDelete()" [disabled]="!selectedBean">{{Locales.delete}}</button>
+    <button *ngIf="result?.length > 0" class="ui-button ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
+    <button *ngIf="result?.length > 0" class="ui-button " (click)="onDelete()" [disabled]="!selectedBean">{{Locales.delete}}</button>
     <div class="right">
         <button pButton (click)="onSubmit()" [label]="Locales.save" [disabled]="!myForm.form.valid"></button>
     </div>

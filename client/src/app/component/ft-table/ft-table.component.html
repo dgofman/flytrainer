@@ -28,7 +28,7 @@
                         <p-radioButton [name]="rowData.field" [value]="false" [formControlName]="rowData.field"></p-radioButton><i [class]="false | ftstate"></i>
                         <p-button label="{{Locales.reset}}" class="filter-button" (click)="filterGroup.get(rowData.field).setValue(null)"></p-button>
                       </div>
-                      <p-calendar #cal *ngIf="rowData.type=='cal'" placeholder="mm/dd/yyyy ( - mm/dd/yyyy)" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange" showButtonBar="true" showIcon="true" selectionMode="range" appendTo="body" [formControlName]="rowData.field">
+                      <p-calendar #cal *ngIf="rowData.type=='cal'" placeholder="mm/dd/yyyy ( - mm/dd/yyyy)" selectionMode="range" [formControlName]="rowData.field" ftCalendar>
                         <p-header style="display: inline-block; height: 10px;">
                           <a class="cal-popup-close" (click)="cal.hideOverlay()">
                             <span class="ui-overlaypanel-close-icon pi pi-times ng-tns-c26-1"></span>
@@ -57,11 +57,13 @@
       [style]="{'minWidth':'80px', 'width': '80px'}"></p-dropdown>
   </div>
 </div>
-<p-table [columns]="getColumns(0)" [value]="data" [resizableColumns]="true" [scrollable]="true" [rowHover]="true" scrollHeight="41rem"
+<p-table [columns]="getColumns(0)" [value]="data" [resizableColumns]="true" [scrollable]="true" [rowHover]="true"
   [expandedRowKeys]="expandedRows" [dataKey]="dataKey" [lazy]="true" [paginator]="true" [rows]="filterModel.total"
-  [totalRecords]="total || data?.length" (onLazyLoad)="lazyLoad($event)" (onColResize)="colResize()">
+  [totalRecords]="total || data?.length" (onLazyLoad)="lazyLoad($event)" (onColResize)="colResize()"
+  (onRowExpand)="onExpandCollapse($event, true)" (onRowCollapse)="onExpandCollapse($event, false)" #fttable>
   <ng-template pTemplate="colgroup" let-columns>
     <colgroup>
+      <col *ngIf="expandFormTemplate" [style.width.px]="40" />
       <col *ngIf="firstHeaderTemplate" [style.width.px]="45" />
       <col *ngFor="let col of columns" [style.width.px]="filters[col.field + '_width'] || col.width"/>
       <col *ngIf="lastHeaderTemplate" [style.width.px]="50" />
@@ -69,10 +71,11 @@
   </ng-template>
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th *ngIf="firstHeaderTemplate" style="text-align: center">
+      <th *ngIf="expandFormTemplate && !firstHeaderTemplate"></th>
+      <th *ngIf="firstHeaderTemplate" style="text-align: center" [colSpan]="expandFormTemplate ? 2 : 1">
         <ng-container *ngTemplateOutlet="firstHeaderTemplate"></ng-container>
       </th>
-      <th *ngFor="let col of columns" pResizableColumn pSortableColumn="{{col.field}}" [title]="col.header" class="ellipsis"  [id]="col.field">
+      <th *ngFor="let col of columns" pResizableColumn pSortableColumn="{{col.field}}" [title]="col.header" class="ellipsis" [id]="col.field">
         {{col.header}}
         <p-sortIcon field="{{col.field}}"></p-sortIcon>
       </th>
@@ -83,6 +86,9 @@
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
     <tr>
+      <td *ngIf="expandFormTemplate" align="center">
+        <i style="color: #007ad9; cursor: pointer;" [pRowToggler]="rowData" class="noshadow" [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+      </td>
       <td *ngIf="firstColumnTemplate" style="text-align: center">
         <ng-container *ngTemplateOutlet="firstColumnTemplate; context: {$implicit: rowData}"></ng-container>
       </td>
@@ -91,7 +97,7 @@
           <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
         </a>
       </td>
-      <td *ngFor="let col of columns" class="ui-resizable-column ellipsis" [style.text-align]="col.align" [title]="formatData(col, rowData, true)" [innerHTML]="formatData(col, rowData, false)"></td>
+      <td *ngFor="let col of columns" class="ui-resizable-column ellipsis" [style.text-align]="col.align" [title]="formatColData(col, rowData, true)" [innerHTML]="formatColData(col, rowData, false)"></td>
       <td *ngIf="lastColumnTemplate" style="text-overflow: initial; text-align: center">
         <ng-container *ngTemplateOutlet="lastColumnTemplate; context: {$implicit: rowData}"></ng-container>
       </td>
@@ -99,17 +105,24 @@
   </ng-template>
   <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
     <tr>
-      <td [attr.colspan]="columns.length + (firstHeaderTemplate ? 1 : 0) + (lastColumnTemplate ? 1 : 0)" [title]="columns.length">
+      <td [attr.colspan]="columns.length + (firstHeaderTemplate ? 1 : 0) + (lastColumnTemplate ? 1 : 0) + 1">
         <div [ftTableFormProvider]="rowData" [table]="this">
-          <ng-container *ngComponentOutlet="expandFormTemplate"></ng-container>
+          <ng-container *ngTemplateOutlet="expandFormTemplate; context: {$implicit: rowData}"></ng-container>
         </div>
       </td>
     </tr>
   </ng-template>
   <ng-template pTemplate="emptymessage" let-columns>
     <tr>
-      <td [attr.colspan]="columns.length + (firstHeaderTemplate ? 1 : 0) + (lastHeaderTemplate ? 1 : 0)" style="text-align: center;">{{Locales.noData}}</td>
+      <td [attr.colspan]="columns.length + (expandFormTemplate ? 1 : 0) + (firstHeaderTemplate ? 1 : 0) + (lastHeaderTemplate ? 1 : 0)" style="text-align: center;">{{Locales.noData}}</td>
     </tr>
+  </ng-template>
+  <ng-template pTemplate="paginatorleft">
+    <div style="margin-left: 10px; margin-top: 8px">
+      <i (click)="fttable.exportCSV()" class="pi pi-file-o gap hand" title="Export CSV"></i>
+      <i (click)="exportExcel()" class="pi pi-file-excel gap hand" title="Export Excel"></i>
+      <!--i (click)="exportPdf()" class="pi pi-file-pdf hand" title="Export PDF"></i-->
+    </div>
   </ng-template>
   <ng-template pTemplate="paginatorright">
     <div style="margin-right: 10px; margin-top: 5px">

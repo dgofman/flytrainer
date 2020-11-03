@@ -32,7 +32,11 @@
               "node_modules/primeicons/primeicons.css",
               "src/assets/less/styles.less"
             ],
-            "scripts": []
+            "scripts": [
+            ],
+            "allowedCommonJsDependencies": [
+              "xlsx"
+            ]
           },
           "configurations": {
             "production": {

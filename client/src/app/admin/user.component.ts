@@ -22,6 +22,17 @@ export class UserComponent extends AppBaseDirective {
   icons = FTIcons;
   result: TableResult<User>;
 
+  accCols: ColumnType[] = [
+        { field: 'type', header: Locales.type, width: 150, },
+        { field: 'accountId', header: Locales.accountNumber, width: 150, },
+        { field: 'expDate', header: Locales.expDate, width: 200, format: 'date' },
+        { field: 'autoPayment', header: Locales.autoPayment, width: 100 },
+        { field: 'defaultTier', header: Locales.tierRates, width: 100 },
+        { field: 'isActive', header: Locales.isActive, type: 'radio', format: 'bool', width: 70, align: 'center' },
+        { field: 'description', header: Locales.description, width: 200 },
+        { field: 'notes', header: Locales.notes, path: ['content'] },
+    ];
+
   cols: ColumnType[] = [
     { field: 'id', show: 'never'},
     { field: 'version', show: 'never'},
@@ -59,7 +70,10 @@ export class UserComponent extends AppBaseDirective {
     eventService.emmiter.subscribe((event: EmitEvent) => {
       switch (event.message) {
         case EventType.Refresh:
-          this.updateDialog(event.data);
+          if (event.data) {
+            this.updateDialog(event.data);
+          }
+          this.table.expandedRows = {};
           this.table.refresh();
           break;
       }
@@ -90,6 +104,11 @@ export class UserComponent extends AppBaseDirective {
     AppHeaderComponent.toggleArrowMenu = false;
   }
 
+  onAddAccount(user: User) {
+    this.onEdit(user);
+    this.dialog.onTabChange(1);
+  }
+
   eventTableHandler(event: EmitEvent) {
     switch (event.message) {
       case EventType.Load:
@@ -97,6 +116,12 @@ export class UserComponent extends AppBaseDirective {
         this.adminService.getUsers(event.data).subscribe(result => {
           this.loading(false);
           this.result = result;
+        }, (ex) => this.errorHandler(ex));
+        break;
+      case EventType.Expand:
+        this.adminService.getAccounts(event.data.id).subscribe(e => {
+            this.loading(false);
+            event.data.accounts = e;
         }, (ex) => this.errorHandler(ex));
         break;
     }

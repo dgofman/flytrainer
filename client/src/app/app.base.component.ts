@@ -1,9 +1,11 @@
 import { environment } from '@client/environments/environment';
 import { Directive } from '@angular/core';
-import { Session } from 'src/modules/models/constants';
+import { Session, ColumnType } from 'src/modules/models/constants';
 import { AppHeaderComponent } from './app.component';
 import { AppUtils } from './utils/app-utils';
 import { AuthService } from './authentication/auth.service';
+import { BaseModel } from 'src/modules/models/base.model';
+import { FTFormControl } from './utils/ft-form.control';
 
 @Directive()
 export abstract class AppBaseDirective {
@@ -22,6 +24,17 @@ export abstract class AppBaseDirective {
 
     get toggleArrowMenu(): boolean {
         return AppHeaderComponent.toggleArrowMenu;
+    }
+
+    formatColData(col: ColumnType, rowData: BaseModel, title: boolean) {
+        if (title && col.format === 'bool') {
+            return '';
+        }
+        return this.formatData(FTFormControl.getData(col, rowData), col.format);
+    }
+
+    formatData(data: any, format: string) {
+        return FTFormControl.Format(data, format);
     }
 
     loading(show: boolean) {

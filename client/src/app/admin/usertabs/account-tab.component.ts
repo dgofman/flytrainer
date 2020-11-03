@@ -5,19 +5,19 @@ import { CommonModel, Note } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { AccountType } from 'src/modules/models/constants';
 import { TabBaseDirective, TabBaseModule } from './tabbase.component';
-import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '../admin-shared.module';
-import { TableResult } from 'src/modules/models/table.result';
+import { EventService, EventType } from 'src/services/event.service';
 
 @Component({
     selector: 'account-tab',
     templateUrl: './account-tab.component.html'
 })
 export class AccountTabComponent extends TabBaseDirective {
-    result: TableResult<CommonModel>;
+    result: CommonModel[];
 
-    constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder) {
+    constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder, private eventService: EventService) {
         super(confirmationService);
         this.controls = [
             { field: 'id' },
@@ -27,7 +27,6 @@ export class AccountTabComponent extends TabBaseDirective {
             { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], value: Object.keys(AccountType).map(key => ({ label: AccountType[key], value: key })) },
             { field: 'other', type: 'hide' },
             { field: 'accountId', header: Locales.accountNumber, type: 'input', placeholder: Locales.leaveBlankAutoGet },
-            { field: 'middle', header: Locales.middlename, type: 'input' },
             { field: 'expDate', header: Locales.expDate, type: 'cal'},
             { field: 'autoPayment', header: Locales.autoPayment, type: 'popup' },
             { field: 'defaultTier', header: Locales.defaultTier, type: 'popup' },
@@ -59,9 +58,9 @@ export class AccountTabComponent extends TabBaseDirective {
         }
     }
 
-    lazyLoad(event?: LazyLoadEvent) {
+    lazyLoad() {
         this.loading(true);
-        this.adminService.getContacts(this.user.id, event.first).subscribe(result => {
+        this.adminService.getAccounts(this.user.id).subscribe(result => {
             this.loading(false);
             this.result = result;
         }, (ex) => this.errorHandler(ex));
@@ -74,13 +73,15 @@ export class AccountTabComponent extends TabBaseDirective {
             this.adminService.updateAccount(this.user.id, account).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
+                this.eventService.emit(EventType.Refresh, null);
                 this.success(Locales.recordUpdated);
             }, (ex) => this.errorHandler(ex));
         } else {
             this.adminService.addAccount(this.user.id, account).subscribe(result => {
                 this.loading(false);
-                this.result.data.push(result);
+                this.result.push(result);
                 this.formGroup.patchValue(result);
+                this.eventService.emit(EventType.Refresh, null);
                 this.success(Locales.recordCreated);
             }, (ex) => this.errorHandler(ex));
         }
@@ -90,10 +91,11 @@ export class AccountTabComponent extends TabBaseDirective {
         this.loading(true);
         this.adminService.deleteAccount(this.user.id, this.selectedBean.id).subscribe(_  => {
             this.loading(false);
-            this.result.data.forEach((item, idx) => {
+            this.result.forEach((item, idx) => {
                 if (this.selectedBean && item.id === this.selectedBean.id) {
-                    this.result.data.splice(idx, 1);
+                    this.result.splice(idx, 1);
                     super.onReset();
+                    this.eventService.emit(EventType.Refresh, null);
                     this.success(Locales.recordDeleted);
                     return false;
                 }

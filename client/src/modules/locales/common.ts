@@ -2,6 +2,8 @@ import Locales from './errors';
 
 export default {
     ...Locales,
+    yes: 'Yes',
+    no: 'No',
     save: 'Save',
     new: 'New',
     cancel: 'Cancel',

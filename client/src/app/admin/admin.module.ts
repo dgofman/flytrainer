@@ -25,6 +25,7 @@ import { ContactTabModule } from './usertabs/contact-tab.component';
 import { DocumentTabModule } from './usertabs/document-tab.component';
 import { CertificateTabModule } from './usertabs/certificate-tab.component';
 import { CourseTabModule } from './usertabs/course-tab.component';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   imports: [
@@ -54,7 +55,8 @@ import { CourseTabModule } from './usertabs/course-tab.component';
     FTDialogvModule,
     FTLeftNavModule,
     FTTableModule,
-    FTPipeModule
+    FTPipeModule,
+    TableModule
   ],
   declarations: [
     UserComponent,

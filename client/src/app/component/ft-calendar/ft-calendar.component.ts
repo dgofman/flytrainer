@@ -11,7 +11,9 @@ export class FTCalendarDirective {
     @Input() showTime: boolean;
 
     constructor(@Host() @Self() private calendar: Calendar) {
-        calendar.placeholder = 'mm/dd/yyyy';
+        if (!calendar.placeholder) {
+            calendar.placeholder = 'mm/dd/yyyy';
+        }
         calendar.monthNavigator = true;
         calendar.yearNavigator = true;
         calendar.showButtonBar = true;

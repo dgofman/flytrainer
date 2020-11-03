@@ -2,7 +2,7 @@ import { ValidatorFn, AbstractControlOptions } from '@angular/forms';
 
 export type SHOW_COLUMNS = 'never' | true | false;
 export type FORMAT_COLUMNS = 'datetime' | 'short' | 'date' | 'bool';
-export type TYPE_COLUMNS = 'hide' | 'check' | 'cal' | 'radio' | 'input' | 'password' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask' | 'number';
+export type TYPE_COLUMNS = 'hide' | 'text' | 'check' | 'cal' | 'radio' | 'input' | 'password' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask' | 'number';
 
 export const RouterOutlet = {
     name: 'view',  // src/app/app.component.ts = <router-outlet name="view"></router-outlet>
@@ -29,6 +29,7 @@ export interface ColumnType {
     value?: any;
     template?: string;
     placeholder?: string;
+    path?: string[];
 }
 
 export interface Session {

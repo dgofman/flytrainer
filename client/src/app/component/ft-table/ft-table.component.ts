@@ -1,6 +1,6 @@
 import Locales from '@locales/common';
 import { LazyLoadEvent, SelectItem, PrimeTemplate } from 'primeng/api';
-import { OverlayPanelModule} from 'primeng/overlaypanel';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { Directive, Input, NgModule, EventEmitter, Output, Component, TemplateRef, AfterContentInit, ContentChildren, QueryList, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TableModule, Table } from 'primeng/table';
@@ -16,9 +16,10 @@ import { FTFormControl } from '../../utils/ft-form.control';
 import { AppUtils } from '../../utils/app-utils';
 import { DomHandler } from 'primeng/dom';
 import { TableResult } from 'src/modules/models/table.result';
-import { FTStatePipe, FTPipeModule } from 'src/app/utils/pipes';
+import { FTPipeModule } from 'src/app/utils/pipes';
 import { ColumnType } from 'src/modules/models/constants';
 import { EmitEvent, EventType } from 'src/services/event.service';
+import { FTCalendarDirectiveModule } from '../ft-calendar/ft-calendar.component';
 
 export type FTTableEvent = {
   first: number,
@@ -38,18 +39,18 @@ export class FTTableComponent implements AfterContentInit {
   Locales = Locales;
   isEditorAccess = AppUtils.isEditorAccess;
   yearRange = AppUtils.defaultYearRange;
-  filterModel: FTTableEvent = {first: 0, total: 25};
+  filterModel: FTTableEvent = { first: 0, total: 15 };
   firstHeaderTemplate: TemplateRef<any>;
   lastHeaderTemplate: TemplateRef<any>;
   firstColumnTemplate: TemplateRef<any>;
   lastColumnTemplate: TemplateRef<any>;
-  filters: {_saveFilter: false};
+  expandFormTemplate: TemplateRef<any>;
+  filters: { _saveFilter: false };
   filterGroup: FormGroup;
   firstRow = 0;
   total: number;
 
   @Input('columns') cols: ColumnType[];
-  @Input('expandFormTemplate') public expandFormTemplate: Component;
   @Input('dataKey') public dataKey = 'id';
   @Input('data') public data: Array<BaseModel>;
   @Output() public onNotify: EventEmitter<EmitEvent> = new EventEmitter();
@@ -69,9 +70,9 @@ export class FTTableComponent implements AfterContentInit {
     this.filters = JSON.parse(sessionStorage.getItem(name) || '{"_saveFilter": true}');
     Object.keys(this.filters).forEach(key => {
       if (this.filters[key] instanceof Array) { // calendar range
-        this.filters[key].forEach((val: any, index: number) =>  {
+        this.filters[key].forEach((val: any, index: number) => {
           if (typeof val === 'string') {
-             this.filters[key][index] = new Date(val);
+            this.filters[key][index] = new Date(val);
           }
         });
       }
@@ -92,39 +93,42 @@ export class FTTableComponent implements AfterContentInit {
     { label: 'All', value: -1 }];
 
   constructor() {
-    this.filters = {_saveFilter: false};
+    this.filters = { _saveFilter: false };
   }
 
   private filterName: string;
   @ViewChild(Table) private table: Table;
 
   ngAfterContentInit(): void {
-    const controls = {_saveFilter: new FTFormControl({field: '_saveFilter'})};
+    const controls = { _saveFilter: new FTFormControl({ field: '_saveFilter' }) };
     this.cols.forEach(col => {
-        controls[col.field] = new FTFormControl(col);
-        controls[col.field + '_show'] = new FTFormControl(col);
-        if (col.show !== 'never') {
-          if (this.filters[col.field + '_show'] !== undefined) {
-            col.show = this.filters[col.field + '_show'] === true;
-          }
-          this.filters[col.field + '_show'] = col.show;
+      controls[col.field] = new FTFormControl(col);
+      controls[col.field + '_show'] = new FTFormControl(col);
+      if (col.show !== 'never') {
+        if (this.filters[col.field + '_show'] !== undefined) {
+          col.show = this.filters[col.field + '_show'] === true;
         }
+        this.filters[col.field + '_show'] = col.show;
+      }
     });
     this.filterGroup = new FormGroup(controls);
     this.templates.forEach((item) => {
       switch (item.getType()) {
         case 'firstColumn':
-            this.firstColumnTemplate = item.template;
-            break;
+          this.firstColumnTemplate = item.template;
+          break;
         case 'lastColumn':
-            this.lastColumnTemplate = item.template;
-            break;
+          this.lastColumnTemplate = item.template;
+          break;
         case 'firstHeader':
-            this.firstHeaderTemplate = item.template;
-            break;
+          this.firstHeaderTemplate = item.template;
+          break;
         case 'lastHeader':
-            this.lastHeaderTemplate = item.template;
-            break;
+          this.lastHeaderTemplate = item.template;
+          break;
+        case 'expandForm':
+          this.expandFormTemplate = item.template;
+          break;
       }
     });
     this.resetFilter();
@@ -146,7 +150,7 @@ export class FTTableComponent implements AfterContentInit {
   }
 
   applyFilter() {
-    const data = this.filterGroup.getRawValue();
+    const data = this.filterGroup.value;
     this.cols.forEach(col => {
       if (col.show !== 'never') {
         col.show = data[col.field + '_show'] === true;
@@ -171,24 +175,24 @@ export class FTTableComponent implements AfterContentInit {
 
   getColumns(view: number): Array<ColumnType> {
     if (view === 0) {
-        return this.cols.filter(c => c.show === true);
+      return this.cols.filter(c => c.show === true);
     } else if (view === 1) {
-        return this.cols.filter(c => c.show !== 'never');
+      return this.cols.filter(c => c.show !== 'never');
     } else {
-        return this.cols.filter(c => this.filterGroup.get(c.field).value !== null);
+      return this.cols.filter(c => this.filterGroup.get(c.field).value !== null);
     }
   }
 
   getChips(col: ColumnType) {
     const val = this.filterGroup.get(col.field).value;
     if (val instanceof Array) { // calendar range
-        const dates = [];
-        val.forEach(date =>  {
-          if (date instanceof Date) {
-            dates.push(new DatePipe('en-US').transform(date, 'shortDate'));
-          }
-        });
-        return dates.join(' - ');
+      const dates = [];
+      val.forEach(date => {
+        if (date instanceof Date) {
+          dates.push(new DatePipe('en-US').transform(date, 'shortDate'));
+        }
+      });
+      return dates.join(' - ');
     }
     return val;
   }
@@ -203,7 +207,7 @@ export class FTTableComponent implements AfterContentInit {
   }
 
   itemsPerPageChanged(event: any) {
-    this.lazyLoad({first: 0, rows: event.value});
+    this.lazyLoad({ first: 0, rows: event.value });
   }
 
   lazyLoad(event?: LazyLoadEvent) {
@@ -228,14 +232,18 @@ export class FTTableComponent implements AfterContentInit {
   colResize() {
     const headers = DomHandler.find(this.table.containerViewChild.nativeElement, '.ui-table-thead > tr:first-child > th');
     headers.map(header => {
-        delete this.filters[header.id + '_width'];
-        const width = DomHandler.getOuterWidth(header);
-        const col = this.filterGroup.get(header.id) as FTFormControl;
-        if (col && col.type.width && col.type.width !== width) {
-          this.filters[header.id + '_width'] = width;
-        }
+      delete this.filters[header.id + '_width'];
+      const width = DomHandler.getOuterWidth(header);
+      const col = this.filterGroup.get(header.id) as FTFormControl;
+      if (col && col.type.width && col.type.width !== width) {
+        this.filters[header.id + '_width'] = width;
+      }
     });
     this.saveFilter();
+  }
+
+  onExpandCollapse(event: any, isExpand: boolean) {
+    this.notify(isExpand ? EventType.Expand : EventType.Collapse, event.data);
   }
 
   onAddNewRow() {
@@ -255,14 +263,12 @@ export class FTTableComponent implements AfterContentInit {
     return item[this.dataKey] === -1;
   }
 
-  formatData(col: any, rowData: BaseModel, title: boolean) {
-    const data = rowData[col.field];
-    switch (col.format) {
-      case 'bool':
-        return title ? '' : '<i class="' + new FTStatePipe().transform(data) + '"></i>';
-      default:
-        return FTFormControl.Serialize(data, col.format);
+  formatColData(col: ColumnType, rowData: BaseModel, title: boolean) {
+    const val = FTFormControl.getData(col, rowData);
+    if (title && col.format === 'bool') {
+      return val ? Locales.yes : Locales.no;
     }
+    return FTFormControl.Format(val, col.format);
   }
 
   onCancel(item: BaseModel) {
@@ -275,6 +281,44 @@ export class FTTableComponent implements AfterContentInit {
     } else {
       delete this.expandedRows[item[this.dataKey]];
     }
+  }
+
+  exportPdf() {
+    /*import('jspdf').then(jspdf => {
+      import('jspdf-autotable').then(_  => {
+        const doc = new jspdf.jsPDF() as any;
+        doc.text(new Date().toLocaleString(), 15, 10);
+        doc.autoTable({
+          head: [this.getColumns(0).map(c => c.header)],
+          body: this.data.map(rowData => this.getColumns(0).map(col => this.formatColData(col, rowData, true)))
+        });
+        doc.save('flytrainer.pdf');
+      });
+    });*/
+  }
+
+  exportExcel() {
+    import('xlsx').then(xlsx => {
+      const columns = this.getColumns(0);
+      const wscols = [];
+      const order = [];
+      const data = [];
+      columns.forEach(col => {
+        order.push(col.header);
+        wscols.push({ width: (this.filters[col.field + '_width'] || col.width || 0) / 5 });
+      });
+      this.data.forEach(row => {
+        const cols = {};
+        columns.forEach(col => {
+          cols[col.header] = this.formatColData(col, row, true);
+        });
+        data.push(cols);
+      });
+      const worksheet = xlsx.utils.json_to_sheet(data, { header: order });
+      worksheet['!cols'] = wscols;
+      const workbook = { Sheets: { Data: worksheet }, SheetNames: ['Data'] };
+      xlsx.writeFile(workbook, 'flytrainer.xlsx', { bookType: 'xlsx', type: 'array' });
+    });
   }
 }
 
@@ -291,7 +335,7 @@ export class FTTableFormProviderDirective {
 }
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, TooltipModule, CheckboxModule, RadioButtonModule, DropdownModule, CalendarModule, TableModule, OverlayPanelModule, FTPipeModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, TooltipModule, CheckboxModule, RadioButtonModule, DropdownModule, CalendarModule, TableModule, OverlayPanelModule, FTPipeModule, FTCalendarDirectiveModule],
   exports: [FTTableComponent, FTTableFormProviderDirective],
   declarations: [FTTableComponent, FTTableFormProviderDirective]
 })

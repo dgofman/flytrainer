@@ -40,6 +40,11 @@ POST    /contact/:userId                controllers.ContactController.addContact
 PATCH   /contact/:userId                controllers.ContactController.updateContact(request: Request, userId: Long)
 DELETE  /contact/:userId/:cId           controllers.ContactController.deleteContact(request: Request, userId: Long, cId: Long)
 
+POST    /tiers                          controllers.TierRateController.getTiers(request: Request)
+POST    /tier                           controllers.TierRateController.addTier(request: Request)
+PATCH   /tier                           controllers.TierRateController.updateTier(request: Request)
+DELETE  /tier/:tId                      controllers.TierRateController.deleteTier(request: Request, tId: Long)
+
 GET     /file/:userId/:docId            controllers.DocumentController.getFile(userId: Long, docId: Long)
 POST    /file/:userId                   controllers.DocumentController.saveFile(request: Request, userId: Long)
 

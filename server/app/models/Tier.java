@@ -1,36 +1,38 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
+import utils.Constants.TierType;
 
 @Entity
 @History
 @Table(name = "tier")
 public class Tier extends BaseModel {
-
-	@NotNull
-	@Length(50)
-	public String name; //name
 	
-	public Double ammount = 0.0; //ammount
+	@NotNull
+	public TierType type = TierType.Hourly;
+	
+	@Length(30)
+	public String other; //other
+
+	@Length(50)
+	public String description; //description
+	
+	@NotNull
+	public Double rate = 0.0; //rate
 	
 	public byte isPercent = 0; //is_percent
 	
-	public Double minQuantity; //min_quantity
+	public Double minRate; //min_rate
 	
-	public Double maxQuantity; //max_quantity
+	public Double maxRate; //max_rate
 	
 	@Column(name = "promotion_code")
 	public String code; //promotion_code
@@ -40,8 +42,6 @@ public class Tier extends BaseModel {
 	
 	@Column(name = "expiration_date") //expiration_date
 	public Date expDate;
-
-	@JsonIgnore
-	@ManyToMany
-	public List<Rate> rates = new ArrayList<>();
+	
+	public byte isDisable = 0; //is_disable
 }

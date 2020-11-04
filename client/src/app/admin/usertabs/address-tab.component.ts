@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { AdminService } from 'src/services/admin.service';
 import { AutoComplete } from 'primeng/autocomplete';
 import { Country, State, AddressType, DocumentType } from 'src/modules/models/constants';
-import { TabBaseDirective, TabBaseModule } from './tabbase.component';
+import { UserTabBaseDirective, UserTabBaseModule } from '../user.component';
 import { ConfirmationService } from 'primeng/api';
 import { Address, Note } from 'src/modules/models/base.model';
 import { AppUtils } from 'src/app/utils/app-utils';
@@ -15,7 +15,7 @@ import { AdminSharedModule } from '../admin-shared.module';
     selector: 'address-tab',
     templateUrl: './address-tab.component.html'
 })
-export class AddressTabComponent extends TabBaseDirective implements OnInit {
+export class AddressTabComponent extends UserTabBaseDirective implements OnInit {
     addresses: Address[];
 
     @ViewChild('desc') description: AutoComplete;
@@ -134,7 +134,7 @@ export class AddressTabComponent extends TabBaseDirective implements OnInit {
 }
 
 @NgModule({
-    imports: [CommonModule, AdminSharedModule, TabBaseModule],
+    imports: [CommonModule, AdminSharedModule, UserTabBaseModule],
     exports: [AddressTabComponent],
     declarations: [AddressTabComponent]
 })

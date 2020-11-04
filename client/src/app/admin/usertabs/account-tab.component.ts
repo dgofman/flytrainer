@@ -4,7 +4,7 @@ import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms'
 import { CommonModel, Note } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { AccountType } from 'src/modules/models/constants';
-import { TabBaseDirective, TabBaseModule } from './tabbase.component';
+import { UserTabBaseDirective, UserTabBaseModule } from '../user.component';
 import { ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '../admin-shared.module';
@@ -14,7 +14,7 @@ import { EventService, EventType } from 'src/services/event.service';
     selector: 'account-tab',
     templateUrl: './account-tab.component.html'
 })
-export class AccountTabComponent extends TabBaseDirective {
+export class AccountTabComponent extends UserTabBaseDirective {
     result: CommonModel[];
 
     constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder, private eventService: EventService) {
@@ -116,7 +116,7 @@ export class AccountTabComponent extends TabBaseDirective {
 
 
 @NgModule({
-    imports: [CommonModule, AdminSharedModule, TabBaseModule],
+    imports: [CommonModule, AdminSharedModule, UserTabBaseModule],
     exports: [AccountTabComponent],
     declarations: [AccountTabComponent]
 })

@@ -36,17 +36,7 @@ public abstract class BaseModel extends AbstractBase {
 	public void setNotes(JsonNode body) throws IOException {
 		this.notes = body != null && !body.get("content").isNull() ? new ObjectMapper().readerFor(Note.class).readValue(body) : null;
 	}
-	
-	@ManyToOne
-	private Document document; //document_id
-
-	public Document getDocument() {
-		return this.document;
-	}
-	public void setDocument(JsonNode body) throws IOException {
-		this.document = body != null ? new ObjectMapper().readerFor(Document.class).readValue(body) : null;
-	}
-	
+		
 	public void save(BaseModel currentUser) {
 		whoCreated = currentUser.id;
 		whoModified = currentUser.id;

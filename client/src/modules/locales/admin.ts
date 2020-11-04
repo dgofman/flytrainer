@@ -4,6 +4,7 @@ import Menu from './menu';
 export default {
     ...Menu,
     ...Common,
+    id: 'ID',
     addresses: 'Addresses',
     certificates: 'Certificates',
     contacts: 'Contacts',
@@ -16,6 +17,7 @@ export default {
     ftn: 'FAA Tracking Number (FTN)',
     role: 'Role',
     isActive: 'Active',
+    isDisable: 'Disabled',
     resetPassword: 'Reset Password',
     isCitizen: 'US Citizen',
     isMemeber: 'Member',
@@ -27,6 +29,7 @@ export default {
     driverState: 'Driver License State',
     dlExpDate: 'Driver License Exp. Date',
     createdDate: 'Created Date',
+    effectiveDate: 'Effective Date',
     whoCreated: 'Who Created',
     modifiedDate: 'Modified Date',
     whoModified: 'Who Modified',
@@ -34,6 +37,11 @@ export default {
     expDate: 'Expiration Date',
     renewDate: 'Renew  Date',
     currentBy: 'Currency Date',
+    rate: 'Rate',
+    minRate: 'Minimum Rate',
+    maxRate: 'Maximum Rate',
+    isPercent: 'Percent rate',
+    promotionCode: 'Promotion Code',
     accountNumber: 'Account Number',
     accNum: 'Account #',
     type: 'Type',
@@ -73,5 +81,6 @@ export default {
     recordUpdated: 'Record updated successfuly',
     recordDeleted: 'Record deleted successfuly',
     deleteRecord: 'Are you sure to delete this record?',
-    deleteHeader: 'Delete Confirmation'
+    deleteHeader: 'Delete Confirmation',
+    pleaseWait: 'Please wait...'
 };

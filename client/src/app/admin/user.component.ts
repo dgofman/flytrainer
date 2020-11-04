@@ -1,17 +1,19 @@
 import Locales from '@locales/admin';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, Directive, Input, NgModule } from '@angular/core';
 import { AdminService } from 'src/services/admin.service';
 import { User } from 'src/modules/models/base.model';
-import { AuthService } from '../authentication/auth.service';
 import { AppBaseDirective } from '../app.base.component';
 import { Role, ColumnType } from 'src/modules/models/constants';
-import { FTIcons } from '../component/ft-menu/ft-menu.component';
 import { Validators } from '@angular/forms';
 import { FTDialogComponent } from '../component/ft-dialog/ft-dialog.component';
 import { TableResult } from 'src/modules/models/table.result';
 import { AppHeaderComponent } from '../app.component';
 import { EventService, EmitEvent, EventType } from 'src/services/event.service';
 import { FTTableComponent } from '../component/ft-table/ft-table.component';
+import { AbstractTabDirective, AbstractTabModule } from './abstract-tab.component';
+import { ConfirmationService } from 'primeng/api';
+import { CommonModule } from '@angular/common';
+import { AdminSharedModule } from './admin-shared.module';
 
 @Component({
   templateUrl: './user.component.html',
@@ -19,8 +21,11 @@ import { FTTableComponent } from '../component/ft-table/ft-table.component';
 })
 export class UserComponent extends AppBaseDirective {
   Locales = Locales;
-  icons = FTIcons;
   result: TableResult<User>;
+  selectedUser: User;
+
+  @ViewChild(FTTableComponent) table: FTTableComponent;
+  @ViewChild(FTDialogComponent) dialog: FTDialogComponent;
 
   accCols: ColumnType[] = [
         { field: 'type', header: Locales.type, width: 150, },
@@ -34,7 +39,7 @@ export class UserComponent extends AppBaseDirective {
     ];
 
   cols: ColumnType[] = [
-    { field: 'id', show: 'never'},
+    { field: 'id', header: Locales.id, type: 'input', width: 50 },
     { field: 'version', show: 'never'},
     { field: 'username', type: 'input', show: true, header: Locales.username, width: 150, validators: [Validators.required, Validators.maxLength(50)] },
     { field: 'first', type: 'input', show: true, header: Locales.firstname, width: 150, validators: [Validators.required, Validators.maxLength(50)] },
@@ -60,12 +65,7 @@ export class UserComponent extends AppBaseDirective {
     { field: 'whoModified', type: 'input', header: Locales.whoModified, width: 200 }
   ];
 
-  @ViewChild(FTTableComponent) table: FTTableComponent;
-  @ViewChild(FTDialogComponent) dialog: FTDialogComponent;
-
-  selectedUser: User;
-
-  constructor(private adminService: AdminService, public appService: AuthService, eventService: EventService) {
+  constructor(private adminService: AdminService, eventService: EventService) {
     super();
     eventService.emmiter.subscribe((event: EmitEvent) => {
       switch (event.message) {
@@ -126,4 +126,20 @@ export class UserComponent extends AppBaseDirective {
         break;
     }
   }
+}
+
+@Directive()
+export abstract class UserTabBaseDirective extends AbstractTabDirective {
+    @Input() user: User;
+
+    constructor(confirmationService: ConfirmationService) {
+        super(confirmationService);
+    }
+}
+
+@NgModule({
+    imports: [CommonModule, AdminSharedModule, AbstractTabModule],
+    exports: [AbstractTabModule]
+})
+export class UserTabBaseModule {
 }

@@ -38,7 +38,7 @@ import utils.Constants.Key;
 		@NamedQuery(name = User.FIND_BY_EMAIL, query = "select(isActive) where username = :username and email = :email"),
 		@NamedQuery(name = User.PASSWORD, query = "select(password) where username = :username and id = :id") })
 @JsonFilter("UserFilter")
-public class User extends BaseModel implements IsAddressable {
+public class User extends DocumentModel implements IsAddressable {
 
 	public static final TypedKey<User> MODEL = TypedKey.<User>create("userModel");
 

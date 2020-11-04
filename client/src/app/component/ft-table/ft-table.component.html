@@ -118,15 +118,15 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="paginatorleft">
-    <div style="margin-left: 10px; margin-top: 8px">
-      <i (click)="fttable.exportCSV()" class="pi pi-file-o gap hand" title="Export CSV"></i>
-      <i (click)="exportExcel()" class="pi pi-file-excel gap hand" title="Export Excel"></i>
+    <div *ngIf="data?.length" style="margin-left: 10px; margin-top: 8px">
+      <i (click)="fttable.exportCSV()" class="pi pi-file-o gap hand" style="color: #007ad9" title="Export CSV"></i>
+      <i (click)="exportExcel()" class="pi pi-file-excel gap hand" style="color: #20a720" title="Export Excel"></i>
       <!--i (click)="exportPdf()" class="pi pi-file-pdf hand" title="Export PDF"></i-->
     </div>
   </ng-template>
   <ng-template pTemplate="paginatorright">
     <div style="margin-right: 10px; margin-top: 5px">
-      {{Locales.total}}: {{total || data?.length}}
+      {{Locales.total}}: {{total || data?.length || 0}}
     </div>
   </ng-template>
 </p-table>

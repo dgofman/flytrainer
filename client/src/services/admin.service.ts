@@ -32,6 +32,23 @@ export class AdminService {
         return this.http.get<string>(`/user/${userId}/${username}`);
     }
 
+    // Tier-Rates
+    public addTier(model: CommonModel): Observable<CommonModel> {
+        return this.http.post<User>(`/tier`, model);
+    }
+
+    public getTiers(model: FTTableEvent): Observable<TableResult<CommonModel>> {
+        return this.http.post<TableResult<User>>(`/tiers`, model);
+    }
+
+    public updateTier(model: CommonModel): Observable<CommonModel> {
+        return this.http.patch<User>(`/tier`, model);
+    }
+
+    public deleteTier(tierId: number): Observable<void> {
+        return this.http.delete<void>(`/tier/${tierId}`);
+    }
+
     // Accounts
     public addAccount(userId: number, model: CommonModel): Observable<CommonModel> {
         return this.http.post<CommonModel>(`/account/${userId}`, model);

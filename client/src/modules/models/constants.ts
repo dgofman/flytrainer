@@ -73,6 +73,15 @@ export enum AccountType {
     Other = 'Other'
 }
 
+export enum TierType {
+    Hourly = 'Hourly',
+    Flight = 'Flight',
+    Fuel = 'Fuel',
+    Shopping = 'Shopping',
+    Training = 'Training',
+    Other = 'Other'
+}
+
 export const DocumentType = {
     Passport: 'Passport',
     DriverLicense: 'Driver License',

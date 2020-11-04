@@ -20,7 +20,7 @@ import utils.Constants.CertificateType;
 @Entity
 @History
 @Table(name = "certificate")
-public class Certificate extends BaseModel {
+public class Certificate extends DocumentModel {
 
 	@NotNull
 	public CertificateType type = CertificateType.PrivatePilot; //certificates

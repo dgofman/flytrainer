@@ -1,12 +1,12 @@
 import Locales from '@locales/admin';
-import { FTIcons } from '../../component/ft-menu/ft-menu.component';
-import { Document, User } from 'src/modules/models/base.model';
+import { FTIcons } from '../component/ft-menu/ft-menu.component';
+import { Document } from 'src/modules/models/base.model';
 import { CommonModule } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 import { AppBaseDirective } from 'src/app/app.base.component';
 import { Input, Component, NgModule, Directive } from '@angular/core';
 import { ColumnType } from 'src/modules/models/constants';
-import { AdminSharedModule } from '../admin-shared.module';
+import { AdminSharedModule } from './admin-shared.module';
 import { ConfirmationService } from 'primeng/api';
 import {  AbstractBase } from 'src/modules/models/base.model';
 
@@ -59,7 +59,7 @@ export class AdminFieldComponent {
 }
 
 @Directive()
-export abstract class TabBaseDirective extends AppBaseDirective {
+export abstract class AbstractTabDirective extends AppBaseDirective {
     Locales = Locales;
     icons = FTIcons;
     formGroup: FormGroup;
@@ -67,8 +67,6 @@ export abstract class TabBaseDirective extends AppBaseDirective {
 
     // tslint:disable-next-line: variable-name
     protected _selectedBean: AbstractBase;
-
-    @Input() user: User;
 
     constructor(protected confirmationService: ConfirmationService) {
         super();
@@ -148,5 +146,5 @@ export abstract class TabBaseDirective extends AppBaseDirective {
     exports: [AdminFieldComponent],
     declarations: [AdminFieldComponent]
 })
-export class TabBaseModule {
+export class AbstractTabModule {
 }

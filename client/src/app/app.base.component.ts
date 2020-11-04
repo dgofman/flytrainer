@@ -3,6 +3,7 @@ import { Directive } from '@angular/core';
 import { Session, ColumnType } from 'src/modules/models/constants';
 import { AppHeaderComponent } from './app.component';
 import { AppUtils } from './utils/app-utils';
+import { FTIcons } from './component/ft-menu/ft-menu.component';
 import { AuthService } from './authentication/auth.service';
 import { BaseModel } from 'src/modules/models/base.model';
 import { FTFormControl } from './utils/ft-form.control';
@@ -13,6 +14,7 @@ export abstract class AppBaseDirective {
     session: Session;
     environment = environment;
     token = AuthService.token;
+    icons = FTIcons;
 
     constructor() {
         this.session = AppUtils.getSession();

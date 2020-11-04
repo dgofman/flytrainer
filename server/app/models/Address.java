@@ -18,7 +18,7 @@ import utils.Constants.AddressType;
 @Entity
 @History
 @Table(name = "address")
-public class Address extends BaseModel {
+public class Address extends DocumentModel {
 
 	@NotNull
 	public AddressType type = AddressType.Home; //type

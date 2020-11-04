@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 import { CommonModel, Note } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { AircraftCategoryClass, DocumentType, CertificateType } from 'src/modules/models/constants';
-import { TabBaseDirective, TabBaseModule } from './tabbase.component';
+import { UserTabBaseDirective, UserTabBaseModule } from '../user.component';
 import { ConfirmationService } from 'primeng/api';
 import { AppUtils } from 'src/app/utils/app-utils';
 import { CommonModule } from '@angular/common';
@@ -15,7 +15,7 @@ import { AutoComplete } from 'primeng/autocomplete/public_api';
     selector: 'course-tab',
     templateUrl: './course-tab.component.html'
 })
-export class CourseTabComponent extends TabBaseDirective implements OnInit {
+export class CourseTabComponent extends UserTabBaseDirective implements OnInit {
     cources: CommonModel[];
     aircraftCategory = AircraftCategoryClass;
 
@@ -137,7 +137,7 @@ export class CourseTabComponent extends TabBaseDirective implements OnInit {
 }
 
 @NgModule({
-    imports: [CommonModule, AdminSharedModule, TabBaseModule],
+    imports: [CommonModule, AdminSharedModule, UserTabBaseModule],
     exports: [CourseTabComponent],
     declarations: [CourseTabComponent]
 })

@@ -4,7 +4,7 @@ import { Validators, FormGroup, FormControl } from '@angular/forms';
 import { Document } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { DocumentType } from 'src/modules/models/constants';
-import { TabBaseDirective, TabBaseModule } from './tabbase.component';
+import { UserTabBaseDirective, UserTabBaseModule } from '../user.component';
 import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '../admin-shared.module';
@@ -20,7 +20,7 @@ import { AppUtils } from 'src/app/utils/app-utils';
         }`
     ]
 })
-export class DocumentTabComponent extends TabBaseDirective {
+export class DocumentTabComponent extends UserTabBaseDirective {
     result: TableResult<Document>;
     children: { [id: number]: Document[] } = {};
 
@@ -208,7 +208,7 @@ export class DocumentTabComponent extends TabBaseDirective {
 }
 
 @NgModule({
-    imports: [CommonModule, AdminSharedModule, TabBaseModule],
+    imports: [CommonModule, AdminSharedModule, UserTabBaseModule],
     exports: [DocumentTabComponent],
     declarations: [DocumentTabComponent]
 })

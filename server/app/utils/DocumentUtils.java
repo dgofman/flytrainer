@@ -8,8 +8,8 @@ import controllers.DocumentController;
 import io.ebean.Ebean;
 import io.ebean.Query;
 import models.Aircraft;
-import models.BaseModel;
 import models.Document;
+import models.DocumentModel;
 import models.User;
 
 public class DocumentUtils {
@@ -31,7 +31,7 @@ public class DocumentUtils {
 		return false;
 	}
 
-	public static <T> void create(BaseModel model, T ref) throws IOException {
+	public static <T> void create(DocumentModel model, T ref) throws IOException {
 		Document document = model.getDocument();
 		if (document != null && document.filePath != null && saveFile(document)) {
 			if (ref instanceof User) {
@@ -44,7 +44,7 @@ public class DocumentUtils {
 		}
 	}
 
-	public static <T>  void update(BaseModel model, T ref, User currentUser) throws IOException {
+	public static <T>  void update(DocumentModel model, T ref, User currentUser) throws IOException {
 		Document document = model.getDocument();
 		File file;
 		if (document != null) {
@@ -78,7 +78,7 @@ public class DocumentUtils {
 		}
 	}
 
-	public static void delete(BaseModel model) throws IOException {
+	public static void delete(DocumentModel model) throws IOException {
 		Document document = model.getDocument();
 		if (document != null) {
 			Ebean.find(Document.class).where().eq("id", document.id).delete();

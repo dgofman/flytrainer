@@ -4,7 +4,7 @@ import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms'
 import { CommonModel, User, Note, Address } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { Country, State, AddressType, Role, ColumnType, DocumentType } from 'src/modules/models/constants';
-import { TabBaseDirective, TabBaseModule } from './tabbase.component';
+import { UserTabBaseDirective, UserTabBaseModule } from '../user.component';
 import { ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '../admin-shared.module';
@@ -22,7 +22,7 @@ import { EventType, EventService } from 'src/services/event.service';
         `
     ]
 })
-export class UserTabComponent extends TabBaseDirective implements OnInit {
+export class UserTabComponent extends UserTabBaseDirective implements OnInit {
 
     accounts: CommonModel[];
     addressControls: ColumnType[];
@@ -40,11 +40,11 @@ export class UserTabComponent extends TabBaseDirective implements OnInit {
             { field: 'middle', header: Locales.middlename, type: 'input' },
             { field: 'last', header: Locales.lastname, type: 'input', validators: [Validators.required] },
             { field: 'role', header: Locales.role, type: 'popup', value: Object.keys(Role).map(key => ({ label: Role[key], value: key })), class: 'inlineL' },
-            { field: 'ssn' , header: Locales.ssn, type: 'input', class: 'inlineR' },
+            { field: 'ssn' , header: Locales.ssn, type: 'mask', value: '999-99-9999', class: 'inlineR' },
             { field: 'phone', header: Locales.phone, type: 'input', class: 'inlineL' },
             { field: 'ftn', header: Locales.ftn, type: 'input', class: 'inlineR' },
             { field: 'dl', header: Locales.driverLicense, type: 'input', class: 'inlineL' },
-            { field: 'dlState', header: Locales.driverState, type: 'input', class: 'inlineR' },
+            { field: 'dlState', header: Locales.driverState, type: 'auto', value: State, class: 'inlineR' },
             { field: 'dlExpDate', header: Locales.dlExpDate, type: 'cal', class: 'inlineL' },
             { field: 'birthday', header: Locales.birthday, type: 'cal', class: 'inlineR' },
             { field: 'isActive', header: Locales.isActive, type: 'check', class: 'inline gap' },
@@ -178,7 +178,7 @@ export class UserTabComponent extends TabBaseDirective implements OnInit {
 }
 
 @NgModule({
-    imports: [CommonModule, AdminSharedModule, TabBaseModule],
+    imports: [CommonModule, AdminSharedModule, UserTabBaseModule],
     exports: [UserTabComponent],
     declarations: [UserTabComponent]
 })

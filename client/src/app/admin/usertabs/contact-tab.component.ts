@@ -4,7 +4,7 @@ import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms'
 import { Contact, Note, Address } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { Country, State, AddressType, ColumnType } from 'src/modules/models/constants';
-import { TabBaseDirective, TabBaseModule } from './tabbase.component';
+import { UserTabBaseDirective, UserTabBaseModule } from '../user.component';
 import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '../admin-shared.module';
@@ -22,7 +22,7 @@ import { AppUtils } from 'src/app/utils/app-utils';
         `
     ]
 })
-export class ContactTabComponent extends TabBaseDirective {
+export class ContactTabComponent extends UserTabBaseDirective {
     result: TableResult<Contact>;
     addressControls: ColumnType[];
     isAddress: boolean;
@@ -155,7 +155,7 @@ export class ContactTabComponent extends TabBaseDirective {
 }
 
 @NgModule({
-    imports: [CommonModule, AdminSharedModule, TabBaseModule],
+    imports: [CommonModule, AdminSharedModule, UserTabBaseModule],
     exports: [ContactTabComponent],
     declarations: [ContactTabComponent]
 })

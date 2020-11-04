@@ -25,7 +25,7 @@ import utils.Constants.DocumentType;
 @History
 @NamedQueries(value = {
 		@NamedQuery(name = Document.FIND_FILE, query = "select contentType, filePath, file where user = :user and id = :id") })
-public class Document extends AbstractBase {
+public class Document extends DocumentModel {
 
 	public static final String FIND_FILE = "Document.findFile";
 	public static final String FIND_DOCUMENTS =  "select id, parent_id, type, name, page_number, (select count(*) + 1 from document c where c.parent_id=p.id) total from document p where user_id = :userId";

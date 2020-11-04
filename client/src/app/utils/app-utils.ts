@@ -50,7 +50,7 @@ export class AppUtils {
     }
 
     static get defaultYearRange(): string{
-        return ((new Date().getFullYear() - 80) + ':' + (new Date().getFullYear()));
+        return ((new Date().getFullYear() - 100) + ':' + (new Date().getFullYear() + 50));
     }
 
     static getSession(): Session {

@@ -16,7 +16,10 @@
           <fa-icon [icon]="icons.faPencil" (click)="onEdit(rowData)" style="cursor: pointer"></fa-icon>
         </ng-template>
         <ng-template pTemplate="expandForm" let-rowData="$implicit">
-          <div *ngIf="!rowData.accounts?.length" style="text-align: center;">
+          <div *ngIf="!rowData.accounts " style="text-align: center;">
+            <p>{{ Locales.pleaseWait }}</p>
+          </div>
+          <div *ngIf="rowData.accounts?.length == 0" style="text-align: center;">
             <p-button [label]="Locales.addAccount" (click)="onAddAccount(rowData)"></p-button>
           </div>
           <div *ngIf="rowData.accounts?.length"><b style="padding-left: 5px; color: #1c8445">{{Locales.accounts}}</b>

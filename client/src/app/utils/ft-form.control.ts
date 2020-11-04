@@ -5,27 +5,12 @@ import { BaseModel } from 'src/modules/models/base.model';
 
 export class FTFormControl extends FormControl {
 
-    private val: any;
-
     constructor(public type: ColumnType, validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions, formState?: any) {
         super(formState, validatorOrOpts);
     }
 
     get label(): string {
         return this.type.header;
-    }
-
-    set value(val: any) {
-        this.val = val;
-    }
-
-    get value(): any {
-        return this.val;
-        //return FTFormControl.Serialize(this.val, this.type ? this.type.format : null);
-    }
-
-    get deserialize(): any {
-        return FTFormControl.Deserialize(this.val);
     }
 
     static getData(col: ColumnType, rowData: BaseModel) {
@@ -59,19 +44,6 @@ export class FTFormControl extends FormControl {
                 case 'datetime':
                     return new FTDateTimePipe().transform(val);
             }
-        }
-        return val;
-    }
-
-    static Deserialize(val: any): any {
-        if (val instanceof Date) {
-            return val.getTime();
-        }
-        if (val === false) {
-            return 0;
-        }
-        if (val === true) {
-            return 1;
         }
         return val;
     }

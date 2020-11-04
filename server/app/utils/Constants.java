@@ -43,6 +43,25 @@ public class Constants {
 		}
 	}
 	
+	public static enum TierType {
+		Other(0),
+		Hourly(1),
+		Flight(2),
+		Fuel(3),
+		Shopping(4),
+		Training(5);
+
+		private final int type;
+
+		private TierType(int type) {
+			this.type = type;
+		}
+		
+		public int getType() {
+			return this.type;
+		}
+	}
+	
 	public static enum InsuranceType {
 		Other(0),
 		Rental(1),

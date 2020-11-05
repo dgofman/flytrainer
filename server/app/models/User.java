@@ -95,10 +95,10 @@ public class User extends DocumentModel implements IsAddressable {
 	@NotNull
 	public String email; //email
 
-	@Column(name = "cellphone")
+	@Column(name = "phone")
 	@Length(30)
 	@DbComment("ex: (+NN) NNN NNN NNN")
-	public String phone; //cellphone
+	public String phone; //phone
 
 	@Column(name = "active")
 	@NotNull

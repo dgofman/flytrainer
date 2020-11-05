@@ -17,26 +17,8 @@
                 </ng-template>
             </ft-table>
             <ft-dialog width="70" height="60">
-                <ng-template pTemplate="{{Locales.user}}" let-user="item">
-                <user-tab [user]="user"></user-tab>
-                </ng-template>
-                <ng-template pTemplate="{{Locales.accounts}}" let-user="item">
-                <account-tab [user]="user"></account-tab>
-                </ng-template>
-                <ng-template pTemplate="{{Locales.contacts}}" let-user="item">
-                <contact-tab [user]="user"></contact-tab>
-                </ng-template>
-                <ng-template pTemplate="{{Locales.certificates}}" let-user="item">
-                <certificate-tab [user]="user"></certificate-tab>
-                </ng-template>
-                <ng-template pTemplate="{{Locales.addresses}}" let-user="item">
-                <address-tab [user]="user"></address-tab>
-                </ng-template>
-                <ng-template pTemplate="Courses/Endorsements" let-user="item">
-                <course-tab [user]="user"></course-tab>
-                </ng-template>
-                <ng-template pTemplate="{{Locales.documents}}" let-user="item">
-                <document-tab [user]="user"></document-tab>
+                <ng-template pTemplate="{{Locales.tier}}" let-tier="item">
+                <tier-tab [tierRate]="tier"></tier-tab>
                 </ng-template>
             </ft-dialog>
         </div>

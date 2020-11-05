@@ -10,6 +10,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
 import { BaseModel } from 'src/modules/models/base.model';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { FTFormControl } from '../../utils/ft-form.control';
@@ -193,6 +194,8 @@ export class FTTableComponent implements AfterContentInit {
         }
       });
       return dates.join(' - ');
+    } else if (typeof val === 'boolean') {
+        return val ? Locales.yes : Locales.no;
     }
     return val;
   }
@@ -335,7 +338,9 @@ export class FTTableFormProviderDirective {
 }
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, TooltipModule, CheckboxModule, RadioButtonModule, DropdownModule, CalendarModule, TableModule, OverlayPanelModule, FTPipeModule, FTCalendarDirectiveModule],
+  imports: [
+    CommonModule, FormsModule, ReactiveFormsModule, ButtonModule, TooltipModule, CheckboxModule, RadioButtonModule, DropdownModule,
+    CalendarModule, InputNumberModule, TableModule, OverlayPanelModule, FTPipeModule, FTCalendarDirectiveModule],
   exports: [FTTableComponent, FTTableFormProviderDirective],
   declarations: [FTTableComponent, FTTableFormProviderDirective]
 })

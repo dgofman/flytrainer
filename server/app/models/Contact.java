@@ -55,17 +55,15 @@ public class Contact extends BaseModel implements IsAddressable {
 	public String phone; //phone
 
 	@ManyToOne
-	public Address address; //address_id
-
-	@ManyToOne
 	@JsonIgnore
 	public User user; // FK user_id - User::contacts
 
-	@Override
+	@ManyToOne
+	private Address address; //address_id
+
 	public Address getAddress() {
-		return address;
+		return this.address;
 	}
-	
 	public void setAddress(JsonNode body) throws IOException {
 		this.address = body != null ? new ObjectMapper().readerFor(Address.class).readValue(body) : null;
 	}

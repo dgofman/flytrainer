@@ -22,8 +22,7 @@ export class AccountTabComponent extends UserTabBaseDirective {
         this.controls = [
             { field: 'id' },
             { field: 'version' },
-            { field: 'document' },
-            { field: 'description', header: Locales.description, type: 'input' },
+            { field: 'description', header: Locales.description, type: 'input', maxlen: 30 },
             { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], value: Object.keys(AccountType).map(key => ({ label: AccountType[key], value: key })) },
             { field: 'other', type: 'hide' },
             { field: 'accountId', header: Locales.accountNumber, type: 'input', placeholder: Locales.leaveBlankAutoGet },
@@ -43,19 +42,6 @@ export class AccountTabComponent extends UserTabBaseDirective {
         });
         this.formGroup = new FormGroup(controls);
         this.onReset();
-    }
-
-    updateSelectedBean(bean: any) {
-        super.updateSelectedBean(bean);
-        if (bean != null) {
-            this.loading(true);
-            this.adminService.getAccount(this.user.id, bean.id).subscribe(e => {
-                this.loading(false);
-                this.formGroup.patchValue(Object.assign(this.defaultBean, e))   ;
-            }, (ex) => this.errorHandler(ex));
-        } else {
-            this.onReset();
-        }
     }
 
     lazyLoad() {
@@ -81,6 +67,7 @@ export class AccountTabComponent extends UserTabBaseDirective {
                 this.loading(false);
                 this.result.push(result);
                 this.formGroup.patchValue(result);
+                this.selectedBean = result;
                 this.eventService.emit(EventType.Refresh, null);
                 this.success(Locales.recordCreated);
             }, (ex) => this.errorHandler(ex));
@@ -110,7 +97,7 @@ export class AccountTabComponent extends UserTabBaseDirective {
     }
 
     get defaultBean() {
-       return { type: this.AppUtils.getKey(AccountType, 'Pilot'), notes: new Note() };
+       return { type: this.AppUtils.getKey(AccountType, 'Renter'), notes: new Note() };
     }
 }
 

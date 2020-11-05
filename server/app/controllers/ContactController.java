@@ -31,17 +31,7 @@ public class ContactController extends BaseController {
 			query.where().eq("user", new User(userId));
 			int total = query.findCount();
 			List<Contact> contacts = query.setFirstRow(offset).setMaxRows(rows).findList();
-			return okResult(new TableResult(offset, total, contacts), BaseModel.Default.class);
-		} catch (Exception e) {
-			return badRequest(e);
-		}
-	}
-
-	public Result getContact(Long userId, Long contactId) {
-		log.debug("ContactController::getContact for user=" + userId);
-		try {
-			Contact contact = Ebean.find(Contact.class).where().eq("user", new User(userId)).eq("id",  contactId).findOne();
-			return okResult(contact, Short.class);
+			return okResult(new TableResult(offset, total, contacts), BaseModel.Short.class);
 		} catch (Exception e) {
 			return badRequest(e);
 		}
@@ -104,9 +94,9 @@ public class ContactController extends BaseController {
 			if (dbContact == null) {
 				return createBadRequest("nocontact", Constants.Errors.ERROR);
 			}
+			dbContact.delete(currentUser);
 			AddressUtils.delete(dbContact);
 			NotesUtils.delete(dbContact);
-			dbContact.delete(currentUser);
 			transaction.commit();
 			return ok();
 		} catch (Exception e) {

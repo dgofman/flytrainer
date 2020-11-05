@@ -17,8 +17,7 @@
         </div>
     </div>
     <div class="ui-fluid p-md-5">
-        <p-table [value]="result?.data" [lazy]="true" (onLazyLoad)="lazyLoad($event)" [(selection)]="selectedBean"
-            [paginator]="true" [rows]="25" [totalRecords]="result?.total" [scrollable]="true">
+        <p-table [value]="result?.data" [lazy]="true" (onLazyLoad)="lazyLoad($event)" [(selection)]="selectedBean">
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
                 <col/>
@@ -44,13 +43,8 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns>
                 <tr>
-                    <td [attr.colspan]="4" style="text-align: center;">{{Locales.noData}}</td>
+                    <td [attr.colspan]="3" style="text-align: center;">{{Locales.noData}}</td>
                 </tr>
-            </ng-template>
-            <ng-template pTemplate="paginatorright">
-                <div style="margin-right: 10px; margin-top: 5px">
-                {{Locales.total}}: {{result?.total}}
-                </div>
             </ng-template>
         </p-table>
     </div>

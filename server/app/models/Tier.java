@@ -30,6 +30,12 @@ public class Tier extends BaseModel {
 	
 	public byte isPercent = 0; //is_percent
 	
+	public byte isDiscount = 1; //is_discount
+	
+	public byte isOverride = 0; //is_override
+	
+	public byte isDisable = 0; //is_disable
+	
 	public Double minRate; //min_rate
 	
 	public Double maxRate; //max_rate
@@ -42,6 +48,4 @@ public class Tier extends BaseModel {
 	
 	@Column(name = "expiration_date") //expiration_date
 	public Date expDate;
-	
-	public byte isDisable = 0; //is_disable
 }

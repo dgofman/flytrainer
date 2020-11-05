@@ -1,21 +1,49 @@
 <form [formGroup]="formGroup" #myForm="ngForm" class="p-grid">
     <div class="ui-fluid p-md-7">
-        <div class="row">
-            <label>{{Locales.description}}</label>
-            <p-autoComplete #desc appendTo="body" field="description" [dropdown]="addresses.length > 0"  [(ngModel)]="selectedBean" [ngModelOptions]="{standalone: true}" (completeMethod)="filterDescription($event, desc)"></p-autoComplete>
-        </div>
         <div *ngFor="let control of controls" [class]="control.class">
             <admin-field [parentGroup]="formGroup" [c]="control" [templates]="{ pobox: pobox }"></admin-field>
         </div>
-    </div>
-    <div class="ui-fluid p-md-5">
         <div class="row" formGroupName="notes">
             <label>{{Locales.notes}}</label>
-            <textarea formControlName="content" pInputTextarea [rows]="25"></textarea>
+            <textarea formControlName="content" pInputTextarea [rows]="6"></textarea>
+        </div>
+    </div>
+    <div class="ui-fluid p-md-5">
+        <div class="row">
+            <p-table [value]="addresses" [lazy]="true" (onLazyLoad)="lazyLoad()" [(selection)]="selectedBean">
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                        <col/>
+                        <col [style.width.rem]="8" />
+                        <col [style.width.rem]="3" />
+                    </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>{{Locales.type}}</th>
+                        <th align="center">{{Locales.isPrimary}}</th>
+                        <th align="center"><i class="pi pi-check"></i></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-data>
+                    <tr>
+                        <td>{{data.type}}</td>
+                        <td align="center" [innerHTML]="formatData(data.isPrimary, 'bool')"></td>
+                        <td>
+                            <p-tableRadioButton [value]="data"></p-tableRadioButton>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="2" style="text-align: center;">{{Locales.noData}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
         <div class="row">
             <div class="row">
-                <p-fileUpload mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.documentUpload"></p-fileUpload>
+                <p-fileUpload mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.uploadDocument"></p-fileUpload>
             </div>
             <div class="row" *ngIf="selectedBean?.document as doc">
                 <span *ngIf="doc.fileName">
@@ -37,6 +65,6 @@
 <ng-template #pobox let-group="group">
     <div class="noshadow" *ngIf="group.controls.type.value != 'Home'" [formGroup]="group">
         <label>{{Locales.pobox}}</label>
-        <input formControlName="pobox" pInputText/>
+        <input formControlName="pobox" pInputText maxlength="10"/>
     </div>
 </ng-template>

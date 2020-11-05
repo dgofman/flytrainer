@@ -30,7 +30,7 @@ export class FTFormControl extends FormControl {
         if (format === 'bool') {
             return '<i class="middle ' + new FTStatePipe().transform(val) + '"></i>';
         } else {
-            return this.Serialize(val, format);
+            return this.Serialize(val, format) || '';
         }
     }
 

@@ -26,11 +26,13 @@ public class Constants {
 	public static enum AccountType {
 		Other(0),
 		Student(1),
-		Pilot(2),
+		Renter(2),
 		Instructor(3),
 		Mechanic(4),
 		Inspector(5),
-		Station(6); //repairstation
+		Employee(6),
+		Corporate(8),
+		Station(9); //repairstation
 
 		private final int type;
 

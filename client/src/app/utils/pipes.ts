@@ -25,7 +25,7 @@ export class FTDateTimePipe implements PipeTransform {
 @Pipe({name: 'ftstate'})
 export class FTStatePipe implements PipeTransform {
   transform(state: boolean): string {
-    return 'pi ' + (state ? 'pi-circle-on green' : 'pi-circle-on red');
+    return 'pi ' + (state ? 'pi-check-circle green' : 'pi-ban red');
   }
 }
 

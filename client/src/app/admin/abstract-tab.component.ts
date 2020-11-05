@@ -16,17 +16,18 @@ import {  AbstractBase } from 'src/modules/models/base.model';
     <div [formGroup]="parentGroup" class="row" *ngIf="c.type">
         <label *ngIf="c.type!='check' && c.header">{{c.header}}</label>
         <p-checkbox *ngIf="c.type=='check'" [label]="c.header" [formControlName]="c.field" binary="true"></p-checkbox>
-        <p-inputNumber *ngIf="c.type =='number'" [showButtons]="true" [formControlName]="c.field" [min]="c.value[0]" [max]="c.value[1]"></p-inputNumber>
-        <input *ngIf="c.type =='input'" ftFTFormatter [control]="c" [formControlName]="c.field" pInputText [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''"/>
-        <input *ngIf="c.type =='password'" [formControlName]="c.field" type="password" pPassword autocomplete="off new-password" [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''"/>
+        <p-inputNumber *ngIf="c.type =='number'" mode="decimal" [minFractionDigits]="c.maxlen || 0" [maxFractionDigits]="c.maxlen || 0" [formControlName]="c.field" [min]="c.value[0]" [max]="c.value[1]"></p-inputNumber>
+        <input *ngIf="c.type =='phone'" ftFTFormatter [control]="c" [formControlName]="c.field" pInputText [attr.disabled]="isDisabled(c)" placeholder="xxx-xxx-xxxx" [attr.maxlength]="c.maxlen || 30"/>
+        <input *ngIf="c.type =='input'" ftFTFormatter [control]="c" [formControlName]="c.field" pInputText [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''" [attr.maxlength]="c.maxlen"/>
+        <input *ngIf="c.type =='password'" [formControlName]="c.field" type="password" pPassword autocomplete="off new-password" [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''" [attr.maxlength]="c.maxlen"/>
         <p-dropdown *ngIf="c.type=='popup'" appendTo="body" [formControlName]="c.field" [options]="c.value" [placeholder]="c.placeholder || ''"></p-dropdown>
-        <p-autoComplete *ngIf="c.type == 'auto'" ftAutoComplete [formControlName]="c.field" [data]="c.value"></p-autoComplete>
-        <p-inputMask *ngIf="c.type=='mask'" [mask]="c.value" [placeholder]="c.placeholder || ''" [formControlName]="c.field"></p-inputMask>
+        <p-autoComplete *ngIf="c.type == 'auto'" ftAutoComplete [formControlName]="c.field" [data]="c.value" [maxlength]="c.maxlen"></p-autoComplete>
+        <p-inputMask *ngIf="c.type=='mask'" [mask]="c.value" [placeholder]="c.placeholder || ''" [formControlName]="c.field" unmask="true"></p-inputMask>
         <p-calendar *ngIf="c.type=='cal'" ftCalendar [formControlName]="c.field"></p-calendar>
         <div *ngIf="c.type=='switch'"><p-inputSwitch [formControlName]="c.field" binary="true"></p-inputSwitch></div>
         <div *ngIf="c.field=='other' && parentGroup.controls.type.value == 'Other'">
             <label>{{Locales.other}}</label>
-            <input formControlName="other" pInputText/>
+            <input formControlName="other" pInputText [attr.maxlength]="c.maxlen || 30"/>
         </div>
         <ng-container *ngIf="c.template" [ngTemplateOutlet]="templates[c.template]" [ngTemplateOutletContext]="{control:c, group: parentGroup}"></ng-container>
         <div *ngIf="f[c.field].errors" style="color: red; ">

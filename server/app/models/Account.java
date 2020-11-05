@@ -8,7 +8,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.ebean.annotation.Aggregation;
 import io.ebean.annotation.History;
@@ -31,11 +31,10 @@ public class Account extends BaseModel {
 	public static final long INITIAL_ACCOUNT_ID = AppConfig.get(Key.INITIAL_ACCOUNT_ID).asLong();
 	
 	@Length(30)
-	@JsonView(Short.class)
 	public String description; //description
 
 	@NotNull
-	public AccountType type = AccountType.Pilot; //type
+	public AccountType type = AccountType.Renter; //type
 	
 	@Length(30)
 	public String other; //other
@@ -57,5 +56,6 @@ public class Account extends BaseModel {
 	public Tier defaultTier; //default_tier_id
 
 	@ManyToOne
+	@JsonIgnore
 	public User user; //FK user_id - User::accounts
 }

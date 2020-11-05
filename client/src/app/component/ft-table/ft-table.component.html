@@ -23,11 +23,12 @@
                     <td style="padding: 0.5em;" class="td-controls">
                       <input *ngIf="rowData.type=='input'" class="ui-inputtext" [formControlName]="rowData.field" [escape]="false" [pTooltip]="Locales.sqlQuery"/>
                       <p-dropdown *ngIf="rowData.type=='popup'" appendTo="body" [options]="rowData.value" [formControlName]="rowData.field" [placeholder]="Locales.selectItem"></p-dropdown>
-                      <div *ngIf="rowData.type=='radio'" class="filter-radio">
-                        <p-radioButton [name]="rowData.field" [value]="true" [formControlName]="rowData.field"></p-radioButton><i [class]="true | ftstate"></i>
-                        <p-radioButton [name]="rowData.field" [value]="false" [formControlName]="rowData.field"></p-radioButton><i [class]="false | ftstate"></i>
+                      <div *ngIf="rowData.type=='radio' || rowData.type=='switch'" class="filter-radio">
+                        <p-radioButton [name]="rowData.field" [value]="true" [formControlName]="rowData.field"></p-radioButton><i [class]="true | ftstate" [title]="Locales.yes"></i>
+                        <p-radioButton [name]="rowData.field" [value]="false" [formControlName]="rowData.field"></p-radioButton><i [class]="false | ftstate" [title]="Locales.no"></i>
                         <p-button label="{{Locales.reset}}" class="filter-button" (click)="filterGroup.get(rowData.field).setValue(null)"></p-button>
                       </div>
+                      <p-inputNumber *ngIf="rowData.type=='number'" mode="decimal" [minFractionDigits]="rowData?.maxlen || 0" [maxFractionDigits]="rowData?.maxlen || 0" [formControlName]="rowData.field"></p-inputNumber>
                       <p-calendar #cal *ngIf="rowData.type=='cal'" placeholder="mm/dd/yyyy ( - mm/dd/yyyy)" selectionMode="range" [formControlName]="rowData.field" ftCalendar>
                         <p-header style="display: inline-block; height: 10px;">
                           <a class="cal-popup-close" (click)="cal.hideOverlay()">

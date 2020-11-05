@@ -1,3 +1,4 @@
+import Locales from '@locales/common';
 import { environment } from '@client/environments/environment';
 import { Directive } from '@angular/core';
 import { Session, ColumnType } from 'src/modules/models/constants';
@@ -29,10 +30,11 @@ export abstract class AppBaseDirective {
     }
 
     formatColData(col: ColumnType, rowData: BaseModel, title: boolean) {
+        const val = FTFormControl.getData(col, rowData);
         if (title && col.format === 'bool') {
-            return '';
+            return val ? Locales.yes : Locales.no;
         }
-        return this.formatData(FTFormControl.getData(col, rowData), col.format);
+        return this.formatData(val, col.format);
     }
 
     formatData(data: any, format: string) {

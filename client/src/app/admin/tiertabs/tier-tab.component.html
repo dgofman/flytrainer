@@ -17,29 +17,16 @@
             <label>{{Locales.notes}}</label>
             <textarea formControlName="content" pInputTextarea [rows]="11"></textarea>
         </div>
-        <div class="row" *ngIf="selectedBean?.document as doc">
-            <div *ngIf="doc.id && doc.fileName">
-                <h3>{{Locales.preview}}</h3>
-                <img style="max-width: 100%" src="{{baseURL}}/file/{{user.id}}/{{doc.id}}?token={{token}}" onerror="this.src='assets/no-image-available.jpeg';"/>
-            </div>
-            <div *ngIf="doc.fileName" class="row" style="margin-top: 20px">
-                <button pButton icon="pi pi-times" style="padding: 0; font-size: 9px;" (click)="deleteDocument(doc)"></button>&nbsp;&nbsp;
-                <a href="{{baseURL}}/file/{{user.id}}/{{doc.id}}?token={{token}}" download>{{Locales.download}}</a>&nbsp;&nbsp;
-                <b>{{doc.fileName}}</b> - {{doc.size}} bytes
-            </div>
-        </div>
     </div>
 </form>
 <div class="row footer left">
-     <p-fileUpload [disabled]="!user?.id" mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.uploadPicture"></p-fileUpload>
-    <div class="right">
-        <button pButton (click)="showPassword()" [label]="Locales.showPassword" *ngIf="isAdmin" [disabled]="!user?.id"></button>
+     <div class="right">
         <button pButton (click)="onSubmit()" [label]="Locales.save" [disabled]="!myForm.form.valid"></button>
     </div>
 </div>
 <ng-template #pobox let-group="group">
     <div class="noshadow" *ngIf="group.controls.type.value != 'Home'" [formGroup]="group">
         <label>{{Locales.pobox}}</label>
-        <input formControlName="pobox" pInputText maxlength="10"/>
+        <input formControlName="pobox" pInputText/>
     </div>
 </ng-template>

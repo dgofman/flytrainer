@@ -32,13 +32,12 @@ export class ContactTabComponent extends UserTabBaseDirective {
         this.controls = [
             { field: 'id' },
             { field: 'version' },
-            { field: 'document' },
-            { field: 'description', header: Locales.description, type: 'input' },
-            { field: 'first', header: Locales.firstname, type: 'input', validators: [Validators.required] },
-            { field: 'middle', header: Locales.middlename, type: 'input' },
-            { field: 'last', header: Locales.lastname, type: 'input', validators: [Validators.required] },
-            { field: 'relationship', header: Locales.relationship, type: 'input', validators: [Validators.required] },
-            { field: 'phone', header: Locales.phone, type: 'input' }
+            { field: 'description', header: Locales.description, type: 'input', maxlen: 30 },
+            { field: 'first', header: Locales.firstname, type: 'input', maxlen: 50, validators: [Validators.required] },
+            { field: 'middle', header: Locales.middlename, type: 'input', maxlen: 50 },
+            { field: 'last', header: Locales.lastname, type: 'input', maxlen: 50, validators: [Validators.required] },
+            { field: 'relationship', header: Locales.relationship, type: 'input', maxlen: 30, validators: [Validators.required] },
+            { field: 'phone', header: Locales.phone, type: 'phone' }
         ];
         this.addressControls = [
             { field: 'id' },
@@ -46,13 +45,13 @@ export class ContactTabComponent extends UserTabBaseDirective {
             { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], value: Object.keys(AddressType).map(key => ({ label: AddressType[key], value: key })) },
             { field: 'other', type: 'hide' },
             { field: 'pobox', type: 'hide', template: 'pobox' },
-            { field: 'street', header: Locales.street, type: 'input', validators: [Validators.required] },
-            { field: 'city', header: Locales.city, type: 'input', validators: [Validators.required] },
-            { field: 'code', header: Locales.code, type: 'input', validators: [Validators.required], placeholder: 'ex. 95134' },
+            { field: 'street', header: Locales.street, type: 'input', maxlen: 120, validators: [Validators.required] },
+            { field: 'city', header: Locales.city, type: 'input', maxlen: 50, validators: [Validators.required] },
+            { field: 'code', header: Locales.code, type: 'input', maxlen: 16, validators: [Validators.required], placeholder: 'ex. 95134' },
             { field: 'state', header: Locales.state, type: 'auto', validators: [Validators.required], value: State, class: 'inlineL' },
             { field: 'country', header: Locales.country, type: 'auto', validators: [Validators.required], value: Country, class: 'inlineR' },
-            { field: 'phone', header: Locales.phone, type: 'input', class: 'inlineL' },
-            { field: 'fax', header: Locales.fax, type: 'input', class: 'inlineR' }
+            { field: 'phone', header: Locales.phone, type: 'phone', class: 'inlineL' },
+            { field: 'fax', header: Locales.fax, type: 'phone', class: 'inlineR' }
         ];
         const fields = {};
         this.addressControls.forEach(c => {
@@ -68,21 +67,13 @@ export class ContactTabComponent extends UserTabBaseDirective {
             controls[c.field] = new FormControl(null, c.validators);
         });
         this.formGroup = new FormGroup(controls);
-        this.formGroup.controls.address.disable();
         this.onReset();
     }
 
     updateSelectedBean(bean: any) {
         super.updateSelectedBean(bean);
         if (bean != null) {
-            this.loading(true);
-            this.adminService.getContact(this.user.id, bean.id).subscribe(e => {
-                this.loading(false);
-                this.formGroup.patchValue(Object.assign(this.defaultBean, e))   ;
-                this.showAddress(e.address && e.address.id !== null, this.formGroup.controls);
-            }, (ex) => this.errorHandler(ex));
-        } else {
-            this.onReset();
+            this.showAddress(bean.address && bean.address.id !== null, this.formGroup.controls);
         }
     }
 
@@ -122,6 +113,7 @@ export class ContactTabComponent extends UserTabBaseDirective {
                 this.loading(false);
                 this.result.data.push(result);
                 this.formGroup.patchValue(result);
+                this.selectedBean = result;
                 this.success(Locales.recordCreated);
             }, (ex) => this.errorHandler(ex));
         }
@@ -145,7 +137,7 @@ export class ContactTabComponent extends UserTabBaseDirective {
     onReset() {
         this.formGroup.reset();
         this.formGroup.patchValue(this.defaultBean);
-        this.isAddress = false;
+        this.showAddress(false, this.formGroup.controls);
         this._selectedBean = null;
     }
 

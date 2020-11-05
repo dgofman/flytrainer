@@ -59,35 +59,35 @@
                     <div class="ui-fluid">
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.userId}}*</label>
-                            <input class="ui-inputtext" name="username" required ngModel autocomplete="off">
+                            <input class="ui-inputtext" name="username" required ngModel autocomplete="off" maxlength="50">
                         </div>
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.password}}*</label>
-                            <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off">
+                            <input type="password" class="ui-inputtext" name="passwd" required ngModel autocomplete="off" maxlength="25">
                         </div>
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.confirmPassword}}*</label>
-                            <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off">
+                            <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off" maxlength="25">
                         </div>
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.email}}*</label>
-                            <input type="email" class="ui-inputtext" name="email" required ngModel autocomplete="off">
+                            <input type="email" class="ui-inputtext" name="email" required ngModel autocomplete="off" maxlength="100">
                         </div>
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.firstName}}*</label>
-                            <input class="ui-inputtext" name="first" required ngModel autocomplete="off">
+                            <input class="ui-inputtext" name="first" required ngModel autocomplete="off" maxlength="50">
                         </div>
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.middleName}}</label>
-                            <input class="ui-inputtext" name="middle" ngModel autocomplete="off">
+                            <input class="ui-inputtext" name="middle" ngModel autocomplete="off" maxlength="50">
                         </div>
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.lastName}}*</label>
-                            <input class="ui-inputtext" name="last" required ngModel autocomplete="off">
+                            <input class="ui-inputtext" name="last" required ngModel autocomplete="off" maxlength="50">
                         </div>
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.phone}}</label>
-                            <input class="ui-inputtext" name="phone" ngModel autocomplete="off">
+                            <input class="ui-inputtext" name="phone" ngModel autocomplete="off" maxlength="30">
                         </div>
                     </div>
                     <ng-template [ngTemplateOutlet]="SubmitButton"></ng-template>
@@ -99,11 +99,11 @@
                         <p>{{Locales.chooseNewPassword}}</p>
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.password}}*</label>
-                            <input type="password" class="ui-inputtext" name="new_passwd" required ngModel autocomplete="off">
+                            <input type="password" class="ui-inputtext" name="new_passwd" required ngModel autocomplete="off" maxlength="25">
                         </div>
                         <div class="row">
                             <label class="p-col-fixed">{{Locales.confirmPassword}}*</label>
-                            <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off">
+                            <input type="password" class="ui-inputtext" name="conf_passwd" required ngModel autocomplete="off" maxlength="25">
                         </div>
                     </div>
                 </ng-template>

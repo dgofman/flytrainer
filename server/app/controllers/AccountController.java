@@ -32,16 +32,6 @@ public class AccountController extends BaseController {
 		}
 	}
 
-	public Result getAccount(Long userId, Long accountId) {
-		log.debug("AccountController::getAccount for user=" + userId);
-		try {
-			Account account = Ebean.find(Account.class).where().eq("user", new User(userId)).eq("id",  accountId).findOne();
-			return okResult(account, Short.class);
-		} catch (Exception e) {
-			return badRequest(e);
-		}
-	}
-
 	public Result addAccount(Http.Request request, Long userId) {
 		log.debug("AccountController::addAccount for user=" + userId);
 		User currentUser = request.attrs().get(User.MODEL);

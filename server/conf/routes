@@ -19,7 +19,6 @@ PATCH   /user/:userId                   controllers.UserController.updateUser(re
 GET     /user/:userId/:username         controllers.UserController.getPassword(request: Request, userId: Long, username: String)
 
 GET     /account/:userId                controllers.AccountController.getAccounts(userId: Long)
-GET     /account/:userId/:aId           controllers.AccountController.getAccount(userId: Long, aId: Long)
 POST    /account/:userId                controllers.AccountController.addAccount(request: Request, userId: Long)
 PATCH   /account/:userId                controllers.AccountController.updateAccount(request: Request, userId: Long)
 DELETE  /account/:userId/:aId           controllers.AccountController.deleteAccount(request: Request, userId: Long, aId: Long)
@@ -35,7 +34,6 @@ PATCH   /certificate/:userId            controllers.CertificateController.update
 DELETE  /certificate/:userId/:addId     controllers.CertificateController.deleteCertificate(request: Request, userId: Long, addId: Long)
 
 GET     /contact/:userId                controllers.ContactController.getContacts(userId: Long, offset: Integer, rows: Integer)
-GET     /contact/:userId/:cId           controllers.ContactController.getContact(userId: Long, cId: Long)
 POST    /contact/:userId                controllers.ContactController.addContact(request: Request, userId: Long)
 PATCH   /contact/:userId                controllers.ContactController.updateContact(request: Request, userId: Long)
 DELETE  /contact/:userId/:cId           controllers.ContactController.deleteContact(request: Request, userId: Long, cId: Long)

@@ -96,14 +96,14 @@ public class AddressController extends BaseController {
 				return createBadRequest("noaddress", Constants.Errors.ERROR);
 			}
 			if (dbAddress.reference != null) {
-				Ebean.find(Class.forName("models." + dbAddress.reference)).asUpdate()
-					.set("address", null).where()
+				Ebean.find(Class.forName("models." + dbAddress.reference)).asUpdate().set("address", null)
+					.where()
 					.eq("address", dbAddress)
 					.eq("user", dbAddress.user).update();
 			}
+			dbAddress.delete(currentUser);
 			NotesUtils.delete(dbAddress);
 			DocumentUtils.delete(dbAddress);
-			dbAddress.delete(currentUser);
 			transaction.commit();
 			return ok();
 		} catch (Exception e) {

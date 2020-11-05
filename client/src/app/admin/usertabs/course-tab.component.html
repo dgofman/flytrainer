@@ -22,7 +22,7 @@
         </div>
         <div class="row">
             <div class="row">
-                <p-fileUpload mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.documentUpload"></p-fileUpload>
+                <p-fileUpload mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.uploadDocument"></p-fileUpload>
             </div>
             <div class="row" *ngIf="selectedBean?.document as doc">
                 <span *ngIf="doc.fileName">

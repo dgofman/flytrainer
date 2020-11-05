@@ -2,7 +2,7 @@ import { ValidatorFn, AbstractControlOptions } from '@angular/forms';
 
 export type SHOW_COLUMNS = 'never' | true | false;
 export type FORMAT_COLUMNS = 'datetime' | 'short' | 'date' | 'bool';
-export type TYPE_COLUMNS = 'hide' | 'text' | 'check' | 'cal' | 'radio' | 'input' | 'password' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask' | 'number';
+export type TYPE_COLUMNS = 'hide' | 'text' | 'check' | 'cal' | 'radio' | 'input' | 'password' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask' | 'number' | 'phone';
 
 export const RouterOutlet = {
     name: 'view',  // src/app/app.component.ts = <router-outlet name="view"></router-outlet>
@@ -30,6 +30,7 @@ export interface ColumnType {
     template?: string;
     placeholder?: string;
     path?: string[];
+    maxlen?: number;
 }
 
 export interface Session {
@@ -65,10 +66,12 @@ export enum AddressType {
 
 export enum AccountType {
     Student = 'Student',
-    Pilot = 'Pilot',
+    Renter = 'Renter',
     Instructor = 'Instructor',
     Mechanic = 'Mechanic',
     Inspector = 'Inspector',
+    Employee = 'Employee',
+    Corporate = 'Corporate',
     Station = 'Station',
     Other = 'Other'
 }

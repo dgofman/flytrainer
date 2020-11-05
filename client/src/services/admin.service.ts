@@ -58,10 +58,6 @@ export class AdminService {
         return this.http.get<CommonModel[]>(`/account/${userId}`);
     }
 
-    public getAccount(userId: number, accountId: number): Observable<CommonModel> {
-        return this.http.get<CommonModel>(`/account/${userId}/${accountId}`);
-    }
-
     public updateAccount(userId: number, model: CommonModel): Observable<CommonModel> {
         return this.http.patch<CommonModel>(`/account/${userId}`, model);
     }
@@ -111,10 +107,6 @@ export class AdminService {
 
     public getContacts(userId: number, offset: number): Observable<TableResult<Contact>> {
         return this.http.get<TableResult<Contact>>(`/contact/${userId}?rows=25&offset=${offset}`);
-    }
-
-    public getContact(userId: number, contactId: number): Observable<Contact> {
-        return this.http.get<Contact>(`/contact/${userId}/${contactId}`);
     }
 
     public updateContact(userId: number, model: CommonModel): Observable<Contact> {

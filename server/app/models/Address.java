@@ -29,7 +29,7 @@ public class Address extends DocumentModel {
 	@Length(30)
 	public String other; //other
 	
-	@Length(100)
+	@Length(30)
 	public String description; //description
 
 	@Length(10)
@@ -39,6 +39,7 @@ public class Address extends DocumentModel {
 	public String street; //street
 
 	@NotNull
+	@Length(50)
 	public String city; //city
 
 	@Length(16)

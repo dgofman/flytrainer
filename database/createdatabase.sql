@@ -57,5 +57,9 @@ SET @@session.time_zone='+00:00';
 SELECT @@global.time_zone, @@session.time_zone;
 SELECT CURRENT_TIMESTAMP();
 
+-- 512M is equivalent to 512*1024*1024, or 536870912.
+SET GLOBAL max_allowed_packet=536870912;
+-- Relogin to your mysql client.
+SELECT @@max_allowed_packet;
 
 DEALLOCATE PREPARE sqlStatment;

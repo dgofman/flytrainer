@@ -106,6 +106,7 @@ export class ContactTabComponent extends UserTabBaseDirective {
             this.adminService.updateContact(this.user.id, contact).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
+                this.formGroup.patchValue(result);
                 this.success(Locales.recordUpdated);
             }, (ex) => this.errorHandler(ex));
         } else {

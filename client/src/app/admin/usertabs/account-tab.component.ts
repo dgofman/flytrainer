@@ -59,6 +59,7 @@ export class AccountTabComponent extends UserTabBaseDirective {
             this.adminService.updateAccount(this.user.id, account).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
+                this.formGroup.patchValue(result);
                 this.eventService.emit(EventType.Refresh, null);
                 this.success(Locales.recordUpdated);
             }, (ex) => this.errorHandler(ex));

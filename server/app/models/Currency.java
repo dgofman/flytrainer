@@ -1,7 +1,6 @@
 package models;
 
 import java.util.Date;
-import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,46 +9,36 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import io.ebean.annotation.DbJson;
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
 import utils.Constants.AircraftCategoryClass;
-import utils.Constants.CertificateType;
+import utils.Constants.CurrencyType;
 
 @Entity
 @History
-@Table(name = "certificate")
-public class Certificate extends DocumentModel {
+@Table(name = "currency")
+public class Currency extends BaseModel {
 
 	@NotNull
-	public CertificateType type = CertificateType.PrivatePilot; //certificates
+	public CurrencyType type = CurrencyType.FlightReview;
 
 	@Length(30)
 	public String other; //other
 
-	@DbJson
 	@Column(name = "class")
-	public Map<AircraftCategoryClass, Boolean> aircraftClass;
-
-	@Length(10)
-	public String number; //number
+	public AircraftCategoryClass aclass;
 
 	@Length(30)
 	public String description; //description
 
-	@Length(100)
-	public String limitations; //limitations
+	public byte isSuperseded  = 0; //is_superseded
 
 	public Date issuedDate; //issued_date
-
-	public Date expDate; //exp_date
-
-	public byte isSuspended = 0; //is_suspended
 	
-	public byte isWithdrawn = 0; //is_withdrawn
-
+	public Date dueDate; //due_date
+	
 	@ManyToOne
 	@JsonIgnore
-	public User user; // FK user_id - User::certificates
+	public User user; // FK user_id - User::currencies
 }

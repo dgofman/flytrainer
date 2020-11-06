@@ -131,15 +131,6 @@ export abstract class AbstractTabDirective extends AppBaseDirective {
         }
         return null;
     }
-
-    deleteDocument(document: Document) {
-        if (!document.id) {
-            this.selectedBean.document = null;
-        } else {
-            this.selectedBean.document = new Document({id: document.id});
-        }
-        this.formGroup.patchValue({document: this.selectedBean.document});
-    }
 }
 
 @NgModule({

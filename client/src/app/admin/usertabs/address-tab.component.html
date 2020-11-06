@@ -27,7 +27,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-data>
                     <tr>
-                        <td>{{data.type}}</td>
+                        <td class="ellipsis" [title]="data.type">{{data.type}}</td>
                         <td align="center" [innerHTML]="formatData(data.isPrimary, 'bool')"></td>
                         <td>
                             <p-tableRadioButton [value]="data"></p-tableRadioButton>
@@ -36,7 +36,7 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage" let-columns>
                     <tr>
-                        <td [attr.colspan]="2" style="text-align: center;">{{Locales.noData}}</td>
+                        <td [attr.colspan]="3" style="text-align: center;">{{Locales.noData}}</td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -45,13 +45,7 @@
             <div class="row">
                 <p-fileUpload mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.uploadDocument"></p-fileUpload>
             </div>
-            <div class="row" *ngIf="selectedBean?.document as doc">
-                <span *ngIf="doc.fileName">
-                    <button pButton icon="pi pi-times" style="padding: 0; font-size: 9px;" (click)="deleteDocument(doc)"></button>&nbsp;&nbsp;
-                    <a href="{{baseURL}}/file/{{user.id}}/{{doc.id}}?token={{token}}" download>{{Locales.download}}</a>&nbsp;&nbsp;
-                    <b>{{doc.fileName}}</b> - {{doc.size}} bytes
-                </span>
-            </div>
+            <admin-prewview [user]="user" [formGroup]="formGroup" [selectedBean]="selectedBean"></admin-prewview>
         </div>
     </div>
 </form>

@@ -8,11 +8,7 @@
             <p-checkbox [label]="Locales.isSuspended" binary="true" formControlName="isSuspended" class="gap"></p-checkbox>
             <p-checkbox [label]="Locales.isWithdrawn" binary="true" formControlName="isWithdrawn"></p-checkbox>
         </div>
-        <div class="row" *ngIf="selectedBean?.id">
-            <h3>{{Locales.preview}}</h3>
-            <a href="{{baseURL}}/file/{{user.id}}/{{selectedBean.id}}?token={{token}}" download>{{Locales.download}}</a>
-            <img style="max-width: 100%" src="{{baseURL}}/file/{{user.id}}/{{selectedBean.id}}?token={{token}}" onerror="this.src='assets/no-image-available.jpeg';"/>
-        </div>
+        <admin-prewview [user]="user" [formGroup]="formGroup" [selectedBean]="selectedBean"></admin-prewview>
     </div>
     <div class="ui-fluid p-md-5">
         <p-table [value]="result?.data" [lazy]="true" (onLazyLoad)="lazyLoad($event)" [(selection)]="selectedBean"

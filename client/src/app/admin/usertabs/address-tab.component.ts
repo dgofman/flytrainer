@@ -62,6 +62,7 @@ export class AddressTabComponent extends UserTabBaseDirective {
             this.adminService.updateAddress(this.user.id, address).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
+                this.formGroup.patchValue(result);
                 if (result.isPrimary) {
                     this.addresses.forEach((item, idx) => {
                         if (result.id === item.id) {
@@ -81,6 +82,7 @@ export class AddressTabComponent extends UserTabBaseDirective {
                 this.loading(false);
                 this.addresses.push(result);
                 this.selectedBean = result;
+                this.formGroup.patchValue(result);
                 this.success(Locales.recordCreated);
             }, (ex) => this.errorHandler(ex));
         }

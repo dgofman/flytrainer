@@ -22,10 +22,10 @@ public class Course extends BaseModel {
 	@Length(30)
 	public String other; //other
 
-	@Length(100)
+	@Length(30)
 	public String number; //number
 
-	@Length(100)
+	@Length(30)
 	public String description; //description
 
 	public Double cost; //cost
@@ -38,7 +38,7 @@ public class Course extends BaseModel {
 
 	public byte isOnline = 0; //is_online
 
-	@Length(100)
+	@Length(50)
 	public String presentedBy; //presented_by
 
 	@Length(100)

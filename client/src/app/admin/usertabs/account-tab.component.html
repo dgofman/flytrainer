@@ -28,7 +28,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-data>
                 <tr>
-                    <td>{{data.type}}</td>
+                    <td class="ellipsis" [title]="data.type">{{data.type}}</td>
                     <td>{{data.accountId}}</td>
                     <td [innerHTML]="formatData(data.isActive, 'bool')"></td>
                     <td>

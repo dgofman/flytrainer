@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { AdminComponentModule } from './admin.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -31,6 +32,7 @@ import { TableModule } from 'primeng/table';
 export class AdminSharedModule {
 
     static list = [
+        AdminComponentModule,
         AutoCompleteModule,
         ButtonModule,
         CalendarModule,

@@ -471,6 +471,30 @@ public class Constants {
 			return this.type;
 		}
 	}
+	
+	public static enum CurrencyType {
+		Other(0),
+		Day(1),
+		Night(2),
+		Instrument(3),
+		Medical(4),
+		CFI(5),
+		FlightReview(6),
+		Part141(7),
+		Temporary(8),
+		Goggle(9),
+		TSATraining(10);
+		
+		private final int type;
+
+		private CurrencyType(int type) {
+			this.type = type;
+		}
+		
+		public int getType() {
+			return this.type;
+		}
+	}
 
 	public static enum AddressType {
 		Other(0),

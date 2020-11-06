@@ -22,13 +22,13 @@ public class Endorsement extends BaseModel {
 	@Length(30)
 	public String other; //other
 
-	@Length(100)
+	@Length(30)
 	public String description; //description
 
 	@Length(100)
 	public String limitations; //limitations
 
-	@Length(50)
+	@Length(30)
 	public String number; //number
 	
 	public Date expDate; //exp_date

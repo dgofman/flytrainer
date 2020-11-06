@@ -15,7 +15,7 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { RouterOutlet } from 'src/modules/models/constants';
 import { FTPipeModule } from '../utils/pipes';
-import { AdminTopbarModule } from './admin.component';
+import { AdminComponentModule } from './admin.component';
 import { UserComponent } from './user.component';
 import { TierRateComponent } from './tierrate.component';
 import { UserTabModule } from './usertabs/user-tab.component';
@@ -39,7 +39,7 @@ import { TierTabModule } from './tiertabs/tier-tab.component';
       RouterOutlet.defineLink('billing', UserComponent),
       RouterOutlet.defineLink('documents', UserComponent)
     ]),
-    AdminTopbarModule,
+    AdminComponentModule,
     CommonModule,
     HttpClientModule, /*required for HTTP_INTERCEPTORS*/
     ReactiveFormsModule, /*required for FormGroup, FormControl */

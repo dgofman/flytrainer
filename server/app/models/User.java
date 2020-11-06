@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -31,13 +32,14 @@ import utils.Constants.Key;
 
 @Entity
 @History
+@Table(name = "user")
+@JsonFilter("UserFilter")
 @NamedQueries(value = {
 		@NamedQuery(name = User.LOGIN, query = "select(uuid, isActive, resetPassword) where username = :username and password = :password"),
 		@NamedQuery(name = User.FIND, query = "select(isActive) where username = :username and uuid = :uuid and version = :version and modifiedDate =:modifiedDate"),
 		@NamedQuery(name = User.FIND_BY_UUID, query = "select(role) where username = :username and uuid = :uuid"),
 		@NamedQuery(name = User.FIND_BY_EMAIL, query = "select(isActive) where username = :username and email = :email"),
 		@NamedQuery(name = User.PASSWORD, query = "select(password) where username = :username and id = :id") })
-@JsonFilter("UserFilter")
 public class User extends DocumentModel implements IsAddressable {
 
 	public static final TypedKey<User> MODEL = TypedKey.<User>create("userModel");

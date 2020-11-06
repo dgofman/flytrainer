@@ -34,7 +34,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-contact>
                 <tr>
-                    <td>{{contact.last}}, {{contact.first}}</td>
+                    <td class="ellipsis" title="{{contact.last}}, {{contact.first}}">{{contact.last}}, {{contact.first}}</td>
                     <td>{{contact.relationship}}</td>
                     <td>
                         <p-tableRadioButton [value]="contact"></p-tableRadioButton>

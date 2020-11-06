@@ -1,49 +1,82 @@
 <form [formGroup]="formGroup" #myForm="ngForm" class="p-grid">
     <div class="ui-fluid p-md-7">
         <div class="row">
+            <label>{{Locales.description}}</label>
+            <input ftFTFormatter formControlName="description" pInputText maxlength="30"/>
+        </div>
+        <div class="row">
+            <label>{{Locales.certificate_num}}</label>
+            <input ftFTFormatter formControlName="number" pInputText maxlength="10"/>
+        </div>
+        <div class="row">
             <p-checkbox [label]="Locales.isSuspended" binary="true" formControlName="isSuspended" class="gap"></p-checkbox>
             <p-checkbox [label]="Locales.isWithdrawn" binary="true" formControlName="isWithdrawn"></p-checkbox>
         </div>
-        <div class="row">
-            <label>{{Locales.description}}</label>
-            <p-autoComplete #desc appendTo="body" field="description" [dropdown]="certificates.length > 0"  [(ngModel)]="selectedBean" [ngModelOptions]="{standalone: true}" (completeMethod)="filterDescription($event, desc)"></p-autoComplete>
-        </div>
         <div *ngFor="let control of controls" [class]="control.class">
-            <admin-field [parentGroup]="formGroup" [c]="control" [templates]="{ pobox: pobox }"></admin-field>
+            <admin-field [parentGroup]="formGroup" [c]="control"></admin-field>
         </div>
         <span *ngFor="let item of aircraftCategory | keyvalue" formGroupName="aircraftClass" style="display: inline-block; white-space: nowrap; padding: 0 20px 10px 0">
             <p-checkbox [label]="item.value" [formControlName]="item.key" binary="true"></p-checkbox>
         </span>
+        <div class="row">
+            <div class="ui-fluid p-md-6" style="padding-right: 5px;">
+                <label>{{Locales.limitations}}</label>
+                <textarea formControlName="limitations" pInputTextarea [rows]="6" maxlength="100"></textarea>
+            </div>
+            <div formGroupName="notes" class="ui-fluid p-md-6" style="padding-left: 5px;">
+                <label>{{Locales.notes}}</label>
+                <textarea formControlName="content" pInputTextarea [rows]="6"></textarea>
+            </div>
+        </div>
     </div>
     <div class="ui-fluid p-md-5">
-        <div class="row" formGroupName="notes">
-            <label>{{Locales.notes}}</label>
-            <textarea formControlName="content" pInputTextarea [rows]="25"></textarea>
+        <div class="row">
+            <p-table [value]="certificates" [lazy]="true" (onLazyLoad)="lazyLoad()" [(selection)]="selectedBean">
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                    <col/>
+                    <col [style.width.rem]="5" />
+                    <col [style.width.rem]="5" />
+                    <col [style.width.rem]="3" />
+                    </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>{{Locales.type}}</th>
+                        <th align="center">{{Locales.isSuspended}}</th>
+                        <th align="center">{{Locales.isWithdrawn}}</th>
+                        <th align="center"><i class="pi pi-check"></i></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-contact>
+                    <tr>
+                        <td class="ellipsis" [title]="getType(contact.type)">{{getType(contact.type)}}</td>
+                        <td align="center" [innerHTML]="formatData(contact.isSuspended, 'bool')"></td>
+                        <td align="center" [innerHTML]="formatData(contact.isWithdrawn, 'bool')"></td>
+                        <td>
+                            <p-tableRadioButton [value]="contact"></p-tableRadioButton>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="4" style="text-align: center;">{{Locales.noData}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
         <div class="row">
             <div class="row">
                 <p-fileUpload mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true)" (onUpload)="onUploadDocument($event, false)" [chooseLabel]="Locales.uploadDocument"></p-fileUpload>
             </div>
-            <div class="row" *ngIf="selectedBean?.document as doc">
-                <span *ngIf="doc.fileName">
-                    <button pButton icon="pi pi-times" style="padding: 0; font-size: 9px;" (click)="deleteDocument(doc)"></button>&nbsp;&nbsp;
-                    <a href="{{baseURL}}/file/{{user.id}}/{{doc.id}}?token={{token}}" download>{{Locales.download}}</a>&nbsp;&nbsp;
-                    <b>{{doc.fileName}}</b> - {{doc.size}} bytes
-                </span>
-            </div>
+            <admin-prewview [user]="user" [formGroup]="formGroup" [selectedBean]="selectedBean"></admin-prewview>
         </div>
     </div>
 </form>
 <div class="row footer">
-    <button *ngIf="certificates.length > 0" class="ui-button ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
-    <button *ngIf="certificates.length > 0" class="ui-button " (click)="onDelete()" [disabled]="!selectedBean">{{Locales.delete}}</button>
+    <button *ngIf="certificates?.length > 0" class="ui-button ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
+    <button *ngIf="certificates?.length > 0" class="ui-button " (click)="onDelete()" [disabled]="!selectedBean">{{Locales.delete}}</button>
     <div class="right">
         <button class="ui-button " (click)="onSubmit()" [disabled]="!myForm.form.valid">{{Locales.save}}</button>
     </div>
 </div>
-<ng-template #pobox let-c="control" let-group="formGroup">
-    <div *ngIf="formGroup.controls.type.value != 'Home'" [formGroup]="group">
-        <label>{{Locales.pobox}}</label>
-        <input formControlName="pobox" pInputText/>
-    </div>
-</ng-template>

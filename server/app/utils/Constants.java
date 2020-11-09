@@ -309,23 +309,24 @@ public class Constants {
 		Passport(1),
 		DriverLicense(2),
 		AlienResident(3),
-		Visa(4),
-		PilotCertificate(5),
-		MedicalCertificate(6),
-		BirthCertificate(7),
-		TSATrainingCertificate(8),
-		TSAFormI20(9),
-		TSAPaymentReceived(10),
-		RentersInsuranceAgreement(11),
-		Finance(12),
-		PrivatePilotPermission(13),
-		InstrumentRatingPermission(14),
-		MultiCommercialPermission(15),
-		TrainingRequest(16),
-		AircraftCheckoutRecord(17),
-		PilotPicture(18),
-		AddressProof(19),
-		OnlineDocument(20);
+		Endorsement(4),
+		Visa(5),
+		PilotCertificate(6),
+		MedicalCertificate(7),
+		BirthCertificate(8),
+		TSATrainingCertificate(9),
+		TSAFormI20(10),
+		TSAPaymentReceived(11),
+		RentersInsuranceAgreement(12),
+		Finance(13),
+		PrivatePilotPermission(14),
+		InstrumentRatingPermission(15),
+		MultiCommercialPermission(16),
+		TrainingRequest(17),
+		AircraftCheckoutRecord(18),
+		PilotPicture(19),
+		AddressProof(20),
+		OnlineDocument(21);
 
 		private final int type;
 
@@ -377,41 +378,48 @@ public class Constants {
 	
 	public static enum EndorsementType {
 		Other(0),
-		Solo(1),
-		CrossCountry(2),
-		Solo90Days(3),
-		Solo25NM(4),
-		Solo50NM(5),
-		SoloNight(6),
-		SoloAirspace(7),
-		KnowledgeTest(8),
-		PracticalTest(9),
-		ProficiencyTest(10),
-		Private(11),
-		Sport(12),
-		Recreational(13),
-		Instrument(14),
-		Commercial(15),
-		Instructor(16),
-		ATP(17),
-		Complex(18),
-		HighPerformance(19),
-		HighAltitude(20),
-		Pressurization(21),
-		TailWheel(22),
-		Rating(23),
-		FlightReview(24),
-		Helicopter(25),
-		Glider(26),
-		GliderAeroTow(27),
-		GliderGroundTow(28),
-		GliderSelfLaunch(29),
-		TowPilotGlider(30),
-		SpinTraining(31),
-		HomeStudy(32),
-		Citizenship(33),
-		NVG(33),
-		EFVS(35);
+		Citizenship(1),
+		PreSoloKnowledge(2),
+		PreSoloFlight(3),
+		PreSoloNight(4),
+		FirstSoloFlight(5), 
+		SoloFlightEeach(6),
+		Solo25NM(7),
+		CrossCountryFlight(8),
+		CrossCountryPlan(9),
+		RepeatedSolo50NM(10),
+		SoloClassB(11),
+		SoloAirportClassB(12),
+		PracticalTest(13),
+		KnowledgeTest(14),
+		PrivateKnowledgeTest(15),
+		PrivatePracticalTest(16),
+		CommercialKnowledgeTest(17),
+		CommercialPracticalTest(18),
+		InstrumentKnowledgeTest(19),
+		InstrumentPracticalTest(20),
+		PreInstrumentPracticalTest(21),
+		WINGS(22),
+		FlightReview(23),
+		InstrumentProficiency(24),
+		Complex(25),
+		HighPerformance(26),
+		Pressurized(27),
+		TailWheel(28),
+		Sport(50),
+		Recreational(51),
+		Instructor(52),
+		ATP(53),
+		Helicopter(54),
+		Glider(55),
+		GliderAeroTow(56),
+		GliderGroundTow(57),
+		GliderSelfLaunch(58),
+		TowPilotGlider(59),
+		SpinTraining(60),
+		HomeStudy(61),
+		NVG(62),
+		EFVS(63);
 
 		private final int type;
 
@@ -577,7 +585,7 @@ public class Constants {
 	}
 
 	public static enum CertificateType {
-		Other(0),
+		Other(0, true),
 		StudentPilot(1),
 		SportPilot(2),
 		RecreationalPilot(3),
@@ -588,21 +596,31 @@ public class Constants {
 		MultiCrewPilot(8),
 		InstrumentRating(9),
 		MultiEngineRating(10),
-		FlightInstructor(11),
-		GoldSealInstructor(12),
-		BasicGroundInstructor(13),
-		AdvancedGroundInstructor(14),
-		InstrumentGroundInstructor(15),
+		FlightInstructor(11, true),
+		GoldSealInstructor(12, true),
+		BasicGroundInstructor(13, true),
+		AdvancedGroundInstructor(14, true),
+		InstrumentGroundInstructor(15, true),
 		PilotExaminer(16);
 
 		private final int type;
+		private final boolean isCFI;
 
 		private CertificateType(int type) {
+			this(type, false);
+		}
+
+		private CertificateType(int type, boolean isCFI) {
 			this.type = type;
+			this.isCFI = isCFI;
 		}
 		
 		public int getType() {
 			return this.type;
+		}
+		
+		public boolean isCFI() {
+			return this.isCFI;
 		}
 	}
 

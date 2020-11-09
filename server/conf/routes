@@ -28,6 +28,7 @@ POST    /address/:userId                controllers.AddressController.addAddress
 PATCH   /address/:userId                controllers.AddressController.updateAddress(request: Request, userId: Long)
 DELETE  /address/:userId/:addId         controllers.AddressController.deleteAddress(request: Request, userId: Long, addId: Long)
 
+GET     /certificate/cfi                controllers.CertificateController.findCFICertificates()
 GET     /certificate/:userId            controllers.CertificateController.getCertificate(userId: Long)
 POST    /certificate/:userId            controllers.CertificateController.addCertificate(request: Request, userId: Long)
 PATCH   /certificate/:userId            controllers.CertificateController.updateCertificate(request: Request, userId: Long)
@@ -37,6 +38,11 @@ GET     /contact/:userId                controllers.ContactController.getContact
 POST    /contact/:userId                controllers.ContactController.addContact(request: Request, userId: Long)
 PATCH   /contact/:userId                controllers.ContactController.updateContact(request: Request, userId: Long)
 DELETE  /contact/:userId/:cId           controllers.ContactController.deleteContact(request: Request, userId: Long, cId: Long)
+
+GET     /endorsement/:userId            controllers.EndorsementController.getEndorsements(userId: Long, offset: Integer, rows: Integer)
+POST    /endorsement/:userId            controllers.EndorsementController.addEndorsement(request: Request, userId: Long)
+PATCH   /endorsement/:userId            controllers.EndorsementController.updateEndorsement(request: Request, userId: Long)
+DELETE  /endorsement/:userId/:cId       controllers.EndorsementController.deleteEndorsement(request: Request, userId: Long, cId: Long)
 
 POST    /tiers                          controllers.TierRateController.getTiers(request: Request)
 POST    /tier                           controllers.TierRateController.addTier(request: Request)

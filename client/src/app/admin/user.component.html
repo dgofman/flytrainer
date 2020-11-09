@@ -51,10 +51,13 @@
         <ng-template pTemplate="{{Locales.certificates}}" let-user="item">
           <certificate-tab [user]="user"></certificate-tab>
         </ng-template>
+        <ng-template pTemplate="{{Locales.endorsements}}" let-user="item">
+          <endorsement-tab [user]="user"></endorsement-tab>
+        </ng-template>
         <ng-template pTemplate="{{Locales.addresses}}" let-user="item">
           <address-tab [user]="user"></address-tab>
         </ng-template>
-        <ng-template pTemplate="Courses/Endorsements" let-user="item">
+        <ng-template pTemplate="Activity/Currencies" let-user="item">
           <course-tab [user]="user"></course-tab>
         </ng-template>
         <ng-template pTemplate="{{Locales.documents}}" let-user="item">

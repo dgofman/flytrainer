@@ -3,53 +3,58 @@
         <div *ngFor="let control of controls" [class]="control.class">
             <admin-field [parentGroup]="formGroup" [c]="control" [templates]="{ path: filePath, url: url }"></admin-field>
         </div>
-        <div class="row">
-            <p-checkbox [label]="Locales.isFrontSide" binary="true" formControlName="isFrontSide" class="gap"></p-checkbox>
-            <p-checkbox [label]="Locales.isSuspended" binary="true" formControlName="isSuspended" class="gap"></p-checkbox>
+        <div class="row gap-row">
+            <p-checkbox [label]="Locales.isFrontSide" binary="true" formControlName="isFrontSide"></p-checkbox>
+            <p-checkbox [label]="Locales.isSuspended" binary="true" formControlName="isSuspended"></p-checkbox>
             <p-checkbox [label]="Locales.isWithdrawn" binary="true" formControlName="isWithdrawn"></p-checkbox>
         </div>
         <admin-prewview [user]="user" [formGroup]="formGroup" [selectedBean]="selectedBean"></admin-prewview>
     </div>
     <div class="ui-fluid p-md-5">
-        <p-table [value]="result?.data" [lazy]="true" (onLazyLoad)="lazyLoad($event)" [(selection)]="selectedBean"
-            [paginator]="true" [rows]="25" [totalRecords]="result?.total" [scrollable]="true">
-            <ng-template pTemplate="colgroup" let-columns>
-                <colgroup>
-                <col [style.width.rem]="6" />
-                <col />
-                <col [style.width.rem]="3" />
-                </colgroup>
-            </ng-template>
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>{{Locales.page_num_total}}</th>
-                    <th>{{Locales.type}} / {{Locales.fileName}}</th>
-                    <th align="center"><i class="pi pi-check"></i></th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-doc>
-                <tr>
-                    <td style="cursor: pointer" (click)="onToggle(doc)" aria-hidden="true">
-                        <span class="pi {{doc.expanded ? 'pi-chevron-down' : 'pi-chevron-right'}}" [style.visibility]="doc.total > 1 ? 'visible' : 'hidden'"></span>
-                        {{doc.pageNumber}}<span *ngIf="!doc.parentId"> / {{doc.total}}</span>
-                    </td>
-                    <td *ngIf="!doc.parent"><b>{{getType(doc.type)}}</b><br>{{doc.fileName}}</td>
-                    <td>
-                        <p-tableRadioButton [value]="doc"></p-tableRadioButton>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage" let-columns>
-                <tr>
-                    <td [attr.colspan]="4" style="text-align: center;">{{Locales.noData}}</td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="paginatorright">
-                <div style="margin-right: 10px; margin-top: 5px">
-                {{Locales.total}}: {{result?.total}}
-                </div>
-            </ng-template>
-        </p-table>
+        <div class="row">
+            <p-table [value]="result?.data" [lazy]="true" (onLazyLoad)="lazyLoad($event)" [(selection)]="selectedBean"
+                [paginator]="true" [rows]="25" [totalRecords]="result?.total" [scrollable]="true">
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                    <col [style.width.rem]="6" />
+                    <col />
+                    <col [style.width.rem]="3" />
+                    </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>{{Locales.page_num_total}}</th>
+                        <th>{{Locales.type}} / {{Locales.fileName}}</th>
+                        <th align="center"><i class="pi pi-check"></i></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-doc>
+                    <tr>
+                        <td style="cursor: pointer" (click)="onToggle(doc)" aria-hidden="true">
+                            <span class="pi {{doc.expanded ? 'pi-chevron-down' : 'pi-chevron-right'}}" [style.visibility]="doc.total > 1 ? 'visible' : 'hidden'"></span>
+                            {{doc.pageNumber}}<span *ngIf="!doc.parentId"> / {{doc.total}}</span>
+                        </td>
+                        <td *ngIf="!doc.parent"><b>{{getType(doc.type)}}</b><br>{{doc.fileName}}</td>
+                        <td>
+                            <p-tableRadioButton [value]="doc"></p-tableRadioButton>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="4" style="text-align: center;">{{Locales.noData}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                    <div style="margin-right: 10px; margin-top: 5px">
+                    {{Locales.total}}: {{result?.total}}
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="row">
+            <admin-prewview [user]="user" [formGroup]="formGroup" [selectedBean]="{document: selectedBean}" hideDelete="true"></admin-prewview>
+        </div>
     </div>
 </form>
 <div class="row footer left">

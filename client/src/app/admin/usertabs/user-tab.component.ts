@@ -1,6 +1,6 @@
 import Locales from '@locales/admin';
 import { Component, NgModule, OnInit } from '@angular/core';
-import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { CommonModel, User, Note, Address } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { Country, State, AddressType, Role, ColumnType, DocumentType } from 'src/modules/models/constants';
@@ -28,17 +28,18 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
     addressControls: ColumnType[];
     isAddress: boolean;
 
-    constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder, private eventService: EventService) {
-        super(confirmationService);
+    constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder, private adminService: AdminService, private eventService: EventService) {
+        super(confirmationService, formBuilder);
         this.controls = [
             { field: 'id' },
             { field: 'version' },
             { field: 'document' },
             { field: 'username', header: Locales.username, type: 'input', maxlen: 50, validators: [Validators.required], class: 'inlineL' },
             { field: 'email', header: Locales.email, type: 'input', maxlen: 100, validators: [Validators.required, Validators.email], class: 'inlineR' },
-            { field: 'first', header: Locales.firstname, type: 'input', maxlen: 50, validators: [Validators.required] },
-            { field: 'middle', header: Locales.middlename, type: 'input', maxlen: 50 },
-            { field: 'last', header: Locales.lastname, type: 'input', maxlen: 50, validators: [Validators.required] },
+            { field: 'first', header: Locales.firstname, type: 'input', maxlen: 50, validators: [Validators.required], class: 'inlineL' },
+            { field: 'last', header: Locales.lastname, type: 'input', maxlen: 50, validators: [Validators.required], class: 'inlineR' },
+            { field: 'middle', header: Locales.middlename, type: 'input', maxlen: 50, class: 'inlineL' },
+            { field: 'sex', header: Locales.sex, type: 'radio', maxlen: 50, value: [Locales.male, Locales.female, 'M', 'F'], class: 'inlineR' },
             { field: 'role', header: Locales.role, type: 'popup', value: Object.keys(Role).map(key => ({ label: Role[key], value: key })), class: 'inlineL' },
             { field: 'ssn' , header: Locales.ssn, type: 'mask', maxlen: 10, value: '999-99-9999', class: 'inlineR' },
             { field: 'phone', header: Locales.phone, type: 'phone', class: 'inlineL' },
@@ -72,18 +73,8 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
         this.addressControls.forEach(c => {
             fields[c.field] = [null, c.validators];
         });
-        const controls = {
-            notes: this.formBuilder.group({
-                id: [null], content: [null]
-            }),
-            address: this.formBuilder.group(fields)
-        };
-        this.controls.forEach(c => {
-            controls[c.field] = new FormControl(null, c.validators);
-        });
-        this.formGroup = new FormGroup(controls);
+        this.initControls({address: this.formBuilder.group(fields)});
         this.formGroup.controls.address.disable();
-        this.onReset();
     }
 
     ngOnInit(): void {
@@ -92,6 +83,7 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
             this.adminService.getUser(this.user.id).subscribe(result => {
                 this.loading(false);
                 this.selectedBean = Object.assign(this.defaultBean, result);
+                Object.assign(this.user, this.selectedBean);
                 this.showAddress(result.address && result.address.id !== null, this.formGroup.controls);
             }, (ex) => this.errorHandler(ex));
         }
@@ -136,6 +128,7 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
             this.adminService.updateUser(this.user.id, user).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
+                Object.assign(this.user, result);
                 this.success(Locales.recordUpdated);
             }, (ex) => this.errorHandler(ex));
         } else {

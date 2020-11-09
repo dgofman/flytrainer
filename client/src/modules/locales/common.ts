@@ -31,7 +31,7 @@ export default {
     download: 'Download',
     selectItem: 'Select Item',
     sqlQuery: '% - Represents the value starts or ends with zero or more characters.',
+    print: 'Print',
     noData: 'No data found.',
-    noMatch: 'No match',
     powerBy: '© Power by FlyTrainer LLC'
 };

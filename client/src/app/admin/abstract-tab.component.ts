@@ -2,17 +2,17 @@ import Locales from '@locales/admin';
 import { FTIcons } from '../component/ft-menu/ft-menu.component';
 import { Document } from 'src/modules/models/base.model';
 import { CommonModule } from '@angular/common';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { AppBaseDirective } from 'src/app/app.base.component';
 import { Input, Component, NgModule, Directive } from '@angular/core';
 import { ColumnType } from 'src/modules/models/constants';
 import { AdminSharedModule } from './admin-shared.module';
 import { ConfirmationService } from 'primeng/api';
-import {  AbstractBase } from 'src/modules/models/base.model';
+import { AbstractBase } from 'src/modules/models/base.model';
 
 @Component({
-  selector: 'admin-field',
-  template: `
+    selector: 'admin-field',
+    template: `
     <div [formGroup]="parentGroup" class="row" *ngIf="c.type">
         <label *ngIf="c.type!='check' && c.header">{{c.header}}</label>
         <p-checkbox *ngIf="c.type=='check'" [label]="c.header" [formControlName]="c.field" binary="true"></p-checkbox>
@@ -21,13 +21,17 @@ import {  AbstractBase } from 'src/modules/models/base.model';
         <input *ngIf="c.type =='input'" ftFTFormatter [control]="c" [formControlName]="c.field" pInputText [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''" [attr.maxlength]="c.maxlen"/>
         <input *ngIf="c.type =='password'" [formControlName]="c.field" type="password" pPassword autocomplete="off new-password" [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''" [attr.maxlength]="c.maxlen"/>
         <p-dropdown *ngIf="c.type=='popup'" appendTo="body" [formControlName]="c.field" [options]="c.value" [placeholder]="c.placeholder || ''"></p-dropdown>
-        <p-autoComplete *ngIf="c.type == 'auto'" ftAutoComplete [formControlName]="c.field" [data]="c.value" [maxlength]="c.maxlen"></p-autoComplete>
+        <p-autoComplete *ngIf="c.type == 'auto'" ftAutoComplete [formControlName]="c.field" [data]="c.value"></p-autoComplete>
         <p-inputMask *ngIf="c.type=='mask'" [mask]="c.value" [placeholder]="c.placeholder || ''" [formControlName]="c.field" unmask="true"></p-inputMask>
         <p-calendar *ngIf="c.type=='cal'" ftCalendar [formControlName]="c.field"></p-calendar>
-        <div *ngIf="c.type=='switch'"><p-inputSwitch [formControlName]="c.field" binary="true"></p-inputSwitch></div>
+        <div *ngIf="c.type=='switch'" style="padding: 3px 0"><p-inputSwitch [formControlName]="c.field" binary="true"></p-inputSwitch></div>
         <div *ngIf="c.field=='other' && parentGroup.controls.type.value == 'Other'">
             <label>{{Locales.other}}</label>
             <input formControlName="other" pInputText [attr.maxlength]="c.maxlen || 30"/>
+        </div>
+        <div *ngIf="c.type=='radio'" style="margin: 5px 0">
+            <p-radioButton [name]="c.field" [label]="c.value[0]" [value]="c.value[2]" [formControlName]="c.field"></p-radioButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <p-radioButton [name]="c.field" [label]="c.value[1]" [value]="c.value[3]" [formControlName]="c.field"></p-radioButton>
         </div>
         <ng-container *ngIf="c.template" [ngTemplateOutlet]="templates[c.template]" [ngTemplateOutletContext]="{control:c, group: parentGroup}"></ng-container>
         <div *ngIf="f[c.field].errors" style="color: red; ">
@@ -69,7 +73,7 @@ export abstract class AbstractTabDirective extends AppBaseDirective {
     // tslint:disable-next-line: variable-name
     protected _selectedBean: AbstractBase;
 
-    constructor(protected confirmationService: ConfirmationService) {
+    constructor(protected confirmationService: ConfirmationService, protected formBuilder: FormBuilder) {
         super();
     }
 
@@ -91,9 +95,27 @@ export abstract class AbstractTabDirective extends AppBaseDirective {
         this.formGroup.patchValue(bean || {});
     }
 
+    initControls(fields?: any) {
+        const controls = Object.assign({
+            notes: this.formBuilder.group({
+                id: [null], content: [null]
+            })
+        }, fields || {});
+        this.controls.forEach(c => {
+            controls[c.field] = new FormControl(null, c.validators);
+        });
+        this.formGroup = new FormGroup(controls);
+        this.onReset();
+    }
+
     onReset() {
         this.formGroup.reset();
+        this.formGroup.patchValue(this.resetBean());
         this._selectedBean = this.formGroup.value;
+    }
+
+    resetBean() {
+        return this.formGroup.value;
     }
 
     onDelete() {
@@ -111,7 +133,7 @@ export abstract class AbstractTabDirective extends AppBaseDirective {
     onUploadDocument(event: any, error: boolean) {
         const doc = this.doUpload(event, error);
         this.selectedBean.document = doc;
-        this.formGroup.patchValue({document: doc});
+        this.formGroup.patchValue({ document: doc });
     }
 
     doUpload(event: any, error: boolean): Document {

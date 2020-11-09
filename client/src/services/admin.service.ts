@@ -100,6 +100,10 @@ export class AdminService {
         return this.http.delete<void>(`/certificate/${userId}/${certId}`);
     }
 
+    public findCFICertificates(): Observable<any[]> {
+        return this.http.get<any[]>(`/certificate/cfi`);
+    }
+
     // Contacts
     public addContact(userId: number, model: Contact): Observable<Contact> {
         return this.http.post<Contact>(`/contact/${userId}`, model);
@@ -115,6 +119,23 @@ export class AdminService {
 
     public deleteContact(userId: number, contactId: number): Observable<void> {
         return this.http.delete<void>(`/contact/${userId}/${contactId}`);
+    }
+
+    // Endorsements
+    public addEndorsement(userId: number, model: CommonModel): Observable<CommonModel> {
+        return this.http.post<CommonModel>(`/endorsement/${userId}`, model);
+    }
+
+    public getEndorsements(userId: number, offset: number): Observable<TableResult<CommonModel>> {
+        return this.http.get<TableResult<CommonModel>>(`/endorsement/${userId}?rows=25&offset=${offset}`);
+    }
+
+    public updateEndorsement(userId: number, model: CommonModel): Observable<CommonModel> {
+        return this.http.patch<CommonModel>(`/endorsement/${userId}`, model);
+    }
+
+    public deleteEndorsement(userId: number, endorsementId: number): Observable<void> {
+        return this.http.delete<void>(`/endorsement/${userId}/${endorsementId}`);
     }
 
     // Document

@@ -25,7 +25,7 @@ export class DocumentTabComponent extends UserTabBaseDirective {
     children: { [id: number]: Document[] } = {};
 
     constructor(confirmationService: ConfirmationService, private adminService: AdminService) {
-        super(confirmationService);
+        super(confirmationService, null);
         this.controls = [
             { field: 'id' },
             { field: 'version' },
@@ -202,8 +202,8 @@ export class DocumentTabComponent extends UserTabBaseDirective {
         }
     }
 
-    onReset() {
-        this.formGroup.patchValue({ type: AppUtils.getKey(DocumentType, 'PilotPicture'), pageNumber: 1, isFrontSide: 1 });
+    resetBean() {
+        return { type: AppUtils.getKey(DocumentType, 'PilotPicture'), pageNumber: 1, isFrontSide: 1 };
     }
 }
 

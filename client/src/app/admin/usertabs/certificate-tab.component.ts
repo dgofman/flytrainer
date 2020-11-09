@@ -1,6 +1,6 @@
 import Locales from '@locales/admin';
 import { Component, NgModule } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { CommonModel, Note } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { AircraftCategoryClass, DocumentType, CertificateType } from 'src/modules/models/constants';
@@ -18,8 +18,8 @@ export class CertificateTabComponent extends UserTabBaseDirective {
     certificates: CommonModel[];
     aircraftCategory = AircraftCategoryClass;
 
-    constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder) {
-        super(confirmationService);
+    constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder, private adminService: AdminService) {
+        super(confirmationService, formBuilder);
         this.controls = [
             { field: 'id' },
             { field: 'version' },
@@ -38,17 +38,7 @@ export class CertificateTabComponent extends UserTabBaseDirective {
         Object.keys(AircraftCategoryClass).forEach(key => {
             fields[key] = [null];
         });
-        const controls = {
-            notes: this.formBuilder.group({
-                id: [null], content: [null]
-            }),
-            aircraftClass: this.formBuilder.group(fields)
-        };
-        this.controls.forEach(c => {
-            controls[c.field] = new FormControl(null, c.validators);
-        });
-        this.formGroup = new FormGroup(controls);
-        this.onReset();
+        this.initControls({aircraftClass: this.formBuilder.group(fields)});
     }
 
     getType(key: string) {
@@ -102,11 +92,8 @@ export class CertificateTabComponent extends UserTabBaseDirective {
         }, (ex) => this.errorHandler(ex));
     }
 
-    onReset() {
-        super.onReset();
-        const certificate = new CommonModel({ type: AppUtils.getKey(CertificateType, 'PrivatePilot'), aircraftClass: {}, notes: new Note() });
-        this.formGroup.patchValue(certificate);
-        return certificate;
+    resetBean() {
+        return  { type: AppUtils.getKey(CertificateType, 'PrivatePilot'), aircraftClass: {}, notes: new Note() };
     }
 }
 

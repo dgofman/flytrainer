@@ -17,6 +17,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 
@@ -51,6 +52,7 @@ export class AdminSharedModule {
         InputTextareaModule,
         InputTextModule,
         PasswordModule,
+        RadioButtonModule,
         ReactiveFormsModule,
         TableModule
     ];

@@ -8,8 +8,8 @@
             <label>{{Locales.certificate_num}}</label>
             <input ftFTFormatter formControlName="number" pInputText maxlength="10"/>
         </div>
-        <div class="row">
-            <p-checkbox [label]="Locales.isSuspended" binary="true" formControlName="isSuspended" class="gap"></p-checkbox>
+        <div class="row gap-row">
+            <p-checkbox [label]="Locales.isSuspended" binary="true" formControlName="isSuspended"></p-checkbox>
             <p-checkbox [label]="Locales.isWithdrawn" binary="true" formControlName="isWithdrawn"></p-checkbox>
         </div>
         <div *ngFor="let control of controls" [class]="control.class">

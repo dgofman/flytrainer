@@ -22,6 +22,8 @@ import utils.Constants.CertificateType;
 @Table(name = "certificate")
 public class Certificate extends DocumentModel {
 
+	public static final String CFI = "Certificate.CFI";
+	
 	@NotNull
 	public CertificateType type = CertificateType.PrivatePilot; //certificates
 
@@ -46,7 +48,7 @@ public class Certificate extends DocumentModel {
 	public Date expDate; //exp_date
 
 	public byte isSuspended = 0; //is_suspended
-	
+
 	public byte isWithdrawn = 0; //is_withdrawn
 
 	@ManyToOne

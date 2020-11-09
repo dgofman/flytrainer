@@ -1,6 +1,6 @@
 import Locales from '@locales/admin';
 import { Component, NgModule } from '@angular/core';
-import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { CommonModel, Note } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { AccountType } from 'src/modules/models/constants';
@@ -17,8 +17,8 @@ import { EventService, EventType } from 'src/services/event.service';
 export class AccountTabComponent extends UserTabBaseDirective {
     result: CommonModel[];
 
-    constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder, private eventService: EventService) {
-        super(confirmationService);
+    constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder, private adminService: AdminService, private eventService: EventService) {
+        super(confirmationService, formBuilder);
         this.controls = [
             { field: 'id' },
             { field: 'version' },
@@ -31,17 +31,7 @@ export class AccountTabComponent extends UserTabBaseDirective {
             { field: 'defaultTier', header: Locales.defaultTier, type: 'popup' },
             { field: 'isActive', header: Locales.isActive, type: 'check' }
         ];
-
-        const controls = {
-            notes: this.formBuilder.group({
-                id: [null], content: [null]
-            })
-        };
-        this.controls.forEach(c => {
-            controls[c.field] = new FormControl(null, c.validators);
-        });
-        this.formGroup = new FormGroup(controls);
-        this.onReset();
+        this.initControls();
     }
 
     lazyLoad() {
@@ -91,13 +81,7 @@ export class AccountTabComponent extends UserTabBaseDirective {
         }, (ex) => this.errorHandler(ex));
     }
 
-    onReset() {
-        this.formGroup.reset();
-        this.formGroup.patchValue(this.defaultBean);
-        this._selectedBean = null;
-    }
-
-    get defaultBean() {
+    resetBean() {
        return { type: this.AppUtils.getKey(AccountType, 'Renter'), notes: new Note() };
     }
 }

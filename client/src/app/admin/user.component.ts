@@ -13,6 +13,7 @@ import { AbstractTabDirective, AbstractTabModule } from './abstract-tab.componen
 import { ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from './admin-shared.module';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   templateUrl: './user.component.html',
@@ -131,8 +132,8 @@ export class UserComponent extends AppBaseDirective {
 export abstract class UserTabBaseDirective extends AbstractTabDirective {
     @Input() user: User;
 
-    constructor(confirmationService: ConfirmationService) {
-        super(confirmationService);
+    constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder) {
+        super(confirmationService, formBuilder);
     }
 }
 

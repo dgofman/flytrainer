@@ -1,6 +1,6 @@
 import Locales from '@locales/admin';
 import { Component, NgModule } from '@angular/core';
-import { Validators, FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { Contact, Note, Address } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { Country, State, AddressType, ColumnType } from 'src/modules/models/constants';
@@ -27,8 +27,8 @@ export class ContactTabComponent extends UserTabBaseDirective {
     addressControls: ColumnType[];
     isAddress: boolean;
 
-    constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder) {
-        super(confirmationService);
+    constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder, private adminService: AdminService) {
+        super(confirmationService, formBuilder);
         this.controls = [
             { field: 'id' },
             { field: 'version' },
@@ -57,17 +57,7 @@ export class ContactTabComponent extends UserTabBaseDirective {
         this.addressControls.forEach(c => {
             fields[c.field] = [null, c.validators];
         });
-        const controls = {
-            notes: this.formBuilder.group({
-                id: [null], content: [null]
-            }),
-            address: this.formBuilder.group(fields)
-        };
-        this.controls.forEach(c => {
-            controls[c.field] = new FormControl(null, c.validators);
-        });
-        this.formGroup = new FormGroup(controls);
-        this.onReset();
+        this.initControls({address: this.formBuilder.group(fields)});
     }
 
     updateSelectedBean(bean: any) {
@@ -136,13 +126,11 @@ export class ContactTabComponent extends UserTabBaseDirective {
     }
 
     onReset() {
-        this.formGroup.reset();
-        this.formGroup.patchValue(this.defaultBean);
+        super.onReset();
         this.showAddress(false, this.formGroup.controls);
-        this._selectedBean = null;
     }
 
-    get defaultBean() {
+    resetBean() {
        return { notes: new Note(), address: new Address({type: AppUtils.getKey(AddressType, 'Contact'), state: this.environment.homeState, country: this.environment.homeCountry}) };
     }
 }

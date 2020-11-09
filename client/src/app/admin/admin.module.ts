@@ -25,8 +25,8 @@ import { ContactTabModule } from './usertabs/contact-tab.component';
 import { DocumentTabModule } from './usertabs/document-tab.component';
 import { CertificateTabModule } from './usertabs/certificate-tab.component';
 import { CourseTabModule } from './usertabs/course-tab.component';
+import { EndorsementTabModule } from './usertabs/endorsement-tab.component';
 import { TableModule } from 'primeng/table';
-import { TierTabModule } from './tiertabs/tier-tab.component';
 
 @NgModule({
   imports: [
@@ -51,8 +51,8 @@ import { TierTabModule } from './tiertabs/tier-tab.component';
     CertificateTabModule,
     CourseTabModule,
     DocumentTabModule,
+    EndorsementTabModule,
     UserTabModule,
-    TierTabModule,
     AccountTabModule,
     FTDialogvModule,
     FTLeftNavModule,

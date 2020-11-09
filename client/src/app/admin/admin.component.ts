@@ -38,11 +38,11 @@ export class AdminTopbarComponent {
 @Component({
     selector: 'admin-prewview',
     template: `<div class="row" *ngIf="selectedBean?.document as doc">
-                    <div *ngIf="doc.id && doc.fileName">
+                    <div *ngIf="doc.id && doc.type">
                         <h3>{{Locales.preview}}</h3>
                         <img style="max-width: 100%" src="{{baseURL}}/file/{{user.id}}/{{doc.id}}?token={{token}}" onerror="this.src='assets/no-image-available.jpeg';"/>
                     </div>
-                    <div *ngIf="doc.fileName" class="row" style="margin-top: 20px">
+                    <div *ngIf="!hideDelete && doc.fileName" class="row" style="margin-top: 20px">
                         <button pButton icon="pi pi-times" style="padding: 0; font-size: 9px;" (click)="deleteDocument(doc)"></button>&nbsp;&nbsp;
                         <a href="{{baseURL}}/file/{{user.id}}/{{doc.id}}?token={{token}}" download>{{Locales.download}}</a>&nbsp;&nbsp;
                         <b>{{doc.fileName}}</b> - {{doc.size}} bytes
@@ -54,6 +54,7 @@ export class AdminPreviewComponent {
     token = AuthService.token;
 
     @Input() user: User;
+    @Input() hideDelete: boolean;
     @Input() formGroup: FormGroup;
     @Input() selectedBean: BaseModel;
 

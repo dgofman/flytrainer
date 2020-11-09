@@ -1,6 +1,6 @@
 import Locales from '@locales/admin';
 import { Component, NgModule } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { AdminService } from 'src/services/admin.service';
 import { Country, State, AddressType, DocumentType } from 'src/modules/models/constants';
 import { UserTabBaseDirective, UserTabBaseModule } from '../user.component';
@@ -17,8 +17,8 @@ import { AdminSharedModule } from '../admin-shared.module';
 export class AddressTabComponent extends UserTabBaseDirective {
     addresses: Address[];
 
-    constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder) {
-        super(confirmationService);
+    constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder, private adminService: AdminService) {
+        super(confirmationService, formBuilder);
         this.addresses = [];
         this.controls = [
             { field: 'id' },
@@ -37,14 +37,7 @@ export class AddressTabComponent extends UserTabBaseDirective {
             { field: 'fax', header: Locales.fax, type: 'phone', class: 'inlineR' },
             { field: 'isPrimary', header: Locales.isPrimary, type: 'switch' }
         ];
-        const controls = { notes: this.formBuilder.group({
-            id: [null], content: [null]
-        })};
-        this.controls.forEach(c => {
-            controls[c.field] = new FormControl(null, c.validators);
-        });
-        this.formGroup = new FormGroup(controls);
-        this.onReset();
+        this.initControls();
     }
 
     lazyLoad() {
@@ -103,11 +96,8 @@ export class AddressTabComponent extends UserTabBaseDirective {
         }, (ex) => this.errorHandler(ex));
     }
 
-    onReset() {
-        super.onReset();
-        const address = new Address({ type: AppUtils.getKey(AddressType, 'Home'), isPrimary: !this.addresses.length ? 1 : 0, state: this.environment.homeState, country: this.environment.homeCountry, notes: new Note() });
-        this.formGroup.patchValue(address);
-        this._selectedBean = null;
+    resetBean() {
+        return { type: AppUtils.getKey(AddressType, 'Home'), isPrimary: !this.addresses.length ? 1 : 0, state: this.environment.homeState, country: this.environment.homeCountry, notes: new Note() };
     }
 }
 

@@ -1,6 +1,6 @@
 import Locales from '@locales/admin';
 import { Component, NgModule, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { CommonModel, Note } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { AircraftCategoryClass, DocumentType, CertificateType } from 'src/modules/models/constants';
@@ -21,8 +21,8 @@ export class CourseTabComponent extends UserTabBaseDirective implements OnInit {
 
     @ViewChild('desc') description: AutoComplete;
 
-    constructor(confirmationService: ConfirmationService, private adminService: AdminService, private formBuilder: FormBuilder) {
-        super(confirmationService);
+    constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder, private adminService: AdminService) {
+        super(confirmationService, formBuilder);
         this.cources = [];
         this.controls = [
             { field: 'id' },
@@ -36,7 +36,6 @@ export class CourseTabComponent extends UserTabBaseDirective implements OnInit {
             { field: 'issuedDate', header: Locales.issuedDate, type: 'cal', class: 'inlineL' },
             { field: 'expDate', header: Locales.expDate, type: 'cal', class: 'inlineR' },
             { field: 'renewDate', header: Locales.renewDate, type: 'cal', class: 'inlineL' },
-            { field: 'currentBy', header: Locales.currentBy, type: 'cal', class: 'inlineR' },
             { field: 'isSuspended' },
             { field: 'isWithdrawn' }
         ];
@@ -44,16 +43,7 @@ export class CourseTabComponent extends UserTabBaseDirective implements OnInit {
         Object.keys(AircraftCategoryClass).forEach(key => {
             fields[key] = [null];
         });
-        const controls = {
-            notes: this.formBuilder.group({
-                id: [null], content: [null]
-            }),
-            aircraftClass: this.formBuilder.group(fields)
-        };
-        this.controls.forEach(c => {
-            controls[c.field] = new FormControl(null, c.validators);
-        });
-        this.formGroup = new FormGroup(controls);
+        this.initControls({aircraftClass: this.formBuilder.group(fields)});
     }
 
     ngOnInit() {
@@ -128,11 +118,8 @@ export class CourseTabComponent extends UserTabBaseDirective implements OnInit {
         }, (ex) => this.errorHandler(ex));
     }
 
-    onReset() {
-        super.onReset();
-        const certificate = new CommonModel({ type: AppUtils.getKey(CertificateType, 'PrivatePilot'), aircraftClass: {}, notes: new Note() });
-        this.formGroup.patchValue(certificate);
-        return certificate;
+    resetBean() {
+        return { type: AppUtils.getKey(CertificateType, 'PrivatePilot'), aircraftClass: {}, notes: new Note() };
     }
 }
 

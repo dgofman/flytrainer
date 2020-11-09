@@ -1,6 +1,10 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,11 +20,29 @@ import play.mvc.Result;
 import utils.BasicAuth;
 import utils.Constants;
 import utils.Constants.Access;
+import utils.Constants.CertificateType;
 import utils.DocumentUtils;
 import utils.NotesUtils;
 
 @BasicAuth({ Access.ASSISTANT, Access.MANAGER, Access.ADMIN })
 public class CertificateController extends BaseController {
+	
+	public Result findCFICertificates() {
+		log.debug("CertificateController::findCFICertificates");
+		try {
+			List<SignedCFI> result = new ArrayList<>();
+			List<CertificateType> types = Arrays.asList(CertificateType.values()).stream().filter(c -> c.isCFI()).collect(Collectors.toList());
+			Ebean.find(Certificate.class).fetch("user", "first, last")
+					.where().ne("isSuspended", 1).and().ne("isWithdrawn", 1).and().in("type", types)
+					.order().asc("user.last")
+					.findEach((Certificate c) -> {
+						result.add(new SignedCFI(c));
+					});
+			return okResult(result);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
 
 	public Result getCertificate(Long userId) {
 		log.debug("CertificateController::getCertificate for user=" + userId);
@@ -100,5 +122,21 @@ public class CertificateController extends BaseController {
 		} finally {
 			  transaction.end();
 		}
+	}
+}
+
+class SignedCFI {
+	public CertificateType type;
+	public String cfiName;
+	public String cfiNo;
+	public Date expDate;
+	public String other;
+	
+	public SignedCFI(Certificate c) {
+		this.type = c.type;
+		this.cfiName = c.user.last + " " + c.user.first;
+		this.cfiNo = c.number;
+		this.expDate = c.expDate;
+		this.other = c.other;
 	}
 }

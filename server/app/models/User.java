@@ -79,6 +79,9 @@ public class User extends DocumentModel implements IsAddressable {
 	@Length(50)
 	public String last; //lastname
 
+	@Length(1)
+	public String sex; //sex
+
 	@Column(name = "username")
 	@Length(50)
 	@NotNull

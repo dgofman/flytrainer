@@ -11,7 +11,7 @@ export class FTDatePipe implements PipeTransform {
 @Pipe({name: 'ftshortdate'})
 export class FTShortDatePipe implements PipeTransform {
   transform(value: any): string {
-    return new DatePipe('en-US').transform(value, 'short');
+    return new DatePipe('en-US').transform(value, 'shortDate');
   }
 }
 

@@ -37,8 +37,6 @@ export class EndorsementTabComponent extends UserTabBaseDirective implements OnI
     constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder, private adminService: AdminService) {
         super(confirmationService, formBuilder);
         this.controls = [
-            { field: 'id' },
-            { field: 'version' },
             { field: 'document' },
             { field: 'signed' },
             { field: 'description', header: Locales.description, type: 'input', maxlen: 30 },
@@ -49,7 +47,7 @@ export class EndorsementTabComponent extends UserTabBaseDirective implements OnI
             { field: 'expDate', header: Locales.expDate, type: 'cal', class: 'inlineR' },
             { field: 'isCanceled', header: Locales.isCanceled, type: 'switch' },
         ];
-        this.initControls();
+        this.initFormGroup();
         let oldValue = null;
         this.formGroup.valueChanges.subscribe(val => {
             let type = '', title = '', text = '';

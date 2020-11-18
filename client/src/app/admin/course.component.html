@@ -6,9 +6,9 @@
         </div>
         <div class="main">
             <div class="breadcrumb">
-                <span *ngFor="let label of [Locales.admin, Locales.tierRates]">{{label}}</span>
+                <span *ngFor="let label of [Locales.admin, Locales.courses]">{{label}}</span>
             </div>
-            <ft-table sortField="last" filter="tier-table" [columns]="cols" [result]="result" (onNotify)="eventTableHandler($event)">
+            <ft-table sortField="last" filter="course-table" [columns]="cols" [result]="result" (onNotify)="eventTableHandler($event)">
                 <ng-template pTemplate="firstHeader">
                     <button pButton icon="pi pi-plus-circle" class="circle" (click)="onAddRate()"></button>
                 </ng-template>
@@ -17,7 +17,7 @@
                 </ng-template>
             </ft-table>
             <ft-dialog width="70" height="60">
-                <ng-template pTemplate="{{Locales.tier}}" let-tier="item">
+                <ng-template pTemplate="{{Locales.course}}" let-tier="item">
 
                 </ng-template>
             </ft-dialog>

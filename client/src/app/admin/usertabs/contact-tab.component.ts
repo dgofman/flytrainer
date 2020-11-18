@@ -30,8 +30,6 @@ export class ContactTabComponent extends UserTabBaseDirective {
     constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder, private adminService: AdminService) {
         super(confirmationService, formBuilder);
         this.controls = [
-            { field: 'id' },
-            { field: 'version' },
             { field: 'description', header: Locales.description, type: 'input', maxlen: 30 },
             { field: 'first', header: Locales.firstname, type: 'input', maxlen: 50, validators: [Validators.required] },
             { field: 'middle', header: Locales.middlename, type: 'input', maxlen: 50 },
@@ -57,7 +55,7 @@ export class ContactTabComponent extends UserTabBaseDirective {
         this.addressControls.forEach(c => {
             fields[c.field] = [null, c.validators];
         });
-        this.initControls({address: this.formBuilder.group(fields)});
+        this.initFormGroup({address: this.formBuilder.group(fields)});
     }
 
     updateSelectedBean(bean: any) {

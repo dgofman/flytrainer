@@ -11,6 +11,7 @@ export default {
     users: 'Users',
     user: 'User',
     accounts: 'Accounts',
+    courses: 'Courses',
     tierRates: 'Tiered-Rates',
     documents: 'Documents'
 };

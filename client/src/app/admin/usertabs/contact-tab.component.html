@@ -1,5 +1,5 @@
 <form [formGroup]="formGroup" #myForm="ngForm" class="p-grid">
-    <div class="ui-fluid p-md-7" style="padding-top: 0">
+    <div class="ui-fluid p-md-7">
         <div *ngFor="let control of controls" [class]="control.class">
             <admin-field [parentGroup]="formGroup" [c]="control"></admin-field>
         </div>

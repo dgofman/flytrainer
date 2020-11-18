@@ -26,8 +26,8 @@ export const FTIcons = {
                 <li [routerLink]="createLink('users')" routerLinkActive="active">
                     <div>{{Locales.users}}</div>
                 </li>
-                <li [routerLink]="createLink('accounts')" routerLinkActive="active">
-                    <div>{{Locales.accounts}}</div>
+                <li [routerLink]="createLink('courses')" routerLinkActive="active">
+                    <div>{{Locales.courses}}</div>
                 </li>
                 <li [routerLink]="createLink('tierRates')" routerLinkActive="active">
                     <div>{{Locales.tierRates}}</div>

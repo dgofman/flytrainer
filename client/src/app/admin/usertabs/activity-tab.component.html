@@ -1,0 +1,96 @@
+<form [formGroup]="formGroup" #myForm="ngForm" class="p-grid">
+    <div class="ui-fluid p-md-7" [ngSwitch]="viweForm">
+        <div class="row">
+            <label>{{Locales.activityType}}</label>
+            <p-dropdown appendTo="body" [options]="activityTypes" [(ngModel)]="viweForm" [ngModelOptions]="{standalone: true}"></p-dropdown>
+        </div>
+        <ng-template [ngSwitchCase]="enum.Currency">
+            <div *ngFor="let control of currencies" [class]="control.class">
+                <admin-field [parentGroup]="currencyGroup" [c]="control"></admin-field>
+            </div>
+            <div class="row p-md-10" formGroupName="notes">
+                <label>{{Locales.notes}}</label>
+                <textarea formControlName="content" pInputTextarea [rows]="3"></textarea>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <p-fileUpload mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true, currencyGroup)" (onUpload)="onUploadDocument($event, false, currencyGroup)" [chooseLabel]="Locales.uploadDocument"></p-fileUpload>
+                </div>
+                <admin-prewview [user]="user" [formGroup]="currencyGroup" [selectedBean]="selectedBean"></admin-prewview>
+            </div>
+        </ng-template>
+        <ng-template [ngSwitchCase]="enum.Course">
+            <div *ngFor="let control of courses" [class]="control.class">
+                <admin-field [parentGroup]="courseGroup" [c]="control" [templates]="{ course: course }"></admin-field>
+            </div>
+            <div class="row" formGroupName="notes">
+                <label>{{Locales.notes}}</label>
+                <textarea formControlName="content" pInputTextarea [rows]="3"></textarea>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <p-fileUpload mode="basic" [auto]="true" url="/file/{{user.id}}" name="file" (onBeforeUpload)="loading(true)" (onError)="onUploadDocument($event, true, courseGroup)" (onUpload)="onUploadDocument($event, false, courseGroup)" [chooseLabel]="Locales.uploadDocument"></p-fileUpload>
+                </div>
+                <admin-prewview [user]="user" [formGroup]="courseGroup" [selectedBean]="selectedBean"></admin-prewview>
+            </div>
+        </ng-template>
+        <ng-template [ngSwitchCase]="enum.Flight">
+            <div *ngFor="let control of flights" [class]="control.class">
+                <admin-field [parentGroup]="flightGroup" [c]="control"></admin-field>
+            </div>
+        </ng-template>
+    </div>
+    <div class="ui-fluid p-md-5">
+        <div class="row">
+            <p-table [value]="result?.data" [lazy]="true" (onLazyLoad)="lazyLoad($event)" [(selection)]="selectedBean"
+                [paginator]="true" [rows]="25" [totalRecords]="result?.total" [scrollable]="true">
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                    <col />
+                    <col [style.width.rem]="5"/>
+                    <col [style.width.rem]="3" />
+                    </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>{{Locales.type}}</th>
+                        <th>{{Locales.issuedDate}}</th>
+                        <th align="center"><i class="pi pi-check"></i></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td class="ellipsis" [title]="">{{rowData}}</td>
+                        <td [innerHTML]="formatData(rowData.issuedDate,  'short')"></td>
+                        <td>
+                            <p-tableRadioButton [value]="rowData"></p-tableRadioButton>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="3" style="text-align: center;">{{Locales.noData}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                    <div style="margin-right: 10px; margin-top: 5px">
+                    {{Locales.total}}: {{result?.total}}
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</form>
+<div class="row footer">
+    <button *ngIf="result?.data.length > 0" class="ui-button ui-button-secondary " style="margin-right: 15px" (click)="onReset()">{{Locales.new}}</button>
+    <button *ngIf="result?.data.length > 0" class="ui-button " (click)="onDelete()" [disabled]="!selectedBean">{{Locales.delete}}</button>
+    <div class="right">
+        <button pButton (click)="onSubmit()" [label]="Locales.save" [disabled]="!myForm.form.valid"></button>
+    </div>
+</div>
+<ng-template #course let-group="group">
+    <div class="noshadow" *ngIf="group.controls.type.value != 'Course'" [formGroup]="group">
+        <label>{{Locales.courseName}}</label>
+        <p-autoComplete ftAutoComplete formControlName="course" [data]="availableCourses"></p-autoComplete>
+    </div>
+</ng-template>

@@ -2,7 +2,7 @@ import { ValidatorFn, AbstractControlOptions } from '@angular/forms';
 
 export type SHOW_COLUMNS = 'never' | true | false;
 export type FORMAT_COLUMNS = 'datetime' | 'short' | 'date' | 'bool';
-export type TYPE_COLUMNS = 'hide' | 'text' | 'check' | 'cal' | 'radio' | 'input' | 'password' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask' | 'number' | 'phone';
+export type TYPE_COLUMNS = 'hide' | 'text' | 'check' | 'cal' | 'radio' | 'input' | 'password' | 'disable' | 'popup' | 'auto' | 'switch' | 'mask' | 'number' | 'currency' | 'phone';
 
 export const RouterOutlet = {
     name: 'view',  // src/app/app.component.ts = <router-outlet name="view"></router-outlet>
@@ -31,6 +31,7 @@ export interface ColumnType {
     placeholder?: string;
     path?: string[];
     maxlen?: number;
+    disabled?: boolean;
 }
 
 export interface Session {
@@ -193,6 +194,54 @@ export const EndorsementType = {
     NVG: 'Night Vision Goggles (NVG) operations',
     EFVS: 'Enhanced Flight Vision System (EFVS)',
     Other: 'Other'
+};
+
+export const CurrencyType = {
+    Day: ['Day (90 days, 3 takeoffs and landings)', 90],
+    Night: ['Night (90 days, 3 takeoffs and landings full stop)', 90],
+    Instrument: ['Instrument (6 approaches, hold with the 6 months)', null, 6],
+    Medical: ['Medical (60 months, over 40 years for 24 months)', null, 24, 60],
+    CFI: ['CFI (valid for 24 months)', null, 24],
+    FlightReview: ['Flight Review (every 24 months)', null, 24],
+    Part141: ['Part 141 Standardization Flight (an annual for each aircraft)', null, 12],
+    TemporaryCertificate: ['Temporary Certificate (valid for 120 days)', 120],
+    TSA: ['TSA Security awareness training (within 365 days)', 365],
+    Other: ['Other']
+};
+
+export const CourseType = {
+    Part61: 'Part 61',
+    Part141: 'Part 141',
+    Part147: 'Part 147',
+    FaaSafety: 'FAA Safety',
+    TSA: 'TSA Approval',
+    Other: 'Other'
+};
+
+export const FlightType = {
+    Rent: 'Rent',
+    Private: 'PPL Training',
+    Instrument: 'Instrument Training',
+    Commercial: 'Commercial Training',
+    Instructor: 'Instructor Training',
+    Multi: 'MultiEngine Training',
+    CheckRide: 'Check-Ride',
+    Business: 'Business Trip',
+    Charter: 'Charter',
+    Mission: 'Mission',
+    Adjust: 'Adjust Time',
+    Maintenance: 'Aircraft Maintenance',
+    Other: 'Other'
+};
+
+export const CancelationType = {
+    Weather: 'Weather',
+    Error: 'Schedule Error',
+    Student: 'Student Availability',
+    Instructor: 'Instructor Availability',
+    Maintenance: 'Aircraft Maintenance Issue',
+    Airport: 'Airport Restriction',
+    TFR: 'TFR - Temporary Flight Restriction'
 };
 
 export enum Country {

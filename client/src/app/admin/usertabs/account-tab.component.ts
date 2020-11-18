@@ -20,8 +20,6 @@ export class AccountTabComponent extends UserTabBaseDirective {
     constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder, private adminService: AdminService, private eventService: EventService) {
         super(confirmationService, formBuilder);
         this.controls = [
-            { field: 'id' },
-            { field: 'version' },
             { field: 'description', header: Locales.description, type: 'input', maxlen: 30 },
             { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], value: Object.keys(AccountType).map(key => ({ label: AccountType[key], value: key })) },
             { field: 'other', type: 'hide' },
@@ -31,7 +29,7 @@ export class AccountTabComponent extends UserTabBaseDirective {
             { field: 'defaultTier', header: Locales.defaultTier, type: 'popup' },
             { field: 'isActive', header: Locales.isActive, type: 'check' }
         ];
-        this.initControls();
+        this.initFormGroup();
     }
 
     lazyLoad() {

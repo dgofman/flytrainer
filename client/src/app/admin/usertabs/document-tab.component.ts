@@ -27,8 +27,6 @@ export class DocumentTabComponent extends UserTabBaseDirective {
     constructor(confirmationService: ConfirmationService, private adminService: AdminService) {
         super(confirmationService, null);
         this.controls = [
-            { field: 'id' },
-            { field: 'version' },
             { field: 'description', header: Locales.description, type: 'input' },
             { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], value: Object.keys(DocumentType).map(key => ({ label: DocumentType[key], value: key })) },
             { field: 'other', type: 'hide' },
@@ -42,7 +40,7 @@ export class DocumentTabComponent extends UserTabBaseDirective {
             { field: 'expDate', header: Locales.expDate, type: 'cal', value: this.AppUtils.defaultYearRange, class: 'inlineR' },
             { field: 'modifiedDate', header: Locales.modifiedDate, type: 'input', value: this.AppUtils.defaultYearRange, format: 'datetime', class: 'inlineL disabled' },
             { field: 'createdDate', header: Locales.createdDate, type: 'input', value: this.AppUtils.defaultYearRange, format: 'datetime', class: 'inlineR disabled' },
-            { field: 'pageNumber', header: Locales.pageNumber, type: 'number', validators: [Validators.required], value: [1, 999] },
+            { field: 'pageNumber', header: Locales.pageNumber, type: 'number', validators: [Validators.required], maxlen: 0, value: [1, 999] },
             { field: 'isFrontSide' },
             { field: 'isSuspended' },
             { field: 'isWithdrawn' },
@@ -123,7 +121,7 @@ export class DocumentTabComponent extends UserTabBaseDirective {
                         this.result.total--;
                     }
                     this.result.data.splice(idx, 1);
-                    this.selectedBean = null;
+                    this.onReset();
                     this.success(Locales.recordDeleted);
                     return false;
                 }

@@ -21,8 +21,6 @@ export class CertificateTabComponent extends UserTabBaseDirective {
     constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder, private adminService: AdminService) {
         super(confirmationService, formBuilder);
         this.controls = [
-            { field: 'id' },
-            { field: 'version' },
             { field: 'document' },
             { field: 'number' },
             { field: 'limitations' },
@@ -38,7 +36,7 @@ export class CertificateTabComponent extends UserTabBaseDirective {
         Object.keys(AircraftCategoryClass).forEach(key => {
             fields[key] = [null];
         });
-        this.initControls({aircraftClass: this.formBuilder.group(fields)});
+        this.initFormGroup({aircraftClass: this.formBuilder.group(fields)});
     }
 
     getType(key: string) {

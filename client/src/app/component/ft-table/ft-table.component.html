@@ -29,6 +29,7 @@
                         <p-button label="{{Locales.reset}}" class="filter-button" (click)="filterGroup.get(rowData.field).setValue(null)"></p-button>
                       </div>
                       <p-inputNumber *ngIf="rowData.type=='number'" mode="decimal" [minFractionDigits]="rowData?.maxlen || 0" [maxFractionDigits]="rowData?.maxlen || 0" [formControlName]="rowData.field"></p-inputNumber>
+                      <p-inputNumber *ngIf="rowData.type=='currency'" mode="currency" currency="USD" [formControlName]="rowData.field"></p-inputNumber>
                       <p-calendar #cal *ngIf="rowData.type=='cal'" placeholder="mm/dd/yyyy ( - mm/dd/yyyy)" selectionMode="range" [formControlName]="rowData.field" ftCalendar>
                         <p-header style="display: inline-block; height: 10px;">
                           <a class="cal-popup-close" (click)="cal.hideOverlay()">

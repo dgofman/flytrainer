@@ -17,6 +17,7 @@ import { RouterOutlet } from 'src/modules/models/constants';
 import { FTPipeModule } from '../utils/pipes';
 import { AdminComponentModule } from './admin.component';
 import { UserComponent } from './user.component';
+import { CourseComponent } from './course.component';
 import { TierRateComponent } from './tierrate.component';
 import { UserTabModule } from './usertabs/user-tab.component';
 import { AccountTabModule } from './usertabs/account-tab.component';
@@ -24,7 +25,7 @@ import { AddressTabModule } from './usertabs/address-tab.component';
 import { ContactTabModule } from './usertabs/contact-tab.component';
 import { DocumentTabModule } from './usertabs/document-tab.component';
 import { CertificateTabModule } from './usertabs/certificate-tab.component';
-import { CourseTabModule } from './usertabs/course-tab.component';
+import { ActivityTabModule } from './usertabs/activity-tab.component';
 import { EndorsementTabModule } from './usertabs/endorsement-tab.component';
 import { TableModule } from 'primeng/table';
 
@@ -33,7 +34,7 @@ import { TableModule } from 'primeng/table';
     RouterModule.forChild([
       Object.assign(RouterOutlet.defineLink('', UserComponent), { redirectTo: 'users', pathMatch: 'full' }),
       RouterOutlet.defineLink('users', UserComponent),
-      RouterOutlet.defineLink('accounts', UserComponent),
+      RouterOutlet.defineLink('courses', CourseComponent),
       RouterOutlet.defineLink('tierRates', TierRateComponent),
       RouterOutlet.defineLink('aircrafts', UserComponent),
       RouterOutlet.defineLink('billing', UserComponent),
@@ -49,7 +50,7 @@ import { TableModule } from 'primeng/table';
     AddressTabModule,
     ContactTabModule,
     CertificateTabModule,
-    CourseTabModule,
+    ActivityTabModule,
     DocumentTabModule,
     EndorsementTabModule,
     UserTabModule,
@@ -62,6 +63,7 @@ import { TableModule } from 'primeng/table';
   ],
   declarations: [
     UserComponent,
+    CourseComponent,
     TierRateComponent
   ],
   providers: [

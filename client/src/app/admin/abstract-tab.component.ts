@@ -16,7 +16,8 @@ import { AbstractBase } from 'src/modules/models/base.model';
     <div [formGroup]="parentGroup" class="row" *ngIf="c.type">
         <label *ngIf="c.type!='check' && c.header">{{c.header}}</label>
         <p-checkbox *ngIf="c.type=='check'" [label]="c.header" [formControlName]="c.field" binary="true"></p-checkbox>
-        <p-inputNumber *ngIf="c.type =='number'" mode="decimal" [minFractionDigits]="c.maxlen || 0" [maxFractionDigits]="c.maxlen || 0" [formControlName]="c.field" [min]="c.value[0]" [max]="c.value[1]"></p-inputNumber>
+        <p-inputNumber *ngIf="c.type =='currency'" mode="currency" currency="USD" [formControlName]="c.field"></p-inputNumber>
+        <p-inputNumber *ngIf="c.type =='number'" mode="decimal" [minFractionDigits]="c.maxlen === undefined ? 2 : c.maxlen" [maxFractionDigits]="c.maxlen === undefined ? 2 : c.maxlen" [formControlName]="c.field" [min]="c.value && c.value[0] || 0" [max]="c.value && c.value[1]"></p-inputNumber>
         <input *ngIf="c.type =='phone'" ftFTFormatter [control]="c" [formControlName]="c.field" pInputText [attr.disabled]="isDisabled(c)" placeholder="xxx-xxx-xxxx" [attr.maxlength]="c.maxlen || 30"/>
         <input *ngIf="c.type =='input'" ftFTFormatter [control]="c" [formControlName]="c.field" pInputText [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''" [attr.maxlength]="c.maxlen"/>
         <input *ngIf="c.type =='password'" [formControlName]="c.field" type="password" pPassword autocomplete="off new-password" [attr.disabled]="isDisabled(c)" [placeholder]="c.placeholder || ''" [attr.maxlength]="c.maxlen"/>
@@ -95,15 +96,22 @@ export abstract class AbstractTabDirective extends AppBaseDirective {
         this.formGroup.patchValue(bean || {});
     }
 
-    initControls(fields?: any) {
+    initControls(fieldControls: ColumnType[], fields?: any) {
         const controls = Object.assign({
+            id: new FormControl(),
+            version: new FormControl(),
             notes: this.formBuilder.group({
                 id: [null], content: [null]
             })
         }, fields || {});
-        this.controls.forEach(c => {
-            controls[c.field] = new FormControl(null, c.validators);
+        fieldControls.forEach(c => {
+            controls[c.field] = new FormControl({value: null, disabled: c.disabled}, c.validators);
         });
+        return controls;
+    }
+
+    initFormGroup(fields?: any) {
+        const controls = this.initControls(this.controls, fields);
         this.formGroup = new FormGroup(controls);
         this.onReset();
     }
@@ -130,10 +138,13 @@ export abstract class AbstractTabDirective extends AppBaseDirective {
         });
     }
 
-    onUploadDocument(event: any, error: boolean) {
+    onUploadDocument(event: any, error: boolean, formGroup?: FormGroup) {
         const doc = this.doUpload(event, error);
         this.selectedBean.document = doc;
-        this.formGroup.patchValue({ document: doc });
+        if (!formGroup) {
+            formGroup = this.formGroup;
+        }
+        formGroup.patchValue({ document: doc });
     }
 
     doUpload(event: any, error: boolean): Document {

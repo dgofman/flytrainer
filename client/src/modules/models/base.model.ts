@@ -46,6 +46,7 @@ export class User extends CommonModel {
     last: string;
     middle: string;
     sex: string;
+    birthday: Date;
 }
 
 export class Address extends CommonModel {

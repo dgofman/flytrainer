@@ -434,19 +434,18 @@ public class Constants {
 	
 	public static enum FlightType {
 		Other(0),
-		Flight(1),
-		Ground(2),
-		PrivateTraining(3),
-		InstrumentTraining(4),
-		CommercialTraining(5),
-		InstructorTraining(6),
-		MultiTraining(7),
-		BusinessFlight(8),
-		DiscoveryFlight(9),
-		CheckRide(10),
-		Charter(11),
-		Event(12),
-		AircraftMaintenance(13);
+		Rent(1),
+		Private(2),
+		Instrument(3),
+		Commercial(4),
+		Instructor(5),
+		Multi(6),
+		CheckRide(7),
+		Business(8),
+		Charter(9),
+		Mission(10),
+		Adjust(11),
+		Maintenance(12);
 
 		private final int type;
 
@@ -462,11 +461,11 @@ public class Constants {
 	public static enum CancelationType {
 		Other(0),
 		Weather(1),
-		ScheduleError(2),
-		StudentCancel(3),
-		InstructorAvailability(4),
-		AircraftMaintenanceIssue(5),
-		AirportRestriction(6),
+		Error(2),
+		Student(3),
+		Instructor(4),
+		Maintenance(5),
+		Airport(6),
 		TFR(7);
 
 		private final int type;
@@ -489,9 +488,8 @@ public class Constants {
 		CFI(5),
 		FlightReview(6),
 		Part141(7),
-		Temporary(8),
-		Goggle(9),
-		TSATraining(10);
+		TemporaryCertificate(8),
+		TSA(10);
 		
 		private final int type;
 

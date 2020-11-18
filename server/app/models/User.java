@@ -51,7 +51,7 @@ public class User extends DocumentModel implements IsAddressable {
 	public static final String PASSWORD = "User.password";
 
 	private static final String defaultPassword = AppConfig.get(Key.DEFAULT_PWD).asText();
-	
+
 	public User() {
 		super();
 	}
@@ -63,106 +63,107 @@ public class User extends DocumentModel implements IsAddressable {
 
 	@JsonView(Never.class)
 	@NotNull
-	public UUID uuid = UUID.randomUUID(); //uuid - internal security verification
+	public UUID uuid = UUID.randomUUID(); // uuid - internal security verification
 
 	@Column(name = "firstname")
 	@NotNull
 	@Length(50)
-	public String first; //firstname
+	public String first; // firstname
 
 	@Column(name = "middlename")
 	@Length(50)
-	public String middle; //middlename
+	public String middle; // middlename
 
 	@Column(name = "lastname")
 	@NotNull
 	@Length(50)
-	public String last; //lastname
+	public String last; // lastname
 
 	@Length(1)
-	public String sex; //sex
+	public String sex; // sex
 
 	@Column(name = "username")
 	@Length(50)
 	@NotNull
 	@Index(unique = true)
-	public String username; //username
+	public String username; // username
 
 	@NotNull
 	@Length(25)
 	@Encrypted
 	@JsonView(Admin.class)
 	@DbComment("CONVERT(AES_DECRYPT(password, `environment.json::encryptKey`) USING  UTF8)")
-	public String password = defaultPassword; //password
+	public String password = defaultPassword; // password
 
 	@Column(name = "email")
 	@Length(100)
 	@NotNull
-	public String email; //email
+	public String email; // email
 
 	@Column(name = "phone")
 	@Length(30)
 	@DbComment("ex: (+NN) NNN NNN NNN")
-	public String phone; //phone
+	public String phone; // phone
 
 	@Column(name = "active")
 	@NotNull
-	public byte isActive = 0; //is_active
+	public byte isActive = 0; // is_active
 
 	@Column(name = "resetPassword")
-	public byte resetPassword = 1; //reset_password
+	public byte resetPassword = 1; // reset_password
 
 	@Column(name = "employee")
-	public byte isSchoolEmployee = 0; //is_school_employee
+	public byte isSchoolEmployee = 0; // is_school_employee
 
 	@Column(name = "citizen")
-	public byte isCitizen = 0; //is_citizen
+	public byte isCitizen = 0; // is_citizen
 
 	@Column(name = "proficient")
-	public byte englishProficient = 0; //english_proficient (AC 60-28)
+	public byte englishProficient = 0; // english_proficient (AC 60-28)
 
 	@Column(name = "member")
-	public byte isMemeber = 1; //is_memeber
+	public byte isMemeber = 1; // is_memeber
 
 	@Column(name = "role")
 	@NotNull
 	@Enumerated
-	public Constants.Access role = Constants.Access.USER; //role
+	public Constants.Access role = Constants.Access.USER; // role
 
 	@Column(name = "birthday")
-	public Date birthday; //birthday
+	public Date birthday; // birthday
 
 	@Column(name = "driver_license")
 	@Length(10)
-	public String dl; //driver_license
+	public String dl; // driver_license
 
 	@Column(name = "driver_license_state")
 	@Length(2)
-	public String dlState; //driver_license_state
+	public String dlState; // driver_license_state
 
 	@Column(name = "driver_license_exp_date")
-	public Date dlExpDate; //driver_license_exp_date
+	public Date dlExpDate; // driver_license_exp_date
 
 	@Column(name = "ssn")
 	@Length(10)
-	public String ssn; //ssn
+	public String ssn; // ssn
 
 	@Column(name = "ftn")
 	@Length(10)
-	public String ftn; //ftn
-	
+	public String ftn; // ftn
+
 	@ManyToOne
-	private Address address; //address_id
+	private Address address; // address_id
 
 	public Address getAddress() {
 		return this.address;
 	}
+
 	public void setAddress(JsonNode body) throws IOException {
 		this.address = body != null ? new ObjectMapper().readerFor(Address.class).readValue(body) : null;
 	}
 
 	@OneToOne
-	public Account defaultAccount; //default_account_id
+	public Account defaultAccount; // default_account_id
 
 	public User(JsonNode body) {
 		this.username = body.get("username").asText();

@@ -31,8 +31,6 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
     constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder, private adminService: AdminService, private eventService: EventService) {
         super(confirmationService, formBuilder);
         this.controls = [
-            { field: 'id' },
-            { field: 'version' },
             { field: 'document' },
             { field: 'username', header: Locales.username, type: 'input', maxlen: 50, validators: [Validators.required], class: 'inlineL' },
             { field: 'email', header: Locales.email, type: 'input', maxlen: 100, validators: [Validators.required, Validators.email], class: 'inlineR' },
@@ -73,7 +71,7 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
         this.addressControls.forEach(c => {
             fields[c.field] = [null, c.validators];
         });
-        this.initControls({address: this.formBuilder.group(fields)});
+        this.initFormGroup({address: this.formBuilder.group(fields)});
         this.formGroup.controls.address.disable();
     }
 
@@ -129,6 +127,7 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
                 Object.assign(this.user, result);
+                this.formGroup.patchValue(result);
                 this.success(Locales.recordUpdated);
             }, (ex) => this.errorHandler(ex));
         } else {

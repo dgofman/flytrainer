@@ -138,6 +138,23 @@ export class AdminService {
         return this.http.delete<void>(`/endorsement/${userId}/${endorsementId}`);
     }
 
+    // Activities
+    public addActivity(userId: number, model: CommonModel): Observable<CommonModel> {
+        return this.http.post<CommonModel>(`/activity/${userId}`, model);
+    }
+
+    public getActivities(userId: number, offset: number): Observable<TableResult<CommonModel>> {
+        return this.http.get<TableResult<CommonModel>>(`/activity/${userId}?rows=25&offset=${offset}`);
+    }
+
+    public updateActivity(userId: number, model: CommonModel): Observable<CommonModel> {
+        return this.http.patch<CommonModel>(`/activity/${userId}`, model);
+    }
+
+    public deleteActivity(userId: number, activityId: number): Observable<void> {
+        return this.http.delete<void>(`/activity/${userId}/${activityId}`);
+    }
+
     // Document
     public getDocuments(userId: number, offset: number): Observable<TableResult<Document>> {
         return this.http.get<TableResult<Document>>(`/documents/${userId}?rows=25&offset=${offset}`);

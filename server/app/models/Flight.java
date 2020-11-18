@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -13,13 +15,18 @@ import utils.Constants.FlightType;
 @Entity
 @History
 @Table(name = "flight")
-public class Flight extends AbstractBase {
+public class Flight extends DocumentModel {
 	
 	@NotNull
-	public FlightType type = FlightType.Flight; //type
+	public FlightType type = FlightType.Rent; //type
 	
 	@Length(30)
 	public String other; //other
+	
+	@Length(30)
+	public String description; //description
+
+	public Date issuedDate; //issued_date
 	
 	public Double startHobbs; //start_hobbs
 	
@@ -33,10 +40,10 @@ public class Flight extends AbstractBase {
 	
 	public Double addedFuel; //added_fuel
 		
-	public CancelationType cancelationType; //cancelation_type
+	public CancelationType cancelation; //cancelation_type
 	
 	@Length(100)
-	public String legs; //legs
+	public String route; //route
 
 	@NotNull
 	@ManyToOne

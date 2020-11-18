@@ -21,8 +21,6 @@ export class AddressTabComponent extends UserTabBaseDirective {
         super(confirmationService, formBuilder);
         this.addresses = [];
         this.controls = [
-            { field: 'id' },
-            { field: 'version' },
             { field: 'document' },
             { field: 'description', header: Locales.description, type: 'input', maxlen: 30 },
             { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], value: Object.keys(AddressType).map(key => ({ label: AddressType[key], value: key })) },
@@ -37,7 +35,7 @@ export class AddressTabComponent extends UserTabBaseDirective {
             { field: 'fax', header: Locales.fax, type: 'phone', class: 'inlineR' },
             { field: 'isPrimary', header: Locales.isPrimary, type: 'switch' }
         ];
-        this.initControls();
+        this.initFormGroup();
     }
 
     lazyLoad() {

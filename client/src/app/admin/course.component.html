@@ -17,8 +17,8 @@
                 </ng-template>
             </ft-table>
             <ft-dialog width="70" height="60">
-                <ng-template pTemplate="{{Locales.course}}" let-tier="item">
-
+                <ng-template pTemplate="{{Locales.course}}" let-course="item">
+                    <course-tab [course]="course"></course-tab>
                 </ng-template>
             </ft-dialog>
         </div>

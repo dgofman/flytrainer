@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @MappedSuperclass
-public abstract class DocumentModel extends BaseModel {
+public abstract class DocumentModel extends NoteModel {
 
 	@ManyToOne
 	private Document document; //document_id

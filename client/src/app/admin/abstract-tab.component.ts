@@ -24,7 +24,7 @@ import { AbstractBase } from 'src/modules/models/base.model';
         <p-dropdown *ngIf="c.type=='popup'" appendTo="body" [formControlName]="c.field" [options]="c.value" [placeholder]="c.placeholder || ''"></p-dropdown>
         <p-autoComplete *ngIf="c.type == 'auto'" ftAutoComplete [formControlName]="c.field" [data]="c.value"></p-autoComplete>
         <p-inputMask *ngIf="c.type=='mask'" [mask]="c.value" [placeholder]="c.placeholder || ''" [formControlName]="c.field" unmask="true"></p-inputMask>
-        <p-calendar *ngIf="c.type=='cal'" ftCalendar [formControlName]="c.field"></p-calendar>
+        <p-calendar *ngIf="c.type=='cal'" ftCalendar [formControlName]="c.field" [showTime]="c.value && c.value.showTime"></p-calendar>
         <div *ngIf="c.type=='switch'" style="padding: 3px 0"><p-inputSwitch [formControlName]="c.field" binary="true"></p-inputSwitch></div>
         <div *ngIf="c.field=='other' && parentGroup.controls.type.value == 'Other'">
             <label>{{Locales.other}}</label>

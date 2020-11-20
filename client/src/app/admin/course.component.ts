@@ -1,5 +1,5 @@
 import Locales from '@locales/admin';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, Input, Directive, NgModule } from '@angular/core';
 import { AdminService } from 'src/services/admin.service';
 import { AppBaseDirective } from '../app.base.component';
 import { Country, State, ColumnType, CourseType, AddressType } from 'src/modules/models/constants';
@@ -8,7 +8,11 @@ import { TableResult } from 'src/modules/models/table.result';
 import { EmitEvent, EventType } from 'src/services/event.service';
 import { AppHeaderComponent } from '../app.component';
 import { FTDialogComponent } from '../component/ft-dialog/ft-dialog.component';
-import { Validators } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
+import { AbstractTabDirective, AbstractTabModule } from './abstract-tab.component';
+import { CommonModule } from '@angular/common';
+import { AdminSharedModule } from './admin-shared.module';
 
 @Component({
   templateUrl: './course.component.html',
@@ -29,7 +33,9 @@ export class CourseComponent extends AppBaseDirective {
     { field: 'other', type: 'input', header: Locales.other, width: 100 },
     { field: 'description', type: 'input', show: true, header: Locales.description, width: 200 },
     { field: 'cost', type: 'currency', show: true, header: Locales.cost, width: 100, class: 'inlineL' },
-    { field: 'time', type: 'number', show: true, header: Locales.time, width: 100, class: 'inlineL' },
+    { field: 'duration', type: 'number', show: true, header: Locales.duration, width: 100, class: 'inlineL' },
+    { field: 'startDate', type: 'cal', header: Locales.startDate, width: 200, format: 'datetime' },
+    { field: 'endDate', type: 'cal', header: Locales.endDate, width: 200, format: 'datetime' },
     { field: 'is_online', type: 'switch', show: true, header: Locales.isOnline, width: 70, align: 'center', format: 'bool' },
     { field: 'credits', type: 'input', show: true, header: Locales.credits, width: 150 },
     { field: 'createdDate', type: 'cal', header: Locales.createdDate, width: 200, format: 'datetime' },
@@ -81,7 +87,7 @@ export class CourseComponent extends AppBaseDirective {
   }
 
   eventTableHandler(event: EmitEvent) {
-    /*switch (event.message) {
+    switch (event.message) {
       case EventType.Load:
         this.loading(true);
         this.adminService.getCourses(event.data).subscribe(result => {
@@ -89,6 +95,22 @@ export class CourseComponent extends AppBaseDirective {
           this.result = result;
         }, (ex) => this.errorHandler(ex));
         break;
-    }*/
+    }
   }
+}
+
+@Directive()
+export abstract class CourseTabBaseDirective extends AbstractTabDirective {
+    @Input() course: CommonModel;
+
+    constructor(confirmationService: ConfirmationService, formBuilder: FormBuilder) {
+        super(confirmationService, formBuilder);
+    }
+}
+
+@NgModule({
+    imports: [CommonModule, AdminSharedModule, AbstractTabModule],
+    exports: [AbstractTabModule]
+})
+export class CourseTabBaseModule {
 }

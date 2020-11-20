@@ -82,7 +82,7 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
                 this.loading(false);
                 this.selectedBean = Object.assign(this.defaultBean, result);
                 Object.assign(this.user, this.selectedBean);
-                this.showAddress(result.address && result.address.id !== null, this.formGroup.controls);
+                this.defineAddress(result.address && result.address.id !== null, this.formGroup.controls);
             }, (ex) => this.errorHandler(ex));
         }
     }
@@ -91,22 +91,12 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
         return AppUtils.canViewAdmin();
     }
 
-    showAddress(state: boolean, controls: any) {
+    defineAddress(state: boolean, controls: any) {
         this.isAddress = state;
         if (state) {
             controls.address.enable();
         } else {
             controls.address.disable();
-        }
-    }
-
-    lazyLoad() {
-        if (this.user && this.user.id) {
-            this.loading(true);
-            this.adminService.getAccounts(this.user.id).subscribe(result => {
-                this.loading(false);
-                this.accounts = result;
-            }, (ex) => this.errorHandler(ex));
         }
     }
 

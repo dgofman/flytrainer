@@ -11,7 +11,7 @@ import io.ebean.annotation.History;
 @Entity
 @History
 @Table(name = "user_course")
-public class UserCourse extends AbstractBase {
+public class UserCourse extends DocumentModel {
 
 	public Date issueDate; //issue_date
 	

@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
@@ -14,6 +16,7 @@ import utils.Constants.TierType;
 @Entity
 @History
 @Table(name = "tier")
+@JsonFilter("TierFilter")
 public class Tier extends BaseModel {
 	
 	@NotNull

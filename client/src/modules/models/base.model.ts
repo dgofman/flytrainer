@@ -38,6 +38,7 @@ export class CommonModel extends BaseModel {
     type: string;
     description: string;
     address: Address;
+    location: Address;
 }
 
 export class User extends CommonModel {

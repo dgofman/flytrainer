@@ -44,11 +44,6 @@ POST    /endorsement/:userId            controllers.EndorsementController.addEnd
 PATCH   /endorsement/:userId            controllers.EndorsementController.updateEndorsement(request: Request, userId: Long)
 DELETE  /endorsement/:userId/:cId       controllers.EndorsementController.deleteEndorsement(request: Request, userId: Long, cId: Long)
 
-POST    /tiers                          controllers.TierRateController.getTiers(request: Request)
-POST    /tier                           controllers.TierRateController.addTier(request: Request)
-PATCH   /tier                           controllers.TierRateController.updateTier(request: Request)
-DELETE  /tier/:tId                      controllers.TierRateController.deleteTier(request: Request, tId: Long)
-
 GET     /file/:userId/:docId            controllers.DocumentController.getFile(userId: Long, docId: Long)
 POST    /file/:userId                   controllers.DocumentController.saveFile(request: Request, userId: Long)
 
@@ -58,3 +53,18 @@ GET     /documents/:userId/:docId       controllers.DocumentController.lazyLoadD
 GET     /document/:userId/:docId        controllers.DocumentController.getDocument(userId: Long, docId: Long)
 POST    /document/:userId               controllers.DocumentController.saveDocument(request: Request, userId: Long)
 DELETE  /document/:userId/:docId        controllers.DocumentController.deleteDocument(userId: Long, docId: Long)
+
+PUT     /tier                           controllers.TierRateController.getTiers(request: Request)
+POST    /tier                           controllers.TierRateController.addTier(request: Request)
+PATCH   /tier                           controllers.TierRateController.updateTier(request: Request)
+DELETE  /tier/:tId                      controllers.TierRateController.deleteTier(request: Request, tId: Long)
+
+PUT     /course                         controllers.CourseController.getCourses(request: Request)
+POST    /course                         controllers.CourseController.createCourse(request: Request)
+PATCH   /course                         controllers.CourseController.updateCourse(request: Request)
+DELETE  /course/:courseId               controllers.CourseController.deleteCourse(request: Request, courseId: Long)
+
+GET     /course/:userId                 controllers.CourseController.getUserCourses(userId: Long, offset: Integer, rows: Integer)
+POST    /course/:userId/:courseId       controllers.CourseController.addUserCourse(request: Request, userId: Long, courseId: Long)
+PATCH   /course/:userId/:courseId       controllers.CourseController.updateUserCourse(request: Request, userId: Long, courseId: Long)
+DELETE  /course/:userId/:courseId       controllers.CourseController.deleteUserCourse(request: Request, userId: Long, courseId: Long)

@@ -55,7 +55,7 @@ export class ActivityTabComponent extends UserTabBaseDirective {
             { field: 'type', header: Locales.type, type: 'input', class: 'disabled' },
             { field: 'description', header: Locales.description, type: 'input', class: 'disabled'},
             { field: 'cost', header: Locales.cost, type: 'currency', disabled: true, class: 'inlineL' },
-            { field: 'time', header: Locales.time, type: 'number', disabled: true, class: 'inlineR' },
+            { field: 'duration', header: Locales.duration, type: 'number', disabled: true, class: 'inlineR' },
             { field: 'credits', header: Locales.credits, type: 'input', class: 'disabled' },
             { field: 'issuedDate', header: Locales.issuedDate, type: 'cal', class: 'inlineL' },
             { field: 'expDate', header: Locales.expDate, type: 'cal', class: 'inlineR' }

@@ -32,23 +32,6 @@ export class AdminService {
         return this.http.get<string>(`/user/${userId}/${username}`);
     }
 
-    // Tier-Rates
-    public addTier(model: CommonModel): Observable<CommonModel> {
-        return this.http.post<User>(`/tier`, model);
-    }
-
-    public getTiers(model: FTTableEvent): Observable<TableResult<CommonModel>> {
-        return this.http.post<TableResult<User>>(`/tiers`, model);
-    }
-
-    public updateTier(model: CommonModel): Observable<CommonModel> {
-        return this.http.patch<User>(`/tier`, model);
-    }
-
-    public deleteTier(tierId: number): Observable<void> {
-        return this.http.delete<void>(`/tier/${tierId}`);
-    }
-
     // Accounts
     public addAccount(userId: number, model: CommonModel): Observable<CommonModel> {
         return this.http.post<CommonModel>(`/account/${userId}`, model);
@@ -174,5 +157,56 @@ export class AdminService {
 
      public deleteDocument(userId: number, docId: number): Observable<void> {
         return this.http.delete<void>(`/document/${userId}/${docId}`);
+    }
+
+        // Tier-Rates
+    public addTier(model: CommonModel): Observable<CommonModel> {
+        return this.http.post<CommonModel>(`/tier`, model);
+    }
+
+    public getTiers(model: FTTableEvent): Observable<TableResult<CommonModel>> {
+        return this.http.put<TableResult<CommonModel>>(`/tier`, model);
+    }
+
+    public updateTier(model: CommonModel): Observable<CommonModel> {
+        return this.http.patch<CommonModel>(`/tier`, model);
+    }
+
+    public deleteTier(tierId: number): Observable<void> {
+        return this.http.delete<void>(`/tier/${tierId}`);
+    }
+
+    // Courses
+    public createCourse(model: CommonModel): Observable<CommonModel> {
+        return this.http.post<CommonModel>(`/course`, model);
+    }
+
+    public getCourses(model: FTTableEvent): Observable<TableResult<CommonModel>> {
+        return this.http.put<TableResult<CommonModel>>(`/course`, model);
+    }
+
+    public updateCourse(model: CommonModel): Observable<CommonModel> {
+        return this.http.patch<CommonModel>(`/course`, model);
+    }
+
+    public deleteCourse(courseId: number): Observable<void> {
+        return this.http.delete<void>(`/course/${courseId}`);
+    }
+
+    // Courses - UserCourse
+    public createUserCourse(model: CommonModel, userId: number, courseId: number): Observable<CommonModel> {
+        return this.http.post<CommonModel>(`/course/${userId}/${courseId}`, model);
+    }
+
+    public getUserCourses(userId: number, offset: number): Observable<TableResult<CommonModel>> {
+        return this.http.get<TableResult<CommonModel>>(`/course/${userId}?rows=25&offset=${offset}`);
+    }
+
+    public updateUserCourse(model: CommonModel, userId: number, courseId: number): Observable<CommonModel> {
+        return this.http.patch<CommonModel>(`/course/${userId}/${courseId}`, model);
+    }
+
+    public deleteUserCourse(userId: number, courseId: number): Observable<void> {
+        return this.http.delete<void>(`/course//${userId}/${courseId}`);
     }
 }

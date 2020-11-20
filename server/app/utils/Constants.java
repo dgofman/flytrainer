@@ -2,6 +2,8 @@ package utils;
 
 public class Constants {
 	
+	public static final int ALL_MAX_LIMIT = 10000;
+	
 	public static final String AUTHORIZATION = "Authorization";
 	public static final String TOKEN_FORMAT = "Bearer";
 	public static final String CORRELATION_ID = "correlationId";

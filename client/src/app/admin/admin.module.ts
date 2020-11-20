@@ -28,6 +28,7 @@ import { CertificateTabModule } from './usertabs/certificate-tab.component';
 import { ActivityTabModule } from './usertabs/activity-tab.component';
 import { EndorsementTabModule } from './usertabs/endorsement-tab.component';
 import { TableModule } from 'primeng/table';
+import { CourseTabModule } from './coursetabs/course-tab.component';
 
 @NgModule({
   imports: [
@@ -55,6 +56,7 @@ import { TableModule } from 'primeng/table';
     EndorsementTabModule,
     UserTabModule,
     AccountTabModule,
+    CourseTabModule,
     FTDialogvModule,
     FTLeftNavModule,
     FTTableModule,

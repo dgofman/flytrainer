@@ -1,4 +1,5 @@
 @charset "UTF-8";
+
 /*
 @import '../../../node_modules/primeng/resources/themes/nova-colored/theme.css';
 @import '../../../node_modules/primeng/resources/primeng.min.css';
@@ -734,6 +735,26 @@ input[type=submit] {
 		border-bottom-right-radius: 0;
 		border-right: 0 none;
 		border-top-right-radius: 0;
+	}
+}
+
+.ui-timepicker {
+	text-align: center;
+
+	&>div {
+		display: inline-block;
+		margin-left: .5em;
+		min-width: 1.5em;
+	}
+
+	a {
+		color: #999;
+		font-size: 1.286em;
+		display: block;
+	}
+
+	&>.ui-separator a {
+		visibility: hidden;
 	}
 }
 

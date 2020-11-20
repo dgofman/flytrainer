@@ -30,8 +30,6 @@ import utils.NotesUtils;
 @BasicAuth({ Access.ASSISTANT, Access.MANAGER, Access.ADMIN })
 public class UserController extends BaseController {
 
-	private static final int ALL_MAX_LIMIT = 10000;
-
 	public Result addUser(Http.Request request) {
 		log.debug("UserController::addtUser");
 		User currentUser = request.attrs().get(User.MODEL);
@@ -72,7 +70,7 @@ public class UserController extends BaseController {
 				}
 			}
 			query.setFirstRow(event.first);
-			query.setMaxRows(event.total != -1 ? event.total : ALL_MAX_LIMIT);
+			query.setMaxRows(event.total != -1 ? event.total : Constants.ALL_MAX_LIMIT);
 			FilterProvider filter = new SimpleFilterProvider().addFilter("UserFilter", SimpleBeanPropertyFilter.filterOutAllExcept(columns));
 			return okResult(new TableResult(event.first, total, query.findList()), filter);
 		} catch (Exception e) {

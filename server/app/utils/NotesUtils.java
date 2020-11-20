@@ -4,13 +4,13 @@ import java.io.IOException;
 
 import io.ebean.Ebean;
 import models.Aircraft;
-import models.BaseModel;
 import models.Note;
+import models.NoteModel;
 import models.User;
 
 public class NotesUtils {
 
-	public static <T> void create(BaseModel model, T ref) throws IOException {
+	public static <T> void create(NoteModel model, T ref) throws IOException {
 		Note notes = model.getNotes();
 		if (notes == null || notes.content == null || notes.content.isBlank()) {
 			model.setNotes(null);
@@ -25,7 +25,7 @@ public class NotesUtils {
 		}
 	}
 
-	public static <T>  void update(BaseModel model, T ref, User currentUser) throws IOException {
+	public static <T> void update(NoteModel model, T ref, User currentUser) throws IOException {
 		Note notes = model.getNotes();
 		if (notes != null) {
 			if (notes.id != null) {
@@ -42,7 +42,7 @@ public class NotesUtils {
 		}
 	}
 
-	public static void delete(BaseModel model) throws IOException {
+	public static void delete(NoteModel model) throws IOException {
 		Note notes = model.getNotes();
 		if (notes != null) {
 			Ebean.find(Note.class).where().eq("id", notes.id).delete();

@@ -61,11 +61,11 @@ export class ContactTabComponent extends UserTabBaseDirective {
     updateSelectedBean(bean: any) {
         super.updateSelectedBean(bean);
         if (bean != null) {
-            this.showAddress(bean.address && bean.address.id !== null, this.formGroup.controls);
+            this.defineAddress(bean.address && bean.address.id !== null, this.formGroup.controls);
         }
     }
 
-    showAddress(state: boolean, controls: any) {
+    defineAddress(state: boolean, controls: any) {
         this.isAddress = state;
         if (state) {
             controls.address.enable();
@@ -125,7 +125,7 @@ export class ContactTabComponent extends UserTabBaseDirective {
 
     onReset() {
         super.onReset();
-        this.showAddress(false, this.formGroup.controls);
+        this.defineAddress(false, this.formGroup.controls);
     }
 
     resetBean() {

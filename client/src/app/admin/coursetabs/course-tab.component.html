@@ -1,0 +1,61 @@
+<form [formGroup]="formGroup" #myForm="ngForm" class="p-grid">
+    <div class="ui-fluid p-md-7">
+        <div *ngFor="let control of controls" [class]="control.class">
+            <admin-field [parentGroup]="formGroup" [c]="control"></admin-field>
+        </div>
+        <p class="row">
+            <p-inputSwitch (onChange)="defineLocation($event.checked, formGroup.controls)" [(ngModel)]="isLocation" [ngModelOptions]="{standalone: true}"></p-inputSwitch><span class="defineAddress">{{Locales.defineLocation}}</span>
+        </p>
+        <div class="row" *ngIf="isLocation">
+            <div *ngFor="let control of locationControls" [class]="control.class">
+                <admin-field [parentGroup]="formGroup.controls.location" [c]="control" [templates]="{ pobox: pobox }"></admin-field>
+            </div>
+        </div>
+    </div>
+    <div class="ui-fluid p-md-5">
+        <div class="row">
+            <p-table [value]="result?.data" [lazy]="true" (onLazyLoad)="lazyLoad($event)" [(selection)]="selectedBean"
+                [paginator]="true" [rows]="25" [totalRecords]="result?.total" [scrollable]="true">
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                    <col [style.width.rem]="5"/>
+                    <col />
+                    <col [style.width.rem]="3" />
+                    </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>{{Locales.type}}</th>
+                        <th>{{Locales.description}}</th>
+                        <th align="center"><i class="pi pi-check"></i></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td class="ellipsis" [title]="getType(rowData.type)">{{getType(rowData.type)}}</td>
+                        <td class="ellipsis" [title]="rowData.description">{{rowData.description}}</td>
+                        <td>
+                            <p-tableRadioButton [value]="rowData"></p-tableRadioButton>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="3" style="text-align: center;">{{Locales.noData}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                    <div style="margin-right: 10px; margin-top: 5px">
+                    {{Locales.total}}: {{result?.total || 0}}
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</form>
+<ng-template #pobox let-group="group">
+    <div class="noshadow" *ngIf="group.controls.type.value != 'Home'" [formGroup]="group">
+        <label>{{Locales.pobox}}</label>
+        <input formControlName="pobox" pInputText maxlength="10"/>
+    </div>
+</ng-template>

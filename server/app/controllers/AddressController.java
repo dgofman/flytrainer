@@ -31,6 +31,16 @@ public class AddressController extends BaseController {
 			return badRequest(e);
 		}
 	}
+	
+	public Result getAddressById(Long id) {
+		log.debug("AddressController::getAddressById for id=" + id);
+		try {
+			Address address = Ebean.find(Address.class).where().eq("id", id).findOne();
+			return okResult(address, Short.class);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
 
 	public Result addAddress(Http.Request request, Long userId) {
 		log.debug("AddressController::addAddress for user=" + userId);

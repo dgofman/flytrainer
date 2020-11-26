@@ -59,7 +59,7 @@
       [style]="{'minWidth':'80px', 'width': '80px'}"></p-dropdown>
   </div>
 </div>
-<p-table [columns]="getColumns(0)" [value]="data" [resizableColumns]="true" [scrollable]="true" [rowHover]="true"
+<p-table *ngIf="getColumns(0); let filterColumn" [columns]="filterColumn" [value]="data" [resizableColumns]="true" [scrollable]="true" [rowHover]="true"
   [expandedRowKeys]="expandedRows" [dataKey]="dataKey" [lazy]="true" [paginator]="true" [rows]="filterModel.total"
   [totalRecords]="total || data?.length" (onLazyLoad)="lazyLoad($event)" (onColResize)="colResize()"
   (onRowExpand)="onExpandCollapse($event, true)" (onRowCollapse)="onExpandCollapse($event, false)" #fttable>
@@ -86,7 +86,7 @@
       </th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
+  <ng-template pTemplate="body" let-rowData let-expanded>
     <tr>
       <td *ngIf="expandFormTemplate" align="center">
         <i style="color: #007ad9; cursor: pointer;" [pRowToggler]="rowData" class="noshadow" [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
@@ -99,15 +99,15 @@
           <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
         </a>
       </td>
-      <td *ngFor="let col of columns" class="ui-resizable-column ellipsis" [style.text-align]="col.align" [title]="formatColData(col, rowData, true)" [innerHTML]="formatColData(col, rowData, false)"></td>
+      <td *ngFor="let col of filterColumn" class="ui-resizable-column ellipsis" [style.text-align]="col.align" [title]="formatColData(col, rowData, true)" [innerHTML]="formatColData(col, rowData, false)"></td>
       <td *ngIf="lastColumnTemplate" style="text-overflow: initial; text-align: center">
         <ng-container *ngTemplateOutlet="lastColumnTemplate; context: {$implicit: rowData}"></ng-container>
       </td>
     </tr>
   </ng-template>
-  <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
+  <ng-template pTemplate="rowexpansion" let-rowData>
     <tr>
-      <td [attr.colspan]="columns.length + (firstHeaderTemplate ? 1 : 0) + (lastColumnTemplate ? 1 : 0) + 1">
+      <td [attr.colspan]="filterColumn.length + (firstHeaderTemplate ? 1 : 0) + (lastColumnTemplate ? 1 : 0) + 1">
         <div [ftTableFormProvider]="rowData" [table]="this">
           <ng-container *ngTemplateOutlet="expandFormTemplate; context: {$implicit: rowData}"></ng-container>
         </div>

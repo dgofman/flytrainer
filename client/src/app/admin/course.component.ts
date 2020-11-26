@@ -2,17 +2,18 @@ import Locales from '@locales/admin';
 import { Component, ViewChild, Input, Directive, NgModule } from '@angular/core';
 import { AdminService } from 'src/services/admin.service';
 import { AppBaseDirective } from '../app.base.component';
-import { Country, State, ColumnType, CourseType, AddressType } from 'src/modules/models/constants';
+import { ColumnType, CourseType } from 'src/modules/models/constants';
 import { CommonModel } from 'src/modules/models/base.model';
 import { TableResult } from 'src/modules/models/table.result';
-import { EmitEvent, EventType } from 'src/services/event.service';
+import { EmitEvent, EventType, EventService } from 'src/services/event.service';
 import { AppHeaderComponent } from '../app.component';
 import { FTDialogComponent } from '../component/ft-dialog/ft-dialog.component';
-import { Validators, FormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { AbstractTabDirective, AbstractTabModule } from './abstract-tab.component';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from './admin-shared.module';
+import { FTTableComponent } from '../component/ft-table/ft-table.component';
 
 @Component({
   templateUrl: './course.component.html',
@@ -21,9 +22,9 @@ import { AdminSharedModule } from './admin-shared.module';
 export class CourseComponent extends AppBaseDirective {
   Locales = Locales;
   result: TableResult<CommonModel>;
-  locationControls: ColumnType[];
   selectedCourse: CommonModel;
 
+  @ViewChild(FTTableComponent) table: FTTableComponent;
   @ViewChild(FTDialogComponent) dialog: FTDialogComponent;
 
   cols: ColumnType[] = [
@@ -36,7 +37,7 @@ export class CourseComponent extends AppBaseDirective {
     { field: 'duration', type: 'number', show: true, header: Locales.duration, width: 100, class: 'inlineL' },
     { field: 'startDate', type: 'cal', header: Locales.startDate, width: 200, format: 'datetime' },
     { field: 'endDate', type: 'cal', header: Locales.endDate, width: 200, format: 'datetime' },
-    { field: 'is_online', type: 'switch', show: true, header: Locales.isOnline, width: 70, align: 'center', format: 'bool' },
+    { field: 'isOnline', type: 'switch', show: true, header: Locales.isOnline, width: 70, align: 'center', format: 'bool' },
     { field: 'credits', type: 'input', show: true, header: Locales.credits, width: 150 },
     { field: 'createdDate', type: 'cal', header: Locales.createdDate, width: 200, format: 'datetime' },
     { field: 'modifiedDate', type: 'cal', header: Locales.modifiedDate, width: 200, format: 'datetime' },
@@ -44,22 +45,19 @@ export class CourseComponent extends AppBaseDirective {
     { field: 'whoModified', type: 'input', header: Locales.whoModified, width: 200 }
   ];
 
-  constructor(public adminService: AdminService) {
+  constructor(public adminService: AdminService, eventService: EventService) {
     super();
-    this.locationControls = [ // location_id
-      { field: 'id' },
-      { field: 'version' },
-      { field: 'type', header: Locales.type, type: 'popup', validators: [Validators.required], value: Object.keys(AddressType).map(key => ({ label: AddressType[key], value: key })) },
-      { field: 'other', type: 'hide' },
-      { field: 'pobox', type: 'hide', template: 'pobox' },
-      { field: 'street', header: Locales.street, type: 'input', maxlen: 120, validators: [Validators.required] },
-      { field: 'city', header: Locales.city, type: 'input', maxlen: 50, validators: [Validators.required] },
-      { field: 'code', header: Locales.code, type: 'input', maxlen: 16, validators: [Validators.required], placeholder: 'ex. 95134' },
-      { field: 'state', header: Locales.state, type: 'auto', validators: [Validators.required], value: State, class: 'inlineL' },
-      { field: 'country', header: Locales.country, type: 'auto', validators: [Validators.required], value: Country, class: 'inlineR' },
-      { field: 'phone', header: Locales.phone, type: 'phone', class: 'inlineL' },
-      { field: 'fax', header: Locales.fax, type: 'phone', class: 'inlineR' }
-    ];
+    eventService.emmiter.subscribe((event: EmitEvent) => {
+      switch (event.message) {
+        case EventType.Refresh:
+          if (event.data) {
+            this.updateDialog(event.data);
+          }
+          this.table.expandedRows = {};
+          this.table.refresh();
+          break;
+      }
+    });
   }
 
   updateDialog(model: CommonModel) {

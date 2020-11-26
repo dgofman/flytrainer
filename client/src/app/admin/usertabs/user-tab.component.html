@@ -4,7 +4,7 @@
             <admin-field [parentGroup]="formGroup" [c]="control"></admin-field>
         </div>
         <p class="row">
-            <p-inputSwitch (onChange)="defineAddress($event.checked, formGroup.controls)" [(ngModel)]="isAddress" [ngModelOptions]="{standalone: true}"></p-inputSwitch><span class="defineAddress">{{Locales.defineAddress}}</span>
+            <p-inputSwitch (onChange)="defineAddress($event.checked, formGroup.controls)" [(ngModel)]="isAddress" [ngModelOptions]="{standalone: true}"></p-inputSwitch><span class="switch-span">{{Locales.defineAddress}}</span>
         </p>
         <div class="row" *ngIf="isAddress">
             <div *ngFor="let control of addressControls" [class]="control.class">
@@ -15,7 +15,7 @@
     <div class="ui-fluid p-md-5">
         <div class="row" formGroupName="notes">
             <label>{{Locales.notes}}</label>
-            <textarea formControlName="content" pInputTextarea [rows]="11"></textarea>
+            <textarea formControlName="content" pInputTextarea [rows]="20"></textarea>
         </div>
         <admin-prewview [user]="user" [formGroup]="formGroup" [selectedBean]="selectedBean"></admin-prewview>
     </div>

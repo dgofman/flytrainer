@@ -11,6 +11,7 @@ POST    /activate                       controllers.HomeController.activate(requ
 POST    /forgot                         controllers.HomeController.forgot(request: Request)
 POST    /reset                          controllers.HomeController.reset(request: Request)
 POST    /logout                         controllers.HomeController.logout(request: Request)
+GET     /notes/:id                      controllers.HomeController.getNotes(id: Long)
 
 GET     /user/:userId                   controllers.UserController.getUser(userId: Long)
 POST    /user                           controllers.UserController.addUser(request: Request)
@@ -24,6 +25,7 @@ PATCH   /account/:userId                controllers.AccountController.updateAcco
 DELETE  /account/:userId/:aId           controllers.AccountController.deleteAccount(request: Request, userId: Long, aId: Long)
 
 GET     /address/:userId                controllers.AddressController.getAddress(userId: Long)
+GET     /address/id/:id                 controllers.AddressController.getAddressById(id: Long)
 POST    /address/:userId                controllers.AddressController.addAddress(request: Request, userId: Long)
 PATCH   /address/:userId                controllers.AddressController.updateAddress(request: Request, userId: Long)
 DELETE  /address/:userId/:addId         controllers.AddressController.deleteAddress(request: Request, userId: Long, addId: Long)
@@ -59,6 +61,7 @@ POST    /tier                           controllers.TierRateController.addTier(r
 PATCH   /tier                           controllers.TierRateController.updateTier(request: Request)
 DELETE  /tier/:tId                      controllers.TierRateController.deleteTier(request: Request, tId: Long)
 
+GET     /course/id/:id                  controllers.CourseController.getCourse(id: Long)
 PUT     /course                         controllers.CourseController.getCourses(request: Request)
 POST    /course                         controllers.CourseController.createCourse(request: Request)
 PATCH   /course                         controllers.CourseController.updateCourse(request: Request)

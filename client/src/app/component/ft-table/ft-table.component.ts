@@ -270,6 +270,12 @@ export class FTTableComponent implements AfterContentInit {
     const val = FTFormControl.getData(col, rowData);
     if (title && col.format === 'bool') {
       return val ? Locales.yes : Locales.no;
+    } else if (col.type === 'popup' && col.value) {
+      for (const opt of col.value) {
+        if (opt.value === val) {
+          return opt.label;
+        }
+      }
     }
     return FTFormControl.Format(val, col.format);
   }

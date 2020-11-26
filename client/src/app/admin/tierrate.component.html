@@ -12,12 +12,12 @@
                 <ng-template pTemplate="firstHeader">
                     <button pButton icon="pi pi-plus-circle" class="circle" (click)="onAddRate()"></button>
                 </ng-template>
-                <ng-template pTemplate="firstColumn" let-rowData="$implicit" *ngIf="AppUtils.isEditorAccess()">
+                <ng-template pTemplate="firstColumn" let-rowData *ngIf="AppUtils.isEditorAccess()">
                     <fa-icon [icon]="icons.faPencil" (click)="onEdit(rowData)" style="cursor: pointer"></fa-icon>
                 </ng-template>
             </ft-table>
             <ft-dialog width="70" height="60">
-                <ng-template pTemplate="{{Locales.tier}}" let-tier="item">
+                <ng-template pTemplate="{{Locales.tier}}" let-tier>
 
                 </ng-template>
             </ft-dialog>

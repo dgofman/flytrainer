@@ -11,7 +11,9 @@ import com.google.common.base.Joiner;
 
 import io.ebean.DuplicateKeyException;
 import io.ebean.Ebean;
+import models.AbstractBase.Short;
 import models.DDoS;
+import models.Note;
 import models.User;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -297,6 +299,16 @@ public class HomeController extends BaseController {
 	public Result initDatabase() {
 		Ebean.find(User.class).findCount();
 		return ok("Compiled successfully.");
+	}
+	
+	public Result getNotes(Long id) {
+		log.debug("HomeController::getNotes for id=" + id);
+		try {
+			Note note = Ebean.find(Note.class).where().eq("id", id).findOne();
+			return okResult(note, Short.class);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
 	}
 
 	private Result checkClientId(JsonNode body) {

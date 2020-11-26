@@ -6,7 +6,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.softigent</groupId>
 	<artifactId>FlyTrainer</artifactId>
-	<packaging>jar</packaging>
 	<description>FlyTrainer for Part 141 Pilot Schools</description>
 	<version>1.0-SNAPSHOT</version>
 	<name>FlyTrainerApp</name>

@@ -2,13 +2,18 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TableResult } from 'src/modules/models/table.result';
-import { CommonModel, Address, Contact, Document, User } from 'src/modules/models/base.model';
+import { CommonModel, Address, Contact, Document, User, Note } from 'src/modules/models/base.model';
 import { FTTableEvent } from 'src/app/component/ft-table/ft-table.component';
 
 @Injectable()
 export class AdminService {
 
     public constructor(private http: HttpClient) {
+    }
+
+    // Notes
+    public getNotes(id: number): Observable<Note> {
+        return this.http.get<Note>(`/notes/${id}`);
     }
 
     // Users
@@ -56,6 +61,10 @@ export class AdminService {
 
     public getAddress(userId: number): Observable<Address[]> {
         return this.http.get<Address[]>(`/address/${userId}`);
+    }
+
+    public getAddressById(id: number): Observable<Address> {
+        return this.http.get<Address>(`/address/id/${id}`);
     }
 
     public updateAddress(userId: number, model: Address): Observable<Address> {
@@ -179,6 +188,10 @@ export class AdminService {
     // Courses
     public createCourse(model: CommonModel): Observable<CommonModel> {
         return this.http.post<CommonModel>(`/course`, model);
+    }
+
+    public getCourse(id: number): Observable<CommonModel> {
+        return this.http.get<CommonModel>(`/course/id/${id}`);
     }
 
     public getCourses(model: FTTableEvent): Observable<TableResult<CommonModel>> {

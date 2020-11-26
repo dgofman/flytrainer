@@ -21,7 +21,7 @@ import utils.Constants.AddressType;
 public class Address extends DocumentModel {
 
 	@NotNull
-	public AddressType type = AddressType.Home; //type
+	public AddressType type; //type
 	
 	@Length(50)
 	public String reference; //Class name
@@ -52,7 +52,7 @@ public class Address extends DocumentModel {
 
 	@NotNull
 	@Length(2)
-	public String country = "US"; //country
+	public String country; //country
 
 	@Length(30)
 	@DbComment("ex: (+NN) NNN NNN NNN")
@@ -63,7 +63,7 @@ public class Address extends DocumentModel {
 	public String fax; //fax
 	
 	@NotNull
-	public byte isPrimary = 1; //is_primary
+	public byte isPrimary; //is_primary
 
 	@ManyToOne
 	@JsonIgnore

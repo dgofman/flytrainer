@@ -16,14 +16,17 @@ import io.ebean.Ebean;
 import io.ebean.Query;
 import io.ebean.Transaction;
 import models.AbstractBase.Short;
+import models.Address;
 import models.BaseModel;
 import models.Course;
 import models.FTTableEvent;
+import models.Note;
 import models.User;
 import models.UserCourse;
 import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
+import utils.AddressUtils;
 import utils.BasicAuth;
 import utils.Constants;
 import utils.Constants.Access;
@@ -32,6 +35,23 @@ import utils.NotesUtils;
 
 @BasicAuth({ Access.ASSISTANT, Access.MANAGER, Access.ADMIN })
 public class CourseController extends BaseController {
+
+	public Result getCourse(Long id) {
+		log.debug("CourseController::getCourse for id=" + id);
+		try {
+			Course course = Ebean.find(Course.class).where().eq("id", id).findOne();
+			Note note = course.getNotes();
+			if (note != null && note.id != null) {
+				course.setNotes(Ebean.find(Note.class).where().eq("id", note.id).findOne());
+			}
+			if (course.location != null && course.location.id != null) {
+				course.location = Ebean.find(Address.class).where().eq("id", course.location.id).findOne();
+			}
+			return okResult(course, Short.class);
+		} catch (Exception e) {
+			return badRequest(e);
+		}
+	}
 
 	public Result getCourses(Http.Request request) {
 		log.debug("CourseController::getCourses");
@@ -77,13 +97,20 @@ public class CourseController extends BaseController {
 	public Result createCourse(Http.Request request) {
 		log.debug("CourseController::createCourse");
 		User currentUser = request.attrs().get(User.MODEL);
+		Transaction transaction = Ebean.beginTransaction();
 		try {
 			JsonNode body = request.body().asJson();
 			Course course = Json.fromJson(body, Course.class);
+			NotesUtils.create(course, null);
+			AddressUtils.create(course, null, currentUser);
 			course.save(currentUser);
+			transaction.commit();
 			return okResult(course, Short.class);
 		} catch (Exception e) {
+			transaction.rollback();
 			return badRequest(e);
+		} finally {
+			transaction.end();
 		}
 	}
 
@@ -113,6 +140,7 @@ public class CourseController extends BaseController {
 	public Result updateCourse(Http.Request request) {
 		log.debug("CourseController::updateCourse");
 		User currentUser = request.attrs().get(User.MODEL);
+		Transaction transaction = Ebean.beginTransaction();
 		try {
 			JsonNode body = request.body().asJson();
 			Course course = Json.fromJson(body, Course.class);
@@ -121,10 +149,16 @@ public class CourseController extends BaseController {
 				return createBadRequest("nocourse", Constants.Errors.ERROR);
 			}
 			new ObjectMapper().readerForUpdating(dbCourse).readValue(body);
+			NotesUtils.update(dbCourse, null, currentUser);
+			AddressUtils.update(dbCourse, null, currentUser);
 			dbCourse.save(currentUser);
+			transaction.commit();
 			return okResult(dbCourse, Short.class);
 		} catch (Exception e) {
+			transaction.rollback();
 			return badRequest(e);
+		} finally {
+			transaction.end();
 		}
 	}
 
@@ -156,15 +190,21 @@ public class CourseController extends BaseController {
 	public Result deleteCourse(Http.Request request, Long courseId) {
 		log.debug("CourseController::deleteCourse id=" + courseId);
 		User currentUser = request.attrs().get(User.MODEL);
+		Transaction transaction = Ebean.beginTransaction();
 		try {
 			Course dbCourse = Ebean.find(Course.class).where().eq("id", courseId).findOne();
 			if (dbCourse == null) {
 				return createBadRequest("nocourse", Constants.Errors.ERROR);
 			}
+			NotesUtils.delete(dbCourse);
+			AddressUtils.delete(dbCourse);
 			dbCourse.delete(currentUser);
 			return ok();
 		} catch (Exception e) {
+			transaction.rollback();
 			return badRequest(e);
+		} finally {
+			transaction.end();
 		}
 	}
 

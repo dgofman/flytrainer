@@ -68,8 +68,8 @@ export class AdminFieldComponent {
 export abstract class AbstractTabDirective extends AppBaseDirective {
     Locales = Locales;
     icons = FTIcons;
-    formGroup: FormGroup;
     controls: ColumnType[];
+    group: FormGroup;
 
     // tslint:disable-next-line: variable-name
     protected _selectedBean: AbstractBase;
@@ -79,6 +79,13 @@ export abstract class AbstractTabDirective extends AppBaseDirective {
     }
 
     abstract doDelete(): void;
+
+    get formGroup(): FormGroup {
+        return this.group;
+    }
+    set formGroup(group: FormGroup) {
+        this.group = group;
+    }
 
     get selectedBean(): any {
         return this._selectedBean;

@@ -137,19 +137,22 @@ public class BaseController extends Controller {
 					log.warn("BaseController::fetch unknown type:" + field.getName() + "=" + node.toPrettyString());
 				}
 			}
-			if (columns != null) {
-				node = event.filter.get(field.getName() + "_show");
-				if (node == null || !node.asBoolean() || !field.isAnnotationPresent(Column.class)
-						|| columns.contains(field.getName())) {
-					continue;
-				}
-				if (!field.isAnnotationPresent(JsonView.class)) {
+			if (columns != null && field.isAnnotationPresent(Column.class)) {
+				if (event.filter.get("SHOW_ALL") != null) {
 					columns.add(field.getName());
 				} else {
-					JsonView annotation = field.getAnnotation(JsonView.class);
-					List<?> annotations = Arrays.asList(annotation.value());
-					if (!annotations.contains(Never.class) && !annotations.contains(Admin.class)) {
+					node = event.filter.get(field.getName() + "_show");
+					if (node == null || !node.asBoolean() || columns.contains(field.getName())) {
+						continue;
+					}
+					if (!field.isAnnotationPresent(JsonView.class)) {
 						columns.add(field.getName());
+					} else {
+						JsonView annotation = field.getAnnotation(JsonView.class);
+						List<?> annotations = Arrays.asList(annotation.value());
+						if (!annotations.contains(Never.class) && !annotations.contains(Admin.class)) {
+							columns.add(field.getName());
+						}
 					}
 				}
 			}

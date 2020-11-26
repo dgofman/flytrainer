@@ -1,16 +1,15 @@
 import Locales from '@locales/admin';
 import { Component, NgModule, OnInit } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
-import { CommonModel, Address } from 'src/modules/models/base.model';
+import { CommonModel, Address, Note } from 'src/modules/models/base.model';
 import { AdminService } from 'src/services/admin.service';
 import { Country, State, AddressType, ColumnType, CourseType } from 'src/modules/models/constants';
 import { CourseTabBaseDirective, CourseTabBaseModule } from '../course.component';
-import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { AdminSharedModule } from '../admin-shared.module';
 import { AppUtils } from 'src/app/utils/app-utils';
 import { EventType, EventService } from 'src/services/event.service';
-import { TableResult } from 'src/modules/models/table.result';
 
 @Component({
     selector: 'course-tab',
@@ -24,7 +23,6 @@ import { TableResult } from 'src/modules/models/table.result';
     ]
 })
 export class CourseTabComponent extends CourseTabBaseDirective implements OnInit {
-    result: TableResult<CommonModel>;
     locationControls: ColumnType[];
     isLocation: boolean;
 
@@ -37,9 +35,9 @@ export class CourseTabComponent extends CourseTabBaseDirective implements OnInit
             { field: 'startDate', header: Locales.startDate, type: 'cal', value: {showTime: true} },
             { field: 'endDate', header: Locales.endDate, type: 'cal', value: {showTime: true} },
             { field: 'cost', header: Locales.cost, type: 'currency', class: 'inlineL' },
-            { field: 'duration', header: Locales.duration, type: 'number', class: 'inlineR'},
+            { field: 'duration', header: Locales.duration, type: 'number', maxlen: 1, class: 'inlineR'},
             { field: 'credits', header: Locales.credits, type: 'input', maxlen: 100 },
-            { field: 'is_online', header: Locales.isOnline, type: 'switch'}
+            { field: 'isOnline', type: 'hide'}
         ];
         this.locationControls = [
             { field: 'id' },
@@ -64,27 +62,15 @@ export class CourseTabComponent extends CourseTabBaseDirective implements OnInit
     }
 
     ngOnInit(): void {
-       /* if (this.course && this.course.id) {
+       if (this.course && this.course.id) {
             this.loading(true);
             this.adminService.getCourse(this.course.id).subscribe(result => {
                 this.loading(false);
                 this.selectedBean = Object.assign(this.defaultBean, result);
                 Object.assign(this.course, this.selectedBean);
-                this.defineAddress(result.location && result.location.id !== null, this.formGroup.controls);
+                this.defineLocation(result.location && result.location.id !== null, this.formGroup.controls);
             }, (ex) => this.errorHandler(ex));
-        }*/
-    }
-
-    lazyLoad(event?: LazyLoadEvent) {
-        /*this.loading(true);
-        this.adminService.getCourses(this.user.id, event.first).subscribe(result => {
-            this.loading(false);
-            this.result = result;
-        }, (ex) => this.errorHandler(ex));*/
-    }
-
-    getType(type: string) {
-        return CourseType[type];
+        }
     }
 
     defineLocation(state: boolean, controls: any) {
@@ -101,7 +87,7 @@ export class CourseTabComponent extends CourseTabBaseDirective implements OnInit
             location = course.location;
         this.loading(true);
         if (location && !location.id) {
-            location.description = location.type + ' Address';
+            location.description = location.type + ' Course ' + course.type;
             location.isPrimary = 1;
         }
         if (course.id) {
@@ -132,7 +118,7 @@ export class CourseTabComponent extends CourseTabBaseDirective implements OnInit
     }
 
     get defaultBean() {
-       return { type: AppUtils.getKey(CourseType, 'Part61'), location: new Address({type: AppUtils.getKey(AddressType, 'Home'), state: this.environment.homeState, country: this.environment.homeCountry}) };
+       return { type: AppUtils.getKey(CourseType, 'Part61'), notes: new Note(), location: new Address({type: AppUtils.getKey(AddressType, 'Business'), state: this.environment.homeState, country: this.environment.homeCountry}) };
     }
 }
 

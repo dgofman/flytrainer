@@ -12,10 +12,10 @@
         <ng-template pTemplate="firstHeader">
           <button pButton icon="pi pi-plus-circle" class="circle" (click)="onAddUser()"></button>
         </ng-template>
-        <ng-template pTemplate="firstColumn" let-rowData="$implicit" *ngIf="AppUtils.isEditorAccess()">
+        <ng-template pTemplate="firstColumn" let-rowData *ngIf="AppUtils.isEditorAccess()">
           <fa-icon [icon]="icons.faPencil" (click)="onEdit(rowData)" style="cursor: pointer"></fa-icon>
         </ng-template>
-        <ng-template pTemplate="expandForm" let-rowData="$implicit">
+        <ng-template pTemplate="expandForm" let-rowData>
           <div *ngIf="!rowData.accounts " style="text-align: center;">
             <p>{{ Locales.pleaseWait }}</p>
           </div>
@@ -29,7 +29,7 @@
                   <th *ngFor="let c of accCols" [style.width.px]="c.width">{{c.header}}</th>
                 </tr>
               </ng-template>
-              <ng-template pTemplate="body" let-rowData let-columns="accCols">
+              <ng-template pTemplate="body" let-rowData>
                 <tr>
                   <td *ngFor="let col of accCols" [style.text-align]="col.align" [title]="formatColData(col, rowData, true)" [innerHTML]="formatColData(col, rowData, false)"></td>
                 </tr>
@@ -39,28 +39,28 @@
         </ng-template>
       </ft-table>
       <ft-dialog width="70" height="60">
-        <ng-template pTemplate="{{Locales.user}}" let-user="item">
+        <ng-template pTemplate="{{Locales.user}}" let-user>
           <user-tab [user]="user"></user-tab>
         </ng-template>
-        <ng-template pTemplate="{{Locales.accounts}}" let-user="item">
+        <ng-template pTemplate="{{Locales.accounts}}" let-user>
           <account-tab [user]="user"></account-tab>
         </ng-template>
-        <ng-template pTemplate="{{Locales.contacts}}" let-user="item">
+        <ng-template pTemplate="{{Locales.contacts}}" let-user>
           <contact-tab [user]="user"></contact-tab>
         </ng-template>
-        <ng-template pTemplate="{{Locales.certificates}}" let-user="item">
+        <ng-template pTemplate="{{Locales.certificates}}" let-user>
           <certificate-tab [user]="user"></certificate-tab>
         </ng-template>
-        <ng-template pTemplate="{{Locales.endorsements}}" let-user="item">
+        <ng-template pTemplate="{{Locales.endorsements}}" let-user>
           <endorsement-tab [user]="user"></endorsement-tab>
         </ng-template>
-        <ng-template pTemplate="{{Locales.activities}}" let-user="item">
+        <ng-template pTemplate="{{Locales.activities}}" let-user>
           <activity-tab [user]="user"></activity-tab>
         </ng-template>
-        <ng-template pTemplate="{{Locales.addresses}}" let-user="item">
+        <ng-template pTemplate="{{Locales.addresses}}" let-user>
           <address-tab [user]="user"></address-tab>
         </ng-template>
-        <ng-template pTemplate="{{Locales.documents}}" let-user="item">
+        <ng-template pTemplate="{{Locales.documents}}" let-user>
           <document-tab [user]="user"></document-tab>
         </ng-template>
       </ft-dialog>

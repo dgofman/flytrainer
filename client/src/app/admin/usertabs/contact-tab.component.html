@@ -8,7 +8,7 @@
             <textarea formControlName="content" pInputTextarea [rows]="4"></textarea>
         </div>
         <p class="row">
-            <p-inputSwitch (onChange)="defineAddress($event.checked, formGroup.controls)" [(ngModel)]="isAddress" [ngModelOptions]="{standalone: true}"></p-inputSwitch><span class="defineAddress">{{Locales.defineAddress}}</span>
+            <p-inputSwitch (onChange)="defineAddress($event.checked, formGroup.controls)" [(ngModel)]="isAddress" [ngModelOptions]="{standalone: true}"></p-inputSwitch><span class="switch-span">{{Locales.defineAddress}}</span>
         </p>
         <div class="row" *ngIf="isAddress">
             <div *ngFor="let control of addressControls" [class]="control.class">

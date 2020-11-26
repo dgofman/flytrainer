@@ -1,29 +1,31 @@
 package models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 
-import io.ebean.annotation.History;
+import io.ebean.Model;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
 
 @Entity
-@History
 @Table(name = "note")
-public class Note extends AbstractBase {
+public class Note extends Model {
 
-	@Length(50)
-	@JsonView(Full.class)
-	public String type; //Class name
+	@Id
+	@Column(name = "id")
+	public Long id; //id
+
+	@Length(30)
+	public String reference; //Class name
 
 	@Lob
 	@NotNull
-	@JsonView(Default.class)
 	public String content; //content
 	
 	@ManyToOne
@@ -33,8 +35,4 @@ public class Note extends AbstractBase {
 	@ManyToOne
 	@JsonIgnore
 	public Aircraft aircraft; //FK aircraft_id - Aircraft::engines
-	
-	public Long getVersion() {
-		return null;
-	}
 }

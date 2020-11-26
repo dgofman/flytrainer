@@ -14,7 +14,7 @@ import io.ebean.annotation.NotNull;
 
 @Entity
 @History
-@Table(name = "ad")
+@Table(name = "airworthiness")
 public class AD extends BaseModel {
 	
 	@NotNull

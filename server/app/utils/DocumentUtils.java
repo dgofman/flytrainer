@@ -51,7 +51,7 @@ public class DocumentUtils {
 			if (document.id == null) {
 				create(model, ref);
 			} else if (document.fileName == null) {
-				model.setDocument(null);
+				model.setJsonDocument(null);
 				model.update(currentUser);
 				Query<Document> query = Ebean.find(Document.class);
 				query.where().eq("id", document.id);
@@ -83,6 +83,6 @@ public class DocumentUtils {
 		if (document != null) {
 			Ebean.find(Document.class).where().eq("id", document.id).delete();
 		}
-		model.setDocument(null);
+		model.setJsonDocument(null);
 	}
 }

@@ -16,13 +16,11 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import io.ebean.annotation.DbComment;
 import io.ebean.annotation.Encrypted;
-import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
 import utils.Constants.DocumentType;
 
 @Entity
-@History
 @NamedQueries(value = {
 		@NamedQuery(name = Document.FIND_FILE, query = "select contentType, filePath, file where user = :user and id = :id") })
 public class Document extends DocumentModel {

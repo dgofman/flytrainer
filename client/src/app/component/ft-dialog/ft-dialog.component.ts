@@ -18,7 +18,7 @@ import { TabViewModule, TabView } from 'primeng/tabview';
           <p-tabView (onChange)="onTabChange($event.index)">
               <p-tabPanel [header]="item.getType()" *ngFor="let item of this.templates; let i = index" [selected]="i == 0">
                 <div *ngIf="activeIndex == i">
-                  <ng-container *ngTemplateOutlet="item.template; context: { item: selectedItem }"></ng-container>
+                  <ng-container *ngTemplateOutlet="item.template; context: { $implicit: selectedItem }"></ng-container>
                 </div>
               </p-tabPanel>
           </p-tabView>

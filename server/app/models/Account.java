@@ -24,7 +24,7 @@ import utils.Constants.Key;
 @NamedQueries(value = { 
 	@NamedQuery(name = Account.FIND, query = "select maxAccountId"),
 })
-public class Account extends NoteModel {
+public class Account extends NotesModel {
 	
 	public static final String FIND = "Account.find";
 

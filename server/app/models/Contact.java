@@ -21,7 +21,7 @@ import models.Address.IsAddressable;
 @Entity
 @History
 @Table(name = "contact")
-public class Contact extends NoteModel implements IsAddressable {
+public class Contact extends NotesModel implements IsAddressable {
 
 	@Length(30)
 	@JsonView(Short.class)

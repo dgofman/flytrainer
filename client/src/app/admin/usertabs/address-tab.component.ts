@@ -40,17 +40,17 @@ export class AddressTabComponent extends UserTabBaseDirective {
 
     lazyLoad() {
         this.loading(true);
-        this.adminService.getAddress(this.user.id).subscribe(result => {
+        this.subs.add(this.adminService.getAddress(this.user.id).subscribe(result => {
             this.loading(false);
             this.addresses = result;
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     onSubmit() {
         this.loading(true);
         const address = new Address(this.formGroup.value as any);
         if (address.id) {
-            this.adminService.updateAddress(this.user.id, address).subscribe(result => {
+            this.subs.add(this.adminService.updateAddress(this.user.id, address).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
                 this.formGroup.patchValue(result);
@@ -64,24 +64,24 @@ export class AddressTabComponent extends UserTabBaseDirective {
                     });
                 }
                 this.success(Locales.recordUpdated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         } else {
             if (address.document) {
                 address.document.type = AppUtils.getKey(DocumentType, 'AddressProof');
             }
-            this.adminService.addAddress(this.user.id, address).subscribe(result => {
+            this.subs.add(this.adminService.addAddress(this.user.id, address).subscribe(result => {
                 this.loading(false);
                 this.addresses.push(result);
                 this.selectedBean = result;
                 this.formGroup.patchValue(result);
                 this.success(Locales.recordCreated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         }
     }
 
     doDelete() {
         this.loading(true);
-        this.adminService.deleteAddress(this.user.id, this.selectedBean.id).subscribe(_ => {
+        this.subs.add(this.adminService.deleteAddress(this.user.id, this.selectedBean.id).subscribe(_ => {
             this.loading(false);
             this.addresses.forEach((item, idx) => {
                 if (item.id === this.selectedBean.id) {
@@ -91,7 +91,7 @@ export class AddressTabComponent extends UserTabBaseDirective {
                     return false;
                 }
             });
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     resetBean() {

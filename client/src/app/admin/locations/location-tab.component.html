@@ -1,0 +1,30 @@
+<form [formGroup]="formGroup" #myForm="ngForm" class="p-grid">
+    <div class="ui-fluid p-md-7">
+        <div *ngFor="let control of controls" [class]="control.class">
+            <admin-field [parentGroup]="formGroup" [c]="control"></admin-field>
+        </div>
+        <p class="row">
+            <p-inputSwitch (onChange)="defineLocation($event.checked, formGroup.controls)" [(ngModel)]="isLocation" [ngModelOptions]="{standalone: true}"></p-inputSwitch><b class="switch-span">{{Locales.defineLocation}}</b>
+            <span class="right">
+                <span><p-inputSwitch formControlName="isOnline"></p-inputSwitch><b class="switch-span">{{Locales.isOnlineProgram}}</b></span>
+            </span>
+        </p>
+        <div class="row" *ngIf="isLocation">
+            <div *ngFor="let control of locationControls" [class]="control.class">
+                <admin-field [parentGroup]="formGroup.controls.location" [c]="control"></admin-field>
+            </div>
+        </div>
+    </div>
+    <div class="ui-fluid p-md-5">
+        <div class="row" formGroupName="notes">
+            <label>{{Locales.notes}}</label>
+            <textarea formControlName="content" pInputTextarea [rows]="18"></textarea>
+        </div>
+    </div>
+</form>
+<div class="row footer left">
+    <button class="ui-button" (click)="onDelete()" [disabled]="location?.id">{{Locales.delete}}</button>
+    <div class="right">
+        <button pButton (click)="onSubmit()" [label]="Locales.save" [disabled]="!myForm.form.valid"></button>
+    </div>
+</div>

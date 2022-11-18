@@ -12,6 +12,7 @@ import com.google.common.base.Joiner;
 import io.ebean.DuplicateKeyException;
 import io.ebean.Ebean;
 import models.AbstractBase.Short;
+import models.Address;
 import models.DDoS;
 import models.Note;
 import models.User;
@@ -20,6 +21,7 @@ import play.mvc.Result;
 import utils.AppConfig;
 import utils.AuthenticationUtils;
 import utils.Constants;
+import utils.Constants.AddressType;
 import utils.Constants.Errors;
 import utils.Constants.Key;
 import utils.MailServer;
@@ -32,6 +34,11 @@ public class HomeController extends BaseController {
 	private static final boolean FORGOT_PASSWORD = AppConfig.get(Key.FORGOT_PASSWORD).asBoolean();
 	private static final String ACCOUNT_ACTIVATION = AppConfig.join(Key.ACCOUNT_ACTIVATION, "<br>");
 	private static final String RESET_PASSWORD = AppConfig.join(Key.RESET_PASSWORD, "<br>");
+	
+	private static final String COMPANY_NAME = AppConfig.get(Key.COMPANY_NAME).asText();
+	private static final String COMPANY_STATE = AppConfig.get(Key.COMPANY_STATE).asText();
+	private static final String COMPANY_COUNTRY = AppConfig.get(Key.COMPANY_COUNTRY).asText();
+	private static final String COMPANY_PHONE = AppConfig.get(Key.COMPANY_PHONE).asText();
 
 	private static final String USER_ATTR = "u";
 	private static final String VERSION_ATTR = "v";
@@ -110,6 +117,19 @@ public class HomeController extends BaseController {
 				} else {
 					return badRequest(Constants.Errors.ERROR.toString());
 				}
+			}
+			// Create default address
+			if (count == 0) { // allow to register at least one user
+				Address address = new Address();
+				address.isFavorite = 1;
+				address.street = "";
+				address.city = "";
+				address.state = COMPANY_STATE;
+				address.country = COMPANY_COUNTRY;
+				address.phone = COMPANY_PHONE;
+				address.description = COMPANY_NAME;
+				address.type = AddressType.Business;
+				address.save();
 			}
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MINUTE, AppConfig.get(Key.EXPIRE_TOKEN).asInt());

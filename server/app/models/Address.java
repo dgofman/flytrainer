@@ -12,15 +12,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.ebean.annotation.DbComment;
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
-import io.ebean.annotation.NotNull;
 import utils.Constants.AddressType;
 
 @Entity
 @History
 @Table(name = "address")
 public class Address extends DocumentModel {
+	
+	public Address link;
 
-	@NotNull
 	public AddressType type; //type
 	
 	@Length(50)
@@ -38,7 +38,6 @@ public class Address extends DocumentModel {
 	@Length(120)
 	public String street; //street
 
-	@NotNull
 	@Length(50)
 	public String city; //city
 
@@ -50,7 +49,6 @@ public class Address extends DocumentModel {
 	@DbComment("ex: state, region, province, prefecture, etc.")
 	public String state; //district
 
-	@NotNull
 	@Length(2)
 	public String country; //country
 
@@ -62,9 +60,10 @@ public class Address extends DocumentModel {
 	@DbComment("ex: (+NN) NNN NNN NNN")
 	public String fax; //fax
 	
-	@NotNull
 	public byte isPrimary; //is_primary
-
+	
+	public byte isFavorite; //is_favorite
+	
 	@ManyToOne
 	@JsonIgnore
 	public User user; // FK user_id - User::addresses

@@ -1,0 +1,52 @@
+<form [formGroup]="formGroup" #myForm="ngForm" class="p-grid">
+    <div class="ui-fluid p-md-7">
+        <div *ngFor="let control of controls" [class]="control.class">
+            <admin-field [parentGroup]="formGroup" [c]="control"></admin-field>
+        </div>
+        <div class="row" formGroupName="notes">
+            <label>{{Locales.notes}}</label>
+            <textarea formControlName="content" pInputTextarea [rows]="8"></textarea>
+        </div>
+    </div>
+    <div class="ui-fluid p-md-5">
+        <p-table [value]="result?.data" [lazy]="true" (onLazyLoad)="lazyLoad($event)"
+                [paginator]="true" [rows]="25" [totalRecords]="result?.total" [scrollable]="true">
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                <col/>
+                <col [style.width.rem]="5" />
+                <col [style.width.rem]="3" />
+                <col [style.width.rem]="3" />
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>{{Locales.type}}</th>
+                    <th>{{Locales.firstname}}</th>
+                    <th>{{Locales.lastname}}</th>
+                    <th align="center"><i class="pi pi-check"></i></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data>
+                <tr>
+                    <td class="ellipsis" [title]="data.type">{{data.type}}</td>
+                    <td>{{data.accountId}}</td>
+                    <td [innerHTML]="formatData(data.isActive, 'bool')"></td>
+                    <td>
+                        <p-tableRadioButton [value]="data"></p-tableRadioButton>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="4" style="text-align: center;">{{Locales.noData}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</form>
+<div class="row footer left">
+    <div class="right">
+        <button pButton (click)="onSubmit()" [label]="Locales.save" [disabled]="!myForm.form.valid"></button>
+    </div>
+</div>

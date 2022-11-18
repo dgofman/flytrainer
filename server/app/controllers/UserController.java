@@ -38,7 +38,7 @@ public class UserController extends BaseController {
 			JsonNode body = request.body().asJson();
 			User user = Json.fromJson(body, User.class);
 			NotesUtils.create(user, user);
-			DocumentUtils.create(user, user);
+			DocumentUtils.create(user, user, currentUser);
 			AddressUtils.create(user, user, currentUser);
 			user.save(currentUser);
 			transaction.commit();

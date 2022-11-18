@@ -69,21 +69,20 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
         ];
         const fields = {};
         this.addressControls.forEach(c => {
-            fields[c.field] = [null, c.validators];
+            fields[c.field] = [{value: null, disabled: true}, c.validators];
         });
         this.initFormGroup({address: this.formBuilder.group(fields)});
-        this.formGroup.controls.address.disable();
     }
 
     ngOnInit(): void {
         if (this.user && this.user.id) {
             this.loading(true);
-            this.adminService.getUser(this.user.id).subscribe(result => {
+            this.subs.add(this.adminService.getUser(this.user.id).subscribe(result => {
                 this.loading(false);
                 this.selectedBean = Object.assign(this.defaultBean, result);
                 Object.assign(this.user, this.selectedBean);
                 this.defineAddress(result.address && result.address.id !== null, this.formGroup.controls);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         }
     }
 
@@ -113,26 +112,26 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
             document.type = AppUtils.getKey(DocumentType, 'PilotPicture');
         }
         if (user.id) {
-            this.adminService.updateUser(this.user.id, user).subscribe(result => {
+            this.subs.add(this.adminService.updateUser(this.user.id, user).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
                 Object.assign(this.user, result);
                 this.formGroup.patchValue(result);
                 this.success(Locales.recordUpdated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         } else {
-            this.adminService.addUser(user).subscribe(result => {
+            this.subs.add(this.adminService.addUser(user).subscribe(result => {
                 this.loading(false);
                 this.selectedBean = result;
                 this.eventService.emit(EventType.Refresh, result);
                 this.success(Locales.recordCreated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         }
     }
 
     showPassword() {
         this.loading(true);
-        this.adminService.getPassword(this.user.id, this.user.username).subscribe(pwd => {
+        this.subs.add(this.adminService.getPassword(this.user.id, this.user.username).subscribe(pwd => {
             this.loading(false);
             const dlg = this.confirmationService.confirm({
                 key: 'confDialog',
@@ -142,7 +141,7 @@ export class UserTabComponent extends UserTabBaseDirective implements OnInit {
                     dlg.close();
                 }
             });
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     doDelete(): void {

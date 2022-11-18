@@ -32,6 +32,7 @@ export default {
     cost: 'Cost',
     duration: 'Duration',
     credits: 'Credits',
+    searchAddress: 'Search Address',
     englishProficient: 'AC60-28',
     englishProficientTitle: 'English proficiency AC60-28',
     isSchoolEmployee: 'School Employee',

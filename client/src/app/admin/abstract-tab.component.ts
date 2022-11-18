@@ -4,11 +4,12 @@ import { Document } from 'src/modules/models/base.model';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { AppBaseDirective } from 'src/app/app.base.component';
-import { Input, Component, NgModule, Directive } from '@angular/core';
-import { ColumnType } from 'src/modules/models/constants';
+import { Input, Component, NgModule, Directive, OnDestroy } from '@angular/core';
+import { ColumnType, AddressType } from 'src/modules/models/constants';
 import { AdminSharedModule } from './admin-shared.module';
 import { ConfirmationService } from 'primeng/api';
 import { AbstractBase } from 'src/modules/models/base.model';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'admin-field',
@@ -29,6 +30,9 @@ import { AbstractBase } from 'src/modules/models/base.model';
         <div *ngIf="c.field=='other' && parentGroup.controls.type.value == 'Other'">
             <label>{{Locales.other}}</label>
             <input formControlName="other" pInputText [attr.maxlength]="c.maxlen || 30"/>
+        </div>
+        <div *ngIf="c.field=='type' && parentGroup.controls.type.value == 'Favorite'" style="margin: 10px 0">
+            <p-autoComplete ftAutoComplete [data]="addressResults" [placeholder]="Locales.searchAddress"></p-autoComplete>
         </div>
         <div *ngIf="c.type=='radio'" style="margin: 5px 0">
             <p-radioButton [name]="c.field" [label]="c.value[0]" [value]="c.value[2]" [formControlName]="c.field"></p-radioButton>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -54,6 +58,8 @@ export class AdminFieldComponent {
     @Input() c: ColumnType;
     @Input() templates: any = {};
 
+    addressResults: any[];
+
     // convenience getter for easy access to form fields
     get f() {
         return this.parentGroup.controls;
@@ -65,11 +71,13 @@ export class AdminFieldComponent {
 }
 
 @Directive()
-export abstract class AbstractTabDirective extends AppBaseDirective {
+export abstract class AbstractTabDirective extends AppBaseDirective implements OnDestroy {
     Locales = Locales;
     icons = FTIcons;
     controls: ColumnType[];
     group: FormGroup;
+
+    private addressSubscription: Subscription;
 
     // tslint:disable-next-line: variable-name
     protected _selectedBean: AbstractBase;
@@ -97,6 +105,12 @@ export abstract class AbstractTabDirective extends AppBaseDirective {
         }
     }
 
+    ngOnDestroy(): void {
+        if (this.addressSubscription) {
+            this.addressSubscription.unsubscribe();
+        }
+    }
+
     updateSelectedBean(bean: any) {
         this._selectedBean = bean;
         this.formGroup.reset();
@@ -120,6 +134,28 @@ export abstract class AbstractTabDirective extends AppBaseDirective {
     initFormGroup(fields?: any) {
         const controls = this.initControls(this.controls, fields);
         this.formGroup = new FormGroup(controls);
+        /*if (addressKey) {
+            let oldType: string;
+            const favorite = this.AppUtils.getKey(AddressType, 'Favorite'),
+                address = this.formGroup.controls[addressKey];
+            if (this.addressSubscription) {
+                this.addressSubscription.unsubscribe();
+            }
+            this.addressSubscription = address.valueChanges.subscribe(val => {
+                if (oldType !== val.type) {
+                    oldType = val.type;
+                    console.log(addressKey, oldType, val.type);
+                    if (val.type === favorite) {
+                        address.disable();
+                        address.get('type').enable({ onlySelf: true });
+                        this.formGroup.get('type').setErrors({incorrect: true});
+                    } else {
+                        address.enable();
+                        this.formGroup.get('type').setErrors(null);
+                    }
+                }
+            });
+        }*/
         this.onReset();
     }
 

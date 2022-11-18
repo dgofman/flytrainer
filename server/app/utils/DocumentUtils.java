@@ -31,7 +31,7 @@ public class DocumentUtils {
 		return false;
 	}
 
-	public static <T> void create(DocumentModel model, T ref) throws IOException {
+	public static <T> void create(DocumentModel model, T ref, User currentUser) throws IOException {
 		Document document = model.getDocument();
 		if (document != null && document.filePath != null && saveFile(document)) {
 			if (ref instanceof User) {
@@ -40,7 +40,7 @@ public class DocumentUtils {
 				document.aircraft = (Aircraft) ref;
 			}
 			document.reference = model.getClass().getSimpleName();
-			document.save();
+			document.save(currentUser);
 		}
 	}
 
@@ -49,7 +49,7 @@ public class DocumentUtils {
 		File file;
 		if (document != null) {
 			if (document.id == null) {
-				create(model, ref);
+				create(model, ref, currentUser);
 			} else if (document.fileName == null) {
 				model.setJsonDocument(null);
 				model.update(currentUser);
@@ -65,7 +65,7 @@ public class DocumentUtils {
 				query.where().eq("id", document.id);
 				Document dbDocument = query.findOne();
 				if (dbDocument == null) {
-					create(model, ref);
+					create(model, ref, currentUser);
 				} else if (saveFile(document)) {
 					if (dbDocument.filePath != null && (file = new File(dbDocument.filePath)).exists()) {
 						file.delete();

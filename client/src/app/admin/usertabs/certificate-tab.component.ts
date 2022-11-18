@@ -45,10 +45,10 @@ export class CertificateTabComponent extends UserTabBaseDirective {
 
     lazyLoad() {
         this.loading(true);
-        this.adminService.getCertificate(this.user.id).subscribe(result => {
+        this.subs.add(this.adminService.getCertificate(this.user.id).subscribe(result => {
             this.loading(false);
             this.certificates = result;
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     onSubmit() {
@@ -58,26 +58,26 @@ export class CertificateTabComponent extends UserTabBaseDirective {
             certificate.document.type = AppUtils.getKey(DocumentType, 'PilotCertificate');
         }
         if (certificate.id) {
-            this.adminService.updateCertificate(this.user.id, certificate).subscribe(result => {
+            this.subs.add(this.adminService.updateCertificate(this.user.id, certificate).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
                 this.formGroup.patchValue(result);
                 this.success(Locales.recordUpdated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         } else {
-            this.adminService.addCertificate(this.user.id, certificate).subscribe(result => {
+            this.subs.add(this.adminService.addCertificate(this.user.id, certificate).subscribe(result => {
                 this.loading(false);
                 this.certificates.push(result);
                 this.selectedBean = result;
                 this.formGroup.patchValue(result);
                 this.success(Locales.recordCreated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         }
     }
 
     doDelete() {
         this.loading(true);
-        this.adminService.deleteCertificate(this.user.id, this.selectedBean.id).subscribe(_ => {
+        this.subs.add(this.adminService.deleteCertificate(this.user.id, this.selectedBean.id).subscribe(_ => {
             this.loading(false);
             this.certificates.forEach((item, idx) => {
                 if (item.id === this.selectedBean.id) {
@@ -87,7 +87,7 @@ export class CertificateTabComponent extends UserTabBaseDirective {
                     return false;
                 }
             });
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     resetBean() {

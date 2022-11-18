@@ -4,7 +4,10 @@
             <admin-field [parentGroup]="formGroup" [c]="control"></admin-field>
         </div>
         <p class="row">
-            <p-inputSwitch (onChange)="defineLocation($event.checked, formGroup.controls)" [(ngModel)]="isLocation" [ngModelOptions]="{standalone: true}"></p-inputSwitch><span class="switch-span">{{Locales.defineLocation}}</span>
+            <p-inputSwitch (onChange)="defineLocation($event.checked, formGroup.controls)" [(ngModel)]="isLocation" [ngModelOptions]="{standalone: true}"></p-inputSwitch><b class="switch-span">{{Locales.defineLocation}}</b>
+            <span class="right">
+                <span><p-inputSwitch formControlName="isOnline"></p-inputSwitch><b class="switch-span">{{Locales.isOnlineProgram}}</b></span>
+            </span>
         </p>
         <div class="row" *ngIf="isLocation">
             <div *ngFor="let control of locationControls" [class]="control.class">
@@ -17,9 +20,6 @@
             <label>{{Locales.notes}}</label>
             <textarea formControlName="content" pInputTextarea [rows]="18"></textarea>
         </div>
-        <p class="row">
-            <p-inputSwitch formControlName="isOnline"></p-inputSwitch><span class="switch-span">{{Locales.isOnlineProgram}}</span>
-        </p>
     </div>
 </form>
 <div class="row footer left">

@@ -63,7 +63,7 @@ public class CertificateController extends BaseController {
 			JsonNode body = request.body().asJson();
 			Certificate certificate = Json.fromJson(body, Certificate.class);
 			NotesUtils.create(certificate, user);
-			DocumentUtils.create(certificate, user);
+			DocumentUtils.create(certificate, user, currentUser);
 			certificate.user = user;
 			certificate.save(currentUser);
 			transaction.commit();

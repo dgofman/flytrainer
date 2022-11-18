@@ -54,7 +54,7 @@ public class AddressController extends BaseController {
 				Ebean.find(Address.class).asUpdate().set("isPrimary", 0) .where().eq("user", user).update();
 			}
 			NotesUtils.create(address, user);
-			DocumentUtils.create(address, user);
+			DocumentUtils.create(address, user, currentUser);
 			address.user = user;
 			address.save(currentUser);
 			transaction.commit();

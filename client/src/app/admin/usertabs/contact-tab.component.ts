@@ -53,7 +53,7 @@ export class ContactTabComponent extends UserTabBaseDirective {
         ];
         const fields = {};
         this.addressControls.forEach(c => {
-            fields[c.field] = [null, c.validators];
+            fields[c.field] = [{value: null, disabled: true}, c.validators];
         });
         this.initFormGroup({address: this.formBuilder.group(fields)});
     }
@@ -76,10 +76,10 @@ export class ContactTabComponent extends UserTabBaseDirective {
 
     lazyLoad(event?: LazyLoadEvent) {
         this.loading(true);
-        this.adminService.getContacts(this.user.id, event.first).subscribe(result => {
+        this.subs.add(this.adminService.getContacts(this.user.id, event.first).subscribe(result => {
             this.loading(false);
             this.result = result;
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     onSubmit() {
@@ -91,26 +91,26 @@ export class ContactTabComponent extends UserTabBaseDirective {
             address.isPrimary = 0;
         }
         if (contact.id) {
-            this.adminService.updateContact(this.user.id, contact).subscribe(result => {
+            this.subs.add(this.adminService.updateContact(this.user.id, contact).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
                 this.formGroup.patchValue(result);
                 this.success(Locales.recordUpdated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         } else {
-            this.adminService.addContact(this.user.id, contact).subscribe(result => {
+            this.subs.add(this.adminService.addContact(this.user.id, contact).subscribe(result => {
                 this.loading(false);
                 this.result.data.push(result);
                 this.formGroup.patchValue(result);
                 this.selectedBean = result;
                 this.success(Locales.recordCreated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         }
     }
 
     doDelete(): void {
         this.loading(true);
-        this.adminService.deleteContact(this.user.id, this.selectedBean.id).subscribe(_  => {
+        this.subs.add(this.adminService.deleteContact(this.user.id, this.selectedBean.id).subscribe(_  => {
             this.loading(false);
             this.result.data.forEach((item, idx) => {
                 if (this.selectedBean && item.id === this.selectedBean.id) {
@@ -120,7 +120,7 @@ export class ContactTabComponent extends UserTabBaseDirective {
                     return false;
                 }
             });
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     onReset() {

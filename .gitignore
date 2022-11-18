@@ -8,3 +8,4 @@ target
 /electorn-release
 /server/sbt-global-pluginstub
 /tmp_files
+client/.angular/cache

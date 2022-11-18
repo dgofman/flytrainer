@@ -343,11 +343,13 @@ public class Constants {
 	
 	public static enum CourseType {
 		Other(0),
-		Part61(1),
-		Part141(2),
-		Part147(3),
-		FaaSafety(4),
-		TSA(5);
+		CFR(1),
+		WINGS(2),
+		WXBRIEF(3),
+		NTSB(4),
+		AD(5),
+		TSA(6),
+		General(7);
 
 		private final int type;
 
@@ -653,6 +655,10 @@ public class Constants {
 		SERVER_PORT("server_port"), 
 		CLIENT_PORT("client_port"), // client/src/environments/environment.json
 		CLIENT_ID("clientId"), // client/src/environments/environment.json
+		COMPANY_NAME("company"), // client/src/environments/environment.json
+		COMPANY_STATE("homeState"), // client/src/environments/environment.json
+		COMPANY_COUNTRY("homeCountry"), // client/src/environments/environment.json
+		COMPANY_PHONE("phone"), // client/src/environments/environment.json
 		CREATE_ACCOUNT("includeCreateAccount"), // client/src/environments/environment.json
 		FORGOT_PASSWORD("includeForgotPassword"), // client/src/environments/environment.json
 		SECRET_KEY("secretKey"), EXPIRE_TOKEN("sessionExpireTimeInMinutes"), 

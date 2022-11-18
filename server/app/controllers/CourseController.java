@@ -123,7 +123,7 @@ public class CourseController extends BaseController {
 			JsonNode body = request.body().asJson();
 			UserCourse course = Json.fromJson(body, UserCourse.class);
 			NotesUtils.create(course, user);
-			DocumentUtils.create(course, user);
+			DocumentUtils.create(course, user, currentUser);
 			course.course = new Course(courseId);
 			course.user = user;
 			course.save(currentUser);
@@ -220,6 +220,7 @@ public class CourseController extends BaseController {
 			}
 			NotesUtils.delete(dbCourse);
 			DocumentUtils.delete(dbCourse);
+			Ebean.createQuery(UserCourse.class).where().eq("course", dbCourse).delete();
 			dbCourse.delete(currentUser);
 			transaction.commit();
 			return ok();

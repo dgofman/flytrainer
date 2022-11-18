@@ -57,10 +57,10 @@ export class DocumentTabComponent extends UserTabBaseDirective {
         super.updateSelectedBean(bean);
         if (bean != null) {
             this.loading(true);
-            this.adminService.getDocument(this.user.id, bean.id).subscribe(document => {
+            this.subs.add(this.adminService.getDocument(this.user.id, bean.id).subscribe(document => {
                 this.loading(false);
                 this.formGroup.patchValue(document);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         } else {
             this.onReset();
         }
@@ -72,23 +72,23 @@ export class DocumentTabComponent extends UserTabBaseDirective {
 
     lazyLoad(event?: LazyLoadEvent) {
         this.loading(true);
-        this.adminService.getDocuments(this.user.id, event.first).subscribe(result => {
+        this.subs.add(this.adminService.getDocuments(this.user.id, event.first).subscribe(result => {
             this.loading(false);
             this.result = result;
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     onSubmit() {
         const document = new Document(this.formGroup.value as any);
         this.loading(true);
-        this.adminService.saveDocument(this.user.id, document).subscribe(result => {
+        this.subs.add(this.adminService.saveDocument(this.user.id, document).subscribe(result => {
             this.loading(false);
             if (this.selectedBean) {
                 Object.assign(this.selectedBean, result);
             }
             this.formGroup.patchValue(result);
             this.success(document.id ? Locales.recordUpdated : Locales.recordCreated);
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     doDelete(): void {
@@ -96,7 +96,7 @@ export class DocumentTabComponent extends UserTabBaseDirective {
         if (this.children[this.selectedBean.id] && this.selectedBean.expanded) {
             this.onToggle(this.selectedBean);
         }
-        this.adminService.deleteDocument(this.user.id, this.selectedBean.id).subscribe(_  => {
+        this.subs.add(this.adminService.deleteDocument(this.user.id, this.selectedBean.id).subscribe(_  => {
             this.loading(false);
             this.result.data.forEach((item, idx) => {
                 if (this.selectedBean && item.id === this.selectedBean.id) {
@@ -126,7 +126,7 @@ export class DocumentTabComponent extends UserTabBaseDirective {
                     return false;
                 }
             });
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     onNextPageUpload(event: any, error: boolean) {
@@ -152,7 +152,7 @@ export class DocumentTabComponent extends UserTabBaseDirective {
 
     saveDocument(doc: Document, isNew: boolean) {
         this.loading(true);
-        this.adminService.saveDocument(this.user.id, doc).subscribe(result => {
+        this.subs.add(this.adminService.saveDocument(this.user.id, doc).subscribe(result => {
             this.loading(false);
             if (isNew) {
                 this.result.data.push(result);
@@ -169,7 +169,7 @@ export class DocumentTabComponent extends UserTabBaseDirective {
                     this.children[this.selectedBean.id].push(result);
                 }
             }
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     onToggle(doc: any) {
@@ -186,11 +186,11 @@ export class DocumentTabComponent extends UserTabBaseDirective {
         }
         if (!this.children[doc.id]) {
             this.loading(true);
-            this.adminService.lazyDocuments(this.user.id, doc.id).subscribe(result => {
+            this.subs.add(this.adminService.lazyDocuments(this.user.id, doc.id).subscribe(result => {
                 this.loading(false);
                 this.children[doc.id] = result;
                 this.result.data.splice(rowIndex + 1, 0, ...result);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         } else {
             if (doc.expanded) {
                 this.result.data.splice(rowIndex + 1, 0, ...this.children[doc.id]);

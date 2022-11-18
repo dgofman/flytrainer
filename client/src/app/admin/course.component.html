@@ -21,10 +21,11 @@
                     <course-tab [course]="course"></course-tab>
                 </ng-template>
                 <ng-template pTemplate="{{Locales.participants}}" let-course>
-                    <course-tab [course]="course"></course-tab>
+                    <participant-tab [course]="course"></participant-tab>
                 </ng-template>
             </ft-dialog>
         </div>
     </div>
     <app-footer></app-footer>
+    <p-confirmDialog key="confDialog" appendTo="body"></p-confirmDialog>
 </div>

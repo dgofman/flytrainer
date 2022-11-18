@@ -1,8 +1,9 @@
-import { NgModule, Directive, HostListener, Input, Optional, AfterViewInit } from '@angular/core';
+import { NgModule, Directive, HostListener, Input, Optional, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormGroupDirective, NgControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AutoComplete } from 'primeng/autocomplete';
 import Locales from '@locales/common';
+import { Subscription } from 'rxjs';
 
 @Directive({
     selector: '[ftAutoComplete]',
@@ -10,7 +11,7 @@ import Locales from '@locales/common';
         class: 'table-dropdown'
     }
 })
-export class FTAutoCompleteDirective implements AfterViewInit {
+export class FTAutoCompleteDirective implements AfterViewInit, OnDestroy {
 
     @Input() dataField: string;
     @Input() field: string;
@@ -20,6 +21,7 @@ export class FTAutoCompleteDirective implements AfterViewInit {
     private displayValue: string;
     private selectedItem: any;
     private suggests: Array<any>;
+    private formGroupSubscription: Subscription;
 
     constructor(private ac: AutoComplete, @Optional() private control: NgControl, @Optional() private formGroup: FormGroupDirective) {
         ac.emptyMessage = Locales.noData;
@@ -42,7 +44,7 @@ export class FTAutoCompleteDirective implements AfterViewInit {
         } else {
             this.suggests = [];
             Object.keys(data || []).forEach(key => {
-                const item = {label: data[key]};
+                const item = { label: data[key] };
                 item[this.dataField] = key;
                 this.suggests.push(item);
             });
@@ -50,7 +52,7 @@ export class FTAutoCompleteDirective implements AfterViewInit {
         }
 
         this.ac.field = this.field;
-        this.formGroup.valueChanges.subscribe(val => {
+        this.formGroupSubscription = this.formGroup.valueChanges.subscribe(val => {
             if (this.control) {
                 this.valueChanges(val[this.control.name]);
             }
@@ -65,6 +67,12 @@ export class FTAutoCompleteDirective implements AfterViewInit {
 
     get data() {
         return this.items;
+    }
+
+    ngOnDestroy() {
+        if (this.formGroupSubscription) {
+            this.formGroupSubscription.unsubscribe();
+        }
     }
 
     valueChanges(data: any) {

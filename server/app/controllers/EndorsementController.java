@@ -46,7 +46,7 @@ public class EndorsementController extends BaseController {
 			JsonNode body = request.body().asJson();
 			Endorsement endorsement = Json.fromJson(body, Endorsement.class);
 			NotesUtils.create(endorsement, user);
-			DocumentUtils.create(endorsement, user);
+			DocumentUtils.create(endorsement, user, currentUser);
 			endorsement.user = user;
 			endorsement.save(currentUser);
 			transaction.commit();

@@ -1,5 +1,6 @@
 package models;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -8,10 +9,14 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.ebean.annotation.DbJson;
 import io.ebean.annotation.History;
 import io.ebean.annotation.Length;
 import io.ebean.annotation.NotNull;
+import models.Address.IsAddressable;
 import utils.Constants.AircraftCategory;
 import utils.Constants.AircraftCategoryClass;
 import utils.Constants.AircraftSpecification;
@@ -19,7 +24,7 @@ import utils.Constants.AircraftSpecification;
 @Entity
 @History
 @Table(name = "aircraft")
-public class Aircraft extends BaseModel {
+public class Aircraft extends BaseModel implements IsAddressable {
 
 	@NotNull
 	public AircraftCategoryClass type = AircraftCategoryClass.SingleEngineLand; //type
@@ -54,16 +59,23 @@ public class Aircraft extends BaseModel {
 	public Date regExpDate; //reg_exp_date
 	
 	public Integer seatsNo; //seats_no
+	
+	@ManyToOne
+	public Address location; //location_id
 
 	@ManyToOne
 	public User onwer; //onwer_id
-
-	@ManyToOne
-	public Address location; //location_id
 	
 	@ManyToOne
 	public Document registration; //registration_id
 	
 	@ManyToOne
 	public Document airworthiness; //airworthiness_id
+	
+	public Address getAddress() {
+		return this.location;
+	}
+	public void setAddress(JsonNode body) throws IOException {
+		this.location = body != null ? new ObjectMapper().readerFor(Address.class).readValue(body) : null;
+	}
 }

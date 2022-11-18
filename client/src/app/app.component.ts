@@ -138,24 +138,23 @@ export class AppToastComponent {
     </div>
   `,
   styles: [`
-    .arrow-menu {
-          cursor: pointer;
-          position: absolute;
-          top: 15px;
-          right: -15px;
-          font-size: 25px;
-          z-index: 1;
+      .arrow-menu {
+        cursor: pointer;
+        position: absolute;
+        top: 15px;
+        right: -15px;
+        font-size: 25px;
+        z-index: 1;
+      }
+      .arrow-menu:hover {
+        color: #d8dae2;
+      }
 
-          &:hover {
-              color: #d8dae2;
-          }
-
-          &>i {
-              -moz-transition: all 0.3s;
-              -o-transition: all 0.3s;
-              -webkit-transition: all 0.3s;
-              transition: all 0.3s;
-          }
+      .arrow-menu>i {
+        -moz-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        -webkit-transition: all 0.3s;
+        transition: all 0.3s;
       }
 
       .arrow-menu.open>i {
@@ -166,7 +165,7 @@ export class AppToastComponent {
           transform: rotate(-180deg);
       }
     `]
-  })
+})
 export class AppHeaderComponent {
   private static toggle = true;
   environment = environment;

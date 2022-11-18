@@ -75,6 +75,14 @@ export class AdminService {
         return this.http.delete<void>(`/address/${userId}/${addressId}`);
     }
 
+    public getLocations(model: FTTableEvent): Observable<TableResult<CommonModel>> {
+        return this.http.put<TableResult<CommonModel>>(`/location`, model);
+    }
+
+    public deleteLocation(locationId: number): Observable<void> {
+        return this.http.delete<void>(`/location/${locationId}`);
+    }
+
     // Certificate
     public addCertificate(userId: number, model: CommonModel): Observable<CommonModel> {
         return this.http.post<CommonModel>(`/certificate/${userId}`, model);

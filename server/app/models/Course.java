@@ -63,8 +63,7 @@ public class Course extends NotesModel implements IsAddressable {
 	@Length(100)
 	@Column
 	public String credits; //credits
-
-	@Column
+	
 	@ManyToOne
 	public Address location; //location_id
 	

@@ -79,10 +79,10 @@ export class TierRateComponent extends AppBaseDirective {
     switch (event.message) {
       case EventType.Load:
         this.loading(true);
-        this.adminService.getTiers(event.data).subscribe(result => {
+        this.subs.add(this.adminService.getTiers(event.data).subscribe(result => {
           this.loading(false);
           this.result = result;
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
         break;
     }
   }

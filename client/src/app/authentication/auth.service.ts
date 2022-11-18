@@ -1,7 +1,7 @@
 import { environment } from '@client/environments/environment';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpInterceptor, HttpEvent, HttpHandler, HttpRequest, HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { CanActivate, Router } from '@angular/router';
 import { Session } from 'src/modules/models/constants';
@@ -9,14 +9,16 @@ import { AppUtils } from '../utils/app-utils';
 import { RouterOutlet } from 'src/modules/models/constants';
 
 @Injectable()
-export class AuthService implements HttpInterceptor, CanActivate {
+export class AuthService implements HttpInterceptor, CanActivate, OnDestroy {
     private static AUTH_TOKEN: string;
     private static CORRELATION_ID: number;
+    private sub: Subscription;
 
     constructor(private http: HttpClient, private router: Router) {
         const session = AppUtils.getSession();
         AuthService.AUTH_TOKEN = session.token;
         AuthService.CORRELATION_ID = session.correlationId;
+        this.sub = new Subscription();
     }
 
     static get token(): string {
@@ -60,13 +62,17 @@ export class AuthService implements HttpInterceptor, CanActivate {
     }
 
     logout() {
-        this.http.post('/logout', { cid: environment.clientId, correlationId: AuthService.CORRELATION_ID, token: AuthService.AUTH_TOKEN }).subscribe(_ => {
+        this.sub.add(this.http.post('/logout', { cid: environment.clientId, correlationId: AuthService.CORRELATION_ID, token: AuthService.AUTH_TOKEN }).subscribe(_ => {
             this.reset();
             this.router.navigate(['login']);
         }, (ex) => {
             console.error(ex);
             this.router.navigate(['login']);
-        });
+        }));
+    }
+
+    ngOnDestroy(): void {
+        this.sub.unsubscribe();
     }
 
     canActivate(): boolean {

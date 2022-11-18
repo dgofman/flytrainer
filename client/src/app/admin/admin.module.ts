@@ -18,6 +18,7 @@ import { FTPipeModule } from '../utils/pipes';
 import { AdminComponentModule } from './admin.component';
 import { UserComponent } from './user.component';
 import { CourseComponent } from './course.component';
+import { LocationComponent } from './location.component';
 import { TierRateComponent } from './tierrate.component';
 import { UserTabModule } from './usertabs/user-tab.component';
 import { AccountTabModule } from './usertabs/account-tab.component';
@@ -29,6 +30,7 @@ import { ActivityTabModule } from './usertabs/activity-tab.component';
 import { EndorsementTabModule } from './usertabs/endorsement-tab.component';
 import { TableModule } from 'primeng/table';
 import { CourseTabModule } from './coursetabs/course-tab.component';
+import { ParticipantTabModule } from './coursetabs/participant-tab.component';
 
 @NgModule({
   imports: [
@@ -57,6 +59,7 @@ import { CourseTabModule } from './coursetabs/course-tab.component';
     UserTabModule,
     AccountTabModule,
     CourseTabModule,
+    ParticipantTabModule,
     FTDialogvModule,
     FTLeftNavModule,
     FTTableModule,
@@ -66,6 +69,7 @@ import { CourseTabModule } from './coursetabs/course-tab.component';
   declarations: [
     UserComponent,
     CourseComponent,
+    LocationComponent,
     TierRateComponent
   ],
   providers: [

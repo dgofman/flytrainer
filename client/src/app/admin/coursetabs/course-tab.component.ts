@@ -55,21 +55,20 @@ export class CourseTabComponent extends CourseTabBaseDirective implements OnInit
         ];
         const fields = {};
         this.locationControls.forEach(c => {
-            fields[c.field] = [null, c.validators];
+            fields[c.field] = [{value: null, disabled: true}, c.validators];
         });
         this.initFormGroup({location: this.formBuilder.group(fields)});
-        this.formGroup.controls.location.disable();
     }
 
     ngOnInit(): void {
        if (this.course && this.course.id) {
             this.loading(true);
-            this.adminService.getCourse(this.course.id).subscribe(result => {
+            this.subs.add(this.adminService.getCourse(this.course.id).subscribe(result => {
                 this.loading(false);
                 this.selectedBean = Object.assign(this.defaultBean, result);
                 Object.assign(this.course, this.selectedBean);
                 this.defineLocation(result.location && result.location.id !== null, this.formGroup.controls);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         }
     }
 
@@ -91,25 +90,25 @@ export class CourseTabComponent extends CourseTabBaseDirective implements OnInit
             location.isPrimary = 1;
         }
         if (course.id) {
-            this.adminService.updateCourse(course).subscribe(result => {
+            this.subs.add(this.adminService.updateCourse(course).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
                 Object.assign(this.course, result);
                 this.formGroup.patchValue(result);
                 this.success(Locales.recordUpdated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         } else {
-            this.adminService.createCourse(course).subscribe(result => {
+            this.subs.add(this.adminService.createCourse(course).subscribe(result => {
                 this.loading(false);
                 this.selectedBean = result;
                 this.eventService.emit(EventType.Refresh, result);
                 this.success(Locales.recordCreated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         }
     }
 
     doDelete(): void {
-        throw new Error('Cannot delete user from UI');
+        this.eventService.emit(EventType.Delete, this.selectedBean);
     }
 
     onReset() {
@@ -118,7 +117,7 @@ export class CourseTabComponent extends CourseTabBaseDirective implements OnInit
     }
 
     get defaultBean() {
-       return { type: AppUtils.getKey(CourseType, 'Part61'), notes: new Note(), location: new Address({type: AppUtils.getKey(AddressType, 'Business'), state: this.environment.homeState, country: this.environment.homeCountry}) };
+       return { type: AppUtils.getKey(CourseType, 'CFR'), notes: new Note(), location: new Address({type: AppUtils.getKey(AddressType, 'Business'), state: this.environment.homeState, country: this.environment.homeCountry}) };
     }
 }
 

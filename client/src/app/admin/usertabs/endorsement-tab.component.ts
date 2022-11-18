@@ -21,7 +21,7 @@ import { EndorsementType, CertificateType, DocumentType } from 'src/modules/mode
             font-weight: bold;
         }
         .right {
-            .float: right;
+            float: right;
         }
         `
     ]
@@ -49,7 +49,7 @@ export class EndorsementTabComponent extends UserTabBaseDirective implements OnI
         ];
         this.initFormGroup();
         let oldValue = null;
-        this.formGroup.valueChanges.subscribe(val => {
+        this.subs.add(this.formGroup.valueChanges.subscribe(val => {
             let type = '', title = '', text = '';
             if (val.type === EndorsementType.Other && oldValue !== val.other) {
                 type = EndorsementType.Other;
@@ -67,21 +67,21 @@ export class EndorsementTabComponent extends UserTabBaseDirective implements OnI
             }
             val.notes.content = '<b style="font-size: 16px">' + title + '</b><hr><br><p style="font-size: 14px">' + text + '</p>';
             this.formGroup.patchValue({type, notes: val.notes});
-        });
+        }));
    }
 
    ngOnInit(): void {
-       this.adminService.findCFICertificates().subscribe(data => {
+       this.subs.add(this.adminService.findCFICertificates().subscribe(data => {
             this.certificates = data.map(d => ({ label: d.cfiName + ' - ' + (d.other || CertificateType[d.type]), data: d }));
-        });
+        }));
    }
 
     lazyLoad(event?: LazyLoadEvent) {
         this.loading(true);
-        this.adminService.getEndorsements(this.user.id, event.first).subscribe(result => {
+        this.subs.add(this.adminService.getEndorsements(this.user.id, event.first).subscribe(result => {
             this.loading(false);
             this.result = result;
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     onSign() {
@@ -121,26 +121,26 @@ export class EndorsementTabComponent extends UserTabBaseDirective implements OnI
             endorsement.document.type = AppUtils.getKey(DocumentType, 'Endorsement');
         }
         if (endorsement.id) {
-            this.adminService.updateEndorsement(this.user.id, endorsement).subscribe(result => {
+            this.subs.add(this.adminService.updateEndorsement(this.user.id, endorsement).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
                 this.formGroup.patchValue(result);
                 this.success(Locales.recordUpdated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         } else {
-            this.adminService.addEndorsement(this.user.id, endorsement).subscribe(result => {
+            this.subs.add(this.adminService.addEndorsement(this.user.id, endorsement).subscribe(result => {
                 this.loading(false);
                 this.result.data.push(result);
                 this.formGroup.patchValue(result);
                 this.selectedBean = result;
                 this.success(Locales.recordCreated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         }
     }
 
     doDelete(): void {
         this.loading(true);
-        this.adminService.deleteEndorsement(this.user.id, this.selectedBean.id).subscribe(_  => {
+        this.subs.add(this.adminService.deleteEndorsement(this.user.id, this.selectedBean.id).subscribe(_  => {
             this.loading(false);
             this.result.data.forEach((item, idx) => {
                 if (this.selectedBean && item.id === this.selectedBean.id) {
@@ -150,7 +150,7 @@ export class EndorsementTabComponent extends UserTabBaseDirective implements OnI
                     return false;
                 }
             });
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 
     resetBean() {

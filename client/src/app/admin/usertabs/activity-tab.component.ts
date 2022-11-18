@@ -83,7 +83,7 @@ export class ActivityTabComponent extends UserTabBaseDirective {
         this.flightGroup = new FormGroup(this.initControls(this.flights));
 
         let oldType: string, oldIssuedDate: Date;
-        this.currencyGroup.valueChanges.subscribe(val => {
+        this.subs.add(this.currencyGroup.valueChanges.subscribe(val => {
             if (val.type === 'Other') {
                 oldType = null;
             } else if (val.type !== oldType && val.type !== 'Other') {
@@ -106,7 +106,7 @@ export class ActivityTabComponent extends UserTabBaseDirective {
                 }
                 this.currencyGroup.patchValue({expDate});
             }
-        });
+        }));
         this.onReset();
    }
 
@@ -133,36 +133,36 @@ export class ActivityTabComponent extends UserTabBaseDirective {
 
     lazyLoad(event?: LazyLoadEvent) {
         /*this.loading(true);
-        this.adminService.getActivities(this.user.id, event.first).subscribe(result => {
+        this.subs.add(this.adminService.getActivities(this.user.id, event.first).subscribe(result => {
             this.loading(false);
             this.result = result;
-        }, (ex) => this.errorHandler(ex));*/
+        }, (ex) => this.errorHandler(ex)));*/
     }
 
     onSubmit() {
         this.loading(true);
         const activity = new CommonModel(this.formGroup.value);
         if (activity.id) {
-            this.adminService.updateActivity(this.user.id, activity).subscribe(result => {
+            this.subs.add(this.adminService.updateActivity(this.user.id, activity).subscribe(result => {
                 this.loading(false);
                 Object.assign(this.selectedBean, result);
                 this.formGroup.patchValue(result);
                 this.success(Locales.recordUpdated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         } else {
-            this.adminService.addActivity(this.user.id, activity).subscribe(result => {
+            this.subs.add(this.adminService.addActivity(this.user.id, activity).subscribe(result => {
                 this.loading(false);
                 this.result.data.push(result);
                 this.formGroup.patchValue(result);
                 this.selectedBean = result;
                 this.success(Locales.recordCreated);
-            }, (ex) => this.errorHandler(ex));
+            }, (ex) => this.errorHandler(ex)));
         }
     }
 
     doDelete(): void {
         this.loading(true);
-        this.adminService.deleteActivity(this.user.id, this.selectedBean.id).subscribe(_  => {
+        this.subs.add(this.adminService.deleteActivity(this.user.id, this.selectedBean.id).subscribe(_  => {
             this.loading(false);
             this.result.data.forEach((item, idx) => {
                 if (this.selectedBean && item.id === this.selectedBean.id) {
@@ -172,7 +172,7 @@ export class ActivityTabComponent extends UserTabBaseDirective {
                     return false;
                 }
             });
-        }, (ex) => this.errorHandler(ex));
+        }, (ex) => this.errorHandler(ex)));
     }
 }
 

@@ -16,85 +16,95 @@ import { AdminSharedModule } from './admin-shared.module';
 import { FTTableComponent } from '../component/ft-table/ft-table.component';
 
 @Component({
-  templateUrl: './course.component.html',
-  styleUrls: ['./admin.component.less']
+    templateUrl: './course.component.html',
+    styleUrls: ['./admin.component.less']
 })
 export class CourseComponent extends AppBaseDirective {
-  Locales = Locales;
-  result: TableResult<CommonModel>;
-  selectedCourse: CommonModel;
+    Locales = Locales;
+    result: TableResult<CommonModel>;
 
-  @ViewChild(FTTableComponent) table: FTTableComponent;
-  @ViewChild(FTDialogComponent) dialog: FTDialogComponent;
+    @ViewChild(FTTableComponent) table: FTTableComponent;
+    @ViewChild(FTDialogComponent) dialog: FTDialogComponent;
 
-  cols: ColumnType[] = [
-    { field: 'id', header: Locales.id, type: 'input', width: 50 },
-    { field: 'version', show: 'never'},
-    { field: 'type', header: Locales.type, type: 'popup', show: true, width: 100, value: Object.keys(CourseType).map(key => ({ label: CourseType[key], value: key })) },
-    { field: 'other', type: 'input', header: Locales.other, width: 100 },
-    { field: 'description', type: 'input', show: true, header: Locales.description, width: 200 },
-    { field: 'cost', type: 'currency', show: true, header: Locales.cost, width: 100, class: 'inlineL' },
-    { field: 'duration', type: 'number', show: true, header: Locales.duration, width: 100, class: 'inlineL' },
-    { field: 'startDate', type: 'cal', header: Locales.startDate, width: 200, format: 'datetime' },
-    { field: 'endDate', type: 'cal', header: Locales.endDate, width: 200, format: 'datetime' },
-    { field: 'isOnline', type: 'switch', show: true, header: Locales.isOnline, width: 70, align: 'center', format: 'bool' },
-    { field: 'credits', type: 'input', show: true, header: Locales.credits, width: 150 },
-    { field: 'createdDate', type: 'cal', header: Locales.createdDate, width: 200, format: 'datetime' },
-    { field: 'modifiedDate', type: 'cal', header: Locales.modifiedDate, width: 200, format: 'datetime' },
-    { field: 'whoCreated', type: 'input', header: Locales.whoCreated, width: 200 },
-    { field: 'whoModified', type: 'input', header: Locales.whoModified, width: 200 }
-  ];
+    cols: ColumnType[] = [
+        { field: 'id', header: Locales.id, type: 'input', width: 50 },
+        { field: 'version', show: 'never' },
+        { field: 'type', header: Locales.type, type: 'popup', show: true, width: 150, value: Object.keys(CourseType).map(key => ({ label: CourseType[key], value: key })) },
+        { field: 'other', type: 'input', header: Locales.other, width: 100 },
+        { field: 'description', type: 'input', show: true, header: Locales.description, width: 200 },
+        { field: 'cost', type: 'currency', show: true, header: Locales.cost, width: 100, class: 'inlineL' },
+        { field: 'duration', type: 'number', show: true, header: Locales.duration, width: 100, class: 'inlineL' },
+        { field: 'startDate', type: 'cal', header: Locales.startDate, width: 200, format: 'datetime' },
+        { field: 'endDate', type: 'cal', header: Locales.endDate, width: 200, format: 'datetime' },
+        { field: 'isOnline', type: 'switch', show: true, header: Locales.isOnline, width: 70, align: 'center', format: 'bool' },
+        { field: 'credits', type: 'input', show: true, header: Locales.credits, width: 150 },
+        { field: 'createdDate', type: 'cal', header: Locales.createdDate, width: 200, format: 'datetime' },
+        { field: 'modifiedDate', type: 'cal', header: Locales.modifiedDate, width: 200, format: 'datetime' },
+        { field: 'whoCreated', type: 'input', header: Locales.whoCreated, width: 200 },
+        { field: 'whoModified', type: 'input', header: Locales.whoModified, width: 200 }
+    ];
 
-  constructor(public adminService: AdminService, eventService: EventService) {
-    super();
-    eventService.emmiter.subscribe((event: EmitEvent) => {
-      switch (event.message) {
-        case EventType.Refresh:
-          if (event.data) {
-            this.updateDialog(event.data);
-          }
-          this.table.expandedRows = {};
-          this.table.refresh();
-          break;
-      }
-    });
-  }
-
-  updateDialog(model: CommonModel) {
-    let path = [Locales.admin, Locales.courses];
-    if (model.id) {
-      path = path.concat(model.description || model.type);
+    constructor(public adminService: AdminService, eventService: EventService) {
+        super();
+        this.subs.add(eventService.emmiter.subscribe((e: EmitEvent) => this.eventTableHandler(e)));
     }
-    this.dialog.path = path;
-    for (let i = 1; i < this.dialog.tabView.tabs.length; i++) {
-      this.dialog.tabView.tabs[i].disabled = !model.id;
+
+    updateDialog(model: CommonModel) {
+        let path = [Locales.admin, Locales.courses];
+        if (model.id) {
+            path = path.concat(model.description || model.type);
+        }
+        this.dialog.path = path;
+        for (let i = 1; i < this.dialog.tabView.tabs.length; i++) {
+            this.dialog.tabView.tabs[i].disabled = !model.id;
+        }
+        this.dialog.selectedItem = model;
+        this.dialog.show = true;
     }
-    this.selectedCourse = model;
-    this.dialog.selectedItem = model;
-    this.dialog.show = true;
-  }
 
-  onAddRate() {
-    this.updateDialog(new CommonModel());
-    AppHeaderComponent.toggleArrowMenu = false;
-  }
-
-  onEdit(model: CommonModel) {
-    this.updateDialog(model);
-    AppHeaderComponent.toggleArrowMenu = false;
-  }
-
-  eventTableHandler(event: EmitEvent) {
-    switch (event.message) {
-      case EventType.Load:
-        this.loading(true);
-        this.adminService.getCourses(event.data).subscribe(result => {
-          this.loading(false);
-          this.result = result;
-        }, (ex) => this.errorHandler(ex));
-        break;
+    onAddRate() {
+        this.updateDialog(new CommonModel());
+        AppHeaderComponent.toggleArrowMenu = false;
     }
-  }
+
+    onEdit(model: CommonModel) {
+        this.updateDialog(model);
+        AppHeaderComponent.toggleArrowMenu = false;
+    }
+
+    eventTableHandler(event: EmitEvent) {
+        switch (event.message) {
+            case EventType.Load:
+                this.loading(true);
+                this.subs.add(this.adminService.getCourses(event.data).subscribe(result => {
+                    this.loading(false);
+                    this.result = result;
+                }, (ex) => this.errorHandler(ex)));
+                break;
+            case EventType.Refresh:
+                if (event.data) {
+                    this.updateDialog(event.data);
+                }
+                this.table.expandedRows = {};
+                this.table.refresh();
+                break;
+            case EventType.Delete:
+                this.loading(true);
+                this.subs.add(this.adminService.deleteCourse(event.data.id).subscribe(_ => {
+                    this.loading(false);
+                    this.result.data.forEach((item, idx) => {
+                        if (event.data && item.id === event.data.id) {
+                            this.result.data.splice(idx, 1);
+                            this.dialog.selectedItem = null;
+                            this.dialog.show = false;
+                            this.success(Locales.recordDeleted);
+                            return false;
+                        }
+                    });
+                }, (ex) => this.errorHandler(ex)));
+                break;
+        }
+    }
 }
 
 @Directive()

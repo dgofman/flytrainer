@@ -51,6 +51,7 @@ export enum Role {
 }
 
 export enum AddressType {
+    Favorite = 'Favorite Address',
     Home = 'Home',
     Business = 'Business',
     Billing = 'Billing',
@@ -210,11 +211,13 @@ export const CurrencyType = {
 };
 
 export const CourseType = {
-    Part61: 'Part 61',
-    Part141: 'Part 141',
-    Part147: 'Part 147',
-    FaaSafety: 'FAA Safety',
+    CFR: 'Code of Federal Regulations (CFR)',
+    WINGS: 'FAA Safety (WINGS)',
+    WXBRIEF: 'Aviation Weather (WXBRIEF)',
+    NTSB: 'Accident Reports (NTSB)',
+    AD: 'Airworthiness Directives',
     TSA: 'TSA Approval',
+    General: 'General Meeting',
     Other: 'Other'
 };
 

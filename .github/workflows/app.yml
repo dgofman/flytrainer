@@ -22,6 +22,8 @@ jobs:
   four:
     needs: wait
     name: Job4
+    env:
+     RELEASE_TAG: v1
     environment: 
       name: QA
       url: https://github.com/${{ github.repository }}/releases/tag/${{ env.RELEASE_TAG }}
@@ -36,5 +38,4 @@ jobs:
       - name: "cleanup"
         run: |
           echo ${{ env.RELEASE_TAG }}
-          echo ${{ env.RELEASE_VERSION }}
       

@@ -5,13 +5,18 @@ on:
     branches: ['master']
 
 jobs:
-  scripts:
+  one:
+    name: Job1
+    environment: DEV
     runs-on: ubuntu-latest
     steps:
       - run: echo "This step runs in the default shell"
       - run: echo "This step runs in bash"
         shell: bash
-      - run: Write-Host "This step runs in PowerShell Core"
-        shell: pwsh
-      - run: Write-Host "This step runs in PowerShell"
-        shell: powershell
+  two:
+    name: Job2
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This step runs in the default shell"
+      - run: echo "This step runs in bash"
+        shell: bash

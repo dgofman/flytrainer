@@ -1,0 +1,17 @@
+name: Flight School Management System
+
+on:
+  push:
+    branches: ['master']
+
+jobs:
+  scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This step runs in the default shell"
+      - run: echo "This step runs in bash"
+        shell: bash
+      - run: Write-Host "This step runs in PowerShell Core"
+        shell: pwsh
+      - run: Write-Host "This step runs in PowerShell"
+        shell: powershell

@@ -12,7 +12,7 @@ jobs:
     name: Wait Prebuild
 
   tree:
-    needs: one
+    needs: wait
     name: Job3
     environment: DEV
     runs-on: ubuntu-latest

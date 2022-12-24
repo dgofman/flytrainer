@@ -18,5 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "This step runs in the default shell"
+        name: Step1
       - run: echo "This step runs in bash"
+        name: Step2
         shell: bash

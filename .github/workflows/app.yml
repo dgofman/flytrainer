@@ -8,7 +8,7 @@ on:
 
 jobs:
   one:
-    uses: dgofman/flytrainer/.github/workflows/prebuild.yml@master
+    uses: ./.github/workflows/prebuild.yml
     name: Wait Prebuild
 
   two:

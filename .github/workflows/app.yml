@@ -9,20 +9,13 @@ on:
 jobs:
   one:
     uses: dgofman/flytrainer/.github/workflows/prebuild.yml@master
-    name: Job1
+    name: Wait Prebuild
+
+  two:
+    name: Job2
     environment: DEV
     runs-on: ubuntu-latest
     steps:
       - run: echo "This step runs in the default shell"
       - run: echo "This step runs in bash"
-        shell: bash
-  two:
-    name: Job2
-    needs: one
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "This step runs in the default shell"
-        name: Step1
-      - run: echo "This step runs in bash"
-        name: Step2
         shell: bash

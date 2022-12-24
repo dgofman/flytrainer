@@ -1,4 +1,4 @@
-name: Flight School Management System - Build
+name: Flight School Management System - Prebuild
 #https://docs.github.com/en/actions/migrating-to-github-actions/migrating-from-azure-pipelines-to-github-actions
 
 on:
@@ -7,7 +7,6 @@ on:
 
 jobs:
   one:
-    uses: dgofman/flytrainer/master/.github/workflows/prebuild.yml@master
     name: Job1
     environment: DEV
     runs-on: ubuntu-latest

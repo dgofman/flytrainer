@@ -15,6 +15,7 @@ jobs:
         shell: bash
   two:
     name: Job2
+    needs: one
     runs-on: ubuntu-latest
     steps:
       - run: echo "This step runs in the default shell"

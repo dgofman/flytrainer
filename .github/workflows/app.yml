@@ -22,11 +22,9 @@ jobs:
   four:
     needs: wait
     name: Job4
-    env:
-     RELEASE_TAG: v1
     environment: 
       name: QA
-      url: https://github.com/${{ github.repository }}/releases/tag/${{ env.RELEASE_TAG }}
+      url: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "This step QA"
@@ -35,7 +33,18 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Create Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - Added file prebuild.yaml
+            - Added file app.yaml
+          draft: false
+          prerelease: false
       - name: "cleanup"
         run: |
-          echo ${{ env.RELEASE_TAG }}
+          echo ${{ github.ref }}
       

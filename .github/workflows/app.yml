@@ -17,6 +17,13 @@ jobs:
     environment: DEV
     runs-on: ubuntu-latest
     steps:
-      - run: echo "This step runs in the default shell"
-      - run: echo "This step runs in bash"
+      - run: echo "This step DEV"
+        shell: bash
+  four:
+    needs: wait
+    name: Job4
+    environment: QA
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This step QA"
         shell: bash

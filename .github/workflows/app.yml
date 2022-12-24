@@ -12,6 +12,7 @@ jobs:
     name: Wait Prebuild
 
   two:
+    needs: one
     name: Job2
     environment: DEV
     runs-on: ubuntu-latest

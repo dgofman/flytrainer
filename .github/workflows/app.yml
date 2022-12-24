@@ -22,8 +22,19 @@ jobs:
   four:
     needs: wait
     name: Job4
-    environment: QA
+    environment: 
+      name: QA
+      url: https://github.com/${{ github.repository }}/releases/tag/${{ env.RELEASE_TAG }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "This step QA"
         shell: bash
+      - name: "checkout repository"
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: "cleanup"
+        run: |
+          echo ${{ env.RELEASE_TAG }}
+          echo ${{ env.RELEASE_VERSION }}
+      

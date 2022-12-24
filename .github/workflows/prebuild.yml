@@ -4,6 +4,7 @@ name: Flight School Management System - Prebuild
 on:
   push:
     branches: ['master']
+  workflow_call:
 
 jobs:
   one:
